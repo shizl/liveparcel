@@ -1,0 +1,14 @@
+name = Live Parcels
+description = Live Parcels.
+package = Live Parcels - core
+core = 7.x
+
+configure = admin/liveparcels
+stylesheets[all][] = liveparcels.css
+
+; Information added by Drupal.org packaging script on 2013-12-28
+version = "7.x-1.0"
+core = "7.x"
+project = "liveparcels"
+datestamp = "1387304010"
+

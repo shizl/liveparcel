@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Contains global Live Parcels functions and store administration functionality.
+ *
+ * The store module is a container of sorts for various helper functions used
+ * in different parts of the Ubercart core.  It also provides screens and
+ * settings pages for use in store administration.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function liveparcels_menu() {
+  $items = array();
+
+  $items['admin/liveparcels'] = array(
+    'title' => 'Live Parcels',
+    'description' => 'Administer Live Parcels settings.',
+    'page callback' => 'liveparcels_admin_settings',
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'liveparcels.admin.inc',
+  );
+  $items['admin/liveparcels/updatefactor'] = array(
+    'title' => 'Update factor',
+    'description' => 'Update factor.',
+    'page callback' => 'liveparcels_factor_settings',
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+  );
+
+  
+  $items['admin/liveparcels/managepackage'] = array(
+    'title' => 'manage package  ',
+    'description' => 'manage package.',
+    'page callback' => 'liveparcels_managepackage',
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+  );
+  $items['admin/liveparcels/fileupload'] = array(
+    'title' => 'manage fileupload  ',
+    'description' => 'manage fileupload.',
+    'page callback' => 'liveparcels_fileupload',
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+  );
+    $items['admin/liveparcels/zoneresult'] = array(
+    'title' => 'manage zoneresult  ',
+    'description' => 'manage zoneresult.',
+    'page callback' => 'liveparcels_zoneresult',
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+  );
+    $items['admin/liveparcels/updatezone'] = array(
+    'title' => ' updatezone  ',
+    'description' => ' updatezone.',
+    'page callback' => 'liveparcels_updatezone',
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+  );
+  
+    
+  return $items;
+}
+
+
