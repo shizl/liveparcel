@@ -1,0 +1,213 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the uc_store module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function liveparcels_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $severities = array(
+      'ok' => REQUIREMENT_OK,
+      'warning' => REQUIREMENT_WARNING,
+      'error' => REQUIREMENT_ERROR,
+    );
+
+    module_load_include('inc', 'liveparcels', 'liveparcels.admin');
+    $results = module_invoke_all('liveparcels_status');
+    foreach ($results as $status) {
+      $requirements[] = array(
+        'severity' => isset($severities[$status['status']]) ? $severities[$status['status']] : REQUIREMENT_INFO,
+        'title' => $status['title'],
+        'value' => $status['desc'],
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_schema().
+ */
+function liveparcels_schema() {
+  $schema = array();
+  $schema['liveparcels_package'] = array(
+    'description' => 'liveparcels package information.',
+    'fields' => array(
+      'position' => array(
+        'description' => ' position id',
+         'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'package_name' => array(
+        'description' => 'Package name.',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      
+      'dead_weight' => array(
+        'description' => ' Dead Weight (kg)',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0.0,
+      ),
+      'dimen_weight' => array(
+        'description' => ' Dimensional Weight (kg)',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0.0,
+      ),
+      'plength' => array(
+        'description' => ' Length (cm)',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0.0,
+      ),
+       'pprice' => array(
+        'description' => ' Price ($)',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0.0,
+      ),
+    ),
+    'primary key' => array('position'),
+  );
+  
+ $schema['liveparcels_zone_post'] = array(
+    'description' => 'liveparcels zone post information.',
+    'fields' => array(
+      'pcode' => array(
+        'description' => 'post code',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      
+      'locality' => array(
+        'description' => 'locality',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'state' => array(
+        'description' => 'state.',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'region' => array(
+        'description' => 'region',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'zone_number' => array(
+        'description' => 'Zone Number',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'bspname' => array(
+        'description' => 'BSPname.',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+  );
+
+
+ $schema['liveparcels_zone_price'] = array(
+    'description' => 'liveparcels zone post information.',
+    'fields' => array(
+      'zone_from_number' => array(
+        'description' => 'zone_from_number',
+         'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      
+      'zone_from' => array(
+        'description' => 'zone_from',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'zone_from_region' => array(
+        'description' => 'zone_from_region',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      
+      'zone_to_number' => array(
+        'description' => 'zone_to_number',
+         'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'zone_to' => array(
+        'description' => 'locality',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'zone_to_region' => array(
+        'description' => 'zone_to_region',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+       'multiplier' => array(
+        'description' => 'multiplier ',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 4,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+  );
+
+  return $schema;
+}
+/**
+ * Implements hook_uninstall().
+ */
+function liveparcels_uninstall() {
+    db_delete('variable')
+      ->condition('name', 'liveparcels%', 'LIKE')
+    ->execute();
+    db_query('DROP TABLE `liveparcels_package`, `liveparcels_zone_post`, `liveparcels_zone_price`;');
+}
+
+
