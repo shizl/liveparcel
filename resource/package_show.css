@@ -1,0 +1,183 @@
+
+.page-main {
+ width:650px;
+ margin:auto;
+ border:1px solid black;
+padding: 10px;
+display: inline-block;
+}
+
+.page-main tr td, .page-main tr th{
+padding:0;
+}
+.page-main li {
+list-style-type: none; 
+}
+.live-parcels-status tr,.page-main td {
+background:#fff !important;
+}
+.header-warning {
+color:red;
+font-weight:700;
+width:100%;
+text-align:center;
+}
+.header-mess {
+padding-left:30px;
+}
+.header-mess h1{
+font-size: 40px;
+margin-top: 15px;
+}
+.header-content {
+margin-top:-16px;
+width:600px;
+}
+.page-float {
+width:450px;
+float:left;
+}
+.page-content-title {
+margin-top: -10px;
+border-bottom: 1px solid #ccc;
+height: 38px;
+margin-bottom: -10px;
+width: 650px;
+}
+.page-content-choose {
+line-height:25px;
+}
+.page-content-choose input {
+margin-left:15px;
+margin-right: 5px;
+}
+.page-content-address {
+margin-top:15px;
+width:590px;
+}
+.page-content-address input {
+border:1px solid black;
+width:150px;
+}
+.page-content-address strong {
+margin-right:10px;
+}
+ .post-all input {
+border:1px solid black;
+width:46px;
+}
+.post-all {
+border: 2px solid #8AC2F5;
+margin-top: 15px;
+width: 455px;
+float: left;
+}
+.post-mess {
+padding-left:10px;
+float:left;
+}
+.parcel {
+background:#E9E6E3;
+
+padding-left: 10px;
+line-height:30px;
+border:1px solid #333;
+}
+.dimensions .dim-first {
+margin-left:104px;
+}
+.dimensional {
+margin-top:10px;
+}
+.dimens-input input{
+background:#ccc;
+margin-right:5px;
+}
+.weight {
+margin-top:10px;
+}
+.weight input {
+margin-left:139px;
+}
+.destination {
+width:238px;
+}
+.des-text input {
+width:150px;
+}
+.post-btn {
+width: 90px;
+float: right;
+margin-top: -70px;
+margin-right: 8px;
+}
+.post-btn .duplicate {
+margin-bottom:5px;
+}
+.post-btn input {
+width:90px;
+height:28px;
+border:1px solid #ccc;
+background:#E8E8E8;
+}
+.order {
+background: #E9E6E3;
+float: right;
+width: 180px;
+margin-top: 20px;
+min-height: 250px;
+margin-bottom:5px;
+}
+.order-btn {
+float: right;
+width: 180px;
+
+}
+.order-btn input {
+width:65px;
+background:#E8E8E8;
+border: 1px solid #ccc;
+height:25px;
+}
+.order-btn-first {
+margin-right:47px;
+}
+.footer-note{
+width:450px;
+text-align:center;
+margin-top:15px;
+float:left;
+}
+.order ul{
+margin:0;
+padding:0;
+}
+.order-title {
+font-size:18px;
+font-weight:bold;
+padding: 10px 10px 5px;
+}
+.order li {
+margin-bottom: 8px;
+}
+.order-total {
+border-top: 1px solid #999;
+margin-top: 15px;
+padding-top: 6px;
+margin-left: -15px;
+padding-left:15px;
+margin-right: 8px;
+}
+.dimens-input {
+width:368px;
+}
+
+
+
+
+
+
+
+
+
+
