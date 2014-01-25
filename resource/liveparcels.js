@@ -1,4 +1,3 @@
-
 function savenote(nid,atype){
 	if(atype=="delete"){
 		jQuery.post('/admin/liveparcels/managepackage',{position:nid,atype:atype},function(data){
@@ -118,7 +117,7 @@ $(document).ready(function(){
 		if(factor>0){
             $.post('/admin/liveparcels/updatefactor',{factor:factor},function(msg){
                 if(msg){
-                alert('update successfuly.');
+                alert('Updated successfully.');
                 }
             });
 		}else{
