@@ -1,12 +1,18 @@
-
-.page-main {
- width:650px;
- margin:auto;
- border:1px solid black;
-padding: 10px;
-display: inline-block;
+body {
+background:white;
+color:black;
+font-size:12px;
 }
-
+input {
+border:1px solid black;
+width:46px;
+}
+li {
+list-style-type: none; 
+}
+tr {
+height:35px;
+}
 .page-main tr td, .page-main tr th{
 padding:0;
 }
@@ -15,6 +21,13 @@ list-style-type: none;
 }
 .live-parcels-status tr,.page-main td {
 background:#fff !important;
+}
+.page-main {
+ width:650px;
+ margin:auto;
+ border:1px solid black;
+ padding:15px 15px 0px 15px;
+ display: inline-block;
 }
 .header-warning {
 color:red;
@@ -45,43 +58,39 @@ margin-bottom: -10px;
 width: 650px;
 }
 .page-content-choose {
-line-height:25px;
+margin-top:-10px;
+padding-top:15px;
 }
 .page-content-choose input {
-margin-left:15px;
-margin-right: 5px;
+margin:0px;
 }
 .page-content-address {
 margin-top:15px;
 width:590px;
 }
 .page-content-address input {
-border:1px solid black;
 width:150px;
 }
 .page-content-address strong {
 margin-right:10px;
 }
- .post-all input {
-border:1px solid black;
-width:46px;
-}
 .post-all {
-border: 2px solid #8AC2F5;
+border: 1px solid black;
 margin-top: 15px;
-width: 455px;
+width: 450px;
 float: left;
 }
 .post-mess {
+margin-top:10px;
 padding-left:10px;
 float:left;
 }
 .parcel {
 background:#E9E6E3;
-
+margin-bottom:10px;
 padding-left: 10px;
 line-height:30px;
-border:1px solid #333;
+border:1px solid #ccc;
 }
 .dimensions .dim-first {
 margin-left:104px;
@@ -106,13 +115,13 @@ width:238px;
 width:150px;
 }
 .post-btn {
-width: 90px;
-float: right;
-margin-top: -70px;
-margin-right: 8px;
+width:100px;
+float:right;
+margin-top: -80px;
+margin-right: 2px;
 }
 .post-btn .duplicate {
-margin-bottom:5px;
+margin-bottom:10px;
 }
 .post-btn input {
 width:90px;
@@ -125,7 +134,7 @@ background: #E9E6E3;
 float: right;
 width: 180px;
 margin-top: 20px;
-min-height: 250px;
+min-height: 280px;
 margin-bottom:5px;
 }
 .order-btn {
@@ -146,38 +155,41 @@ margin-right:47px;
 width:450px;
 text-align:center;
 margin-top:15px;
+margin-bottom:10px;
 float:left;
 }
 .order ul{
-margin:0;
-padding:0;
+margin:0px !important;
+padding:0px !important;
 }
 .order-title {
 font-size:18px;
 font-weight:bold;
-padding: 10px 10px 5px;
+padding: 10px 15px 5px;
 }
 .order li {
+margin-left:40px;
 margin-bottom: 8px;
 }
 .order-total {
 border-top: 1px solid #999;
+padding-left: 55px;
 margin-top: 15px;
 padding-top: 6px;
-margin-left: -15px;
-padding-left:15px;
+margin-left: 15px;
 margin-right: 8px;
 }
 .dimens-input {
 width:368px;
 }
-
-
-
-
-
-
-
-
-
-
+.parcel input {
+float:right;
+background:#E8E8E8;
+height:30px;
+border:1px solid #999;
+display:none;
+width: 35px;
+}
+.pcode {
+display:none;
+}

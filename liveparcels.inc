@@ -29,15 +29,15 @@ function liveparcels_packageshow() {
 		 <input class="deliver" type="radio" name="items" checked value="" >Deliver one or more items
          <input class="pick-up" type="radio" name="items" value="" >Pick-up one or more items
       </div>
-      <div class="page-content-address" ><strong>Pickup post/suburb:</strong><input class="post-suburb" type="text" > </div>
-      <div class="post-all">
-          <div class="parcel"><strong>Parcel #1</strong></div>
+      <div class="page-content-address" ><strong>Pickup post/suburb:</strong><input class="post-suburb" type="text" ><input class="post-suburb-hide" type="hidden" ></div><div class="pcode"></div>
+      <div class="post-all" id=vp1>
+          <div class="parcel"><strong>Parcel #1</strong><input type="button" value="X"></div>
         <div class="post-mess"> 
 		 <table>
           <tr><td class="dimensions">Dimensions(cm):</td><td><input class="dim-first" type="text">X<input class="dim-second" type="text">X<input class="dim-three" type="text"></td></tr>
-          <tr><td class="dimensional">Dimensional weight(kg):</td><td class="dimens-input"><input type="text" readonly>(this value is calculated automatically)</td></tr>
-          <tr><td class="weight">weight(kg):</td><td class="wei-text"><input type="text" ></td></tr>
-          <tr><td class="destination">Destination postcode/suburb:</td><td class="des-text"><input type="text" ></td></tr>
+          <tr><td class="dimensional">Dimensional weight(kg):</td><td class="dimens-input"><input class="dimens-text" type="text" readonly>(this value is calculated automatically)</td></tr>
+          <tr><td class="weight">weight(kg):</td><td class="wei-text"><input class="weight-text" type="text" ></td></tr>
+          <tr><td class="destination">Destination postcode/suburb:</td><td class="des-text"><input class="postcode-suburb" type="text" ><input class="postcode-suburb-hide" type="hidden" ></td></tr>
         </table>
         </div>
         <div class="post-btn">
@@ -50,80 +50,214 @@ function liveparcels_packageshow() {
       <div class="order">
           <div class="order-title">Order summary</div>
           <ul>
-          <li class="order-first">Parcel #1: $25(2 ticket)</li>
-          <li>Parcel #2: $25(2 ticket)</li>
-          <li>Parcel #3: $25(2 ticket)</li>
-          <div class="order-total">Total:$75(6 ticket)</div>
+          <li class="order-first">Parcel #1: No value</li>
+          <li>Parcel #2: No value</li>
+          <li>Parcel #3: No value</li>
           </ul>
+          <div class="order-total">Total:No value</div>
+          
       </div>
       <div class="order-btn">
-		  <input class="order-btn-first" type="button" name="modify" value="Modify">
+		  <input class="order-btn-first" type="button" name="modify" value="Save">
 	      <input type="button" name="checkout" value="Checkout">
       </div>
 	  <div class="footer-note">
 		Note:to calculate your parcel price, we use either the Dimensional
         Weight or the Actual Weight, whichever is the greater of the two values.	
-	  </div>
+	 </div>
   </div>
-  <script language="javascript">
+ <script type="text/javascript">
   (function($){
-  function isFloat(key,str){
-   var reg = parseFloat(str);
-   if(reg>0){
-	  $("."+key).val(reg);
-	 return reg;   
-   }else{
-	 return 0;   
-   }
-  }
-	function reckon(){
-		var first = isFloat("dim-first",$(".dim-first").val());
-		var second = isFloat("dim-second",$(".dim-second").val());
-		var three = isFloat("dim-three",$(".dim-three").val());
-		if( $(".dim-first").val() !== "" && $(".dim-second").val() !=="" && $(".dim-three").val() !==""){
-		     if(first>0 && second>0 && three>0){				 
-			    var volume = first*second*three*'.variable_get('liveparcels_factor',1).';
-                volume=Math.round(volume*1000)/1000;
-                if(volume>0){
-                          $(".dimens-input input").val(volume);
-                }else{
-                    $(".dim-first").val("");
-			    $(".dim-second").val("");
-			    $(".dim-three").val("");
-			    $(".dimens-input").html("Please input int or float value.");
-                    }
-			  
-			 }else{
-				$(".dim-first").val("");
-			    $(".dim-second").val("");
-			    $(".dim-three").val("");
-			    $(".dimens-input").html("Please input int or float value.");
-		     }
-		}	 
-	 }
-     $(".dim-first").bind("blur",reckon);
-     $(".dim-second").bind("blur",reckon);
-     $(".dim-three").bind("blur",reckon);
-     $(".wei-text input").blur(function(){
-		var weight = isFloat("wei-text",$(".wei-text input").val());
-		if($(".wei-text input").val()!==""){
-		   if(weight>0){
-		   	$(".wei-text input").val(weight);
-	     }else{
-		   	$(".wei-text input").val("");
-		 }
-       }
+  var zonedata='.(liveparcels_getZonelistData()<>'' ? liveparcels_getZonelistData():'').';
+     $(".post-all input").blur(function(){
+		 var first = $(this).parent("td").find(".dim-first").val();
+		 var second = $(this).parent("td").find(".dim-second").val();
+		 var three = $(this).parent("td").find(".dim-three").val();
+		 var weight = $(this).parent("td").find(".weight-text").val();
+		 var dimens  = $(this).parent("td").find(".dimens-text").val();
+		 var cla = $(this).attr("class");
+	  if(cla == "dim-first" || cla == "dim-second" || cla == "dim-three"){ 
+		 if(first !== "" && second!== "" && three !== ""){
+			if(parseFloat(first)>0 && parseFloat(second)>0 && parseFloat(three)>0){
+		         var volume = parseFloat(first) * parseFloat(second) * parseFloat(three)*'.variable_get('liveparcels_factor',1).';
+		         var Pvolume = volume.toFixed(4);
+	             $(this).parent("td").parent("tr").next("tr")
+	             .children("td").find(".dimens-text").val(Pvolume); 
+	             $(this).parent("td").find(".dim-first").val(parseFloat(first));
+		         $(this).parent("td").find(".dim-second").val(parseFloat(second));
+		         $(this).parent("td").find(".dim-three").val(parseFloat(three));    
+			}else{
+			      alert("Please fill in the correct information");
+			      $(this).parent("td").find(".dim-first").val("");
+		          $(this).parent("td").find(".dim-second").val("");
+		          $(this).parent("td").find(".dim-three").val("");   
+			      return false;
+			}
+	     }
+	   }
+	   if(cla ="weight-text"){
+		   if(weight !== "" ){
+			 if(parseFloat(weight)>0){
+				 $(this).parent("td").find(".weight-text").val(parseFloat(weight));
+			   }else{
+				 $(this).parent("td").find(".weight-text").val(""); 
+			   }
+			} 
+	    }
+	 
+	  });
+	  
+     var num = 1;
+     $(".add_new input").click(function(){
+		num++;
+		var divText = $(".post-all:last");
+        var newDiv = divText.clone(true);
+		divText.after(newDiv);
+		$(".post-all:last .parcel strong").html("Parcel #" + num);
+		$(".post-all:last .parcel input").show();
+		$(".post-all:last .post-mess table input").val("");
+		
      });
-
+	 $(".duplicate input").click(function(){
+		num++;
+		var divText = $(this).parent().parent().parent();
+        var newDiv = divText.clone(true);
+		$(".post-all:last").after(newDiv);
+		$(".post-all:last .parcel strong").html("Parcel #" + num);
+		$(".post-all:last .parcel input").show();
+   		
+     });
+	 $(".parcel input").click(function() {
+		$(this).parent().parent().remove();
+		num--;
+	 });
+	 function getprice(f,tlen,postfrom,subtotal){
+			  var max = 0;
+			  var parcelnum = $(".post-all:eq("+(f-1)+")").find(".parcel strong").text();
+			  var dimfirst = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
+			  var dimsecond = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
+			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
+			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
+			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
+			  var postto = $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").val();
+			  var postfrom =$(".post-suburb").val();
+			  if(dimfirst > max){
+				  max = dimfirst; 
+			  }
+			  if(dimsecond > max){
+			      max = dimsecond;
+			  }
+			  if(dimthree > max){
+				  max = dimthree;  
+			  }
+			  $.get("/liveparcels/getpackageprice",{max:max,dimenstext:dimenstext,weighttext:weighttext},function(data){
+			       if(data>0){
+                     $.get("/liveparcels/getzoneprice",{postfrom:postfrom,postto:postto,price:data},function(zone){
+                          
+                          $(".order ul").append("<li>" + parcelnum +":&nbsp" + zone +"</li>");
+                           
+                          subtotal = subtotal + parseFloat(zone);
+                         alert(tlen); 
+                         if(f<tlen){
+							getprice(f+1,tlen,postfrom,subtotal);
+                         }else{
+                         
+							$(".order-total").html("Total: " + subtotal);
+                         }
+                     });
+			       }
+	        }) ;
+	       }
+	 $(".order-btn-first").click(function(){
+		if($(this).attr("value")=="Save"){
+		      var postfrom =$(".post-suburb").val();
+		      var f=1;   
+		      var subtotal = 0;   
+		   var tlen=$(".post-all:last").index()-2;
+		   $(".order ul li").remove();
+		   getprice(f,tlen,postfrom,subtotal);
+	       
+	       $(".post-all input").attr("disabled",true);
+	       $(this).attr("value","Modify"); 
+	    }else{
+		   $(".post-all input").attr("disabled",false);
+		   $(".dimens-text").attr("disabled",true);
+	       $(this).attr("value","Save");
+		}    
+	 });
+	 $(".post-suburb").keyup(function(){
+      var words=gettrim($("."post-suburb").val());
+      if( words.length >= 3){
+	      setTimeout(ajaxsearch(words),500);
+      }
+	  });
+    function ajaxsearch(words){      
+        if(words == "" || words == " " ){
+	     	 $(".pcode").hide();
+             return false;
+        } 
+        var str="";
+		var p=0;
+	 	var res="";
+		var pcode=zonedata.pcode;
+		for (k in pcode){
+			str=pcode[k].name.toUpperCase();
+			if(str.indexOf(words.toUpperCase()) >= 0){
+			   $(".pcode").show();
+		    }	
+		}
+	 }
   })(jQuery) </script>'));
   
 	$build['liveparcels'] = array(
-	'#theme' => 'table',
-	  '#rows' => $rows,
-	  '#attributes' => array('class' => array('live-parcels-status')),
+	"#theme" => "table",
+	  "#rows" => $rows,
+	  "#attributes" => array("class" => array("live-parcels-status")),
 	);
 
 	 drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/package_show.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 	 
   return $build;
+}
+function liveparcels_getPackageprice() {
+	$max = $_REQUEST['max'];
+	$dimenstext = $_REQUEST['dimenstext'];
+	$weighttext = $_REQUEST['weighttext'];	
+	if($max>0 && $dimenstext>0 && $weighttext>0){
+		$items='';
+		$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` WHERE `plength`<". $max ." AND `dead_weight`<". $dimenstext ." AND  `dimen_weight`<" . $weighttext . " ORDER BY `pprice` DESC  LIMIT 1")->fetchField();		
+		if($items==""){
+		  	$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
+	   }
+	}
+		echo $items;
+}  
+
+function liveparcels_getZoneprice() {
+    $postfrom = $_REQUEST['postfrom'];
+	$postto = $_REQUEST['postto'];
+	$price = $_REQUEST['price'];
+	if($postfrom!=="" && $postto!==""){
+		$pzone='';
+		$pzon='';
+		$pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` WHERE `zone_from_number`='". $postfrom ."' AND   `zone_to_number`='". $postto."'")->fetchField();	
+		if($pzon<>''){
+			$pzone=$pzon*$price;
+		}else{
+			$pzone=0;
+		}
+	}
+		echo $pzone;		
+}
+function liveparcels_getZonelistData() {
+	$postlist =array();
+	$result= db_query("SELECT `pcode`,`locality`,`zone_number` FROM `{liveparcels_zone_post}");
+	foreach($result as $row){
+			$postlist[$row->zone_number] = array(
+			  'pcode' => $row->pcode,
+			  'locality' => $row->locality,			  
+			);
+	}
+	return json_encode($postlist);
+	
 }

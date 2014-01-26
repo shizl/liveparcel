@@ -255,6 +255,7 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
             }else{
                 $error.='Please select upload file.';
             }
+            
                  $_SESSION['liveparcels_status']=array('status'=>$error<>'' ? 0:1,'message'=>$error <> '' ? $error : 'Failure Line:'.$fline.';<br>Failure count:'.$fcount.';<br>Success count:'.$secount);
             }
         	
