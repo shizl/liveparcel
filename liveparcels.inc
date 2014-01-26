@@ -26,10 +26,10 @@ function liveparcels_packageshow() {
 	  <div class="page-float">
       <div class="page-content-select"><h4>Please select the service you requires:</h4></div>
       <div class="page-content-choose">
-		 <input class="deliver" type="radio" name="items" checked value="" >Deliver one or more items
-         <input class="pick-up" type="radio" name="items" value="" >Pick-up one or more items
+		 <input class="deliver" type="radio" name="items" checked value="1" >Deliver one or more items
+         <input class="pick-up" type="radio" name="items" value="2" >Pick-up one or more items
       </div>
-      <div class="page-content-address" ><strong>Pickup post/suburb:</strong><input id="0" class="post-suburb" type="text" ><input class="pnum-from" type="hidden" ><ul class="fpcode" id="pcode0"></ul></div>
+      <div class="page-content-address" ><strong class="package-from">Destination post/suburb:</strong><input id="0" class="post-suburb" type="text" ><input class="pnum-from" type="hidden" ><ul class="fpcode" id="pcode0"></ul></div>
       <div class="post-all" id=vp1>
           <div class="parcel"><strong>Parcel #1</strong><input type="button" value="X"></div>
         <div class="post-mess"> 
@@ -37,7 +37,7 @@ function liveparcels_packageshow() {
           <tr><td class="dimensions">Dimensions(cm):</td><td><input class="dim-first" type="text">X<input class="dim-second" type="text">X<input class="dim-three" type="text"></td></tr>
           <tr><td class="dimensional">Dimensional weight(kg):</td><td class="dimens-input"><input class="dimens-text" type="text" readonly>(this value is calculated automatically)</td></tr>
           <tr><td class="weight">weight(kg):</td><td class="wei-text"><input class="weight-text" type="text" ></td></tr>
-          <tr><td class="destination">Destination postcode/suburb:</td><td class="des-text"><input class="postcode-suburb"  id="1" type="text" ><input class="pnum-to" type="hidden" ><ul class="pcode" id="pcode1"></ul></td></tr>
+          <tr><td class="destination"><span class="package-to">Pickup postcode/suburb:</span></td><td class="des-text"><input class="postcode-suburb"  id="1" type="text" ><input class="pnum-to" type="hidden" ><ul class="pcode" id="pcode1"></ul></td></tr>
         </table>
         </div>
         <div class="post-btn">
@@ -131,6 +131,15 @@ function liveparcels_packageshow() {
 		$(".post-all:last .parcel input").show();
    		
      });
+     $(".deliver").click(function(){
+         $(".package-from").text("Destination post/suburb:");
+         $(".package-to").text("Pickup postcode/suburb:");
+        });
+    $(".pick-up").click(function(){
+         $(".package-to").text("Destination post/suburb:");
+         $(".package-from").text("Pickup postcode/suburb:");
+        });
+        
 	 $(".parcel input").click(function() {
 		$(this).parent().parent().remove();
 		num--;
@@ -143,8 +152,14 @@ function liveparcels_packageshow() {
 			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-			  var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-			  var postfrom =$(".pnum-from").val();
+              if($(".deliver").attr("checked")=="checked"){
+                     var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var postto =$(".pnum-from").val();
+                }else{
+                    var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var postfrom =$(".pnum-from").val();
+                }
+			 
 			  if(dimfirst > max){
 				  max = dimfirst; 
 			  }
