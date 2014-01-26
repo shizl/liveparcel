@@ -127,3 +127,16 @@ function liveparcels_packageshow() {
 	 
   return $build;
 }
+ function liveparcels_managepackage(){
+	 $atype=!empty($_REQUEST['atype']) ? trim($_REQUEST['atype']):'';
+
+	 	$result = db_query("SELECT `pprice` FROM `{liveparcels_package}` WHERE   ORDER BY `pprice` DESC", array(':id' => $order->order_id))->fetchField();
+		foreach ($result as $row) {
+			$items[$row->position] = array(
+		
+			  'pprice' => $row->pprice
+			);
+		}
+				
+        echo $
+}
