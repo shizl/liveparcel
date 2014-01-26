@@ -247,7 +247,7 @@ function liveparcels_packageshow() {
 			  res+="<li id="+zonedata[k].pnum+">"+str+" "+post+"</li>";
 		    }	
 		}
-        if(res<>""){
+        if(res != ""){
          $("#pcode"+id).html(res);
            $(".pcode li").click(function(){
                  $(this).parent("ul").hide();
