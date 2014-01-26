@@ -68,6 +68,27 @@ function liveparcels_menu() {
     'access callback' => true,
     'file' => 'liveparcels.inc',
   );
+     $items['liveparcels/getpackageprice'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getPackageprice',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+  );
+     $items['liveparcels/getzoneprice'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZoneprice',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+  );
+     $items['liveparcels/getzonelistdata'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZonelistData',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+  );
 
   return $items;
 }
