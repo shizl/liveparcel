@@ -12,13 +12,12 @@ function liveparcels_packageshow() {
     
 	$rows['package'] = array(array('data' => '<div class="page-main">
 	<div class="header-warning">
-	  Warning: The calculator is unable to deterine the cost to deliver your parcel #3 to the location
-	  you have entered. You may proceed and complete the checkout but the parcel will not be picked up untill you have accepted the price that the administrator will provide and notify you within one working day.
+	  '.variable_get('liveparcels_error_message').'
 	</div>
 	<div class="header-mess">
 	  <div><h1>Postage calculator</h1></div>
 	  <div class="header-content">
-		  To obtain a free,instant quote on your shipment,please select the service you requires, enter the pickup/destination postcode/suburb as well as the parcel\'s details. You may enter the detail\'s of multiple parcels to send to or pick up from different places on this form. If you would like to proceed with the booking,press the Checkout button.
+	    '.variable_get('liveparcels_info_message').'
 	  </div>
 	</div>
 	<div class="page-content">
