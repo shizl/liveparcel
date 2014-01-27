@@ -1,7 +1,7 @@
 
 function savenote(nid,atype){
 	if(atype=="delete"){
-		jQuery.post('/admin/liveparcels_managepackage',{position:nid,atype:atype},function(data){
+		jQuery.post('/admin/liveparcels/settings/managepackage',{position:nid,atype:atype},function(data){
 			if(data){
 				alert('Delete package success.');	
 				jQuery("#n"+nid).remove();
@@ -85,7 +85,7 @@ function savenote(nid,atype){
 			newid=1;
 		}
 		
-		jQuery.post('/admin/liveparcels_managepackage',{position:newid,oldposition:oldposition,package_name:package_name,dead_weight:dead_weight,dimen_weight:dimen_weight,plength:plength,pprice:pprice,atype:atype},function(data){
+		jQuery.post('/admin/liveparcels/settings/managepackage',{position:newid,oldposition:oldposition,package_name:package_name,dead_weight:dead_weight,dimen_weight:dimen_weight,plength:plength,pprice:pprice,atype:atype},function(data){
 				if(data){
                
                 document.location.reload();
@@ -101,7 +101,7 @@ function savenote(nid,atype){
 }
 (function ($){
 $(document).ready(function(){
-	$.post("/admin/liveparcels_managepackage",{atype:'packagelist'},function(data){
+	$.post("/admin/liveparcels/settings/managepackage",{atype:'packagelist'},function(data){
 		if(data !='[]'){
 			var ndata="";
 			packageData=eval('(' + data + ')');	
@@ -116,7 +116,7 @@ $(document).ready(function(){
 	$('#update-factor').click(function(){
 		var factor=parseFloat($('#factor').val());
 		if(factor>0){
-            $.post('/admin/liveparcels_updatefactor',{factor:factor},function(msg){
+            $.post('/admin/liveparcels/settings/updatefactor',{factor:factor},function(msg){
                 if(msg){
                 alert('update successfuly.');
                 }
@@ -132,7 +132,7 @@ $(document).ready(function(){
             }else{
                 var region_id='';
             }
-            $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$(this).val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+            $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$(this).val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -141,7 +141,7 @@ $(document).ready(function(){
        
     });
     $('.state-pickup').change(function(){
-            $.post('/admin/liveparcels_updatezone',{region:$(this).val()},function(msg){
+            $.post('/admin/liveparcels/settings/updatezone',{region:$(this).val()},function(msg){
                 if(msg){
                      $('.zone-pickup').html(msg);
                     if($('.useregion').attr('checked')==true){
@@ -149,7 +149,7 @@ $(document).ready(function(){
                     }else{
                         var region_id='';
                     }
-                 $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+                 $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -176,7 +176,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -198,7 +198,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -219,7 +219,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -235,10 +235,10 @@ $(document).ready(function(){
             var region_id='';
         }
         
-        $.post('/admin/liveparcels_updatezone',{region:region_id},function(msg){
+        $.post('/admin/liveparcels/settings/updatezone',{region:region_id},function(msg){
                 if(msg){
                      $('.zone-pickup').html(msg);
-                 $.post('/admin/liveparcels_zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+                 $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -248,7 +248,7 @@ $(document).ready(function(){
                 }
             });
     });
-     $.post('/admin/liveparcels_zoneresult',{region:'',zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+     $.post('/admin/liveparcels/settings/zoneresult',{region:'',zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
             if(msg){
                 $('.pickup-result .draggable').remove();
                 $('.table-head').after(msg);

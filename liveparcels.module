@@ -42,7 +42,7 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
   
-  $items['admin/liveparcels_updatefactor'] = array(
+  $items['admin/liveparcels/settings/updatefactor'] = array(
     'title' => 'Update factor',
     'description' => 'Update factor.',
     'page callback' => 'liveparcels_factor_settings',
@@ -51,28 +51,28 @@ function liveparcels_menu() {
   );
 
   
-  $items['admin/liveparcels_managepackage'] = array(
+  $items['admin/liveparcels/settings/managepackage'] = array(
     'title' => 'manage package  ',
     'description' => 'manage package.',
     'page callback' => 'liveparcels_managepackage',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-  $items['admin/liveparcels_fileupload'] = array(
+  $items['admin/liveparcels/settings/fileupload'] = array(
     'title' => 'manage fileupload  ',
     'description' => 'manage fileupload.',
     'page callback' => 'liveparcels_fileupload',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels_zoneresult'] = array(
+    $items['admin/liveparcels/settings/zoneresult'] = array(
     'title' => 'manage zoneresult  ',
     'description' => 'manage zoneresult.',
     'page callback' => 'liveparcels_zoneresult',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels_updatezone'] = array(
+    $items['admin/liveparcels/settings/updatezone'] = array(
     'title' => ' updatezone  ',
     'description' => ' updatezone.',
     'page callback' => 'liveparcels_updatezone',
