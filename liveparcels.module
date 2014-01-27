@@ -16,15 +16,33 @@
 function liveparcels_menu() {
   $items = array();
 
-  $items['admin/liveparcels'] = array(
+    $items['admin/liveparcels'] = array(
     'title' => 'Live Parcels',
+    'description' => 'Administer Live Parcels .',
+    'page callback' => 'liveparcels_configpage',
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'liveparcels.admin.inc',
+  );
+  $items['admin/liveparcels/settings'] = array(
+    'title' => 'Live Parcels Setting',
     'description' => 'Administer Live Parcels settings.',
     'page callback' => 'liveparcels_admin_settings',
     'access arguments' => array('administer actions'),
     'weight' => -13,
     'file' => 'liveparcels.admin.inc',
   );
-  $items['admin/liveparcels/updatefactor'] = array(
+  $items['admin/liveparcels/message'] = array(
+    'title' => 'Live Parcels Message',
+    'description' => 'Administer Live Parcels Message.',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('liveparcels_admin_message_form'),
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'liveparcels.admin.inc',
+  );
+  
+  $items['admin/liveparcels_updatefactor'] = array(
     'title' => 'Update factor',
     'description' => 'Update factor.',
     'page callback' => 'liveparcels_factor_settings',
@@ -33,28 +51,28 @@ function liveparcels_menu() {
   );
 
   
-  $items['admin/liveparcels/managepackage'] = array(
+  $items['admin/liveparcels_managepackage'] = array(
     'title' => 'manage package  ',
     'description' => 'manage package.',
     'page callback' => 'liveparcels_managepackage',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-  $items['admin/liveparcels/fileupload'] = array(
+  $items['admin/liveparcels_fileupload'] = array(
     'title' => 'manage fileupload  ',
     'description' => 'manage fileupload.',
     'page callback' => 'liveparcels_fileupload',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/zoneresult'] = array(
+    $items['admin/liveparcels_zoneresult'] = array(
     'title' => 'manage zoneresult  ',
     'description' => 'manage zoneresult.',
     'page callback' => 'liveparcels_zoneresult',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/updatezone'] = array(
+    $items['admin/liveparcels_updatezone'] = array(
     'title' => ' updatezone  ',
     'description' => ' updatezone.',
     'page callback' => 'liveparcels_updatezone',
