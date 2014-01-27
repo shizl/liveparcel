@@ -132,12 +132,12 @@ function liveparcels_packageshow() {
    		
      });
      $(".deliver").click(function(){
-         $(".package-from").text("Destination post/suburb:");
-         $(".package-to").text("Pickup postcode/suburb:");
+         $(".package-from").text("Pickup postcode/suburb:");
+         $(".package-to").text("Destination postcode/suburb:");
         });
     $(".pick-up").click(function(){
-         $(".package-to").text("Destination post/suburb:");
-         $(".package-from").text("Pickup postcode/suburb:");
+         $(".package-to").text("Pickup postcode/suburb:");
+         $(".package-from").text("Destination postcode/suburb:");
         });
         
 	 $(".parcel input").click(function() {
@@ -172,19 +172,27 @@ function liveparcels_packageshow() {
 			  $.get("/liveparcels/getpackageprice",{max:max,dimenstext:dimenstext,weighttext:weighttext},function(data){
 			       if(data>0){
                      $.get("/liveparcels/getzoneprice",{postfrom:postfrom,postto:postto,price:data},function(zone){
-                          
+                       if(zone>0){ 
                           $(".order ul").append("<li>" + parcelnum +":&nbsp" + zone +"</li>");
                            
                           subtotal = subtotal + parseFloat(zone);
                        
-                         if(f<tlen){
+                          if(f<tlen){
 							getprice(f+1,tlen,postfrom,subtotal);
-                         }else{
-                         
+                          }else{                       
 							$(".order-total").html("Total: " + subtotal);
-                         }
+                          }
+					    }else{
+                            $(".order ul").append("<li>" + parcelnum +":&nbsp??</li>");
+                            $(".header-warning").show();
+                            if(f<tlen){
+							   getprice(f+1,tlen,postfrom,subtotal);
+                            }else{                       
+							  $(".order-total").html("Total: " + subtotal);
+                          }
+					    }
                      });
-			       }
+			       } v
 	        }) ;
 	       }
 	 $(".order-btn-first").click(function(){

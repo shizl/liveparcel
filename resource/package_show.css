@@ -26,7 +26,7 @@ background:#fff !important;
  width:650px;
  margin:auto;
  border:1px solid black;
- padding:15px 15px 0px 15px;
+ padding:10px 15px 0px 15px;
  display: inline-block;
 }
 .header-warning {
@@ -34,9 +34,11 @@ color:red;
 font-weight:700;
 width:100%;
 text-align:center;
+display:none;
 }
 .header-mess {
 padding-left:30px;
+margin-top:-16px;
 }
 .header-mess h1{
 font-size: 40px;
@@ -207,7 +209,7 @@ position: absolute;
 padding: 0 !important;
 margin: 0 !important;
 z-index:3;
-left:164px;
+left:190px;
 height:150px;
 overflow-y:auto;
 background:#eee;
