@@ -98,7 +98,7 @@ function liveparcels_packageshow() {
           <div class="order-total">Total:No value</div>
           </div>
           <div class="order-btn">
-		    <input class="form-submit" type="button" name="modify" value="Save">
+		    <input class="form-submit" type="button" name="modify" value="Update">
 	        <input class="form-submit" type="button" name="checkout" value="Checkout">
           </div>  
 	  <div class="footer-note">
@@ -421,7 +421,7 @@ function liveparcels_packageshow() {
 	        }) ;
 	       }
 	 $(".order-btn input:first").click(function(){
-		if($(this).attr("value")=="Save"){
+		if($(this).attr("value")=="Update"){
 		   
 	       var postfrom =$(".pnum-from").val();
 	       var postfroms =$(".post-suburb").val();
@@ -444,7 +444,7 @@ function liveparcels_packageshow() {
 	       $(".post-all input").attr("disabled",true);
 	       $(".add_new input").attr("disabled",true);
 	       $(".post-mess table input").css("background","#d2d2d2");
-	       $(this).attr("value","Update");
+	       $(this).attr("value","Modify");
 	    }else{
 	      
 	       if(postfroms == ""){
@@ -464,7 +464,7 @@ function liveparcels_packageshow() {
 		   $(".order ul li").remove();
 		   $(".order ul").append("<li>Pending...</li>");
 		   $(".order-total").html("Total: Pending..."); 
-	       $(this).attr("value","Save");
+	       $(this).attr("value","Update");
 		}    
 	 });
    
