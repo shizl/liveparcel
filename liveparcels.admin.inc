@@ -454,6 +454,13 @@ function liveparcels_zonedata($atype='zoneoption',$region=''){
         '#default_value' => variable_get('liveparcels_error_message'),
        
       );
+      $form['liveparcels_note_message'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Liveparcels Note Message'),
+        '#description' => t('Liveparcels Note Message'),
+        '#default_value' => variable_get('liveparcels_note_message'),
+       
+      );
 
       return system_settings_form($form);
     }

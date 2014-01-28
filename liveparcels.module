@@ -79,7 +79,7 @@ function liveparcels_menu() {
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
   );
-     $items['liveparcels/packageshow'] = array(
+     $items['liveparcels/parcel_quote'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_packageshow',

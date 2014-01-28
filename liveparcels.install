@@ -209,5 +209,14 @@ function liveparcels_uninstall() {
     ->execute();
     db_query('DROP TABLE `liveparcels_package`, `liveparcels_zone_post`, `liveparcels_zone_price`;');
 }
+/**
+ * Implements hook_install().
+ */
+function liveparcels_install() {
+    variable_set('liveparcels_postcount','');
+    variable_set('liveparcels_info_message','');
+    variable_set('liveparcels_error_message','');
+    variable_set('liveparcels_note_message','');
+}
 
 
