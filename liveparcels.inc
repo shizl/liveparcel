@@ -59,7 +59,7 @@ function liveparcels_packageshow() {
               </td>
             </tr>
             <tr>
-               <td class="weight">Weight (kg):</td>
+               <td class="weight">Dead weight (kg):</td>
                <td class="wei-text">
                  <input class="weight-text" type="text" >
                </td>
