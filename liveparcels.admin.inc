@@ -443,22 +443,22 @@ function liveparcels_zonedata($atype='zoneoption',$region=''){
   
       $form['liveparcels_info_message'] = array(
       '#type' => 'textarea',
-        '#title' => t('Liveparcels Info Message'),
-        '#description' => t('Liveparcels Info Message'),
+        '#title' => t('Welcome message'),
+        '#description' => t('This message will be shown just below the heading of the quote and book page.'),
         '#default_value' => variable_get('liveparcels_info_message'),
         
       );
       $form['liveparcels_error_message'] = array(
         '#type' => 'textarea',
-        '#title' => t('Liveparcels Error Message'),
-        '#description' => t('Liveparcels Error Message'),
+        '#title' => t('Error message'),
+        '#description' => t('This message will be shown whenever pricing is undefined and LiveParcels is unable to determine the price automatically.'),
         '#default_value' => variable_get('liveparcels_error_message'),
        
       );
       $form['liveparcels_note_message'] = array(
         '#type' => 'textarea',
-        '#title' => t('Liveparcels Note Message'),
-        '#description' => t('Liveparcels Note Message'),
+        '#title' => t('Bottom message'),
+        '#description' => t('This message will be shown at the bottom of the quote and book page.'),
         '#default_value' => variable_get('liveparcels_note_message'),
        
       );
