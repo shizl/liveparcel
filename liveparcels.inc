@@ -15,7 +15,6 @@ function liveparcels_packageshow() {
 	  '.variable_get('liveparcels_error_message').'
 	</div>
 	<div class="header-mess">
-	  <div><h1>Postage calculator</h1></div>
 	  <div class="header-content">
 	    '.variable_get('liveparcels_info_message').'
 	  </div>
@@ -390,32 +389,32 @@ function liveparcels_packageshow() {
                      $.get("/liveparcels/getzoneprice", 
                      {postfrom:postfrom,postto:postto,price:data},function(zone){
                        if(zone>0){ 
-                          $(".order ul").append("<li>" + parcelnum +":&nbsp" + zone +"</li>");
+                          $(".order ul").append("<li>" + parcelnum +": '.variable_get('uc_currency_sign').'"+ zone +"</li>");
                            
                           subtotal = subtotal + parseFloat(zone);
                        
                           if(f<tlen){
 							getprice(f+1,tlen,postfrom,subtotal);
                           }else{                       
-							$(".order-total").html("Total: " + subtotal);
+							$(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
                           }
 					    }else{
-                            $(".order ul").append("<li>" + parcelnum +"<span style=\'color:red\'>:&nbsp ??</span></li>");
+                            $(".order ul").append("<li>" + parcelnum + ": <span style=\'color:red\'>??</span></li>");
                             $(".header-warning").show();
                             if(f<tlen){
 							   getprice(f+1,tlen,postfrom,subtotal);
                             }else{                       
-							  $(".order-total").html("Total: " + subtotal);
+							  $(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
                           }
 					    }
                      });
 			       }else{
-			       $(".order ul").append("<li>" + parcelnum +"<span style=\'color:red\'>:&nbsp ??</span></li>");
+			       $(".order ul").append("<li>" + parcelnum +": <span style=\'color:red\'>??</span></li>");
                             $(".header-warning").show();
 					if(f<tlen){
 						getprice(f+1,tlen,postfrom,subtotal);
 					  }else{                       
-						$(".order-total").html("Total: " + subtotal);
+						$(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
 					  }
 			       }
 	        }) ;

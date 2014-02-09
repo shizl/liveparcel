@@ -25,9 +25,9 @@ background:#fff !important;
 .page-main {
  width:650px;
  margin:auto;
- border:1px solid black;
  padding:10px 15px 0px 15px;
  display: inline-block;
+ margin-top:-15px;
 }
 .header-warning {
 color:red;
@@ -38,7 +38,7 @@ display:none;
 }
 .header-mess {
 padding-left:12px;
-margin-top:-16px;
+margin-top:25px;
 }
 .header-mess h1{
 font-size: 40px;

@@ -80,8 +80,8 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
      $items['liveparcels/parcel_quote'] = array(
-    'title' => ' package show  ',
-    'description' => ' package show.',
+    'title' => ' Quote and book  ',
+    'description' => ' Quote and book.',
     'page callback' => 'liveparcels_packageshow',
     'access callback' => true,
     'file' => 'liveparcels.inc',
