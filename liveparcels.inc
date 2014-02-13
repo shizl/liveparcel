@@ -90,11 +90,9 @@ function liveparcels_packageshow() {
       <div class="order">
           <div class="order-title">Order summary</div>
           <ul>
-          <li class="order-first">Parcel #1: No value</li>
-          <li>Parcel #2: No value</li>
-          <li>Parcel #3: No value</li>
+          <li class="order-first">Pending...</li>
           </ul>
-          <div class="order-total">Total:No value</div>
+          <div class="order-total">Total : Pending...</div>
           </div>
           <div class="order-btn">
 		    <input class="form-submit" type="button" name="modify" value="Update">
@@ -353,9 +351,11 @@ function liveparcels_packageshow() {
 		num--;
 	 });
 	 $(".post-all").mouseenter(function(){
-	     $(this).find(".duplicate").show();
+	    if($(".order-btn input:first").attr("value")=="Update"){
+	       $(this).find(".duplicate").show();
+	    }
 	 }).mouseleave(function(){
-	     $(this).find(".duplicate").hide();
+	    $(this).find(".duplicate").hide();
 	 });
 	 function getprice(f,tlen,postfrom,subtotal){
 	 
@@ -440,9 +440,9 @@ function liveparcels_packageshow() {
 		   var tlen=$(".post-all:last").index()-2;
 		   $(".order ul li").remove();
 		   getprice(f,tlen,postfrom,subtotal);	       
-	       $(".post-all input").attr("disabled",true);
-	       $(".add_new input").attr("disabled",true);
+	       $(".page-float input").attr("disabled",true);     
 	       $(".post-mess table input").css("background","#d2d2d2");
+	       $(".add_new").hide();
 	       $(this).attr("value","Modify");
 	    }else{
 	      
@@ -455,14 +455,15 @@ function liveparcels_packageshow() {
 		   }else{
 		      $(".post-suburb").css("border","1px solid #ccc");
 		   }
-		   $(".post-all input").attr("disabled",false);
-		   $(".add_new input").attr("disabled",false);
+		   $(".page-float input").attr("disabled",false);
+		   
 		   $(".dimens-text").attr("disabled",true);
 		   $(".post-mess table input").css("background","white");
 		   $(".dimens-input input").css("background","#d2d2d2");
 		   $(".order ul li").remove();
 		   $(".order ul").append("<li>Pending...</li>");
 		   $(".order-total").html("Total: Pending..."); 
+		   $(".add_new").show();
 	       $(this).attr("value","Update");
 		}    
 	 });

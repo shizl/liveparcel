@@ -85,6 +85,8 @@ function liveparcels_menu() {
     'page callback' => 'liveparcels_packageshow',
     'access callback' => true,
     'file' => 'liveparcels.inc',
+    'menu_name'=>'main-menu',
+    'weight'=>2,
   );
      $items['liveparcels/getpackageprice'] = array(
     'title' => ' package show  ',
