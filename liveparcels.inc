@@ -15,10 +15,9 @@ function liveparcels_packageshow() {
 	  '.variable_get('liveparcels_error_message').'
 	</div>
 	<div class="header-mess">
-<<<<<<< HEAD
-=======
+
 <!--	  <div><h1>Postage calculator</h1></div> -->
->>>>>>> text_content
+
 	  <div class="header-content">
 	    '.variable_get('liveparcels_info_message').'
 	  </div>
