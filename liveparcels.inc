@@ -15,6 +15,10 @@ function liveparcels_packageshow() {
 	  '.variable_get('liveparcels_error_message').'
 	</div>
 	<div class="header-mess">
+<<<<<<< HEAD
+=======
+<!--	  <div><h1>Postage calculator</h1></div> -->
+>>>>>>> text_content
 	  <div class="header-content">
 	    '.variable_get('liveparcels_info_message').'
 	  </div>
@@ -44,7 +48,7 @@ function liveparcels_packageshow() {
           <div class="post-mess"> 
 		    <table>
             <tr>
-             <td class="dimensions">Dimensions(cm):</td>
+             <td class="dimensions">Dimensions (cm):</td>
               <td>
               <input class="dim-first" type="text">X
               <input class="dim-second" type="text">X
@@ -52,13 +56,13 @@ function liveparcels_packageshow() {
              </td>
             </tr>
             <tr>
-              <td class="dimensional">Dimensional weight(kg):</td>
+              <td class="dimensional">Dimensional weight (kg):</td>
               <td class="dimens-input">
                 <input class="dimens-text" type="text" readonly>(this value is calculated automatically)
               </td>
             </tr>
             <tr>
-               <td class="weight">weight(kg):</td>
+               <td class="weight">Dead weight (kg):</td>
                <td class="wei-text">
                  <input class="weight-text" type="text" >
                </td>

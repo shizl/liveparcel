@@ -214,9 +214,7 @@ function liveparcels_uninstall() {
  */
 function liveparcels_install() {
     variable_set('liveparcels_postcount','');
-    variable_set('liveparcels_info_message','');
-    variable_set('liveparcels_error_message','');
-    variable_set('liveparcels_note_message','');
+    variable_set('liveparcels_info_message','To obtain a free, instant quote on your shipment, please select the service you requires, enter the pickup/destination postcode/suburb as well as the parcel&#39s details. You may enter the details of multiple parcels to send to or pick up from different places on this form. If you would like to proceed with the booking, press the Checkout button.');
+    variable_set('liveparcels_error_message','Warning: The calculator is unable to determine the cost to deliver one of your parcels to the location you have entered. You may proceed and complete the checkout but the parcel will not be picked up until you have accepted the price that the administrator will provide and notify you within one working day.');
+    variable_set('liveparcels_note_message','Note: To calculate your parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.');
 }
-
-

@@ -25,16 +25,16 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
   $items['admin/liveparcels/settings'] = array(
-    'title' => 'Live Parcels Setting',
-    'description' => 'Administer Live Parcels settings.',
+    'title' => 'Pricing and postcode',
+    'description' => 'Configure pricing and postcode. View price table.',
     'page callback' => 'liveparcels_admin_settings',
     'access arguments' => array('administer actions'),
     'weight' => -13,
     'file' => 'liveparcels.admin.inc',
   );
   $items['admin/liveparcels/message'] = array(
-    'title' => 'Live Parcels Message',
-    'description' => 'Administer Live Parcels Message.',
+    'title' => 'Quote and book messages',
+    'description' => 'Customize the messages to show at the quote and book page.',
     'page callback' => 'drupal_get_form',
     'page arguments'=>array('liveparcels_admin_message_form'),
     'access arguments' => array('administer actions'),
@@ -80,8 +80,13 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
      $items['liveparcels/parcel_quote'] = array(
+<<<<<<< HEAD
     'title' => ' Quote and book  ',
     'description' => ' Quote and book.',
+=======
+    'title' => 'Quote and book',
+    'description' => 'Obtain quotation and book delivery/pickup',
+>>>>>>> text_content
     'page callback' => 'liveparcels_packageshow',
     'access callback' => true,
     'file' => 'liveparcels.inc',
@@ -112,5 +117,3 @@ function liveparcels_menu() {
 
   return $items;
 }
-
-
