@@ -124,7 +124,7 @@ margin-left:6px;
 display:none;
 }
 .order {
-background: #E9E6E3;
+background: #F6F6F2;
 float: right;
 width: 180px;
 margin-top: 16px;
@@ -156,12 +156,12 @@ font-weight:bold;
 padding: 10px 15px 5px;
 }
 .order li {
-margin-left:40px;
+margin-left:15px;
 margin-bottom: 8px;
+margin-top:10px;
 }
 .order-total {
 border-top: 1px solid #999;
-padding-left: 55px;
 margin-top: 15px;
 padding-top: 6px;
 margin-left: 15px;
@@ -225,6 +225,10 @@ float: left;
 margin-left: 56px;
 display:none;
 }
+.post-mess table tr td:first-child{
+width:170px;
+}
+
 .post-mess table tr  input {
 width:46px;
 }

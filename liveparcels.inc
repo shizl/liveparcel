@@ -9,7 +9,18 @@
  * Menu callback which provides the store administration overview page.
  */
 function liveparcels_packageshow() {
-    
+
+$items = menu_get_item('liveparcels/parcel_quote');
+$item = array(
+  'link_path'=>$items['path'],
+  'link_title'=>$items['title'],
+  'description'=>$items['description']
+ );
+$count = db_query("SELECT count(*) FROM {menu_links} where menu_name = 'navigation' and link_path ='liveparcels/parcel_quote' ")->fetchField();
+if($count == 0){
+menu_link_save($item);
+}
+
 	$rows['package'] = array(array('data' => '<div class="page-main">
 	<div class="header-warning">
 	  '.variable_get('liveparcels_error_message').'
@@ -90,12 +101,14 @@ function liveparcels_packageshow() {
           </div>   
       </div>
       </div>
-      <div class="order">
-          <div class="order-title">Order summary</div>
+      <div class="order sidebar">
+	 <div class="block">	
+          <h2>Order summary</h2>
           <ul>
           <li class="order-first">Pending...</li>
           </ul>
           <div class="order-total">Total : Pending...</div>
+           </div>
           </div>
           <div class="order-btn">
 		    <input class="form-submit" type="button" name="modify" value="Update">
@@ -386,20 +399,20 @@ function liveparcels_packageshow() {
 			  if(dimthree > max){
 				  max = dimthree;  
 			  }
-			  $.get("/liveparcels/getpackageprice",
+			  $.get("/admin/liveparcels/getpackageprice/ajax",
 			  {max:max,dimenstext:dimenstext,weighttext:weighttext},function(data){
 			       if(data>0){
-                     $.get("/liveparcels/getzoneprice", 
+                     $.get("/admin/liveparcels/getzoneprice/ajax", 
                      {postfrom:postfrom,postto:postto,price:data},function(zone){
                        if(zone>0){ 
-                          $(".order ul").append("<li>" + parcelnum +": '.variable_get('uc_currency_sign').'"+ zone +"</li>");
+                          $(".order ul").append("<li>" + parcelnum +": '.variable_get('uc_currency_sign','$').'"+ zone +"</li>");
                            
                           subtotal = subtotal + parseFloat(zone);
                        
                           if(f<tlen){
 							getprice(f+1,tlen,postfrom,subtotal);
                           }else{                       
-							$(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
+							$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
                           }
 					    }else{
                             $(".order ul").append("<li>" + parcelnum + ": <span style=\'color:red\'>??</span></li>");
@@ -407,7 +420,7 @@ function liveparcels_packageshow() {
                             if(f<tlen){
 							   getprice(f+1,tlen,postfrom,subtotal);
                             }else{                       
-							  $(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
+							  $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
                           }
 					    }
                      });
@@ -417,7 +430,7 @@ function liveparcels_packageshow() {
 					if(f<tlen){
 						getprice(f+1,tlen,postfrom,subtotal);
 					  }else{                       
-						$(".order-total").html("Total: '.variable_get('uc_currency_sign').'" + subtotal);
+						$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
 					  }
 			       }
 	        }) ;
@@ -564,14 +577,14 @@ function liveparcels_getPackageprice() {
 	if($max>0 && $dimenstext>0 && $weighttext>0){
 		$items=0;
 
-		$arr = db_query("SELECT `dead_weight`,`dimen_weight`,`plength` FROM 
+		$arr = db_query("SELECT `weight`,`plength` FROM 
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
-		if($arr['dead_weight'] < $dimenstext || $arr['dimen_weight'] < $weighttext || $arr['plength'] < $max){
+		if($arr['weight'] < $dimenstext || $arr['plength'] < $max){
 		     $items=0;
 	    }else{			
 			$nowprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `plength`<". $max ." AND `dead_weight`<". $dimenstext ." 
-		   AND  `dimen_weight`<" . $weighttext . " ORDER BY `pprice` DESC  LIMIT 1")
+		   WHERE `plength`<". $max ." AND `weight`<". $dimenstext ." 
+		   ORDER BY `pprice` DESC  LIMIT 1")
 		   ->fetchField();
 		   if($nowprice>0){
 			  $items= $nowprice;

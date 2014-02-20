@@ -2,7 +2,7 @@ name = Live Parcels
 description = Live Parcels.
 package = Live Parcels - core
 core = 7.x
-
+dependencies[] = uc_store
 configure = admin/liveparcels
 stylesheets[all][] = liveparcels.css
 

@@ -17,8 +17,8 @@ function liveparcels_admin_settings() {
 <p>For more information, visit <a href="http://en.wikipedia.org/wiki/Dimensional_weight" target="_blank">http://en.wikipedia.org/wiki/Dimensional_weight</a></p>
 <p>Dimensional weight = (L cm x W cm x H cm) x Dimensional Factor</p></div> <div class="parcels-factor">Dimensional Factor: <input type="text" class="small-text" value="'.variable_get('liveparcels_factor',0.0002).'" id="factor"> &nbsp;&nbsp;<input type="button" value="update" class="form-submit" id="update-factor"></div>
 <div class="package-table"><ul class="packagedata">
-<li id="phead"><div class="field-small">Position</div><div class="field">Package Name</div><div class="field">Dead Weight (kg)</div><div class="field">Dimensional Weight (kg)</div><div class="field-small">Length (cm)</div><div class="field-small">Price ($)</div><div class="field">Edit/Delete</div></li>
-<li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="package_name small-text"></div><div class="field"><input type="text" class="dead_weight small-text"></div><div class="field"><input type="text" class="dimen_weight small-text"></div><div class="field-small"><input type="text" class="plength small-text"></div><div class="field-small"><input type="text" class="pprice small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div></div>'));
+<li id="phead"><div class="field-small">Position</div><div class="field">Package Name</div><div class="field">Weight (kg)</div><div class="field-small">Length (cm)</div><div class="field-small">Price ('.variable_get('uc_currency_sign','$').')</div><div class="field">Edit/Delete</div></li>
+<li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="package_name small-text"></div><div class="field"><input type="text" class="weight small-text"></div><div class="field-small"><input type="text" class="plength small-text"></div><div class="field-small"><input type="text" class="pprice small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div></div>'));
 	$rows['zone_post'] = array(array('data' => '<div class="parcels-title">Postcode, region and zone settings</div><div class="parcels-body"><div class="parcels-note"><p>If you would like to check the complete list of postcodes/regions/zones stored in LiveParcels, click export and open the saved csv file using spreadsheet software such as Microsoft Excel or <a href="http://www.libreoffice.org/" target="_blank">LibreOffice</a>. After you have modified the csv, you can update the postcode, region and zone settings on LiveParcels by clicking the Choose File button, browse and import the csv file you have modified. Please make sure the csv you import follows the same structure as the csv exported from LiveParcels or it will not be processed correctly.</p> <p>In order to allow you to manage/set the pricing more easily, multiple postcodes (associated with suburb/state) are grouped into zones; multiple zones are grouped into regions. Grouping of zones into region is optional, its only purpose is to allow you to find the zones more easily in the price table below. You can leave the region column blank if you don&#39t want to use region grouping. If you decide to group zones into region, please make sure that each zone only belongs to one region or it will be ignored.</p><p>By default, we do not provide the postcode database. You would have to provide your own. You are encouraged to find the postcode database(csv) of the country you requires from your local post office&#39s web site or you may can try <a href="http://download.geonames.org/export/zip/" target="_blank">geoname&#39s postcode database</a>. Do note that geoname&#39s postcode database tends to have missing information for each postcode and you may have to fill it in manually. We can provide some assistance if you have troubles here.</p>
 </div> <div class="parcels-factor">Postcode Settings: The current data contain '.(variable_get('liveparcels_postcount') >0 ? variable_get('liveparcels_postcount').' rows':variable_get('liveparcels_postcount').'row').'<br><form id="zonepost" class="submit_form1" method="post" action="/admin/liveparcels/settings" enctype="multipart/form-data"> <input type="hidden" name="fact" value="importzonepost"> <input type="file" id="zone-import" name="zonepost">  <input type="submit" value="Upload" class="form-submit" id="import-zone"> <input type="button" value="Export" class="form-submit" id="export-zone"  onclick="location.href=\'/admin/liveparcels/settings/fileupload/?act=exportzonepost\'"></form></div>
 <div class="parcels-note"><strong style="color:#ff0000">Warning: Uploading a new csv file will replace the existing postcode/zone settings on the system and reset zone price multiplier to zero. Please make sure you have made a backup before you do this.
@@ -59,10 +59,9 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
 			$items[$row->position] = array(
 			  'position' => $row->position,
 			  'package_name' => $row->package_name,
-			  'dead_weight' => $row->dead_weight,
-			  'dimen_weight' => $row->dimen_weight,
+			  'weight' => $row->weight,
 			  'plength' => $row->plength,
-			  'pprice' => $row->pprice
+			  'pprice' => $row->pprice,
 			);
 		}
 				
@@ -72,9 +71,9 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
         $lastresult = db_query("SELECT * FROM `{liveparcels_package}`  ORDER BY `position` DESC limit 1");
         $lastarray=array();
         foreach ($lastresult as $row) {
-	 		$lastarray=array('position'=>$row->position,'dead_weight'=>$row->dead_weight,'dimen_weight'=>$row->dimen_weight,'plength'=>$row->plength);
+	 		$lastarray=array('position'=>$row->position,'weight'=>$row->weight,'plength'=>$row->plength);
         } 	
-        if(count($lastarray)>0 && $_REQUEST['position']>$lastarray['position'] && (floatval($_REQUEST['dead_weight'])<$lastarray['dead_weight'] || floatval($_REQUEST['dimen_weight'])<$lastarray['dimen_weight'] || floatval($_REQUEST['plenght'])<$lastarray['plenght'] || (floatval($_REQUEST['dead_weight'])==$lastarray['dead_weight'] && floatval($_REQUEST['dimen_weight'])==$lastarray['dimen_weight'] && floatval($_REQUEST['plenght'])==$lastarray['plenght']))){
+        if(count($lastarray)>0 && $_REQUEST['position']>$lastarray['position'] && (floatval($_REQUEST['weight'])<$lastarray['weight'] || floatval($_REQUEST['plenght'])<$lastarray['plenght'] || (floatval($_REQUEST['weight'])==$lastarray['weight'] && floatval($_REQUEST['plenght'])==$lastarray['plenght']))){
             echo 0;
             exit;
         }
@@ -88,11 +87,11 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
 				db_query("UPDATE `{liveparcels_package}` SET `position`=`position`+1 WHERE `position` >= '".$row->position."' ORDER BY `position` DESC ");
 			} 		
 	 	}	
-	 	db_query("INSERT INTO `{liveparcels_package}` VALUES('".$_REQUEST['position']."','".$_REQUEST['package_name']."','".$_REQUEST['dead_weight']."','".$_REQUEST['dimen_weight']."','".$_REQUEST['plength']."','".$_REQUEST['pprice']."')");
+	 	db_query("INSERT INTO `{liveparcels_package}` VALUES('".$_REQUEST['position']."','".$_REQUEST['package_name']."','".$_REQUEST['weight']."','".$_REQUEST['plength']."','".$_REQUEST['pprice']."')");
 	 	echo 1;
  	
  	}elseif($atype=="update"){
-		db_query("UPDATE `{liveparcels_package}` SET `package_name`='".$_REQUEST['package_name']."',`dead_weight`='".$_REQUEST['dead_weight']."',`dimen_weight`='".$_REQUEST['dimen_weight']."',`plength`='".$_REQUEST['plength']."',`pprice`='".$_REQUEST['pprice']."' WHERE `position`='".$_REQUEST['position']."'");			
+		db_query("UPDATE `{liveparcels_package}` SET `package_name`='".$_REQUEST['package_name']."',`weight`='".$_REQUEST['weight']."',`plength`='".$_REQUEST['plength']."',`pprice`='".$_REQUEST['pprice']."' WHERE `position`='".$_REQUEST['position']."'");			
  		echo 1;
  	
  	}elseif($atype=="delete"){
@@ -344,7 +343,7 @@ export csv file package post
           foreach ($result as $row) {
               $packdata="";
               foreach($tprice as $pprice){
-                    $packdata.=$row->multiplier > 0 ? '<td>$'.$pprice*floatval($row->multiplier).'</td>':'<td>Undefined</td>';
+                    $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$').$pprice*floatval($row->multiplier).'</td>':'<td>Undefined</td>';
                 }
                 $s++;
                 $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';

@@ -88,26 +88,29 @@ function liveparcels_menu() {
     'menu_name'=>'main-menu',
     'weight'=>2,
   );
-     $items['liveparcels/getpackageprice'] = array(
+     $items['admin/liveparcels/getpackageprice/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getPackageprice',
     'access callback' => true,
     'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
   );
-     $items['liveparcels/getzoneprice'] = array(
+     $items['admin/liveparcels/getzoneprice/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getZoneprice',
     'access callback' => true,
     'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
   );
-     $items['liveparcels/getzonelistdata'] = array(
+     $items['admin/liveparcels/getzonelistdata/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getZonelistData',
     'access callback' => true,
     'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
   );
 
   return $items;
