@@ -572,28 +572,32 @@ menu_link_save($item);
 
 function liveparcels_getPackageprice() {
 	$max = $_REQUEST['max'];
+
 	$dimenstext = $_REQUEST['dimenstext'];
-	$weighttext = $_REQUEST['weighttext'];	
-	if($max>0 && $dimenstext>0 && $weighttext>0){
+	$weighttext = $_REQUEST['weighttext'];
+
+	$weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
+	
+	if($max>0 && $dimenstext>0 && $weighttext>0){ 
 		$items=0;
 
 		$arr = db_query("SELECT `weight`,`plength` FROM 
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
-		if($arr['weight'] < $dimenstext || $arr['plength'] < $max){
+		if($arr['weight'] < $weight || $arr['plength'] < $max){
 		     $items=0;
-	    }else{			
+	        }else{			
 			$nowprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `plength`<". $max ." AND `weight`<". $dimenstext ." 
+		   WHERE `plength`<". $max ." AND `weight`<". $weight ." 
 		   ORDER BY `pprice` DESC  LIMIT 1")
 		   ->fetchField();
-		   if($nowprice>0){
+		        if($nowprice>0){
 			  $items= $nowprice;
 			}else{
 		  	$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
 		  	ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
-	       }
-	    }
-    }
+	                }
+	      }
+      }
 		echo $items;
 }  
 
