@@ -585,17 +585,26 @@ function liveparcels_getPackageprice() {
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
 		if($arr['weight'] < $weight || $arr['plength'] < $max){
 		     $items=0;
-	        }else{			
+	        }else{
+                     
+		$maxweight = db_query("SELECT `weight` FROM 
+		`{liveparcels_package}` ORDER BY `weight` DESC LIMIT 1")->fetchAssoc();
+		$maxlength = db_query("SELECT `plength` FROM 
+		`{liveparcels_package}` ORDER BY `plength` DESC LIMIT 1")->fetchAssoc();
+				
 			$nowprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `plength`<". $max ." AND `weight`<". $weight ." 
+		   WHERE `plength`<=". $maxlength['plength'] ." or `weight`<=". $maxweight['weight'] ." 
 		   ORDER BY `pprice` DESC  LIMIT 1")
 		   ->fetchField();
 		        if($nowprice>0){
 			  $items= $nowprice;
+    			 
 			}else{
 		  	$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
 		  	ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
 	                }
+
+
 	      }
       }
 		echo $items;
