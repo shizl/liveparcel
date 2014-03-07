@@ -587,10 +587,14 @@ function liveparcels_getPackageprice() {
 		     $items=0;
 	        }else{
                      				
-			$nowprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `plength`<". $max ." or `weight`<". $weight ." 
-		   ORDER BY `pprice` DESC  LIMIT 1")
+			$pprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+		   WHERE `plength`>=". $max ." ORDER BY `pprice` ASC  LIMIT 1")
 		   ->fetchField();
+$lprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+		   WHERE `weight`>=". $weight ." 
+		   ORDER BY `pprice` ASC  LIMIT 1")
+		   ->fetchField();
+$nowprice=$lprice >$pprice ? $lprice:$pprice;
 		        if($nowprice>0){
 			  $items= $nowprice;
     			 
