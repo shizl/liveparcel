@@ -73,7 +73,7 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
         foreach ($lastresult as $row) {
 	 		$lastarray=array('position'=>$row->position,'weight'=>$row->weight,'plength'=>$row->plength);
         } 	
-        if(count($lastarray)>0 && $_REQUEST['position']>$lastarray['position'] && (floatval($_REQUEST['weight'])<$lastarray['weight'] || floatval($_REQUEST['plenght'])<$lastarray['plenght'] || (floatval($_REQUEST['weight'])==$lastarray['weight'] && floatval($_REQUEST['plenght'])==$lastarray['plenght']))){
+        if(count($lastarray)>0 && $_REQUEST['position']>$lastarray['position'] && floatval($_REQUEST['weight'])<=$lastarray['weight'] && floatval($_REQUEST['plength'])<=$lastarray['plength']){
             echo 0;
             exit;
         }
