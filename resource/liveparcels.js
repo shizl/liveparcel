@@ -67,14 +67,14 @@ function savenote(nid,atype){
 					return false;
 				}
                 var newid= parseInt(jQuery(".package-line:eq(1) .position").val())+1;
-               }else if(position >= parseInt(jQuery(".package-line:eq(0) .position").val()) ){
+               }else if(position > parseInt(jQuery(".package-line:eq(0) .position").val()) ){
                    
-                if(((weight>=parseFloat(jQuery(".package-line:eq(1) .weight").val())  && plength >=parseFloat(jQuery(".package-line:eq(1) .plength").val())) || (weight<=parseFloat(jQuery(".package-line:eq(0) .weight").val())  && plength <=parseFloat(jQuery(".package-line:eq(0) .plength").val()))) && position != oldposition  ){
-                         alert('Please input values larger than the last row or in between the row you are trying to add to.');						return false;
-                }
-                    var newid= parseInt(jQuery(".package-line:eq(0) .position").val())+1;
+                    if(((weight>=parseFloat(jQuery(".package-line:eq(1) .weight").val())  && plength >=parseFloat(jQuery(".package-line:eq(1) .plength").val())) || (weight<=parseFloat(jQuery(".package-line:eq(0) .weight").val())  && plength <=parseFloat(jQuery(".package-line:eq(0) .plength").val()))) && position != oldposition  ){
+                             alert('Please input values larger than the last row or in between the row you are trying to add to.');						return false;
+                    }
+                        var newid= parseInt(jQuery(".package-line:eq(0) .position").val())+1;
                 }else{ 
-                    if(weight>=parseFloat(jQuery(".package-line:eq(0) .weight").val())  && plength >=parseFloat(jQuery(".package-line:eq(0) .plength").val()) && position != oldposition  ){
+                    if((weight == parseFloat(jQuery(".package-line:eq(0) .weight").val())  && plength >=parseFloat(jQuery(".package-line:eq(0) .plength").val())) || (weight>=parseFloat(jQuery(".package-line:eq(0) .weight").val())  && plength ==parseFloat(jQuery(".package-line:eq(0) .plength").val()))  ){
                                         alert('Please input values larger than the last row or in between the row you are trying to add to.');
                                         return false;
                                 }

@@ -382,7 +382,7 @@ menu_link_save($item);
 			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-              if($(".deliver").attr("checked")=="checked"){
+              if($(".deliver").attr("checked")){
                      var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postto =$(".pnum-from").val();
                 }else{
