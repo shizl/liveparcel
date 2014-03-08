@@ -3,7 +3,8 @@ function savenote(nid,atype){
 		jQuery.post('/admin/liveparcels/settings/managepackage',{position:nid,atype:atype},function(data){
 			if(data){
 				alert('Delete package success.');	
-				jQuery("#n"+nid).remove();
+				 document.location.reload();
+                //jQuery("#n"+nid).remove();
 			}
 		});
 	}else{
@@ -28,21 +29,30 @@ function savenote(nid,atype){
 		if( aid > 2){
 			if(position>parseInt(jQuery(".package-line:eq(0) .position").val())){
                 if(position>parseInt(jQuery(".package-line:eq("+(aid-1)+") .position").val())){
-                    if(weight <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())  && position != oldposition) {
+                    if((weight == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())) || (weight <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())) ) {
 
                         alert('Please input values larger than the last row or in between the row you are trying to add to.');
                         return false;
                     }
                 }else{
-                    if(((weight <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight >=parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength >= parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val())) ) && position != oldposition) {
+                    if(position != oldposition){
+                        if((weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) ||(weight <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight == parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength >= parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val())) || (weight >=parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val()))) {
 
-                        alert('Please input values larger than the last row or in between the row you are trying to add to.');
-                        return false;
+                            alert('Please input values larger than the last row or in between the row you are trying to add to.');
+                            return false;
+                        }
+                    }else{
+                  
+                       if((weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight ==parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) && plength >= parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val())) || (weight >=parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val())) ) {
+
+                            alert('Please input values larger than the last row or in between the row you are trying to add to.');
+                            return false;
+                        } 
                     }
                 }
 				var newid=position;
 			}else{
-				if(weight >parseFloat(jQuery(".package-line:eq(0) .weight").val())  || plength > parseFloat(jQuery(".package-line:eq(0)  .plength").val()) || (weight==parseFloat(jQuery(".package-line:eq(0)  .weight").val())  && plength==parseFloat(jQuery(".package-line:eq(0)  .plength").val()) && position != oldposition ) ){
+				if(weight >parseFloat(jQuery(".package-line:eq(0) .weight").val())  || plength > parseFloat(jQuery(".package-line:eq(0)  .plength").val()) || (weight==parseFloat(jQuery(".package-line:eq(0)  .weight").val())  && plength==parseFloat(jQuery(".package-line:eq(0)  .plength").val())) ){
 					alert('Please input values larger than the last row or in between the row you are trying to add to.');
 					return false;
 				}
@@ -83,13 +93,13 @@ function savenote(nid,atype){
                 var newid=position;   
                 }
 			}else{
-            var	newid=1;
-		}
+                var	newid=1;
+            }
 		
 		jQuery.post('/admin/liveparcels/settings/managepackage',{position:newid,oldposition:oldposition,package_name:package_name,weight:weight,plength:plength,pprice:pprice,atype:atype},function(data){
 				if(data){
-               //alert(data);
-                document.location.reload();
+              // alert(data);
+               document.location.reload();
 
             }
         });

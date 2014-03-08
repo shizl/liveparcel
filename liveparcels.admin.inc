@@ -68,35 +68,24 @@ drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.
 			echo json_encode($items);
  		
  	}elseif($atype=="updateposition"){
-        $lastresult = db_query("SELECT * FROM `{liveparcels_package}`  ORDER BY `position` DESC limit 1");
-        $lastarray=array();
-        foreach ($lastresult as $row) {
-	 		$lastarray=array('position'=>$row->position,'weight'=>$row->weight,'plength'=>$row->plength);
-        } 	
-        if(count($lastarray)>0 && $_REQUEST['position']>$lastarray['position'] && floatval($_REQUEST['weight'])<=$lastarray['weight'] && floatval($_REQUEST['plength'])<=$lastarray['plength']){
-            echo 0;
-            exit;
-        }
-	 	$result = db_query("SELECT `position` FROM `{liveparcels_package}` WHERE `position` = '".$_REQUEST['position']."' ");
-         if($_REQUEST['oldposition']>0){
-                db_query("DELETE FROM `{liveparcels_package}` WHERE `position` = '".$_REQUEST['oldposition']."' ");
-                }
-	 	if(count($result)>0){
-           
-	 		foreach ($result as $row) {
-				db_query("UPDATE `{liveparcels_package}` SET `position`=`position`+1 WHERE `position` >= '".$row->position."' ORDER BY `position` DESC ");
-			} 		
-	 	}	
-	 	db_query("INSERT INTO `{liveparcels_package}` VALUES('".$_REQUEST['position']."','".$_REQUEST['package_name']."','".$_REQUEST['weight']."','".$_REQUEST['plength']."','".$_REQUEST['pprice']."')");
+         db_query("UPDATE `{liveparcels_package}` SET `position`=`position`+1 WHERE `position` >= '".$_REQUEST['position']."' ORDER BY `position` DESC");
+        db_query("INSERT INTO `{liveparcels_package}` VALUES('".$_REQUEST['position']."','".$_REQUEST['package_name']."','".$_REQUEST['weight']."','".$_REQUEST['plength']."','".$_REQUEST['pprice']."')");
 	 	echo 1;
  	
  	}elseif($atype=="update"){
-		db_query("UPDATE `{liveparcels_package}` SET `package_name`='".$_REQUEST['package_name']."',`weight`='".$_REQUEST['weight']."',`plength`='".$_REQUEST['plength']."',`pprice`='".$_REQUEST['pprice']."' WHERE `position`='".$_REQUEST['position']."'");			
+		db_query("UPDATE `{liveparcels_package}` SET `package_name`='".$_REQUEST['package_name']."',`weight`='".$_REQUEST['weight']."',`plength`='".$_REQUEST['plength']."',`pprice`='".$_REQUEST['pprice']."' WHERE `position`='".$_REQUEST['oldposition']."'");			
  		echo 1;
  	
  	}elseif($atype=="delete"){
+        
  		$result=db_query("DELETE FROM `{liveparcels_package}` WHERE `position`='".$_REQUEST['position']."'");
-
+$result = db_query("SELECT `position` FROM `{liveparcels_package}` WHERE `position` > '".$_REQUEST['position']."' ");
+           
+            if(count($result)>0){
+                foreach ($result as $row) {
+                    db_query("UPDATE `{liveparcels_package}` SET `position`=`position`-1 WHERE `position` >= '".$row->position."'  ORDER BY `position` ASC");
+                } 		
+            }	
  		echo 1;
  	}
  }
