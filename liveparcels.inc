@@ -424,7 +424,7 @@ menu_link_save($item);
                      });
 			       }else{
 			       $(".order ul").append("<li>" + parcelnum +": <span style=\'color:red\'>??</span></li>");
-                            $(".header-warning").show();
+                            //$(".header-warning").show();
 					if(f<tlen){
 						getprice(f+1,tlen,postfrom,subtotal);
 					  }else{                       
