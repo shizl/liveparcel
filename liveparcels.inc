@@ -383,11 +383,11 @@ menu_link_save($item);
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
               if($(".deliver").attr("checked")){
-                     var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-                    var postto =$(".pnum-from").val();
-                }else{
-                    var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                     var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postfrom =$(".pnum-from").val();
+                }else{
+                    var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var postto =$(".pnum-from").val();
                 }
 			 checknull(f);
 			  if(dimfirst > max){
@@ -406,9 +406,7 @@ menu_link_save($item);
                      {postfrom:postfrom,postto:postto,price:data},function(zone){
                        if(zone>0){ 
                           $(".order ul").append("<li>" + parcelnum +": '.variable_get('uc_currency_sign','$').'"+ zone +"</li>");
-                           
                           subtotal = subtotal + parseFloat(zone);
-                       
                           if(f<tlen){
 							getprice(f+1,tlen,postfrom,subtotal);
                           }else{                       
@@ -421,7 +419,7 @@ menu_link_save($item);
 							   getprice(f+1,tlen,postfrom,subtotal);
                             }else{                       
 							  $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
-                          }
+                            }
 					    }
                      });
 			       }else{
@@ -455,6 +453,7 @@ menu_link_save($item);
 		   var subtotal = 0;   
 		   var tlen=$(".post-all:last").index()-2;
 		   $(".order ul li").remove();
+           $(".header-warning").hide();
 		   getprice(f,tlen,postfrom,subtotal);	       
 	       $(".page-float input").attr("disabled",true);     
 	       $(".post-mess table input").css("background","#d2d2d2");
