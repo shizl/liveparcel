@@ -143,6 +143,7 @@ menu_link_save($item);
 
 	}
       function checknull(f){
+          var error=0;
 		 var first  = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
 		 var second = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
 		 var three  = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
@@ -150,37 +151,8 @@ menu_link_save($item);
 		 var dimens = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 		 var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
 		 var posttos = $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").val();
-		 if(first == ""){
-	            $(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px dashed red");
-	            $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		        $(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px solid #ccc");
-		 }
-		 if(second == ""){
-	            $(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px dashed red");
-	            $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		        $(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px solid #ccc");
-		 }		
-		 if(three == ""){
-	            $(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px dashed red");
-	            $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		        $(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px solid #ccc");
-		 }
-		 if(weight == ""){
-	            $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px dashed red");
-	            $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		        $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px solid #ccc");
-		 }
-		 if(dimens == ""){
-	            $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px dashed red");
-	            $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		        $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px solid #ccc");
-		 }
 		 if(postto == ""){
+             error=1;
 	           $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").css("border","1px dashed red");
 	           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
 		 }else{
@@ -197,54 +169,52 @@ menu_link_save($item);
 		         var Pvolume = volume.toFixed(4);
 		         $(".post-all:eq("+(f-1)+")").find(".dimens-text").val(Pvolume);  
 		     }   
-				 if(!isFloat(first)){		 
+				 if(!isFloat(first)){
+                     error=1;		 
 					$(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px dashed red");
 					$(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-					 return false;
-					 
 				 }else{
 					$(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px solid #ccc");
 				 }
 	         
 				 if(!isFloat(second)){
+                     error=1;
 					$(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px dashed red");
 					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-					 return false;
-					 
 				 }else{
 					$(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px solid #ccc"); 
 				}
 	         
 				 if(!isFloat(three)){
+                     error=1;
 					$(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px dashed red");
 					$(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-					return false;
-					 
 				 }else{
 					$(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px solid #ccc"); 
 				 }
 	      
-				 if(isFloat(weight)){
-					 $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px solid #ccc"); 
-				   }else{
+				 if(!isFloat(weight)){
+                      error=1;
 					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
 					 $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px dashed red");
-					 return false;
+				   }else{
+                      $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px solid #ccc"); 
 				   }
 			  
-				 if(isFloat(dimens)){
-					 $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px solid #ccc"); 
-				   }else{
+				 if(!isFloat(dimens)){
+                      error=1;
 					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
 					 $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px dashed red");
-					 return false;
+				   }else{
+                      $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px solid #ccc"); 
 				   }
 			     if(posttos ==""){
 			       $(".post-all:eq("+(f-1)+")").find(".pnum-to").val("");
 			     }
 		    if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
 		         $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
-		}     
+		}
+        return error;     
 	  }
 	  $(".post-all input").blur(function(){
 		 var first = $(this).parent("td").find(".dim-first").val();
@@ -389,7 +359,6 @@ menu_link_save($item);
                     var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postto =$(".pnum-from").val();
                 }
-			 checknull(f);
 			  if(dimfirst > max){
 				  max = dimfirst; 
 			  }
@@ -424,7 +393,7 @@ menu_link_save($item);
                      });
 			       }else{
 			       $(".order ul").append("<li>" + parcelnum +": <span style=\'color:red\'>??</span></li>");
-                            //$(".header-warning").show();
+                            $(".header-warning").show();
 					if(f<tlen){
 						getprice(f+1,tlen,postfrom,subtotal);
 					  }else{                       
@@ -454,7 +423,16 @@ menu_link_save($item);
 		   var tlen=$(".post-all:last").index()-2;
 		   $(".order ul li").remove();
            $(".header-warning").hide();
-		   getprice(f,tlen,postfrom,subtotal);	       
+           var er=0;
+           for(var i=1;i<=tlen;i++){
+                er=checknull(i);
+                if(er){
+                break;    
+                }
+            }
+            if(!er){
+                getprice(f,tlen,postfrom,subtotal);	 
+           }       
 	       $(".page-float input").attr("disabled",true);     
 	       $(".post-mess table input").css("background","#d2d2d2");
 	       $(".add_new").hide();
