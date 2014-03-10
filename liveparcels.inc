@@ -575,10 +575,9 @@ menu_link_save($item);
 function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 
 	$weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
-	
+	$items=0;
 	if($max>0 && $dimenstext>0 && $weighttext>0){ 
-		$items=0;
-
+		
 		$arr = db_query("SELECT `weight`,`plength` FROM 
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
 		if($arr['weight'] < $weight || $arr['plength'] < $max){
@@ -619,14 +618,17 @@ function liveparcels_getZoneprice() {
                 $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
 		WHERE `zone_from_number`='". $pdata['postfrom'] ."' AND   
 		`zone_to_number`='". $pdata['postto']."'")->fetchField();	
-                if($pzon<>''){
-                    $pzone=$pzon*$price; 
+        
+                if($pzon>0){
+                    $pzone=$pzon*$pprice; 
                 }else{
                     $pzone=0;
                 }
+               
             }else{
                   $pzone=0;  
             }
+            
             $totals+=$pzone;
             if($pzone=='0'){
             $error=1;    
