@@ -343,7 +343,7 @@ menu_link_save($item);
 	 }).mouseleave(function(){
 	    $(this).find(".duplicate").hide();
 	 });
-	 function getprice(f,tlen,postfrom,subtotal){
+	 function getprice(f,tlen,postfrom,ajaxrequest){
 	 
 			  var max = 0;
 			  var parcelnum = $(".post-all:eq("+(f-1)+")").find(".parcel strong").text();
@@ -368,6 +368,29 @@ menu_link_save($item);
 			  if(dimthree > max){
 				  max = dimthree;  
 			  }
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
+              
+             if(f<tlen){ 
+                getprice(f+1,tlen,postfrom,ajaxrequest);
+                
+            }else{
+                $.get("/admin/liveparcels/getzoneprice/ajax", 
+                     {ajaxrequest:"["+ajaxrequest+"]",action:"updateprice"},function(zone){
+                         
+                       if(zone != ""){ 
+                          $(".order ul").append(zone.parcels);
+                          if( zone.error=="1"){
+                              $(".header-warning").show();
+                              }
+							$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
+					    }else{
+                            $(".header-warning").show();
+							  $(".order-total").html("Total : Pending..."); 
+					    }
+                     },"json");
+            }
+            
+          /*    
 			  $.get("/admin/liveparcels/getpackageprice/ajax",
 			  {max:max,dimenstext:dimenstext,weighttext:weighttext},function(data){
 			       if(data>0){
@@ -400,8 +423,9 @@ menu_link_save($item);
 						$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
 					  }
 			       }
-	        }) ;
+	        }) ;*/
 	       }
+           
 	 $(".order-btn input:first").click(function(){
 		if($(this).attr("value")=="Update"){
 		   
@@ -431,7 +455,8 @@ menu_link_save($item);
                 }
             }
             if(!er){
-                getprice(f,tlen,postfrom,subtotal);	 
+                var ajaxrequest="";
+                getprice(f,tlen,postfrom,ajaxrequest);	
            }       
 	       $(".page-float input").attr("disabled",true);     
 	       $(".post-mess table input").css("background","#d2d2d2");
@@ -547,11 +572,7 @@ menu_link_save($item);
      return $build;
 }
 
-function liveparcels_getPackageprice() {
-	$max = $_REQUEST['max'];
-
-	$dimenstext = $_REQUEST['dimenstext'];
-	$weighttext = $_REQUEST['weighttext'];
+function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 
 	$weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
 	
@@ -578,31 +599,43 @@ $nowprice=$lprice >$pprice ? $lprice:$pprice;
 			}else{
 		  	$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
 		  	ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
-	                }
-
-
+            }
 	      }
       }
-		echo $items;
+		return $items;
 }  
 
 function liveparcels_getZoneprice() {
-    $postfrom = $_REQUEST['postfrom'];
-	$postto = $_REQUEST['postto'];
-	$price = $_REQUEST['price'];
-	if($postfrom!=="" && $postto!==""){
-		$pzone='';
-		$pzon='';
-		$pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
-		WHERE `zone_from_number`='". $postfrom ."' AND   
-		`zone_to_number`='". $postto."'")->fetchField();	
-		if($pzon<>''){
-			$pzone=$pzon*$price;
-		}else{
-			$pzone=0;
-		}
+    $ajaxrequest = $_REQUEST['ajaxrequest'];
+    $pricedata =json_decode($ajaxrequest,true);
+	$action = $_REQUEST['action'];
+    $parcels='';
+    $totals=0;
+    $error=0;
+	if($action =="updateprice" && count($pricedata)>0){
+        foreach($pricedata as $key=>$pdata){
+            $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
+            if($pprice>0){
+                $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
+		WHERE `zone_from_number`='". $pdata['postfrom'] ."' AND   
+		`zone_to_number`='". $pdata['postto']."'")->fetchField();	
+                if($pzon<>''){
+                    $pzone=$pzon*$price; 
+                }else{
+                    $pzone=0;
+                }
+            }else{
+                  $pzone=0;  
+            }
+            $totals+=$pzone;
+            if($pzone=='0'){
+            $error=1;    
+            }
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
+        }
 	}
-		echo $pzone;		
+    $returndata=array('error'=>$error,'totals'=>$totals,'parcels'=>$parcels);
+		echo json_encode($returndata);		
 }
 function liveparcels_getZonelistData() {
 	$postlist =array();
