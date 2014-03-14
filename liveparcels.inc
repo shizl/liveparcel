@@ -111,8 +111,12 @@ menu_link_save($item);
            </div>
           </div>
           <div class="order-btn">
-		    <input class="form-submit" type="button" name="modify" value="Update">
-	        <input class="form-submit" type="button" name="checkout" value="Checkout">
+          <form action="/liveparcels/parcels_addtocart" method="POST" id="liveparcelsform">
+           <input  type="hidden" name="action" value="addtocart">
+          <input class="parcelsPost" type="hidden" name="parcelsPost" value="">
+          </form>
+		    <input class="form-submit check_parcels" type="button" name="modify" value="Update">
+	        <input class="form-submit add_to_cart" type="button" name="checkout" value="Checkout">
           </div>  
 	  <div class="footer-note">
 	  '.variable_get('liveparcels_note_message').'
@@ -337,14 +341,13 @@ menu_link_save($item);
 		num--;
 	 });
 	 $(".post-all").mouseenter(function(){
-	    if($(".order-btn input:first").attr("value")=="Update"){
+	    if($(".order-btn .check_parcels").val()=="Update"){
 	       $(this).find(".duplicate").show();
 	    }
 	 }).mouseleave(function(){
 	    $(this).find(".duplicate").hide();
 	 });
 	 function getprice(f,tlen,postfrom,ajaxrequest){
-	 
 			  var max = 0;
 			  var parcelnum = $(".post-all:eq("+(f-1)+")").find(".parcel strong").text();
 			  var dimfirst = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
@@ -368,7 +371,7 @@ menu_link_save($item);
 			  if(dimthree > max){
 				  max = dimthree;  
 			  }
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -381,7 +384,18 @@ menu_link_save($item);
                           $(".order ul").append(zone.parcels);
                           if( zone.error=="1"){
                               $(".header-warning").show();
-                              }
+                                $(".parcelsPost").val("");
+                            }else{
+                              
+                                var parcelsjson=eval("(" +"{\\"parcels\\":["+ ajaxrequest +"]}"+ ")");
+                                  for (k in zone.pprice){
+                                      parcelsjson.parcels[k].price=zone.pprice[k];
+                                    }
+                                    parcelsjson.totals= zone.totals;
+                                    parcelsjson.discount= zone.discount;  
+                                    $(".parcelsPost").val(json2str(parcelsjson)); 
+                            }
+                              
 							$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
 					    }else{
                             $(".header-warning").show();
@@ -390,43 +404,17 @@ menu_link_save($item);
                      },"json");
             }
             
-          /*    
-			  $.get("/admin/liveparcels/getpackageprice/ajax",
-			  {max:max,dimenstext:dimenstext,weighttext:weighttext},function(data){
-			       if(data>0){
-                     $.get("/admin/liveparcels/getzoneprice/ajax", 
-                     {postfrom:postfrom,postto:postto,price:data},function(zone){
-                       if(zone>0){ 
-                          $(".order ul").append("<li>" + parcelnum +": '.variable_get('uc_currency_sign','$').'"+ zone +"</li>");
-                          subtotal = subtotal + parseFloat(zone);
-                          if(f<tlen){
-							getprice(f+1,tlen,postfrom,subtotal);
-                          }else{                       
-							$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
-                          }
-					    }else{
-                            $(".order ul").append("<li>" + parcelnum + ": <span style=\'color:red\'>??</span></li>");
-                            $(".header-warning").show();
-                            if(f<tlen){
-							   getprice(f+1,tlen,postfrom,subtotal);
-                            }else{                       
-							  $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
-                            }
-					    }
-                     });
-			       }else{
-			       $(".order ul").append("<li>" + parcelnum +": <span style=\'color:red\'>??</span></li>");
-                            $(".header-warning").show();
-					if(f<tlen){
-						getprice(f+1,tlen,postfrom,subtotal);
-					  }else{                       
-						$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + subtotal);
-					  }
-			       }
-	        }) ;*/
-	       }
-           
-	 $(".order-btn input:first").click(function(){
+        }
+         function json2str(o) { 
+            var arr = []; 
+            var fmt = function(s) { 
+            if (typeof s == "object" && s != null) return json2str(s); 
+                return /^(string|number)$/.test(typeof s) ? "\\"" + s + "\\"" : s; 
+            } 
+            for (var i in o) arr.push("\\"" + i + "\\":" + fmt(o[i])); 
+            return "{" + arr.join(",") + "}"; 
+        } 
+	 $(".check_parcels").click(function(){
 		if($(this).attr("value")=="Update"){
 		   
 	       var postfrom =$(".pnum-from").val();
@@ -463,7 +451,7 @@ menu_link_save($item);
 	       $(".add_new").hide();
 	       $(this).attr("value","Modify");
 	    }else{
-	      
+           $(".parcelsPost").val("");
 	       if(postfroms == ""){
 	          $(".pnum-from").val("");
 	       }
@@ -485,8 +473,14 @@ menu_link_save($item);
 	       $(this).attr("value","Update");
 		}    
 	 });
-   
-        
+    $(".add_to_cart").click(function(){
+        if($(".parcelsPost").val()==""){
+                alert("Please update parcels information.");
+                return false;
+        }else{
+            $("#liveparcelsform").submit();
+        }
+    });
 	 $(".post-suburb").keyup(function(){
           var words=gettrim($(this).val());
           var id=$(this).attr("id");
@@ -582,24 +576,23 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
 		if($arr['weight'] < $weight || $arr['plength'] < $max){
 		     $items=0;
-	        }else{
-                     				
-			$pprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `plength`>=". $max ." ORDER BY `pprice` ASC  LIMIT 1")
-		   ->fetchField();
-$lprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		   WHERE `weight`>=". $weight ." 
-		   ORDER BY `pprice` ASC  LIMIT 1")
-		   ->fetchField();
-$nowprice=$lprice >$pprice ? $lprice:$pprice;
-		        if($nowprice>0){
-			  $items= $nowprice;
-    			 
-			}else{
-		  	$items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-		  	ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
-            }
-	      }
+                }else{
+                                        
+                    $pprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+                   WHERE `plength`>=". $max ." ORDER BY `pprice` ASC  LIMIT 1")
+                   ->fetchField();
+        $lprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+                   WHERE `weight`>=". $weight ." 
+                   ORDER BY `pprice` ASC  LIMIT 1")
+                   ->fetchField();
+        $nowprice=$lprice >$pprice ? $lprice:$pprice;
+                    if($nowprice>0){
+                      $items= $nowprice;
+                    }else{
+                    $items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+                    ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
+                    }
+              }
       }
 		return $items;
 }  
@@ -611,9 +604,11 @@ function liveparcels_getZoneprice() {
     $parcels='';
     $totals=0;
     $error=0;
+    $parcels_price=array();
 	if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
+            
             if($pprice>0){
                 $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
 		WHERE `zone_from_number`='". $pdata['postfrom'] ."' AND   
@@ -628,7 +623,7 @@ function liveparcels_getZoneprice() {
             }else{
                   $pzone=0;  
             }
-            
+            $parcels_price[]=variable_get('uc_currency_sign','$').$pzone;
             $totals+=$pzone;
             if($pzone=='0'){
             $error=1;    
@@ -636,19 +631,8 @@ function liveparcels_getZoneprice() {
             $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
         }
 	}
-    $returndata=array('error'=>$error,'totals'=>$totals,'parcels'=>$parcels);
+    $discount=50;
+    $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'parcels'=>$parcels,'pprice'=>$parcels_price);
 		echo json_encode($returndata);		
 }
-function liveparcels_getZonelistData() {
-	$postlist =array();
-	$result= db_query("SELECT `pcode`,`locality`,`zone_number` 
-	FROM `{liveparcels_zone_post}");
-	foreach($result as $row){
-			$postlist[] = array(
-			  'pcode' => $row->pcode,
-			  'locality' => $row->locality,	
-              'pnum'=>$row->zone_number		  
-			);
-	}
-	return json_encode($postlist);
-}
+
