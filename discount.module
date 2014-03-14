@@ -22,17 +22,17 @@ function discount_default_rate(){
 function discount_roles_rate($tid){
   $rate = discount_get_rate('roles',$tid);
   if($rate){
-  return $rate;
+    return $rate;
   }else{
-  return 1;
+    return 1;
   }
 }
 function discount_user_rate($tid){
   $rate = discount_get_rate('user',$tid);
   if($rate){
-  return $rate;
+    return $rate;
   }else{
-  return 1;
+    return 1;
   }
 }
 
