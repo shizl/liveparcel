@@ -61,10 +61,10 @@ function discount_get_rate($type='',$tid=0){
 }
 function discount_theme(){
   $theme_hooks = array(
-    'user-wrapper' => array(
-       'render element' => 'form',
-    ),
-   );   
-    return  $theme_hooks;
+      'user_wrapper' => array(
+        'render element' => 'form',
+        ),
+      );   
+  return  $theme_hooks;
 }
 

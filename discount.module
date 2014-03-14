@@ -64,9 +64,6 @@ function discount_theme(){
       'user_wrapper' => array(
         'render element' => 'form',
         ),
-      'roles_wrapper' => array(
-        'render element' => 'form',
-        ),
       );   
   return  $theme_hooks;
 }

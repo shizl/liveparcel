@@ -33,16 +33,22 @@ function discount_settings($form,$form_state) {
       '#title' =>'User Discount',
       '#description' => 'aaaa',
       '#collapsible' => TRUE,
-      '#theme'=>'user-wrapper',
       );
-
+      
+ $form['user']['user_wrapper'] = array(
+ 		  
+ 		'#prefix' => '<div id="user-wrapper">',
+    '#suffix' => '</div>',
+    '#theme'=>'user_wrapper',
+   );
+     
   $query = db_select('live_parcel_discount','tid');
   $query
     ->condition('type','user')
     ->fields('tid',array('tid'));
   $result = $query->execute();
   foreach($result as $row) {
-    $form['user']['user_rate['.$row->tid.']'] = array(
+    $form['user']['user_wrapper']['user_rate['.$row->tid.']'] = array(
         '#type' => 'textfield',
         '#required' => TRUE,
         '#title' =>(user_load($row->tid)->name).' Discount Setting',
@@ -50,34 +56,34 @@ function discount_settings($form,$form_state) {
         );
   }
 
-  $form['user']['add'] = array(
+  $form['add'] = array(
       '#title' =>'Add User Discount',
       '#description' => 'aaaa',
       '#type'=>'fieldset',
 
       );
-  $form['user']['add']['add_more_user'] = array(
+  $form['add']['add_more_user'] = array(
       '#type' => 'textfield',
       '#title' =>'User',
     //  '#required' => TRUE,
       '#autocomplete_path' => 'user/autocomplete',
  '#default_value' => '',
       );
-  $form['user']['add']['add_more_rate'] = array(
+  $form['add']['add_more_rate'] = array(
       '#type' => 'textfield',
       '#title' =>'Discount Rate',
  '#default_value' => '',
   //    '#required' => TRUE,
       );
-  $form['user']['add']['add_more_submit'] = array(
+  $form['add']['add_more_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Add User'),
-      '#submit' => array('discount_add_more_submit'),
-    /*  '#ajax' => array(
+      //'#submit' => array('discount_add_more_submit'),
+     '#ajax' => array(
         'callback' => 'discount_add_more',
         'wrapper' => 'user-wrapper',
         'method' => 'replace',
-        ),*/
+        ),
       );
 
   $form['submit'] = array(
@@ -189,7 +195,7 @@ function discount_settings_submit($form,&$form_state){
 }
 
 function discount_add_more($form,$form_state){
-  /*
+  
      $table = 'live_parcel_discount';
 
      $name = $form['add']['add_more_user']['#value'];
@@ -213,10 +219,25 @@ function discount_add_more($form,$form_state){
      ))
      ->execute();
      }
-  // drupal_set_message('<pre>'. print_r($form['user'], TRUE) .'</pre>');
-  return $form['user']['user-warpper'];
-
-   */
-
+      
+   //drupal_set_message('<pre>'. print_r($form['user'], TRUE) .'</pre>');
+   
+  $query = db_select('live_parcel_discount','tid');
+  $query
+    ->condition('type','user')
+    ->fields('tid',array('tid'));
+  $result = $query->execute();
+  
+  foreach($result as $row) {
+    $form['user']['user_wrapper']['user_rate['.$row->tid.']'] = array(
+        '#type' => 'textfield',
+        '#required' => TRUE,
+        '#title' =>(user_load($row->tid)->name).' Discount Setting',
+        '#value' =>discount_user_rate($row->tid),
+        );
+  }
+//  print_r($form['user']['user_wrapper']);
+  
+  return $form['user']['user_wrapper'];
 }
 
