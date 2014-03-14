@@ -1,9 +1,14 @@
 <?php
 function discount_settings($form,$form_state) {
+  $form['removed'] = array(
+      '#title' => t('Shoe size'),
+      '#type' => 'item',
+      '#description' => t('This question has been removed because the law prohibits us from asking your shoe size.'),
+      );
   $form['default'] = array(
       '#type'=>'fieldset',
       '#title' =>'Default Discount',
-      '#description' => 'aaaa',
+      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
       '#collapsible' => TRUE,
       );
   $form['default']['default_setting'] = array(
@@ -16,7 +21,7 @@ function discount_settings($form,$form_state) {
   $form['roles'] = array(
       '#type'=>'fieldset',
       '#title' =>'Roles Discount',
-      '#description' => 'aaaa',
+      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
       '#collapsible' => TRUE,
       );
   foreach(user_roles() as $tid => $roles){
@@ -31,7 +36,7 @@ function discount_settings($form,$form_state) {
   $form['user'] = array(
       '#type'=>'fieldset',
       '#title' =>'User Discount',
-      '#description' => 'aaaa',
+      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
       '#collapsible' => TRUE,
       );
 
@@ -58,7 +63,7 @@ function discount_settings($form,$form_state) {
 
   $form['add'] = array(
       '#title' =>'Add User Discount',
-      '#description' => 'aaaa',
+      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
       '#type'=>'fieldset',
       );
   $form['add']['add_more_user'] = array(
