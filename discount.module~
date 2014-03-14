@@ -1,0 +1,70 @@
+<?php
+function discount_menu(){
+  $items['admin/liveparcels/discounts'] = array(
+      'title' => t('Discount settings'), 
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('discount_settings'),
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
+      'file' => 'discount.admin.inc',
+      );
+  return $items;
+}
+
+function discount_default_rate(){
+  $rate = discount_get_rate('default',0);
+  if($rate){
+    return $rate;
+  }else{
+    return 1;
+  }
+}
+function discount_roles_rate($tid){
+  $rate = discount_get_rate('roles',$tid);
+  if($rate){
+  return $rate;
+  }else{
+  return 1;
+  }
+}
+function discount_user_rate($tid){
+  $rate = discount_get_rate('user',$tid);
+  if($rate){
+  return $rate;
+  }else{
+  return 1;
+  }
+}
+
+function discount_get_rate($type='',$tid=0){
+  if($type!=''){
+    $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => $type, ':tid' => $tid))->fetchField();
+    return $result;
+  }else{
+    global $user;
+    $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'user', ':tid' => $user->uid))->fetchField();
+    if($result){
+      return $result;
+    }
+    foreach($user as $roles_id =>$roles){
+      $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'roles', ':tid' => $roles_id))->fetchField();
+      if($result){
+        return $result;
+      }
+    }
+    $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'default', ':tid' => $tid))->fetchField();
+    if($result){
+      return $result;
+    }
+    return 1;
+  }
+}
+function discount_theme(){
+  $theme_hooks = array(
+    'user-wrapper' => array(
+       'render element' => 'form',
+    ),
+   );   
+    return  $theme_hooks;
+}
+
