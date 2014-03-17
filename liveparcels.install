@@ -17,7 +17,6 @@ function liveparcels_requirements($phase) {
       'warning' => REQUIREMENT_WARNING,
       'error' => REQUIREMENT_ERROR,
     );
-
     module_load_include('inc', 'liveparcels', 'liveparcels.admin');
     $results = module_invoke_all('liveparcels_status');
     foreach ($results as $status) {
@@ -296,18 +295,8 @@ function liveparcels_install() {
     variable_set('liveparcels_error_message','Warning: The calculator is unable to determine the cost to deliver one of your parcels to the location you have entered. You may proceed and complete the checkout but the parcel will not be picked up until you have accepted the price that the administrator will provide and notify you within one working day.');
     variable_set('liveparcels_note_message','Note: To calculate your parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.');
     db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel_product', 'Live Parcel Product', 'uc_product', 'uc_product', 'Live Parcel Product', '', 1, 'Name', 0, 0, 0, 0, 'live_parcel_product');INSERT INTO `uc_product_classes` (`pcid`, `name`, `description`) VALUES('live_parcel_product', 'Live Parcel Product', 'Live Parcel Product');");
-  /*  $nid=db_insert('node')
-->fields(array(
-  'title' => 'liveparcels',
-  'uid' => 1,
-  'language'=>'und',
-  'changed' => REQUEST_TIME,
-  'type'=>'live_parcel_product',
-  'created' => REQUEST_TIME,
-))->execute();
-db_update('node')
-->fields(array('vid' => $nid))->condition('nid',$nid , '=')->execute();*/
 $nid=db_query("SELECT `nid` FORM `node` ORDER BY `nid` DESC LIMIT 1")->fetchField();
+$nid+=1;
 db_update('node')
 ->fields(array('nid' => $nid,'vid' => $nid))->condition('nid',1, '=')->execute();
 db_update('node_revision')
