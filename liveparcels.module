@@ -306,6 +306,9 @@ function liveparcels_uc_checkout_pane_alter(&$panes) {
      $parcels=liveparcels_getparcelsdata();
      if($parcels){
           $panes['cart']['enabled'] = false;
+          $panes['parcels']['enabled'] = true;
+    }else{
+        $panes['parcels']['enabled'] = false;
     }
 }
 
