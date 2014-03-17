@@ -394,7 +394,7 @@ menu_link_save($item);
                                   for (k in zone.pprice){
                                       parcelsjson.parcels[k].price=zone.pprice[k];
                                     }
-                                     parcelsjson.ptype= ptype;
+                                    parcelsjson.ptype= ptype;
                                     parcelsjson.totals= zone.totals;
                                     parcelsjson.discount= zone.discount; 
                                      

@@ -232,58 +232,24 @@ $schema['liveparcels_cart'] = array(
       ),
     ),
   );
-  $schema['liveparcels_tracking_log'] = array(
-    'description' => 'liveparcels tracking log information.',
-    'fields' => array(
-      'order_id' => array(
-        'description' => 'order_id',
-         'type' => 'int',
-        'unsigned' => FALSE,
-        'not null' => TRUE,
-        'default' => 0,
-      ),
-      'parcel_tracking_id' => array(
-        'description' => 'parcel_tracking_id',
-        'type' => 'varchar',
-        'length' => 50,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-        'status' => array(
-        'description' => 'status',
-        'type' => 'varchar',
-        'length' => 50,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-      'message' => array(
-        'description' => 'message',
-        'type' => 'text',
-      ),
-      'date' => array(
-        'description' => 'date',
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-      ),
-    ),
-  );
+ 
   return $schema;
 }
 /**
  * Implements hook_uninstall().
  */
 function liveparcels_uninstall() {
+    
+    db_query("DROP TABLE `liveparcels_package`,`liveparcels_cart`,`liveparcels_order`, `liveparcels_zone_post`, `liveparcels_zone_price`;DELETE FROM `node` WHERE `nid`='". variable_get('liveparcels_product_id')."';DELETE FROM `uc_products` WHERE `nid`='". variable_get('liveparcels_product_id')."'; ");
     db_delete('variable')
       ->condition('name', 'liveparcels%', 'LIKE')
     ->execute();
     db_delete('node_type')
-      ->condition('name', 'live_parcel_product', 'LIKE')
+      ->condition('type', 'live_parcel_product', '=')
     ->execute();
     db_delete('uc_product_classes')
-      ->condition('name', 'live_parcel_product', 'LIKE')
+      ->condition('pcid', 'live_parcel_product', '=')
     ->execute();
-    db_query('DROP TABLE `liveparcels_package`, `liveparcels_zone_post`, `liveparcels_zone_price`;');
 }
 /**
  * Implements hook_install().
@@ -295,15 +261,12 @@ function liveparcels_install() {
     variable_set('liveparcels_error_message','Warning: The calculator is unable to determine the cost to deliver one of your parcels to the location you have entered. You may proceed and complete the checkout but the parcel will not be picked up until you have accepted the price that the administrator will provide and notify you within one working day.');
     variable_set('liveparcels_note_message','Note: To calculate your parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.');
     db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel_product', 'Live Parcel Product', 'uc_product', 'uc_product', 'Live Parcel Product', '', 1, 'Name', 0, 0, 0, 0, 'live_parcel_product');INSERT INTO `uc_product_classes` (`pcid`, `name`, `description`) VALUES('live_parcel_product', 'Live Parcel Product', 'Live Parcel Product');");
-$nid=db_query("SELECT `nid` FORM `node` ORDER BY `nid` DESC LIMIT 1")->fetchField();
-$nid+=1;
-db_update('node')
-->fields(array('nid' => $nid,'vid' => $nid))->condition('nid',1, '=')->execute();
-db_update('node_revision')
-->fields(array('nid' => $nid,'vid' => $nid))->condition('nid',1 , '=')->execute();
+$nid=db_query("SELECT `nid` FROM `node` ORDER BY `nid` DESC LIMIT 1")->fetchField();
+$nid=$nid > 0 ? $nid+1:1;
+ variable_set('liveparcels_product_id',$nid);
 db_query("INSERT INTO `node` (`nid`, `vid`, `type`, `language`, `title`, `uid`, `status`, `created`, `changed`, `comment`, `promote`, `sticky`, `tnid`, `translate`) VALUES
-(1, 1, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 0, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES
-(1, 1, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);
+($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 0, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES
+($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);
 INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
 (".$nid.", ".$nid.", 'parcels', 0.00000, 0.00000, 0.00000, 0, 'lb', 0, 0, 0, 'in', 1, 1, 0, 1);");
 

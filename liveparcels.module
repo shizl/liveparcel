@@ -187,10 +187,12 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
 function liveparcels_getparcelsdata(){
     $cart_id=uc_cart_get_id();
     $pid=db_query("SELECT COUNT(`nid`) AS cid,`nid` FROM `uc_cart_products` WHERE `cart_id`='$cart_id'")->fetchAssoc();
-    if($pid['cid']==1 && $pid['nid']==1){
+    if($pid['cid']==1 && $pid['nid']==variable_get('liveparcels_product_id')){
         $pdata=db_query("SELECT `parcel_info` FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'")->fetchField();
         $pdata=!empty($pdata) ? unserialize($pdata):0;
     }else{
+        db_query("DELETE FROM `uc_cart_products` WHERE `nid`='".variable_get('liveparcels_product_id')."' AND `cart_id`='$cart_id'");
+        db_query("DELETE FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'");
         $pdata=0;
     }
     return  $pdata;
@@ -265,7 +267,8 @@ function liveparcels_theme() {
 /*
  * Implement hook_uc_line_item()
 */
-function liveparcels_uc_line_item() {
+function liveparcels_uc_line_item(){
+    $items=array();
 $parcels=liveparcels_getparcelsdata();
      if($parcels){
          $items[] = array(
