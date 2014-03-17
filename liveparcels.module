@@ -160,13 +160,13 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
           }else{
             uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
           }
-          $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        /*  $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
           if($discount){
               uc_order_update_line_item($discount,'Discount price', -$parcels['discount']);
           }else{
             uc_order_line_item_add($order->order_id,'discount','Discount price',-$parcels['discount'],'9');
           }
-
+*/
         }
       
           $contents['liveparcels_review_table'] = array(
@@ -281,7 +281,7 @@ $parcels=liveparcels_getparcelsdata();
             'calculated' => TRUE, 
             'callback' => 'uc_line_item_generic',
           );
-           $items[] = array(
+        /*   $items[] = array(
             'id' => 'discount', 
             'title' => t('Discount Price'), 
             'weight' => 9, 
@@ -290,7 +290,7 @@ $parcels=liveparcels_getparcelsdata();
             'add_list' => TRUE, 
             'calculated' => TRUE, 
             'callback' => 'uc_line_item_generic',
-          );
+          );*/
   }
   return $items;
 } 
@@ -306,6 +306,9 @@ function liveparcels_uc_checkout_pane_alter(&$panes) {
      $parcels=liveparcels_getparcelsdata();
      if($parcels){
           $panes['cart']['enabled'] = false;
+          $panes['parcels']['enabled'] = true;
+    }else{
+        $panes['parcels']['enabled'] = false;
     }
 }
 
