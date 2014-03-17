@@ -29,22 +29,20 @@ function savenote(nid,atype){
 		if( aid > 2){
 			if(position>parseInt(jQuery(".package-line:eq(0) .position").val())){
                 if(position>parseInt(jQuery(".package-line:eq("+(aid-1)+") .position").val())){
-                    if((weight == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())) || (weight <= parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())) ) {
+                    if((weight == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val())) || weight < parseFloat(jQuery(".package-line:eq("+(aid-1)+") .weight").val()) || plength < parseFloat(jQuery(".package-line:eq("+(aid-1)+") .plength").val()) ) {
 
                         alert('Please input values larger than the last row or in between the row you are trying to add to.');
                         return false;
                     }
                 }else{
                     if(position != oldposition){
-                        if((weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) ||(weight <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight == parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength >= parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val())) || (weight >=parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val()))) {
-
+                        if(weight < parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) || plength < parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val()) || (weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight == parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val())) || weight >parseFloat(jQuery(".package-line:eq("+(position-1)+") .weight").val()) || plength > parseFloat(jQuery(".package-line:eq("+(position-1)+") .plength").val())) {
                             alert('Please input values larger than the last row or in between the row you are trying to add to.');
                             return false;
                         }
                     }else{
                   
-                       if((weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight <= parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || (weight ==parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) && plength >= parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val())) || (weight >=parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val())) ) {
-
+                       if((weight == parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val())) || weight < parseFloat(jQuery(".package-line:eq("+(position-2)+") .weight").val()) || plength < parseFloat(jQuery(".package-line:eq("+(position-2)+") .plength").val()) || weight >parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) || plength > parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val()) || (weight ==parseFloat(jQuery(".package-line:eq("+(position)+") .weight").val()) && plength == parseFloat(jQuery(".package-line:eq("+(position)+") .plength").val())) ) {
                             alert('Please input values larger than the last row or in between the row you are trying to add to.');
                             return false;
                         } 
@@ -52,7 +50,7 @@ function savenote(nid,atype){
                 }
 				var newid=position;
 			}else{
-				if(weight >parseFloat(jQuery(".package-line:eq(0) .weight").val())  || plength > parseFloat(jQuery(".package-line:eq(0)  .plength").val()) || (weight==parseFloat(jQuery(".package-line:eq(0)  .weight").val())  && plength==parseFloat(jQuery(".package-line:eq(0)  .plength").val())) ){
+				if((weight >parseFloat(jQuery(".package-line:eq(0) .weight").val())  || plength > parseFloat(jQuery(".package-line:eq(0)  .plength").val()) || (weight==parseFloat(jQuery(".package-line:eq(0)  .weight").val())  && plength==parseFloat(jQuery(".package-line:eq(0)  .plength").val()))) && position != oldposition ){
 					alert('Please input values larger than the last row or in between the row you are trying to add to.');
 					return false;
 				}
