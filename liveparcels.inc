@@ -396,7 +396,7 @@ menu_link_save($item);
                                     }
                                     parcelsjson.ptype= ptype;
                                     parcelsjson.totals= zone.totals;
-                                    parcelsjson.discount= zone.discount;  
+                                   // parcelsjson.discount= zone.discount;  
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             }
                               
