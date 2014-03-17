@@ -191,6 +191,8 @@ function liveparcels_getparcelsdata(){
         $pdata=db_query("SELECT `parcel_info` FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'")->fetchField();
         $pdata=!empty($pdata) ? unserialize($pdata):0;
     }else{
+        db_query("DELETE FROM `uc_cart_products` WHERE `nid`='1' AND `cart_id`='$cart_id'");
+        db_query("DELETE FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'");
         $pdata=0;
     }
     return  $pdata;

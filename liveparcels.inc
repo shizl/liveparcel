@@ -355,12 +355,15 @@ menu_link_save($item);
 			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
+              var ptype=1;
               if($(".deliver").attr("checked")){
                      var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postfrom =$(".pnum-from").val();
+                    ptype=1;
                 }else{
                     var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postto =$(".pnum-from").val();
+                     ptype=2;
                 }
 			  if(dimfirst > max){
 				  max = dimfirst; 
@@ -391,6 +394,7 @@ menu_link_save($item);
                                   for (k in zone.pprice){
                                       parcelsjson.parcels[k].price=zone.pprice[k];
                                     }
+                                    parcelsjson.ptype= ptype;
                                     parcelsjson.totals= zone.totals;
                                     parcelsjson.discount= zone.discount;  
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
