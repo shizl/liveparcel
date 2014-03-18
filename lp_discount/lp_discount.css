@@ -1,0 +1,23 @@
+.page-admin-liveparcels-discounts .form-item label{
+display:inline;
+}
+.page-admin-liveparcels-discounts .form-item input{
+float:right;
+width:150px;
+}
+.page-admin-liveparcels-discounts fieldset.form-wrapper{
+width:500px;
+}
+#edit-add .form-item input{
+float:none;
+}
+#edit-add .form-item label{
+display:block;
+}
+#edit-add .form-item{
+float:left;
+}
+#edit-add .form-submit{
+float:right;
+margin-top:1em;
+}

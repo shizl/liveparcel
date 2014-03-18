@@ -1,0 +1,46 @@
+<?php
+function lp_discount_uninstall(){
+db_delete('menu_links')
+  ->condition('module','live_parcel_discount')
+  ->execute();
+menu_cache_clear_all();
+}
+function lp_discount_schema() {
+  $schema['live_parcel_discount'] = array(
+      'description' => 'TODO: please describe this table!',
+      'fields' => array(
+        'id' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'serial',
+          'not null' => TRUE,
+          ),
+        'type' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          ),
+        'rate' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'float',
+          'not null' => TRUE,
+          'default' => 0,
+          ),
+        'tid' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+          ),
+        ),
+        'primary key' => array('id'),
+        'indexes' => array(
+            'rate' => array('rate'),
+            ),
+        );
+  return $schema;
+
+}
+
+
+
