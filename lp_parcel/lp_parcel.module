@@ -10,6 +10,160 @@
 
 
 /**
- * Implements hook_menu().
+ * Implements hook_uc_checkout_pane().
+ create liveparcels extra pane 
+ * */
+function lp_parcel_uc_checkout_pane_parcel_pickup_extra($op, $order, $form = NULL, &$form_state = NULL){
+        $parcels=liveparcels_getparcelsdata();
+     if($parcels){
+      switch ($op) {
+        case 'view':        
+       $pickup_extra=array();
+       $extra=array();
+        $pickup = entity_create('field_collection_item', array('field_name' => 'field_parcel_pickup_extra'));
+
+        field_attach_form('field_collection_item',$pickup, $pickup_extra, $form_state, 'und');
+  
+        if($parcels['ptype']=="1"){
+            for($f=0;$f<count($parcels['parcels']);$f++){
+                 $extra['pickup'][$f]= array(
+                 '#type' => 'fieldset', 
+          '#tree' => TRUE, 
+          '#title'=>$parcels['parcels'][$f]['parcelnum'],
+          '#prefix' => '<div class="pickup_extra">', 
+          '#suffix' => '</div>', 
+          );
+          $extra['pickup'][$f]+=$pickup_extra;
+         
+            }
+          
+            
+        }else{
+            $extra['pickup']=array(
+            '#type' => 'fieldset', 
+            '#tree' => TRUE, 
+            '#title'=>$parcels['parcels'][0]['parcelnum'],
+            '#prefix' => '<div class="pickup_extra">', 
+            '#suffix' => '</div>', 
+          );
+            $extra['pickup']+=$pickup_extra;
+           
+        }
+       // print_r($extra);exit;
+          return array('contents' => $extra, 'next-button' => FALSE);
+        case 'review':
+  
+      }
+    }
+}
+/**
+ * Implements hook_uc_checkout_pane().
+ create liveparcels extra pane 
+ * */
+function lp_parcel_uc_checkout_pane_parcel_delivery_extra($op, $order, $form = NULL, &$form_state = NULL){
+        $parcels=liveparcels_getparcelsdata();
+     if($parcels){
+      switch ($op) {
+        case 'view':        
+        $delivery_extra=array();
+       $extra=array();
+        $delivery = entity_create('field_collection_item', array('field_name' => 'field_parcel_delivery_extra'));
+         field_attach_form('field_collection_item',$delivery, $delivery_extra, $form_state, 'und');
+        if($parcels['ptype']=="1"){
+            $extra['delivery']=array(
+                 '#type' => 'fieldset', 
+          '#tree' => TRUE, 
+          '#title'=>$parcels['parcels'][0]['parcelnum'],
+          '#prefix' => '<div class="delivery_extra">', 
+          '#suffix' => '</div>', 
+          );
+            $extra['delivery']+=$delivery_extra;
+        }else{
+            for($f=0;$f<count($parcels['parcels']);$f++){
+               $extra['delivery'][$f]=array(
+                 '#type' => 'fieldset', 
+          '#tree' => TRUE, 
+          '#title'=>$parcels['parcels'][$f]['parcelnum'],
+          '#prefix' => '<div class="delivery_extra">', 
+          '#suffix' => '</div>', 
+          );
+          $extra['delivery'][$f]+=$delivery_extra;
+            }
+        }
+          return array('contents' => $extra, 'next-button' => FALSE);
+        case 'review':
+  
+      }
+    }
+}
+function theme_lp_parcel_table($variables) {
+    $parcels = $variables['items'];
+ 
+  // Set up table rows.
+    foreach ($parcels['parcels'] as $parcel ) {
+        
+      $rows[] = array(
+        array('data' => $parcel['parcelnum'], 'class' => array('products')),
+        array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
+     
+      );
+    }
+
+  // Add the subtotal as the final row.
+    $rows[] = array(
+      'data' => array(
+        // One cell
+        array(
+          'data' => array(
+            '#theme' => 'uc_price',
+            '#prefix' => '<span id="subtotal-title">' . t('Subtotal:') . '</span> ',
+            '#price' => $parcels['totals'],
+          ),
+          // Cell attributes
+          'colspan' => 4,
+          'class' => array('subtotal'),
+        ),
+      ),
+      // Row attributes
+      'class' => array('subtotal'),
+    );
+  return theme('table', array( 'rows' => $rows, 'attributes' => array('class' => array('lp_parcel_table'))));
+}
+/**
+ * Implements hook_uc_checkout_pane().
  */
+function lp_parcel_uc_checkout_pane() {
+    $parcels=liveparcels_getparcelsdata();
+     if($parcels){
+      $panes['parcel_pickup_extra'] = array(
+      'id' => 'parcel_pickup_extra',
+      'callback' => 'lp_parcel_uc_checkout_pane_parcel_pickup_extra',
+    'title' => t('Parcel pickup extra contents'),
+    'desc' => t("Display the contents of a customer's shopping cart."),
+      'process' => TRUE,
+      'enabled' => TRUE,
+      'weight' => 4,
+      );
+      $panes['parcel_delivery_extra'] = array(
+      'id' => 'parcel_delivery_extra',
+      'callback' => 'lp_parcel_uc_checkout_pane_parcel_delivery_extra',
+    'title' => t('Parcel delivery extra contents'),
+    'desc' => t("Display the contents of a customer's shopping cart."),
+      'process' => TRUE,
+      'enabled' => TRUE,
+      'weight' => 5,
+      );
+       }
+  return $panes;    
+}
+function lp_parcel_form_uc_cart_checkout_form_alter(&$form, &$form_state, $form_id){
+
+drupal_add_js('jQuery(".delivery_extra textarea").attr("name",jQuery(".delivery_extra textarea").attr("name")+"[]");
+jQuery(".delivery_extra input").attr("name",jQuery(".delivery_extra input").attr("name")+"[]");
+jQuery(".delivery_extra select").attr("name",jQuery(".delivery_extra select").attr("name")+"[]");
+jQuery(".pickup_extra textarea").attr("name",jQuery(".pickup_extra textarea").attr("name")+"[]");
+jQuery(".pickup_extra input").attr("name",jQuery(".pickup_extra input").attr("name")+"[]");
+jQuery(".pickup_extra select").attr("name",jQuery(".pickup_extra select").attr("name")+"[]");
+', array('type' => 'inline', 'scope' => 'footer'));
+}
 
