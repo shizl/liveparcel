@@ -77,11 +77,16 @@ function lp_discount_get_pricing($amount) {
     return ($amount-($amount*$user_rate));
   }
   $user_roles = $user->roles;
+  foreach($user_roles as $roles => $key){
+    $roles_rate = lp_discount_roles_rate($roles);
+    return ($amount-($amount*$roles_rate));
 
+  }
 
   $default_rate = lp_discount_default_rate();
   return ($amount-($amount*$default_rate));
 }
+/*
 function lp_discount_uc_line_item(){
   $items[] = array(
       'id' => 'discount',
@@ -114,4 +119,4 @@ function lp_discount_line_item_add() {
         );
   }
 }
-
+*/

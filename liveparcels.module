@@ -144,6 +144,7 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
      if($parcels){
       switch ($op) {
         case 'view':
+        $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
         $order_total=$parcels['totals']-$parcels['discount'];
         if($order->order_total != $order_total ){
             $order->order_total=$order_total;
