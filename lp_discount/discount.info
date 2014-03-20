@@ -1,6 +1,0 @@
-name = Discount
-description = Discount
-package = Yeaoh
-core = 7.x
-configure = admin/liveparcels/discounts
-stylesheets[all][] = discount.css
