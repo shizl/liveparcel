@@ -97,6 +97,21 @@ function lp_discount_uc_line_item(){
   return $items;
 }
 function lp_discount_line_item_add() {
-
-
+  $order = uc_order_load(intval($_SESSION['cart_order']));
+  $pricing = lp_discount_get_pricing(uc_order_get_total($order,TRUE)); 
+  $label = "Discount";
+  $result = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'));
+  if ($lid = $result->fetchField()) {
+    uc_order_update_line_item($lid,
+        $label,
+        $pricing
+        );
+  }
+  else {
+    uc_order_line_item_add($order->order_id, 'discount',
+        $label,
+        $pricing
+        );
+  }
 }
+
