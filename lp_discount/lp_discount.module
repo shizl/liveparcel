@@ -67,4 +67,36 @@ function lp_discount_theme(){
       );   
   return  $theme_hooks;
 }
+function lp_discount_get_pricing($amount) {
+  if(!$amount) {
+    return;
+  }
+  global $user;
+  $user_rate = lp_discount_user_rate($user->uid);
+  if($user_rate != 1) {
+    return ($amount-($amount*$user_rate));
+  }
+  $user_roles = $user->roles;
 
+
+  $default_rate = lp_discount_default_rate();
+  return ($amount-($amount*$default_rate));
+}
+function lp_discount_uc_line_item(){
+  $items[] = array(
+      'id' => 'discount',
+      'title' => t('Discount'),
+      'weight' => 2,
+      'default' => FALSE,
+      'stored' => TRUE,
+      'add_list' => TRUE,
+      'calculated' => TRUE,
+      'display_only' => TRUE,
+      'callback' => 'lp_discount_line_item_add',
+      );
+  return $items;
+}
+function lp_discount_line_item_add() {
+
+
+}
