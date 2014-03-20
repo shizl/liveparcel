@@ -144,23 +144,25 @@ function lp_discount_admin_settings_submit($form,&$form_state){
   }
 
   $user = $form['user'];
-  foreach($_POST['user_rate'] as $tid => $rate){
-    $id = db_query("SELECT id FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'user', ':tid' => $tid))->fetchField();
-    if($id){
-      db_update($table)
-        ->expression('rate',$rate)
-        ->condition('type','user')
-        ->condition('tid',$tid)
-        ->execute();
-    }else{
-      db_insert($table)
-        ->fields(array(
-              'id' => NULL,
-              'type' => 'user',
-              'rate' => $rate,
-              'tid' => $tid,
-              ))
-        ->execute();
+  if(isset($_POST['user_rate'])){
+    foreach($_POST['user_rate'] as $tid => $rate){
+      $id = db_query("SELECT id FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'user', ':tid' => $tid))->fetchField();
+      if($id){
+        db_update($table)
+          ->expression('rate',$rate)
+          ->condition('type','user')
+          ->condition('tid',$tid)
+          ->execute();
+      }else{
+        db_insert($table)
+          ->fields(array(
+                'id' => NULL,
+                'type' => 'user',
+                'rate' => $rate,
+                'tid' => $tid,
+                ))
+          ->execute();
+      }
     }
   }
   //drupal_set_message('<pre>'.print_r($default,TRUE).'</pre>');
