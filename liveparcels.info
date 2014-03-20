@@ -3,6 +3,8 @@ description = Live Parcels.
 package = Live Parcels - core
 core = 7.x
 dependencies[] = uc_store
+dependencies[] = uc_product
+dependencies[] = uc_cart
 configure = admin/liveparcels
 stylesheets[all][] = liveparcels.css
 
@@ -11,4 +13,3 @@ version = "7.x-1.0"
 core = "7.x"
 project = "liveparcels"
 datestamp = "1387304010"
-
