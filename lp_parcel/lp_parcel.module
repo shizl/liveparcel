@@ -15,43 +15,84 @@
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
         $parcels=liveparcels_getparcelsdata();
-      //  print_r($op);exit;
+   
      if($parcels){
       switch ($op) {
         case 'view':        
        $pickup_extra=array();
-       $extra=array();
-        $pickup = entity_create('field_collection_item', array('field_name' => 'field_parcel_pickup_extra'));
 
-        field_attach_form('field_collection_item',$pickup, $pickup_extra, $form_state, 'und');
-  
         if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
-                 $extra['pickup'][$f]= array(
-                 '#type' => 'fieldset', 
-          '#tree' => TRUE, 
-          '#title'=>$parcels['parcels'][$f]['parcelnum'],
-          '#prefix' => '<div class="pickup_extra">', 
-          '#suffix' => '</div>', 
-          );
-          $extra['pickup'][$f]+=$pickup_extra;
-         
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_pick_up_time'=> array(
+                  '#title' => t('Pickup time'),
+                  '#type' => 'date_popup', 
+                  '#date_format' => 'm-d-Y', 
+                  '#date_year_range' => '0:+2', 
+                  '#required' => TRUE,
+                  '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
+                ),'field_pick_up_time_ampm'=>array(
+       '#type' => 'select',
+       '#title' => '',
+       '#options' => array(
+          'AM' => t('AM'),
+         'PM' => t('PM'),
+       ),
+       '#default_value' => 'AM',
+   ),'field_customer_reference'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Customer reference'),
+    '#default_value' =>'',
+    '#description' => t('Enter any reference number here to help you find this item.')
+  ),'field_cash_to_collect'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Cash to collect'),
+    '#default_value' =>'',
+    '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+  ),'field_pickup_note'=>array(
+'#title' => t('Pickup Note'),
+'#type' => 'textarea',
+'#description' => t('Enter any information here that would assist with the pick up process'),
+'#default_value' =>'',
+));
             }
 
         }else{
-            $extra['pickup']=array(
-            '#type' => 'fieldset', 
-            '#tree' => TRUE, 
-            '#title'=>$parcels['parcels'][0]['parcelnum'],
-            '#prefix' => '<div class="pickup_extra">', 
-            '#suffix' => '</div>', 
-          );
-            $extra['pickup']+=$pickup_extra;
-           
+         $pickup_extra[0]=array('field_pick_up_time'=> array(
+                  '#title' => t('Pickup time'),
+                  '#type' => 'date_popup', 
+                  '#date_format' => 'm-d-Y', 
+                  '#date_year_range' => '0:+2', 
+                  '#required' => TRUE,
+                  '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
+                ),'field_pick_up_time_ampm'=>array(
+       '#type' => 'select',
+       '#title' => '',
+       '#options' => array(
+          'AM' => t('AM'),
+         'PM' => t('PM'),
+       ),
+       '#default_value' => 'AM',
+   ),'field_customer_reference'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Customer reference'),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+    '#description' => t('Enter any reference number here to help you find this item.')
+  ),'field_cash_to_collect'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Cash to collect'),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+    '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+  ),'field_pickup_note'=>array(
+'#title' => t('Pickup Note'),
+'#type' => 'textarea',
+'#description' => t('Enter any information here that would assist with the pick up process'),
+'#default_value' =>'',
+));
         }
-        $contents['pickup'] =$extra;
+        $contents['pickup'] =$pickup_extra;
           return array('contents' => $contents);
-   
       }
     }
 }
@@ -64,35 +105,44 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
      if($parcels){
       switch ($op) {
         case 'view':        
-        $delivery_extra=array();
-       $extra=array();
-        $delivery = entity_create('field_collection_item', array('field_name' => 'field_parcel_delivery_extra'));
-         field_attach_form('field_collection_item',$delivery, $delivery_extra, $form_state, 'und');
+    $delivery_extra=array();
         if($parcels['ptype']=="1"){
-            $extra['delivery']=array(
-                 '#type' => 'fieldset', 
-          '#tree' => TRUE, 
-          '#title'=>$parcels['parcels'][0]['parcelnum'],
-          '#prefix' => '<div class="delivery_extra">', 
-          '#suffix' => '</div>', 
-          );
-            $extra['delivery']+=$delivery_extra;
+             $delivery_extra[0]=array('field_authority_to_leave'=>array(
+      '#type' =>'checkbox', 
+  '#title' => t('Authority to leave'),
+  ),'field_delivery_note'=>array(
+'#title' => t('Delivery Note'),
+'#type' => 'textarea',
+'#description' => t('Enter any information here that would assist with the delivery process'),
+'#default_value' =>'',
+));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
-               $extra['delivery'][$f]=array(
-                 '#type' => 'fieldset', 
-          '#tree' => TRUE, 
-          '#title'=>$parcels['parcels'][$f]['parcelnum'],
-          '#prefix' => '<div class="delivery_extra">', 
-          '#suffix' => '</div>', 
-          );
-          $extra['delivery'][$f]+=$delivery_extra;
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_authority_to_leave'=>array(
+      '#type' =>'checkbox', 
+  '#title' => t('Authority to leave'),
+  ),'field_delivery_note'=>array(
+'#title' => t('Delivery Note'),
+'#type' => 'textarea',
+'#description' => t('Enter any information here that would assist with the delivery process'),
+'#default_value' =>'',
+));
             }
         }
-           $contents['delivery'] =$extra;
+           $contents['delivery'] =$delivery_extra;
           return array('contents' => $contents);
-        case 'review':
-  
+        case 'process':
+        $pickupdata=array();
+        $deliverydata=array();
+       foreach($form['panes']['parcel_pickup']['pickup'] as $key=>$pickup){
+            $pickupdata[$key]=@array('field_pick_up_time'=>$pickup['field_pick_up_time']['#value']['date'],'field_pick_up_time_ampm'=>$pickup['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$pickup['field_customer_reference']['#value'],'field_cash_to_collect'=>$pickup['field_cash_to_collect']['#value'],'field_pickup_note'=>$pickup['field_pickup_note']['#value']);
+      
+        }
+        foreach($form['panes']['parcel_delivery']['delivery'] as $key=>$delivery){
+            $deliverydata[$key]=@array('field_authority_to_leave'=>$delivery['field_authority_to_leave']["#value"],'field_delivery_note'=>$delivery['field_delivery_note']["#value"]);
+        }
+        db_query("UPDATE `liveparcels_order` SET `extra_info`='".serialize(array('pickupdata'=>$pickupdata,'deliverydata'=>$deliverydata))."' WHERE `order_id`='".$order->order_id."'");
+   case 'review':   
       }
     }
 }
@@ -152,29 +202,77 @@ function lp_parcel_uc_checkout_pane() {
        }
   return $panes;    
 }
-function lp_parcel_form_uc_cart_checkout_form_alter(&$form, &$form_state, $form_id){
-
-drupal_add_js('
-var a=1;
-var f=1;
-jQuery(".delivery_extra").each(function(){
-    jQuery(this).find("textarea").attr("name",jQuery(this).find("textarea").attr("name")+"["+a+"]");
-    jQuery(this).find("input").attr("name",jQuery(this).find("input").attr("name")+"["+a+"]");
-    jQuery(this).find("select").attr("name",jQuery(this).find("select").attr("name")+"["+a+"]");  
-    a++;
-});
-jQuery(".pickup_extra").each(function(){
-    jQuery(this).find("textarea").attr("name",jQuery(this).find("textarea").attr("name")+"["+f+"]");
-    jQuery(this).find("input").attr("name",jQuery(this).find("input").attr("name")+"["+f+"]");
-    jQuery(this).find("select").attr("name",jQuery(this).find("select").attr("name")+"["+f+"]");  
-    f++;
-});
-', array('type' => 'inline', 'scope' => 'footer'));
- $form['#submit'][] = 'lp_parcel_parcel_extra_submit';
+function lp_parcel_uc_checkout_complete($order, $account) {
+    $order_id=$order->order_id;
+    $parceldata=lp_parcel_get_parcel_data($order_id);
+    $parcel_info=unserialize($parceldata['parcel_info']);
+    $extra_info=unserialize($parceldata['extra_info']);
+    $node_revision="";
+    
+    $field_parcel_size="";
+    $field_parcel_weight="";
+    $field_parcel_price="";
+    $field_parcel_order_id="";
+    $field_parcel_pickup_address="";
+    $field_parcel_delivery_address="";
+    $field_pick_up_time="";
+    $field_pick_up_time_ampm="";
+    $field_customer_reference="";
+    $field_cash_to_collect="";
+    $field_pickup_note="";
+    $field_authority_to_leave="";
+    $field_delivery_note="";
+    
+    foreach($parcel_info['parcels'] as $key=>$parcel){
+       $nid = db_insert('node') 
+        ->fields(array(
+          'title' => 'order-'.$order_id.'-'.$parcel['parcelnum'],
+          'uid' => 1,
+          'type'=>'live_parcel', 
+          'language'=>'und',
+           'status'=>1,
+          'created' => REQUEST_TIME,
+        ))->execute();
+        db_update('node') 
+        ->fields(array(
+         'vid'=>$nid,
+          'changed' => REQUEST_TIME,
+        ))->condition('nid',$nid, '=')->execute();
+        $node_revision.=($node_revision != "" ? ",":"")."($nid, $nid, 1, 'live_parcel', '',".REQUEST_TIME.", 1, 2, 1, 0)";
+        
+         $field_parcel_size.=($field_parcel_size != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm'."', NULL)";
+         
+          $field_parcel_weight.=($field_parcel_weight != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['weighttext']."', NULL)";
+          
+          $field_parcel_price.=($field_parcel_price != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['price']."')";
+          
+          $field_parcel_order_id.=($field_parcel_order_id != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$order_id."', NULL)";
+          $p=$parcel_info['ptype']=='1' ? $key:0; 
+          $d=$parcel_info['ptype']=='2' ? $key:0; 
+          $field_parcel_pickup_address.=($field_parcel_pickup_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_parcel_pickup_address']."')";
+          
+          $field_parcel_delivery_address.=($field_parcel_delivery_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_parcel_delivery_address']."')";
+          
+          $field_pick_up_time.=($field_pick_up_time != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pick_up_time']."')";
+          
+          $field_pick_up_time_ampm.=($field_pick_up_time_ampm != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pick_up_time_ampm']."')";
+          
+          $field_customer_reference.=($field_customer_reference != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_customer_reference']."', NULL)";
+          
+          $field_cash_to_collect.=($field_cash_to_collect != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_cash_to_collect']."', NULL)";
+          
+          $field_pickup_note.=($field_pickup_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pickup_note']."', NULL)";
+          
+          $field_authority_to_leave.=($field_authority_to_leave != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_authority_to_leave']."')";
+          
+          $field_delivery_note.=($field_delivery_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_delivery_note']."', NULL)";
+    }
+       db_query("INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES".$node_revision.";INSERT INTO `field_data_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";INSERT INTO `field_revision_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";INSERT INTO `field_data_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";INSERT INTO `field_revision_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";INSERT INTO `field_data_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";INSERT INTO `field_revision_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";INSERT INTO `field_data_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";INSERT INTO `field_revision_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";INSERT INTO `field_data_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";INSERT INTO `field_revision_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";INSERT INTO `field_data_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";INSERT INTO `field_revision_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";INSERT INTO `field_data_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";INSERT INTO `field_revision_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";INSERT INTO `field_data_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";INSERT INTO `field_revision_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";INSERT INTO `field_data_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";INSERT INTO `field_revision_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";INSERT INTO `field_data_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";INSERT INTO `field_revision_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";INSERT INTO `field_data_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";INSERT INTO `field_revision_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";INSERT INTO `field_data_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";INSERT INTO `field_revision_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";INSERT INTO `field_data_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";INSERT INTO `field_revision_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";");
+        
 }
-function lp_parcel_parcel_extra_submit(&$form, &$form_state) {
-  echo "<pre>";
-    print_r($form);exit;
+function lp_parcel_get_parcel_data($order_id){
+    $pdata=db_query("SELECT * FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
+    return  $pdata;    
 }
 
 
