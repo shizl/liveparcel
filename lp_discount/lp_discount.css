@@ -1,23 +1,37 @@
 .page-admin-liveparcels-discounts .form-item label{
-display:inline;
+display:block;
+width:500px;
+float:left;
 }
 .page-admin-liveparcels-discounts .form-item input{
-float:right;
+float:left;
 width:150px;
 }
+
 .page-admin-liveparcels-discounts fieldset.form-wrapper{
-width:500px;
+}
+#edit-add{
+margin:30px -14px -14px -16px;
 }
 #edit-add .form-item input{
 float:none;
 }
 #edit-add .form-item label{
 display:block;
+width:inherit;
 }
 #edit-add .form-item{
 float:left;
 }
-#edit-add .form-submit{
-float:right;
-margin-top:1em;
+#edit-add label{
+margin-right:10px;
 }
+#edit-add .form-item-add-more-rate{
+margin-left:30px;
+}
+#edit-add .form-submit{
+float:left;
+margin-top:0.5em;
+margin-left:0.5em;
+}
+

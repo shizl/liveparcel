@@ -4,21 +4,13 @@ function lp_discount_menu(){
       'title' => t('Discount settings'), 
       'page callback' => 'drupal_get_form',
       'page arguments' => array('lp_discount_settings'),
-      'access callback' => TRUE,
+      'access arguments' => array('administer actions'),
       'type' => MENU_NORMAL_ITEM,
       'file' => 'lp_discount.admin.inc',
       );
   return $items;
 }
 
-function lp_discount_default_rate(){
-  $rate = lp_discount_get_rate('default',0);
-  if($rate){
-    return $rate;
-  }else{
-    return 1;
-  }
-}
 function lp_discount_roles_rate($tid){
   $rate = lp_discount_get_rate('roles',$tid);
   if($rate){
@@ -41,22 +33,8 @@ function lp_discount_get_rate($type='',$tid=0){
     $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => $type, ':tid' => $tid))->fetchField();
     return $result;
   }else{
-    global $user;
-    $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'user', ':tid' => $user->uid))->fetchField();
-    if($result){
-      return $result;
-    }
-    foreach($user as $roles_id =>$roles){
-      $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'roles', ':tid' => $roles_id))->fetchField();
-      if($result){
-        return $result;
-      }
-    }
-    $result = db_query("SELECT rate FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'default', ':tid' => $tid))->fetchField();
-    if($result){
-      return $result;
-    }
-    return 1;
+    return;
+
   }
 }
 function lp_discount_theme(){
@@ -74,49 +52,13 @@ function lp_discount_get_pricing($amount) {
   global $user;
   $user_rate = lp_discount_user_rate($user->uid);
   if($user_rate != 1) {
-    return ($amount-($amount*$user_rate));
+    return ($amount*$user_rate);
   }
-  $user_roles = $user->roles;
-  foreach($user_roles as $roles => $key){
-    $roles_rate = lp_discount_roles_rate($roles);
-    return ($amount-($amount*$roles_rate));
-
-  }
-
-  $default_rate = lp_discount_default_rate();
-  return ($amount-($amount*$default_rate));
+  $user_roles = user_roles();
+  $user_role = $user->roles;
+  $temp = (array_intersect_key($user_roles,$user_role));
+  $temp = (array_slice($temp,-1,1,TRUE));
+  $roles = (key($temp));
+  $roles_rate = lp_discount_roles_rate($roles);
+  return ($amount*$roles_rate);
 }
-/*
-function lp_discount_uc_line_item(){
-  $items[] = array(
-      'id' => 'discount',
-      'title' => t('Discount'),
-      'weight' => 2,
-      'default' => FALSE,
-      'stored' => TRUE,
-      'add_list' => TRUE,
-      'calculated' => TRUE,
-      'display_only' => TRUE,
-      'callback' => 'lp_discount_line_item_add',
-      );
-  return $items;
-}
-function lp_discount_line_item_add() {
-  $order = uc_order_load(intval($_SESSION['cart_order']));
-  $pricing = lp_discount_get_pricing(uc_order_get_total($order,TRUE)); 
-  $label = "Discount";
-  $result = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'));
-  if ($lid = $result->fetchField()) {
-    uc_order_update_line_item($lid,
-        $label,
-        $pricing
-        );
-  }
-  else {
-    uc_order_line_item_add($order->order_id, 'discount',
-        $label,
-        $pricing
-        );
-  }
-}
-*/

@@ -163,9 +163,9 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
           }
           $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
           if($discount){
-              uc_order_update_line_item($discount,'Discount price', -$parcels['discount']);
+              uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
           }else{
-            uc_order_line_item_add($order->order_id,'discount','Discount price',-$parcels['discount'],'9');
+            uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
           }
 
         }
@@ -284,7 +284,7 @@ $parcels=liveparcels_getparcelsdata();
           );
            $items[] = array(
             'id' => 'discount', 
-            'title' => t('Discount Price'), 
+            'title' => t('Parcel discount'), 
             'weight' => 9, 
             'default' => FALSE, 
             'stored' => TRUE, 
