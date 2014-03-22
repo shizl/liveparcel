@@ -363,7 +363,7 @@ menu_link_save($item);
                 }else{
                     var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postto =$(".pnum-from").val();
-                     ptype=2;
+                    ptype=2;
                 }
 			  if(dimfirst > max){
 				  max = dimfirst; 
@@ -396,7 +396,8 @@ menu_link_save($item);
                                     }
                                     parcelsjson.ptype= ptype;
                                     parcelsjson.totals= zone.totals;
-                                    parcelsjson.discount= zone.discount;  
+                                    parcelsjson.discount= zone.discount; 
+                                     
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             }
                               

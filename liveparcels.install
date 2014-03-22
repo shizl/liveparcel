@@ -17,7 +17,6 @@ function liveparcels_requirements($phase) {
       'warning' => REQUIREMENT_WARNING,
       'error' => REQUIREMENT_ERROR,
     );
-
     module_load_include('inc', 'liveparcels', 'liveparcels.admin');
     $results = module_invoke_all('liveparcels_status');
     foreach ($results as $status) {

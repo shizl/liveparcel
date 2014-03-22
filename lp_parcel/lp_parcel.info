@@ -1,0 +1,12 @@
+name = Live Parcels-Parcel
+description = Live Parcels-Parcel.
+package = Live Parcels - core
+core = 7.x
+dependencies[] = field_collection
+dependencies[] = liveparcels
+
+; Information added by Drupal.org packaging script on 2014-03-15
+version = "7.x-1.0"
+core = "7.x"
+project = "lp_parcel"
+datestamp = "1387304010"
