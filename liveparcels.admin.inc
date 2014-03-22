@@ -468,15 +468,7 @@ function liveparcels_configpage() {
 
   return $build;
 }
-function liveparcels_test() {
-$form[] = array(
-'#title' => 'wqfasddfasd',
-'#type' => 'item',
-'#description' => liveparcels_zoneresult(),
 
-);
-return $form;
-}
 function liveparcels_live_parcel_price() {
 $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Price table (calculated)</div><div class="parcels-body"><div class="parcels-note"><p>The price table below is calculated based on your settings above. It shows you the cost to deliver a parcel from the pickup zone to different delivery zone. Please select a pickup zone to see the corresponding price.</p>
         <p><input type="checkbox" value="1" class="useregion"> Enable grouping of zones into region.</p>
