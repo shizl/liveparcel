@@ -26,7 +26,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
-                  '#date_format' => 'm-d-Y', 
+                  '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
                   '#required' => TRUE,
                   '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
@@ -60,7 +60,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
          $pickup_extra[0]=array('field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
-                  '#date_format' => 'm-d-Y', 
+                  '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
                   '#required' => TRUE,
                   '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
@@ -134,14 +134,22 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         case 'process':
         $pickupdata=array();
         $deliverydata=array();
-       foreach($form['panes']['parcel_pickup']['pickup'] as $key=>$pickup){
-            $pickupdata[$key]=@array('field_pick_up_time'=>$pickup['field_pick_up_time']['#value']['date'],'field_pick_up_time_ampm'=>$pickup['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$pickup['field_customer_reference']['#value'],'field_cash_to_collect'=>$pickup['field_cash_to_collect']['#value'],'field_pickup_note'=>$pickup['field_pickup_note']['#value']);
-      
+       foreach($parcels['parcels'] as $key=>$val){
+           if($parcels['ptype']==1){
+               $picktime=$form['panes']['parcel_pickup']['pickup'] [$key]['field_pick_up_time']['#value']['date'];
+                $picktime=date("Y-m-d",strtotime($picktime));
+                $pickupdata[$key]=@array('field_pick_up_time'=>$picktime,'field_pick_up_time_ampm'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_customer_reference']['#value'],'field_cash_to_collect'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_cash_to_collect']['#value'],'field_pickup_note'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_pickup_note']['#value']);
+                
+                $deliverydata[0]=@array('field_authority_to_leave'=>$form['panes']['parcel_delivery']['delivery'] [0]['field_authority_to_leave']["#value"],'field_delivery_note'=>$form['panes']['parcel_delivery']['delivery'] [0]['field_delivery_note']["#value"]);
+            }else{
+                $picktime=$form['panes']['parcel_pickup']['pickup'] [0]['field_pick_up_time']['#value']['date'];
+                $picktime=date("Y-m-d",strtotime($picktime));
+                $pickupdata[0]=@array('field_pick_up_time'=>$picktime,'field_pick_up_time_ampm'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_customer_reference']['#value'],'field_cash_to_collect'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_cash_to_collect']['#value'],'field_pickup_note'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_pickup_note']['#value']);
+                $deliverydata[$key]=@array('field_authority_to_leave'=>$form['panes']['parcel_delivery']['delivery'] [$key]['field_authority_to_leave']["#value"],'field_delivery_note'=>$form['panes']['parcel_delivery']['delivery'] [$key]['field_delivery_note']["#value"]);
+            }
         }
-        foreach($form['panes']['parcel_delivery']['delivery'] as $key=>$delivery){
-            $deliverydata[$key]=@array('field_authority_to_leave'=>$delivery['field_authority_to_leave']["#value"],'field_delivery_note'=>$delivery['field_delivery_note']["#value"]);
-        }
-        db_query("UPDATE `liveparcels_order` SET `extra_info`='".serialize(array('pickupdata'=>$pickupdata,'deliverydata'=>$deliverydata))."' WHERE `order_id`='".$order->order_id."'");
+        $parceldata=array('pickupdata'=>$pickupdata,'deliverydata'=>$deliverydata);
+         db_update('liveparcels_order')->fields(array('extra_info' => serialize($parceldata)))->condition('order_id',$order->order_id , '=')->execute();
    case 'review':   
       }
     }
@@ -205,8 +213,8 @@ function lp_parcel_uc_checkout_pane() {
 function lp_parcel_uc_checkout_complete($order, $account) {
     $order_id=$order->order_id;
     $parceldata=lp_parcel_get_parcel_data($order_id);
-    $parcel_info=unserialize($parceldata['parcel_info']);
-    $extra_info=unserialize($parceldata['extra_info']);
+    $parcel_info=$parceldata['parcel_info'];
+    $extra_info=$parceldata['extra_info'];
     $node_revision="";
     
     $field_parcel_size="";
@@ -222,13 +230,12 @@ function lp_parcel_uc_checkout_complete($order, $account) {
     $field_pickup_note="";
     $field_authority_to_leave="";
     $field_delivery_note="";
-    
     foreach($parcel_info['parcels'] as $key=>$parcel){
        $nid = db_insert('node') 
         ->fields(array(
-          'title' => 'order-'.$order_id.'-'.$parcel['parcelnum'],
           'uid' => 1,
           'type'=>'live_parcel', 
+          'title' => 'order-'.$order_id.'-'.$parcel['parcelnum'],
           'language'=>'und',
            'status'=>1,
           'created' => REQUEST_TIME,
@@ -238,41 +245,89 @@ function lp_parcel_uc_checkout_complete($order, $account) {
          'vid'=>$nid,
           'changed' => REQUEST_TIME,
         ))->condition('nid',$nid, '=')->execute();
-        $node_revision.=($node_revision != "" ? ",":"")."($nid, $nid, 1, 'live_parcel', '',".REQUEST_TIME.", 1, 2, 1, 0)";
+  
+        $node_revision.=($node_revision != "" ? ",":"")."($nid, $nid, 1, '".'order-'.$order_id.'-'.$parcel['parcelnum']."', '',".REQUEST_TIME.", 1, 2, 1, 0)";
         
          $field_parcel_size.=($field_parcel_size != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm'."', NULL)";
          
           $field_parcel_weight.=($field_parcel_weight != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['weighttext']."', NULL)";
           
-          $field_parcel_price.=($field_parcel_price != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['price']."')";
+          $field_parcel_price.=($field_parcel_price != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".str_replace('$','',$parcel['price'])."')";
           
           $field_parcel_order_id.=($field_parcel_order_id != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$order_id."', NULL)";
-          $p=$parcel_info['ptype']=='1' ? $key:0; 
-          $d=$parcel_info['ptype']=='2' ? $key:0; 
-          $field_parcel_pickup_address.=($field_parcel_pickup_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_parcel_pickup_address']."')";
+          if($parcel_info['ptype']=='1' ){
+        
+              $field_parcel_pickup_address.=($field_parcel_pickup_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".($extra_info['pickupdata'][$key]['field_parcel_pickup_address']>0 ? $extra_info['pickupdata'][$key]['field_parcel_pickup_address']:0)."')";
+              
+              $field_parcel_delivery_address.=($field_parcel_delivery_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".($extra_info['deliverydata'][0]['field_parcel_delivery_address']>0 ? $extra_info['deliverydata'][0]['field_parcel_delivery_address']:0 )."')";
+              
+              $field_pick_up_time.=($field_pick_up_time != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$key]['field_pick_up_time']."')";
+              
+              $field_pick_up_time_ampm.=($field_pick_up_time_ampm != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$key]['field_pick_up_time_ampm']."')";
+              
+              $field_customer_reference.=($field_customer_reference != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$key]['field_customer_reference']."', NULL)";
+              
+              $field_cash_to_collect.=($field_cash_to_collect != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$key]['field_cash_to_collect']."', NULL)";
+              
+              $field_pickup_note.=($field_pickup_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$key]['field_pickup_note']."', NULL)";
           
-          $field_parcel_delivery_address.=($field_parcel_delivery_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_parcel_delivery_address']."')";
+              $field_authority_to_leave.=($field_authority_to_leave != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][0]['field_authority_to_leave']."')";
+              
+              $field_delivery_note.=($field_delivery_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][0]['field_delivery_note']."', NULL)";
+            }else{
+                $field_parcel_pickup_address.=($field_parcel_pickup_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".($extra_info['pickupdata'][0]['field_parcel_pickup_address']>0 ? $extra_info['pickupdata'][0]['field_parcel_pickup_address']:0)."')";
+              
+              $field_parcel_delivery_address.=($field_parcel_delivery_address != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".($extra_info['deliverydata'][$key]['field_parcel_delivery_address']>0 ? $extra_info['deliverydata'][$key]['field_parcel_delivery_address']:0)."')";
+              
+              $field_pick_up_time.=($field_pick_up_time != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][0]['field_pick_up_time']."')";
+              
+              $field_pick_up_time_ampm.=($field_pick_up_time_ampm != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][0]['field_pick_up_time_ampm']."')";
+              
+              $field_customer_reference.=($field_customer_reference != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][0]['field_customer_reference']."', NULL)";
+              
+              $field_cash_to_collect.=($field_cash_to_collect != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][0]['field_cash_to_collect']."', NULL)";
+              
+              $field_pickup_note.=($field_pickup_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][0]['field_pickup_note']."', NULL)";
           
-          $field_pick_up_time.=($field_pick_up_time != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pick_up_time']."')";
-          
-          $field_pick_up_time_ampm.=($field_pick_up_time_ampm != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pick_up_time_ampm']."')";
-          
-          $field_customer_reference.=($field_customer_reference != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_customer_reference']."', NULL)";
-          
-          $field_cash_to_collect.=($field_cash_to_collect != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_cash_to_collect']."', NULL)";
-          
-          $field_pickup_note.=($field_pickup_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['pickupdata'][$p]['field_pickup_note']."', NULL)";
-          
-          $field_authority_to_leave.=($field_authority_to_leave != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_authority_to_leave']."')";
-          
-          $field_delivery_note.=($field_delivery_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$d]['field_delivery_note']."', NULL)";
+              $field_authority_to_leave.=($field_authority_to_leave != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$key]['field_authority_to_leave']."')";
+              
+              $field_delivery_note.=($field_delivery_note != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$extra_info['deliverydata'][$key]['field_delivery_note']."', NULL)";
+
+          }
     }
-       db_query("INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES".$node_revision.";INSERT INTO `field_data_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";INSERT INTO `field_revision_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";INSERT INTO `field_data_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";INSERT INTO `field_revision_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";INSERT INTO `field_data_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";INSERT INTO `field_revision_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";INSERT INTO `field_data_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";INSERT INTO `field_revision_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";INSERT INTO `field_data_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";INSERT INTO `field_revision_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";INSERT INTO `field_data_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";INSERT INTO `field_revision_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";INSERT INTO `field_data_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";INSERT INTO `field_revision_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";INSERT INTO `field_data_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";INSERT INTO `field_revision_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";INSERT INTO `field_data_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";INSERT INTO `field_revision_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";INSERT INTO `field_data_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";INSERT INTO `field_revision_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";INSERT INTO `field_data_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";INSERT INTO `field_revision_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";INSERT INTO `field_data_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";INSERT INTO `field_revision_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";INSERT INTO `field_data_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";INSERT INTO `field_revision_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";");
+       db_query("INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES".$node_revision.";
+       INSERT INTO `field_data_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";
+       INSERT INTO `field_revision_field_parcel_size` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_size_value`, `field_parcel_size_format`) VALUES".$field_parcel_size.";");
+        db_query("INSERT INTO `field_data_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";
+       INSERT INTO `field_revision_field_parcel_weight` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_weight_value`, `field_parcel_weight_format`) VALUES".$field_parcel_weight.";");
+        db_query("INSERT INTO `field_data_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";
+       INSERT INTO `field_revision_field_parcel_price` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_price_value`) VALUES".$field_parcel_price.";");
+        db_query("INSERT INTO `field_data_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";
+       INSERT INTO `field_revision_field_parcel_order_id` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_order_id_value`, `field_parcel_order_id_format`) VALUES".$field_parcel_order_id.";");
+        db_query("INSERT INTO `field_data_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";
+       INSERT INTO `field_revision_field_parcel_pickup_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_pickup_address_value`) VALUES".$field_parcel_pickup_address.";");
+        db_query("INSERT INTO `field_data_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";
+       INSERT INTO `field_revision_field_parcel_delivery_address` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_parcel_delivery_address_value`) VALUES".$field_parcel_delivery_address.";");
+        db_query("INSERT INTO `field_data_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";
+       INSERT INTO `field_revision_field_pick_up_time` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_value`) VALUES".$field_pick_up_time.";");
+        db_query("INSERT INTO `field_data_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";
+       INSERT INTO `field_revision_field_pick_up_time_ampm` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pick_up_time_ampm_value`) VALUES".$field_pick_up_time_ampm.";");
+        db_query("INSERT INTO `field_data_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";
+       INSERT INTO `field_revision_field_customer_reference` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_customer_reference_value`, `field_customer_reference_format`) VALUES".$field_customer_reference.";");
+        db_query("INSERT INTO `field_data_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";
+       INSERT INTO `field_revision_field_cash_to_collect` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_cash_to_collect_value`, `field_cash_to_collect_format`) VALUES".$field_cash_to_collect.";");
+        db_query("INSERT INTO `field_data_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";
+       INSERT INTO `field_revision_field_pickup_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_pickup_note_value`, `field_pickup_note_format`) VALUES".$field_pickup_note.";");
+        db_query("INSERT INTO `field_data_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";
+       INSERT INTO `field_revision_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";");
+        db_query("INSERT INTO `field_data_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";
+       INSERT INTO `field_revision_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";");
         
 }
 function lp_parcel_get_parcel_data($order_id){
-    $pdata=db_query("SELECT * FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
-    return  $pdata;    
+    $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
+    $parceldata=array("parcel_info"=>unserialize($pdata['parcel_info']),"extra_info"=>unserialize($pdata['extra_info']));
+    return  $parceldata;    
 }
 
 
