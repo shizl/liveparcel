@@ -120,7 +120,23 @@ function liveparcels_menu() {
     'file' => 'liveparcels.inc',
     'type'=>MENU_CALLBACK,
   );
-
+    $items['user/%user/live_parcel_price'] = array(
+    'title' => 'Price list',
+    'description' => ' package show.',
+    'page callback' => array('liveparcels_live_parcel_price'),
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+    'type'=>MENU_LOCAL_TASK,
+  );
+    $items['user/%user/test'] = array(
+    'title' => 'test',
+    'description' => ' package show.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('liveparcels_test'),
+    'access callback' => true,
+    'file' => 'liveparcels.admin.inc',
+    'type'=>MENU_LOCAL_TASK,
+  );
   return $items;
 }
 /*get zonelistdata*/

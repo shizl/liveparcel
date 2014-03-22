@@ -143,7 +143,7 @@ $(document).ready(function(){
             }else{
                 var region_id='';
             }
-            $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$(this).val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+            $.post('/admin/liveparcels/settings/zoneresult',{region:region_id,zone:$(this).val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -259,7 +259,7 @@ $(document).ready(function(){
                 }
             });
     });
-     $.post('/admin/liveparcels/settings/zoneresult',{region:'',zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+     $.post('/admin/liveparcels/settings/zoneresult',{region:'',zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
             if(msg){
                 $('.pickup-result .draggable').remove();
                 $('.table-head').after(msg);
