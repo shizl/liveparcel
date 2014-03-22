@@ -1,5 +1,17 @@
 <?php
 function lp_address_country_setting_form($form,$form_state){
+     // $form['address'] = array('#type' => 'vertical_tabs');
+
+  $form['lp_country'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Country Settings'),
+    '#collapsible' => TRUE,
+  );
+    $form['lp_state'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Backend  State Update features'),
+     '#collapsible' => TRUE,
+  );
     $countryinfo=db_query("SELECT `country_name`,`country_iso_code_2`,`country_iso_code_3` FROM `uc_countries` WHERE `country_id`='8888'")->fetchAssoc();
    if(!is_array($countryinfo)){
         db_insert('uc_countries')
@@ -15,25 +27,40 @@ function lp_address_country_setting_form($form,$form_state){
       'country_iso_code_2' =>'LP',
       'country_iso_code_3' => 'LPL'); 
     }
-     $form['country_name'] = array(
+     $form['lp_country']['country_name'] = array(
       '#type' => 'textfield',
         '#title' => t('Liveparcels address country name'),
         '#default_value' => $countryinfo['country_name'],
+        '#size'=>20,
+        '#description'=>'country name',
       );
-      $form['country_iso_code_2'] = array(
+      $form['lp_country']['country_iso_code_2'] = array(
         '#type' => 'textfield',
         '#title' => t('Liveparcels address country code'),
         '#default_value' => $countryinfo['country_iso_code_2'],
+        '#maxlength'=>2,
+        '#size'=>4,
+        '#description'=>'Max 2 char',
       );
-      $form['country_iso_code_3'] = array(
+      $form['lp_country']['country_iso_code_3'] = array(
         '#type' => 'textfield',
         '#title' => t('Liveparcels address country code2'),
         '#default_value' =>$countryinfo['country_iso_code_3'],
+        '#maxlength'=>3,
+        '#size'=>4,
+        '#description'=>'Max 3 char',
       );
+      $active = array('insert' => t('keep Old and Add New States'), 'delete' => t('Delete Old and  Add New States'));
+      $form['lp_state']['active'] = array(
+    '#type' => 'radios',
+    '#title' => t('State update'),
+    '#default_value' => 'insert',
+    '#options' => $active);
+    
        $form['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Save'),
-       '#submit'=>array('lp_address_admin_country_form_submit')
+       '#submit'=>array('lp_address_country_setting_form_submit','lp_address_update_zone_form_submit')
       );
       return $form;  
 }
@@ -44,23 +71,6 @@ function lp_address_country_setting_form_submit($form,$form_state){
       'country_iso_code_3' => $form_state['values']['country_iso_code_3'],
   ))->condition('country_id', 8888, '=')->execute();
 
-}
-function lp_address_update_zone_form($form,$form_state){
- 
-    $active = array('insert' => t('Insert state to uc address state'), 'delete' => t('Delete state to uc address state'));
-      $form['settings']['active'] = array(
-    '#type' => 'radios',
-    '#title' => t('State update'),
-    '#default_value' => 'insert',
-    '#options' => $active,
-    '#description' => t('Insert or delete state to uc address state.'));
-    
-       $form['submit'] = array(
-        '#type' => 'submit',
-        '#value' => t('Save'),
-       '#submit'=>array('lp_address_update_zone_form_submit')
-      );
-      return $form;  
 }
 function lp_address_update_zone_form_submit($form,$form_state){
     $oldstate=db_query("SELECT `zone_code` FROM `uc_zones` WHERE `zone_country_id`='8888'");
@@ -95,5 +105,4 @@ function lp_address_update_zone_form_submit($form,$form_state){
         db_delete('uc_zones')->condition('zone_code',$deletestate , 'in')->execute();
         }
     }
-  
 }

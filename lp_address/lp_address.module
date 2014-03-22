@@ -13,15 +13,7 @@ function lp_address_menu() {
     'weight' => -13,
    'file' => 'lp_address.inc',
   );
-   $items['admin/liveparcels/lp_address_update_zone'] = array(
-    'title' => 'Parcels state update',
-    'description' => 'Customize the Parcels state update.',
-    'page callback' => 'drupal_get_form',
-    'page arguments'=>array('lp_address_update_zone_form'),
-    'access arguments' => array('administer actions'),
-    'weight' => -13,
-    'file' => 'lp_address.inc',
-  );
+
   return $items;
 }
 

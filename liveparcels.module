@@ -41,41 +41,46 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
   
-  $items['admin/liveparcels/settings/updatefactor'] = array(
+  $items['admin/liveparcels/settings/updatefactor/ajax'] = array(
     'title' => 'Update factor',
     'description' => 'Update factor.',
     'page callback' => 'liveparcels_factor_settings',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
+    'type'=>MENU_CALLBACK,
   );
 
   
-  $items['admin/liveparcels/settings/managepackage'] = array(
+  $items['admin/liveparcels/settings/managepackage/ajax'] = array(
     'title' => 'manage package  ',
     'description' => 'manage package.',
     'page callback' => 'liveparcels_managepackage',
     'access callback' => true,
     'file' => 'liveparcels.admin.inc',
+    'type'=>MENU_CALLBACK,
   );
-  $items['admin/liveparcels/settings/fileupload'] = array(
+  $items['admin/liveparcels/settings/fileupload/ajax'] = array(
     'title' => 'manage fileupload  ',
     'description' => 'manage fileupload.',
     'page callback' => 'liveparcels_fileupload',
     'access callback' => true,
+    'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/settings/zoneresult'] = array(
+    $items['admin/liveparcels/settings/zoneresult/ajax'] = array(
     'title' => 'manage zoneresult  ',
     'description' => 'manage zoneresult.',
     'page callback' => 'liveparcels_zoneresult',
     'access callback' => true,
+    'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/settings/updatezone'] = array(
+    $items['admin/liveparcels/settings/updatezone/ajax'] = array(
     'title' => ' updatezone  ',
     'description' => ' updatezone.',
     'page callback' => 'liveparcels_updatezone',
     'access callback' => true,
+    'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
      $items['liveparcels/parcel_quote'] = array(
