@@ -43,7 +43,6 @@ function lp_discount_settings($form,$form_state) {
   foreach($result as $row) {
     $form['user']['user_wrapper']['user_rate['.$row->tid.']'] = array(
         '#type' => 'textfield',
-        '#required' => TRUE,
         '#title' =>(user_load($row->tid)->name),
         '#default_value' =>lp_discount_user_rate($row->tid),
         );
@@ -112,24 +111,32 @@ function lp_discount_admin_settings_submit($form,&$form_state){
   if(isset($_POST['user_rate'])){
     foreach($_POST['user_rate'] as $tid => $rate){
       $id = db_query("SELECT id FROM {live_parcel_discount} WHERE type = :type AND tid=:tid", array(':type' => 'user', ':tid' => $tid))->fetchField();
-      if($id){
-        db_update($table)
-          ->expression('rate',$rate)
+      if(!$rate){
+        db_delete($table)
           ->condition('type','user')
           ->condition('tid',$tid)
           ->execute();
       }else{
-        db_insert($table)
-          ->fields(array(
-                'id' => NULL,
-                'type' => 'user',
-                'rate' => $rate,
-                'tid' => $tid,
-                ))
-          ->execute();
+        if($id){
+          db_update($table)
+            ->expression('rate',$rate)
+            ->condition('type','user')
+            ->condition('tid',$tid)
+            ->execute();
+        }else{
+          db_insert($table)
+            ->fields(array(
+                  'id' => NULL,
+                  'type' => 'user',
+                  'rate' => $rate,
+                  'tid' => $tid,
+                  ))
+            ->execute();
+        }
       }
     }
   }
+//  drupal_set_message('<pre>'.print_r($user,TRUE).'</pre>');
   drupal_set_message(t('Save Ok'));
 }
 function lp_discount_add_more($form,$form_state){
