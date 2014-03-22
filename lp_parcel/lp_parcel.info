@@ -2,7 +2,6 @@ name = Live Parcels-Parcel
 description = Live Parcels-Parcel.
 package = Live Parcels - core
 core = 7.x
-dependencies[] = field_collection
 dependencies[] = liveparcels
 
 ; Information added by Drupal.org packaging script on 2014-03-15
