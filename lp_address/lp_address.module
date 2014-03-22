@@ -1,5 +1,29 @@
 <?php
-
+/**
+ * Implements hook_menu().
+ */
+function lp_address_menu() {
+  $items = array();
+ $items['admin/liveparcels/lp_address_country_setting'] = array(
+    'title' => 'Parcels Country code setting',
+    'description' => 'Customize the Parcels Country code setting.',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('lp_address_country_setting_form'),
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+   'file' => 'lp_address.inc',
+  );
+   $items['admin/liveparcels/lp_address_update_zone'] = array(
+    'title' => 'Parcels state update',
+    'description' => 'Customize the Parcels state update.',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('lp_address_update_zone_form'),
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'lp_address.inc',
+  );
+  return $items;
+}
 
 function lp_address_uc_checkout_pane() {
   $panes['test'] = array(
@@ -120,15 +144,4 @@ function custom_uc_checkout_pane_address_render($form,&$form_state){
    return $form['panes']['test']['address_view']['address'];
 }
 
-/*
-function lp_address_theme(){
-  $theme_hooks = array(
-    'pane_address' => array(
-      'render element' => 'form',
-    ),
-  ); 
- return $theme_hooks;
-}
-
-*/
 
