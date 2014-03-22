@@ -1,0 +1,147 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function lp_address_menu() {
+  $items = array();
+ $items['admin/liveparcels/lp_address_country_setting'] = array(
+    'title' => 'Parcels Country code setting',
+    'description' => 'Customize the Parcels Country code setting.',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('lp_address_country_setting_form'),
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+   'file' => 'lp_address.inc',
+  );
+   $items['admin/liveparcels/lp_address_update_zone'] = array(
+    'title' => 'Parcels state update',
+    'description' => 'Customize the Parcels state update.',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('lp_address_update_zone_form'),
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'lp_address.inc',
+  );
+  return $items;
+}
+
+function lp_address_uc_checkout_pane() {
+  $panes['test'] = array(
+    'callback' => 'uc_checkout_pane_test', 
+    'title' => t('test contents'), 
+    'desc' => t("Display the contents of a customer's test address."), 
+    'weight' => 1, 
+    'process' => FALSE, 
+    'collapsible' => FALSE,
+  );
+  return $panes;
+}
+
+function uc_checkout_pane_test($op, $order, $form = NULL, &$form_state = NULL){
+
+  $description = t('Enter your billing address and information here.');
+  switch ($op) {
+    case 'view':
+     $contents['address_view'] = address_view('test',$order);
+
+      return array('description' => $description, 'contents' => $contents);
+
+    case 'process':
+     address_process('test',$form_state);
+    case 'review':
+     $review[]  = address_review('test');
+      return $review;
+  }
+
+
+}
+
+
+function address_view($pane,$order,$address=null){
+	global $user;
+     	$options = array();
+           array_push($options,'Select one...');
+	 if ($user->uid && $addresses = get_uc_address_book($user->uid)) {
+          foreach($addresses as $adr){
+            $options[$adr['aid']] = $adr['company'].', '.$adr['firstname'].' '.$adr['lastname'].', '.$adr['city'].', '.$adr['street1'];
+          }
+	if($addresses!=null){
+        $contents['select_address'] = array(
+          '#type' => 'select', 
+          '#title' => t('Select addresses'), 
+          '#options' => $options, 
+          '#ajax' => array(
+            'callback' => 'custom_uc_checkout_pane_address_render', 
+            'wrapper' => $pane . '-address-pane', 
+            'progress' => array(
+              'type' => 'throbber',
+            ),
+          ), 
+          '#states' => array(
+            'invisible' => array(
+              'input[name="panes[' . $pane . '][copy_address]"]' => array('checked' => TRUE),
+            ),
+          ),
+        );
+	}
+       }
+      $contents['address'] = array(
+        '#prefix' => '<div id="' . $pane . '-address-pane">', 
+       	'#suffix' => '</div>',
+	//'#theme' => 'pane_address',
+    	'#type' => 'uc_addresses_address',
+    	'#uc_addresses_address' => $address,
+    	'#uc_addresses_context' => 'address_form',
+      );
+
+  return  $contents;
+}
+
+function address_process($pane,$form_state){
+
+}
+
+function address_review($pane){
+
+      $review = array(
+        'title' => t('Address'),
+        'data' => t('this address content.'),
+      );     
+      return $review;
+
+
+}
+
+
+function  get_uc_address_book($uid){
+  $address = array();
+ $result = db_query('SELECT * FROM {uc_addresses} where uid=:uid',array(':uid'=>$uid));
+ foreach($result as $data){
+   $addr = array();
+   $addr['aid'] =$data->aid;
+   $addr['firstname'] =$data->first_name;
+   $addr['lastname'] =$data->last_name;
+   $addr['phone'] =$data->phone;
+   $addr['company'] =$data->company;
+   $addr['street1'] =$data->street1;
+   $addr['street2'] =$data->street2;
+   $addr['city'] =$data->city;
+   $addr['zone'] =$data->zone;
+   $addr['postal_code'] =$data->postal_code;
+   $addr['country'] =$data->country;
+
+   $address[] = $addr;
+ }
+return $address;
+}
+
+function custom_uc_checkout_pane_address_render($form,&$form_state){
+
+    $form_state['values']['panes']['test']['address_view']['address']['first_name']='122';
+
+    //print_r($form['panes']['test']['address_view']['address']);
+     
+   return $form['panes']['test']['address_view']['address'];
+}
+
+
