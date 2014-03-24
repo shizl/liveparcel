@@ -4,6 +4,9 @@ package = Live Parcels - core
 core = 7.x
 dependencies[] = liveparcels
 dependencies[] = date_popup
+dependencies[] = date_api
+dependencies[] = list
+dependencies[] = number
 ; Information added by Drupal.org packaging script on 2014-03-15
 version = "7.x-1.0"
 core = "7.x"
