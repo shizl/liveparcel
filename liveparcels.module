@@ -173,13 +173,13 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
           }else{
             uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
           }
-        /*  $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+         $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
           if($discount){
               uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
           }else{
             uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
           }
-*/
+
         }
       
           $contents['liveparcels_review_table'] = array(
