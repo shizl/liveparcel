@@ -20,10 +20,10 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
       switch ($op) {
         case 'view':        
        $pickup_extra=array();
-
         if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
-               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_pick_up_time'=> array(
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address'=>get_parcel_address($parcels['parcels'][$f],'pickup'),
+               'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -57,7 +57,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             }
 
         }else{
-         $pickup_extra[0]=array('field_pick_up_time'=> array(
+         $pickup_extra[0]=array('field_parcel_pickup_address'=>get_parcel_address($parcels['parcels'][0],'pickup'),'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -107,7 +107,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         case 'view':        
     $delivery_extra=array();
         if($parcels['ptype']=="1"){
-             $delivery_extra[0]=array('field_authority_to_leave'=>array(
+             $delivery_extra[0]=array('field_parcel_delivery_address'=>get_parcel_address($parcels['parcels'][0],'delivery'),'field_authority_to_leave'=>array(
       '#type' =>'checkbox', 
   '#title' => t('Authority to leave'),
   ),'field_delivery_note'=>array(
@@ -118,7 +118,8 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
 ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
-                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_authority_to_leave'=>array(
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address'=>get_parcel_address($parcels['parcels'][$f],'delivery'),
+                   'field_authority_to_leave'=>array(
       '#type' =>'checkbox', 
   '#title' => t('Authority to leave'),
   ),'field_delivery_note'=>array(
@@ -153,6 +154,15 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
    case 'review':   
       }
     }
+}
+/*
+ * get_parcel_address($parcels,'pickup')
+ * parcels info,parcels type
+ * */
+function get_parcel_address($parcel_info,$parcel_type='pickup'){
+        if(module_exists('lp_address')){
+            return  '';
+        }
 }
 function theme_lp_parcel_table($variables) {
     $parcels = $variables['items'];

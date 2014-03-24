@@ -1,6 +1,5 @@
 <?php
 function lp_address_country_setting_form($form,$form_state){
-     // $form['address'] = array('#type' => 'vertical_tabs');
 
   $form['lp_country'] = array(
     '#type' => 'fieldset',
