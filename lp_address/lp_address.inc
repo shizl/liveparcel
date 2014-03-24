@@ -55,12 +55,18 @@ function lp_address_country_setting_form($form,$form_state){
     '#type' => 'radios',
     '#title' => t('State update'),
     '#default_value' => 'insert',
-    '#options' => $active);
+    '#options' => $active,
+    '#description'=>t('keep Old and Add New States '));
+      $form['lp_state']['update_state'] = array(
+    '#type' => 'submit',
+    '#value' => 'Update',
+     '#submit'=>array('lp_address_update_zone_form_submit'),
+    );
     
        $form['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Save'),
-       '#submit'=>array('lp_address_country_setting_form_submit','lp_address_update_zone_form_submit')
+       '#submit'=>array('lp_address_country_setting_form_submit')
       );
       return $form;  
 }
