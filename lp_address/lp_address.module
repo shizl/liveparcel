@@ -13,127 +13,183 @@ function lp_address_menu() {
     'weight' => -13,
    'file' => 'lp_address.inc',
   );
-
+  $items['liveparcels/lp_address_update_render/ajax'] = array(
+   'title' => 'lp_address_update_render ',
+    'description' => 'lp_address_update_render.',
+    'page callback' => 'lp_address_update_render',
+    'access callback' => true,
+  );
   return $items;
 }
 
-function lp_address_uc_checkout_pane() {
-  $panes['test'] = array(
-    'callback' => 'uc_checkout_pane_test', 
-    'title' => t('test contents'), 
-    'desc' => t("Display the contents of a customer's test address."), 
-    'weight' => 1, 
-    'process' => FALSE, 
-    'collapsible' => FALSE,
-  );
-  return $panes;
-}
 
-function uc_checkout_pane_test($op, $order, $form = NULL, &$form_state = NULL){
-
-  $description = t('Enter your billing address and information here.');
-  switch ($op) {
-    case 'view':
-     $contents['address_view'] = address_view('test',$order);
-
-      return array('description' => $description, 'contents' => $contents);
-
-    case 'process':
-     address_process('test',$form_state);
-    case 'review':
-     $review[]  = address_review('test');
-      return $review;
-  }
-
-
-}
-
-
-function address_view($pane,$order,$address=null){
+/*
+ * parceal address view function
+ * */
+function lp_address_address_view($parcel_info,$parcel_type,$key){
 	global $user;
      	$options = array();
-           array_push($options,'Select one...');
-	 if ($user->uid && $addresses = get_uc_address_book($user->uid)) {
+       array_push($options,'Select one...');
+       $pdata=$parcel_type=="pickup" ? $parcel_info['parcels'][$key]['postfrom']:$parcel_info['parcels'][$key]['postto'];
+       $pdata= explode('_',$pdata);
+    $post_code=$pdata[2];//postal code
+      $countryinfo=lp_address_get_country_info();//country id and name
+      $parcel_array=lp_address_get_parcel_address_filter($post_code);
+    $zone_id=lp_address_get_zone_id($pdata[1]);//zone_id
+	 if ($user->uid && $addresses = lp_address_get_uc_address_book($user->uid,$parcel_array,$zone_id,$post_code)) {
           foreach($addresses as $adr){
-            $options[$adr['aid']] = $adr['company'].', '.$adr['firstname'].' '.$adr['lastname'].', '.$adr['city'].', '.$adr['street1'];
+            $options[$parcel_type.'_'.$key.'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').$adr->company.', '.$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
           }
-	if($addresses!=null){
         $contents['select_address'] = array(
           '#type' => 'select', 
           '#title' => t('Select addresses'), 
+          '#attributes' => array('class'=>array('parcel_select_address')),
           '#options' => $options, 
-          '#ajax' => array(
-            'callback' => 'custom_uc_checkout_pane_address_render', 
-            'wrapper' => $pane . '-address-pane', 
-            'progress' => array(
-              'type' => 'throbber',
-            ),
-          ), 
-          '#states' => array(
-            'invisible' => array(
-              'input[name="panes[' . $pane . '][copy_address]"]' => array('checked' => TRUE),
-            ),
-          ),
         );
-	}
        }
-      $contents['address'] = array(
-        '#prefix' => '<div id="' . $pane . '-address-pane">', 
-       	'#suffix' => '</div>',
-	//'#theme' => 'pane_address',
-    	'#type' => 'uc_addresses_address',
-    	'#uc_addresses_address' => $address,
-    	'#uc_addresses_context' => 'address_form',
+     
+      $contents['address'] = array('first_name'=>array(
+    '#type' => 'textfield',
+    '#title' => t('First name'),
+    '#attributes' => array('class'=>array($parcel_type.'_first_name')),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+
+  ),'last_name'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Last name'),
+    '#attributes' => array('class'=>array($parcel_type.'_last_name')),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+
+  ),'company'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Company'),
+    '#attributes' => array('class'=>array($parcel_type.'_company')),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+  ),'street1'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Street address:'),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+    '#attributes' => array('class'=>array($parcel_type.'_street1')),
+  ),'street2'=>array(
+    '#type' => 'textfield',
+    '#default_value' =>'',
+    '#maxlength' => 100,
+'#attributes' => array('class'=>array($parcel_type.'_street2')),
+  ),'parcel_data'=>array('#markup'=>'<div class="parcel_data"><strong>City:</strong> '. $parcel_array['locality'].'&nbsp;&nbsp;&nbsp;<strong>State/Province:</strong> '. $pdata[1].' &nbsp;&nbsp;&nbsp;<strong>Country:</strong> '.$countryinfo['country_name'].' &nbsp;&nbsp;&nbsp;<strong>Postal code:</strong> '.$post_code.'</div>'),'city'=>array(
+    '#type' => 'hidden',
+    '#title' => t('City'),
+    '#default_value' =>$parcel_array['locality'],
+    '#maxlength' => 100,
+  ), 'zone'=>array(
+    '#type' => 'hidden',
+    '#title' => t('State/Province'),
+    '#default_value' =>$zone_id,
+    '#maxlength' => 100,
+ 
+  ),'country'=>array(
+    '#type' => 'hidden',
+    '#title' => t('Country'),
+    '#default_value' =>$countryinfo['country_id'],
+    '#maxlength' => 100,
+  ),'postal_code'=>array(
+    '#type' => 'hidden',
+    '#title' => t('Postal code'),
+    '#default_value' =>$post_code,
+    '#maxlength' => 100,
+  ),'phone'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number'),
+    '#attributes' => array('class'=>array($parcel_type.'_phone')),
+    '#default_value' =>'',
+    '#maxlength' => 100,
+
+  ),'address_name'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Save as'),
+    '#default_value' =>'',
+    '#attributes' => array('class'=>array($parcel_type.'_address_name')),
+    '#maxlength' => 100,
+  ),'default_shipping'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  ),'default_billing'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  )  
       );
+        if(count($parcel_info['parcels'])>1){
+            if($parcel_info['ptype']==1 && $parcel_type=='pickup' ){
+                $parcel_select=array();
+               foreach($parcel_info['parcels'] as $p=>$parcel){
+                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
+                }
+                $contents['use_parcel']=array('#type' => 'select', 
+                '#title' => t('Use addresses as '), 
+                 '#attributes' => array('class'=>array('parcel_use_parcel')),
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$p ); 
+            }
+             if($parcel_info['ptype']==2 && $parcel_type=='delivery' ){
+                $parcel_select=array();
+               foreach($parcel_info['parcels']  as $p=>$parcel){
+                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
+                }
+                $contents['use_parcel']=array('#type' => 'select', 
+                '#title' => t('Use addresses as '), 
+                '#attributes' => array('class'=>array('parcel_use_parcel')),
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$p ); 
+            }
+          
+      }
 
   return  $contents;
 }
-
-function address_process($pane,$form_state){
-
+/*address_update($address_id,$address)
+ * address parel update 
+ * */
+function lp_address_address_update($address){
+global $user;
+    if($address['select_address']>0){
+        $address_id=$address['select_address'];
+            db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
+    }else{
+        $address['address']['uid']=$user->uid;
+             $address_id=db_insert('uc_addresses')->fields($address['address'])->execute();
+    }
+      return $address_id;
 }
 
-function address_review($pane){
-
-      $review = array(
-        'title' => t('Address'),
-        'data' => t('this address content.'),
-      );     
-      return $review;
-
-
+/*
+ * get parcel address book
+ * $parcel_type 
+ * */
+function  lp_address_get_uc_address_book($uid,$parcel_array,$zone_id,$post_code){
+      $address = db_query("SELECT * FROM {uc_addresses} WHERE `uid`='$uid' AND `postal_code`='".$parcel_array['pcode']."' AND `city`='".$parcel_array['locality']."' AND `zone`='".$zone_id."'");
+    return $address;
 }
-
-
-function  get_uc_address_book($uid){
-  $address = array();
- $result = db_query('SELECT * FROM {uc_addresses} where uid=:uid',array(':uid'=>$uid));
- foreach($result as $data){
-   $addr = array();
-   $addr['aid'] =$data->aid;
-   $addr['firstname'] =$data->first_name;
-   $addr['lastname'] =$data->last_name;
-   $addr['phone'] =$data->phone;
-   $addr['company'] =$data->company;
-   $addr['street1'] =$data->street1;
-   $addr['street2'] =$data->street2;
-   $addr['city'] =$data->city;
-   $addr['zone'] =$data->zone;
-   $addr['postal_code'] =$data->postal_code;
-   $addr['country'] =$data->country;
-
-   $address[] = $addr;
- }
-return $address;
+/*get parcel postcode
+ * $post_id
+ * */
+function lp_address_get_parcel_address_filter($post_id){
+    	$result= db_query("SELECT * FROM `{liveparcels_zone_post}` WHERE `pcode`='$post_id'")->fetchAssoc();
+        return $result;
 }
-
-function custom_uc_checkout_pane_address_render($form,&$form_state){
-
-    $form_state['values']['panes']['test']['address_view']['address']['first_name']='122';
-
-    //print_r($form['panes']['test']['address_view']['address']);
-     
-   return $form['panes']['test']['address_view']['address'];
+function lp_address_get_country_info($country_id='8888'){
+    $countryinfo=db_query("SELECT `country_id`,`country_name`,`country_iso_code_2`,`country_iso_code_3` FROM `uc_countries` WHERE `country_id`='$country_id'")->fetchAssoc();
+    return   $countryinfo;
+    }
+function lp_address_get_zone_id($zone_name=''){
+    $zone_id=db_query("SELECT `zone_id` FROM `uc_zones` WHERE `zone_name`='$zone_name'")->fetchField();
+    return   $zone_id;
 }
-
-
+function lp_address_update_render(){
+    $address_id=$_REQUEST['address_id'];
+     $address = db_query("SELECT * FROM {uc_addresses} WHERE `aid`='".$address_id."'")->fetchAssoc();
+     echo json_encode($address);
+     exit;
+}
