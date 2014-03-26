@@ -236,23 +236,22 @@ function theme_lp_parcel_table($variables) {
  * Implements hook_uc_checkout_pane().
  */
 function lp_parcel_uc_checkout_pane() {
-    $parcels=liveparcels_getparcelsdata();
-     if($parcels){
+   
       $panes['parcel_pickup'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_pickup',
     'title' => t('Parcel pickup extra contents'),
     'desc' => t("Display the contents of a customer's shopping cart."),
-      'enabled' => TRUE,
+      'enabled' => FALSE,
       'weight' => 4,
       );
       $panes['parcel_delivery'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_delivery',
     'title' => t('Parcel delivery extra contents'),
     'desc' => t("Display the contents of a customer's shopping cart."),
-      'enabled' => TRUE,
+      'enabled' => FALSE,
       'weight' => 5,
       );
-       }
+       
   return $panes;    
 }
 function lp_parcel_uc_checkout_complete($order, $account) {

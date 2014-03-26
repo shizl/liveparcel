@@ -262,16 +262,14 @@ function theme_liveparcels_review_table($variables) {
  */
 function liveparcels_uc_checkout_pane() {
     $parcels=liveparcels_getparcelsdata();
-     if($parcels){
-      $panes['parcels'] = array(
-      'id' => 'parcels',
-      'callback' => 'liveparcels_uc_checkout_pane_parcels',
-    'title' => t('Parcels contents'),
-    'desc' => t("Display the contents of a customer's shopping cart."),
-      'process' => TRUE,
-      'enabled' => FALSE,
-      'weight' => 1,
-      ); }
+          $panes['parcels'] = array(
+          'id' => 'parcels',
+          'callback' => 'liveparcels_uc_checkout_pane_parcels',
+        'title' => t('Parcels contents'),
+        'desc' => t("Display the contents of a customer's shopping cart."),
+          'enabled' => FALSE,
+          'weight' => 1,
+          ); 
   return $panes;    
 }
 /**
@@ -288,7 +286,7 @@ function liveparcels_theme() {
 */
 function liveparcels_uc_line_item(){
     $items=array();
-$parcels=liveparcels_getparcelsdata();
+    $parcels=liveparcels_getparcelsdata();
      if($parcels){
          $items[] = array(
             'id' => 'parcel', 
