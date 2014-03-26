@@ -313,17 +313,14 @@ function liveparcels_uc_line_item(){
   }
   return $items;
 } 
-/* if product_id is 1,cart hiddren */
-function liveparcels_uc_cart_pane($items) {
-    if( !is_null($items) && is_array($items)){
-        foreach($items as $key=>$val){
-            if($key==variable_get('liveparcels_product_id')){
+/* if product_id is liveparcel,cart hiddren */
+function liveparcels_uc_cart_pane_alter($items) {
+  $parcels=liveparcels_getparcelsdata();
+     if($parcels){
                  header("location:/cart/checkout");exit;
-            }
-        }
     }
 }
-/*if product_id is 1,checkout cart pane hiddren*/
+/*if product_id is liveparcel,checkout cart pane hiddren*/
 function liveparcels_uc_checkout_pane_alter(&$panes) {
      $parcels=liveparcels_getparcelsdata();
      if($parcels){

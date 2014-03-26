@@ -642,7 +642,11 @@ function liveparcels_getZoneprice() {
             $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
         }
 	}
-    $discount=lp_discount_get_pricing($totals);
+     if(module_exists('lp_discount')){
+        $discount=lp_discount_get_pricing($totals);
+    }else{
+        $discount=0;
+    }
     $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
 		echo json_encode($returndata);		
