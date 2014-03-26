@@ -107,6 +107,7 @@ menu_link_save($item);
           <ul>
           <li class="order-first">Pending...</li>
           </ul>
+           '.(module_exists('lp_discount') ? '<div class="order-discount">Discount : Pending...</div>':'').'
           <div class="order-total">Total : Pending...</div>
            </div>
           </div>
@@ -357,12 +358,12 @@ menu_link_save($item);
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
               var ptype=1;
               if($(".deliver").attr("checked")){
-                     var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-                    var postfrom =$(".pnum-from").val();
+                   var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var postto =$(".pnum-from").val();
                     ptype=1;
                 }else{
-                    var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-                    var postto =$(".pnum-from").val();
+                    var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var postfrom =$(".pnum-from").val();
                     ptype=2;
                 }
 			  if(dimfirst > max){
@@ -400,10 +401,13 @@ menu_link_save($item);
                                      
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             }
-                              
-							$(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
+                            '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
+                             
+							
+                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
 					    }else{
                             $(".header-warning").show();
+                             '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount:  Pending...");':'').'
 							  $(".order-total").html("Total : Pending..."); 
 					    }
                      },"json");
@@ -539,7 +543,7 @@ menu_link_save($item);
 			str=zonedata[k].locality.toUpperCase();
             post=zonedata[k].pcode;
 			if(str.indexOf(words.toUpperCase()) >= 0 || post.indexOf(words) >= 0){
-			  res+="<li id="+zonedata[k].pnum+">"+str+" "+post+"</li>";
+			  res+="<li id=\'"+zonedata[k].pnum+"_"+zonedata[k].state+"_"+post+"\'>"+str+" "+post+"</li>";
 		    }	
 		}
         if(res != ""){
@@ -615,9 +619,11 @@ function liveparcels_getZoneprice() {
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
             
             if($pprice>0){
+                $pfrom=explode('_',$pdata['postfrom']);
+                 $pto=explode('_',$pdata['postto']);
                 $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
-		WHERE `zone_from_number`='". $pdata['postfrom'] ."' AND   
-		`zone_to_number`='". $pdata['postto']."'")->fetchField();	
+		WHERE `zone_from_number`='". $pfrom[0] ."' AND   
+		`zone_to_number`='".$pto[0]."'")->fetchField();	
         
                 if($pzon>0){
                     $pzone=$pzon*$pprice; 

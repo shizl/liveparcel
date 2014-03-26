@@ -20,10 +20,10 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
       switch ($op) {
         case 'view':        
        $pickup_extra=array();
-
         if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
-               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_pick_up_time'=> array(
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f),
+               'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -57,7 +57,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             }
 
         }else{
-         $pickup_extra[0]=array('field_pick_up_time'=> array(
+         $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0),'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -91,7 +91,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 '#default_value' =>'',
 ));
         }
-        $contents['pickup'] =$pickup_extra;
+        $contents=$pickup_extra;
           return array('contents' => $contents);
       }
     }
@@ -104,10 +104,14 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         $parcels=liveparcels_getparcelsdata();
      if($parcels){
       switch ($op) {
-        case 'view':        
+        case 'view':      
+             
+        if(module_exists('lp_address')){  
+          drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
+          }
     $delivery_extra=array();
         if($parcels['ptype']=="1"){
-             $delivery_extra[0]=array('field_authority_to_leave'=>array(
+             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0),'field_authority_to_leave'=>array(
       '#type' =>'checkbox', 
   '#title' => t('Authority to leave'),
   ),'field_delivery_note'=>array(
@@ -118,7 +122,8 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
 ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
-                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_authority_to_leave'=>array(
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f),
+                   'field_authority_to_leave'=>array(
       '#type' =>'checkbox', 
   '#title' => t('Authority to leave'),
   ),'field_delivery_note'=>array(
@@ -129,30 +134,70 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
 ));
             }
         }
-           $contents['delivery'] =$delivery_extra;
+           $contents=$delivery_extra;
+          
           return array('contents' => $contents);
         case 'process':
         $pickupdata=array();
         $deliverydata=array();
-       foreach($parcels['parcels'] as $key=>$val){
            if($parcels['ptype']==1){
-               $picktime=$form['panes']['parcel_pickup']['pickup'] [$key]['field_pick_up_time']['#value']['date'];
-                $picktime=date("Y-m-d",strtotime($picktime));
-                $pickupdata[$key]=@array('field_pick_up_time'=>$picktime,'field_pick_up_time_ampm'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_customer_reference']['#value'],'field_cash_to_collect'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_cash_to_collect']['#value'],'field_pickup_note'=>$form['panes']['parcel_pickup']['pickup'] [$key]['field_pickup_note']['#value']);
-                
-                $deliverydata[0]=@array('field_authority_to_leave'=>$form['panes']['parcel_delivery']['delivery'] [0]['field_authority_to_leave']["#value"],'field_delivery_note'=>$form['panes']['parcel_delivery']['delivery'] [0]['field_delivery_note']["#value"]);
+              // $picktime=$form_state['values']['panes']['parcel_pickup'][$key]['field_pick_up_time'];
+                //$picktime=date("Y-m-d",strtotime($picktime));
+                 foreach($parcels['parcels'] as $key=>$val){
+                    $pickup_address_id=lp_address_address_update($form_state['values']['panes']['parcel_pickup'][$key]['field_parcel_pickup_address_data']);
+                    $pickupdata[$key]=@array('field_parcel_pickup_address'=>$pickup_address_id,'field_pick_up_time'=>$form_state['values']['panes']['parcel_pickup'][$key]['field_pick_up_time'],'field_pick_up_time_ampm'=>$form_state['values']['panes']['parcel_pickup'][$key]['field_pick_up_time_ampm'],'field_customer_reference'=>$form_state['values']['panes']['parcel_pickup'][$key]['field_customer_reference'],'field_cash_to_collect'=>$form_state['values']['panes']['parcel_pickup'][$key]['field_cash_to_collect'],'field_pickup_note'=>$form_state['values']['panes']['parcel_pickup'][$key]['field_pickup_note']);
+                }
+                 $delivery_address_id=lp_address_address_update($form_state['values']['panes']['parcel_delivery'][0]['field_parcel_delivery_address_data']);
+                $deliverydata[0]=@array('field_parcel_delivery_address'=>$delivery_address_id,'field_authority_to_leave'=>$form_state['values']['panes']['parcel_delivery'][0]['field_authority_to_leave'],'field_delivery_note'=>$form_state['values']['panes']['parcel_delivery'][0]['field_delivery_note']);
             }else{
-                $picktime=$form['panes']['parcel_pickup']['pickup'] [0]['field_pick_up_time']['#value']['date'];
-                $picktime=date("Y-m-d",strtotime($picktime));
-                $pickupdata[0]=@array('field_pick_up_time'=>$picktime,'field_pick_up_time_ampm'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_pick_up_time_ampm']['#value'],'field_customer_reference'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_customer_reference']['#value'],'field_cash_to_collect'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_cash_to_collect']['#value'],'field_pickup_note'=>$form['panes']['parcel_pickup']['pickup'] [0]['field_pickup_note']['#value']);
-                $deliverydata[$key]=@array('field_authority_to_leave'=>$form['panes']['parcel_delivery']['delivery'] [$key]['field_authority_to_leave']["#value"],'field_delivery_note'=>$form['panes']['parcel_delivery']['delivery'] [$key]['field_delivery_note']["#value"]);
-            }
+               // $picktime=$form['panes']['parcel_pickup'][0]['field_pick_up_time']['#value']['date'];
+                //$picktime=date("Y-m-d",strtotime($picktime));
+                $pickup_address_id=lp_address_address_update($form_state['values']['panes']['parcel_pickup'][0]['field_parcel_pickup_address_data']);
+                $pickupdata[0]=@array('field_parcel_pickup_address'=>$pickup_address_id,'field_pick_up_time'=>$form_state['values']['panes']['parcel_pickup'][0]['field_pick_up_time'],'field_pick_up_time_ampm'=>$form_state['values']['panes']['parcel_pickup'][0]['field_pick_up_time_ampm'],'field_customer_reference'=>$form_state['values']['panes']['parcel_pickup'][0]['field_customer_reference'],'field_cash_to_collect'=>$form_state['values']['panes']['parcel_pickup'][0]['field_cash_to_collect'],'field_pickup_note'=>$form_state['values']['panes']['parcel_pickup'][0]['field_pickup_note']);
+                 foreach($parcels['parcels'] as $key=>$val){
+                    $delivery_address_id=lp_address_address_update($form_state['values']['panes']['parcel_delivery'][$key]['field_parcel_delivery_address_data']);
+                    $deliverydata[$key]=@array('field_parcel_delivery_address'=>$delivery_address_id,'field_authority_to_leave'=>$form_state['values']['panes']['parcel_delivery'][$key]['field_authority_to_leave'],'field_delivery_note'=>$form_state['values']['panes']['parcel_delivery'][$key]['field_delivery_note']);
+                }
         }
         $parceldata=array('pickupdata'=>$pickupdata,'deliverydata'=>$deliverydata);
          db_update('liveparcels_order')->fields(array('extra_info' => serialize($parceldata)))->condition('order_id',$order->order_id , '=')->execute();
    case 'review':   
       }
     }
+}
+/*
+ * get_parcel_address($parcel_info,'pickup')
+ * parcels info,parcels type
+ * */
+function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0'){
+        if(module_exists('lp_address')){
+            return  lp_address_address_view($parcel_info,$parcel_type,$key);
+        }else{
+        return array();    
+        }
+}
+/*
+ * update_parcel_address($address)
+ * parcels info,parcels type
+ * */
+function lp_parcel_update_parcel_address($address){
+        if(module_exists('lp_address')){
+            return  lp_address_address_update($address);
+        }else{
+        return array();    
+        }
+}
+/*
+ * get_parcel_address_update()
+ * parcels info,parcels type
+ * */
+function lp_parcel_get_parcel_address_update($address_id,$address){
+        if(module_exists('lp_address')){
+            return  lp_address_address_update($address_id,$address);
+        }else{
+        return array();    
+        }
+        
 }
 function theme_lp_parcel_table($variables) {
     $parcels = $variables['items'];

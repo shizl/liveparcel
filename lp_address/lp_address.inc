@@ -1,6 +1,5 @@
 <?php
 function lp_address_country_setting_form($form,$form_state){
-     // $form['address'] = array('#type' => 'vertical_tabs');
 
   $form['lp_country'] = array(
     '#type' => 'fieldset',
@@ -12,7 +11,7 @@ function lp_address_country_setting_form($form,$form_state){
     '#title' => t('Backend  State Update features'),
      '#collapsible' => TRUE,
   );
-    $countryinfo=db_query("SELECT `country_name`,`country_iso_code_2`,`country_iso_code_3` FROM `uc_countries` WHERE `country_id`='8888'")->fetchAssoc();
+    $countryinfo=lp_address_get_country_info();
    if(!is_array($countryinfo)){
         db_insert('uc_countries')
     ->fields(array(
