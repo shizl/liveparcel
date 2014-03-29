@@ -1,4 +1,4 @@
-name = Checkout Address
+name =Address
 description = checkout panel lp address .
 package = Live Parcels - core
 dependencies[] = uc_store

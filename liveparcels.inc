@@ -104,7 +104,7 @@ menu_link_save($item);
       <div class="order sidebar">
 	 <div class="block">	
           <h2>Order summary</h2>
-          <ul>
+          <ul class="parcel-line">
           <li class="order-first">Pending...</li>
           </ul>
            '.(module_exists('lp_discount') ? '<div class="order-discount">Discount : Pending...</div>':'').'
@@ -404,7 +404,7 @@ menu_link_save($item);
                             '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
                              
 							
-                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
+                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  '(zone.totals-zone.discount)':'zone.totals').');
 					    }else{
                             $(".header-warning").show();
                              '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount:  Pending...");':'').'

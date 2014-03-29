@@ -8,7 +8,7 @@ function lp_address_install() {
   // Make the entry in the country table.
   // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
   $country_id=db_query("SELECT `country_id` FROM `uc_countries` where country_id='8888'");
-  if($country_id>0){
+  if(empty($country_id)){
      
       db_insert('uc_countries')
         ->fields(array(

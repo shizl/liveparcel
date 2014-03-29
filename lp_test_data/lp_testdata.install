@@ -4,24 +4,7 @@
 * Implementation of hook_install().
 */
 function lp_testdata_install() {
-
-// name of the file
-// mysql host
-$mysql_host = 'localhost';
-// mysql username
-$mysql_username = 'root';
-// mysql password
-$mysql_password = 'root';
-// database name
-$mysql_database = 'drupal7';
-// connect to mysql server
-mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('error connecting to mysql server: ' . mysql_error());
-// select database
-mysql_select_db($mysql_database) or die('error selecting mysql database: ' . mysql_error());
-// temporary variable, used to store current query
-$templine = '';
-// read in entire file
-
+$templine='';
 $file_path1 = drupal_get_path('module','lp_testdata').'/liveparcels_package.sql';
 $file_path2 = drupal_get_path('module','lp_testdata').'/liveparcels_zone_post.sql';
 $file_path3 = drupal_get_path('module','lp_testdata').'/liveparcels_zone_price.sql';
@@ -40,7 +23,7 @@ $file_array = array($file_path1 ,$file_path2 ,$file_path3);
 	// if it has a semicolon at the end, it's the end of the query
 		if (substr(trim($line), -1, 1) == ';'){
 				// perform the query
-				mysql_query($templine) or print('error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+				db_query($templine) or print('error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
 				// reset temp variable to empty
 				$templine = '';
 		}

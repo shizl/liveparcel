@@ -138,6 +138,9 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
           
           return array('contents' => $contents);
         case 'process':
+        if(module_exists('lp_address')){  
+          drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
+          }
         $pickupdata=array();
         $deliverydata=array();
            if($parcels['ptype']==1){
@@ -290,7 +293,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
           'changed' => REQUEST_TIME,
         ))->condition('nid',$nid, '=')->execute();
   
-        $node_revision.=($node_revision != "" ? ",":"")."($nid, $nid, 1, '".'order-'.$order_id.'-'.$parcel['parcelnum']."', '',".REQUEST_TIME.", 1, 2, 1, 0)";
+        $node_revision.=($node_revision != "" ? ",":"")."($nid, $nid, 1, '".'order-'.$order_id.'-'.$parcel['parcelnum']."', '',".REQUEST_TIME.", 1, 0, 1, 0)";
         
          $field_parcel_size.=($field_parcel_size != "" ? ",":"")."('node', 'live_parcel', 0, '$nid', '$nid', 'und', 0, '".$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm'."', NULL)";
          
@@ -366,12 +369,26 @@ function lp_parcel_uc_checkout_complete($order, $account) {
        INSERT INTO `field_revision_field_authority_to_leave` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_authority_to_leave_value`) VALUES".$field_authority_to_leave.";");
         db_query("INSERT INTO `field_data_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";
        INSERT INTO `field_revision_field_delivery_note` (`entity_type`, `bundle`, `deleted`, `entity_id`, `revision_id`, `language`, `delta`, `field_delivery_note_value`, `field_delivery_note_format`) VALUES".$field_delivery_note.";");
-        
+ $cart_id=uc_cart_get_id();
+ db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute(); 
 }
 function lp_parcel_get_parcel_data($order_id){
     $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
     $parceldata=array("parcel_info"=>unserialize($pdata['parcel_info']),"extra_info"=>unserialize($pdata['extra_info']));
     return  $parceldata;    
+}
+
+/*if product_id is liveparcel,checkout cart pane hiddren*/
+function lp_parcel_uc_checkout_pane_alter(&$panes) {
+     $parcels=liveparcels_getparcelsdata();
+     if($parcels){
+          $panes['parcel_pickup']['enabled'] = true;
+          $panes['parcel_delivery']['enabled'] = true;
+    }else{
+        $panes['parcel_pickup']['enabled'] = false;
+          $panes['parcel_delivery']['enabled'] = false;
+       
+    }
 }
 
 

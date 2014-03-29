@@ -155,7 +155,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
  * */
 function lp_address_address_update($address){
 global $user;
-    if($address['select_address']>0){
+    if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
             db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
