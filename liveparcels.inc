@@ -402,9 +402,8 @@ menu_link_save($item);
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             }
                             '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
-                             
-							
-                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  '(zone.totals-zone.discount)':'zone.totals').');
+                            var totals=zone.totals-zone.discount; 
+                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
 					    }else{
                             $(".header-warning").show();
                              '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount:  Pending...");':'').'
