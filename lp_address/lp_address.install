@@ -7,9 +7,8 @@
 function lp_address_install() {
   // Make the entry in the country table.
   // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
-  $country_id=db_query("SELECT `country_id` FROM `uc_countries` where country_id='8888'");
-  if(empty($country_id)){
-     
+  $country_id=db_query("SELECT `country_id` FROM `uc_countries` where `country_id`='8888'")->fetchField();
+  if($country_id != '8888' ){
       db_insert('uc_countries')
         ->fields(array(
           'country_id' => 8888,
@@ -17,8 +16,7 @@ function lp_address_install() {
           'country_iso_code_2' => 'LP',
           'country_iso_code_3' => 'LPL',
           'version' => 1,
-        ))
-        ->execute();
+        ))->execute();
       
       // Make the entries in the zones table.  Use %d for the zone_id and the
       // function uc_get_zone_ids($num) as the second argument for db_query() where
