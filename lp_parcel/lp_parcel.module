@@ -258,6 +258,15 @@ function lp_parcel_uc_checkout_pane() {
   return $panes;    
 }
 function lp_parcel_uc_checkout_complete($order, $account) {
+      $parcels=liveparcels_getparcelsdata();
+            if(module_exists('lp_discount')){
+            $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
+            $order_total=$parcels['totals']-$parcels['discount'];
+        }else{
+            $order_total=$parcels['totals'];
+        }
+     db_update('uc_orders')->fields(array('order_total' => $order_total))->condition('order_id',$order->order_id , '=')->execute();
+    db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
     $order_id=$order->order_id;
     $parceldata=lp_parcel_get_parcel_data($order_id);
     $parcel_info=$parceldata['parcel_info'];
