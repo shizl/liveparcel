@@ -51,14 +51,14 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
      
       $contents['address'] = array('first_name'=>array(
     '#type' => 'textfield',
-    '#title' => t('First name'),
+    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_first_name')),
     '#default_value' =>'',
     '#maxlength' => 100,
 
   ),'last_name'=>array(
     '#type' => 'textfield',
-    '#title' => t('Last name'),
+    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_last_name')),
     '#default_value' =>'',
     '#maxlength' => 100,
@@ -71,7 +71,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#maxlength' => 100,
   ),'street1'=>array(
     '#type' => 'textfield',
-    '#title' => t('Street address:'),
+    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
     '#default_value' =>'',
     '#maxlength' => 100,
     '#attributes' => array('class'=>array($parcel_type.'_street1')),
