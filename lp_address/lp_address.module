@@ -109,11 +109,9 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#maxlength' => 100,
 
   ),'address_name'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Save as'),
-    '#default_value' =>'',
-    '#attributes' => array('class'=>array($parcel_type.'_address_name')),
-    '#maxlength' => 100,
+    '#type' => 'hidden',
+    '#value' =>'',
+    '#maxlength' => 4,
   ),'default_shipping'=>array(
     '#type' => 'hidden',
     '#value' =>'0',
@@ -155,23 +153,22 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
  * */
 function lp_address_address_update($address){
 global $user;
-   $aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
-   
+   //$aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
     if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
-        $address['address']['address_name']=$aid>0 && $aid != $address_id ? 'address-'.$address_id : trim($address['address']['address_name']);
+      //  $address['address']['address_name']=$aid>0 && $aid != $address_id ? 'address-'.$address_id : trim($address['address']['address_name']);
         db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
-        if($aid>0){
+        /*if($aid>0){
               $address['address']['address_name']='';
                $address['address']['uid']=$user->uid;
             $address_id=db_insert('uc_addresses')->fields($address['address'])->execute(); 
              db_update('uc_addresses')->fields(array('address_name'=>'address-'.$address_id))->condition('aid',$address_id,'=')->execute();
-        }else{
-            $address['address']['address_name']=trim($address['address']['address_name']);
+        }else{*/
+            //$address['address']['address_name']=trim($address['address']['address_name']);
             $address['address']['uid']=$user->uid;
             $address_id=db_insert('uc_addresses')->fields($address['address'])->execute();
-        }
+       // }
     }
       return $address_id;
 }
