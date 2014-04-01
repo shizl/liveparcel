@@ -156,19 +156,35 @@ global $user;
    //$aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
     if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
-      //  $address['address']['address_name']=$aid>0 && $aid != $address_id ? 'address-'.$address_id : trim($address['address']['address_name']);
-        db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
+       $addressbook =UcAddressesAddressBook::loadAddress($address_id);
+       $addressbook->setField('first_name', $address['address']['first_name']);
+       $addressbook->setField('last_name', $address['address']['last_name']);
+       $addressbook->setField('company', $address['address']['company']);
+       $addressbook->setField('street1', $address['address']['street1']);
+        $addressbook->setField('street2', $address['address']['street2']);
+       $addressbook->setField('city', $address['address']['city']);
+        $addressbook->setField('postal_code', $address['address']['postal_code']);
+       $addressbook->setField('zone', $address['address']['zone']);
+       $addressbook->setField('country', $address['address']['country']);
+       $addressbook->setField('phone', $address['address']['phone']);
+       $addressbook->save();
+       // db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
-        /*if($aid>0){
-              $address['address']['address_name']='';
-               $address['address']['uid']=$user->uid;
-            $address_id=db_insert('uc_addresses')->fields($address['address'])->execute(); 
-             db_update('uc_addresses')->fields(array('address_name'=>'address-'.$address_id))->condition('aid',$address_id,'=')->execute();
-        }else{*/
-            //$address['address']['address_name']=trim($address['address']['address_name']);
-            $address['address']['uid']=$user->uid;
-            $address_id=db_insert('uc_addresses')->fields($address['address'])->execute();
-       // }
+       $addressbook=UcAddressesAddressBook::get($user->uid)->addAddress();
+       $addressbook->setField('first_name', $address['address']['first_name']);
+       $addressbook->setField('last_name', $address['address']['last_name']);
+       $addressbook->setField('company', $address['address']['company']);
+       $addressbook->setField('street1', $address['address']['street1']);
+        $addressbook->setField('street2', $address['address']['street2']);
+       $addressbook->setField('city', $address['address']['city']);
+        $addressbook->setField('postal_code', $address['address']['postal_code']);
+       $addressbook->setField('zone', $address['address']['zone']);
+       $addressbook->setField('country', $address['address']['country']);
+       $addressbook->setField('phone', $address['address']['phone']);
+       $addressbook->setField('default_shipping', '0');
+       $addressbook->setField('default_billing', '0');
+       $addressbook->save();
+       $address_id=$addressbook->getField('aid');
     }
       return $address_id;
 }

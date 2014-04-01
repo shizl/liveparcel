@@ -153,7 +153,6 @@ function liveparcels_getZonelistData() {
 /* create liveparcels pane */
 function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_state = NULL){
         $parcels=liveparcels_getparcelsdata();
-         
      if($parcels){
       switch ($op) {
         case 'view':
