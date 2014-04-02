@@ -9,7 +9,63 @@
  * Menu callback which provides the store administration overview page.
  */
 function liveparcels_packageshow() {
+$parcels=liveparcels_getparcelsdata();
+$parcel_info='';
+ $postfrom='';
+ $jsondata=liveparcels_getZonelistData();
+if(count($parcels)>0){
 
+        $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
+     $post=$parcels['ptype']==2 ? 'postto':'postfrom';
+  foreach($parcels['parcels'] as $parcel){
+       $parcel_info.=' <div class="post-all">
+          <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
+            <div class="error-mess">Please fill in the correct information!</div>           
+            <input type="button" value="X">
+          </div>
+          <div class="post-mess"> 
+		    <table>
+            <tr>
+             <td class="dimensions">Dimensions (cm):</td>
+              <td>
+              <input class="dim-first" type="text" value="'.$parcel['dimfirst'].'">X
+              <input class="dim-second" type="text" value="'.$parcel['dimsecond'].'">X
+              <input class="dim-three" type="text" value="'.$parcel['dimthree'].'">
+             </td>
+            </tr>
+            <tr>
+              <td class="dimensional">Dimensional weight (kg):</td>
+              <td class="dimens-input">
+                <input class="dimens-text" type="text" readonly  value="'.$parcel['dimenstext'].'">(this value is calculated automatically)
+              </td>
+            </tr>
+            <tr>
+               <td class="weight">Dead weight (kg):</td>
+               <td class="wei-text">
+                 <input class="weight-text" type="text"  value="'.$parcel['weighttext'].'">
+               </td>
+            </tr>
+            <tr>
+               <td class="destination">
+                  <span class="package-to">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</span>
+               </td>
+               <td class="des-text">
+                 <input class="postcode-suburb"  id="1" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
+                 <input class="pnum-to" type="hidden"  value="'.$parcel[$post].'">
+                  <ul class="pcode" id="pcode1">
+                  </ul>
+                </td>
+              </tr>
+            </table>
+          </div>
+        <div class="post-btn">
+             <div class="duplicate">
+                <input class="form-submit" type="button" name="duplicate" value="Duplicate">
+             </div>
+        </div>
+      </div>';
+    }  
+}
 $items = menu_get_item('liveparcels/parcel_quote');
 $item = array(
   'link_path'=>$items['path'],
@@ -39,18 +95,18 @@ menu_link_save($item);
       <div class="page-content-select"><h4>Please select the service 
       you requires:</h4></div>
       <div class="page-content-choose">
-		 <input class="deliver" type="radio" name="items" checked value="1" >
+		 <input class="deliver" type="radio" name="items" '.(count($parcels)>0 && $parcels['ptype']==2 ? '':'checked').' value="1" >
 		 Deliver one or more items
-         <input class="pick-up" type="radio" name="items" value="2" >
+         <input class="pick-up" type="radio" name="items" '.(count($parcels)>0 && $parcels['ptype']==2 ? 'checked':'').' value="2" >
          Pick-up one or more items
       </div>
       <div class="page-content-address" >
-           <strong class="package-from">Destination post/suburb:</strong>
-           <input id="0" class="post-suburb" type="text" >
-           <input class="pnum-from" type="hidden" >
+           <strong class="package-from">'.($post=='postto' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
+           <input id="0" class="post-suburb" type="text"  value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
+           <input class="pnum-from" type="hidden"  value="'.$postfrom.'">
            <ul class="fpcode" id="pcode0"></ul>
       </div>
-      <div class="post-all">
+    '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
           <div class="parcel"><strong>Parcel #1</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
             <input type="button" value="X">
@@ -95,7 +151,7 @@ menu_link_save($item);
                 <input class="form-submit" type="button" name="duplicate" value="Duplicate">
              </div>
         </div>
-      </div>
+      </div>').'
           <div class="add_new">
                <input class="form-submit" type="button" name="add_new" value="Add new">
           </div>   
@@ -125,7 +181,7 @@ menu_link_save($item);
   </div>
  <script type="text/javascript">
   (function($){
-  var zonedata='.(liveparcels_getZonelistData()<>'' ? liveparcels_getZonelistData():'').';
+  var zonedata='.( $jsondata<>'' ? $jsondata:'').';
    function isFloat(oNum){
 
 	  if(!oNum) return false;
