@@ -131,7 +131,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
                 $contents['use_parcel']=array('#type' => 'select', 
                 '#title' => t('Use addresses as '), 
                  '#attributes' => array('class'=>array('parcel_use_parcel')),
-                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$p ); 
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
             }
              if($parcel_info['ptype']==2 && $parcel_type=='delivery' ){
                 $parcel_select=array();
@@ -141,7 +141,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
                 $contents['use_parcel']=array('#type' => 'select', 
                 '#title' => t('Use addresses as '), 
                 '#attributes' => array('class'=>array('parcel_use_parcel')),
-                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$p ); 
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
             }
           
       }
@@ -151,8 +151,8 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
 /*address_update($address_id,$address)
  * address parel update 
  * */
-function lp_address_address_update($address){
-global $user;
+function lp_address_address_update($address,$uid){
+//global $user;
    //$aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
     if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
@@ -170,7 +170,7 @@ global $user;
        $addressbook->save();
        // db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
-       $addressbook=UcAddressesAddressBook::get($user->uid)->addAddress();
+       $addressbook=UcAddressesAddressBook::get($uid)->addAddress();
        $addressbook->setField('first_name', $address['address']['first_name']);
        $addressbook->setField('last_name', $address['address']['last_name']);
        $addressbook->setField('company', $address['address']['company']);

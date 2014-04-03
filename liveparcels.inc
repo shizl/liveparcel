@@ -12,16 +12,16 @@ function liveparcels_packageshow() {
 $parcels=liveparcels_getparcelsdata();
 $parcel_info='';
  $postfrom='';
+ $post='postfrom';
  $jsondata=liveparcels_getZonelistData();
-if(count($parcels)>0){
-
+if($parcels>0){
         $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
      $post=$parcels['ptype']==2 ? 'postto':'postfrom';
-  foreach($parcels['parcels'] as $parcel){
+  foreach($parcels['parcels'] as $pid=>$parcel){
        $parcel_info.=' <div class="post-all">
           <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
-            <input type="button" value="X">
+            <input type="button" value="X" '.($pid>0 ? 'style="display:block"':'').'>
           </div>
           <div class="post-mess"> 
 		    <table>
@@ -50,7 +50,7 @@ if(count($parcels)>0){
                   <span class="package-to">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</span>
                </td>
                <td class="des-text">
-                 <input class="postcode-suburb"  id="1" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
+                 <input class="postcode-suburb"  id="'.$pid.'" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
                  <input class="pnum-to" type="hidden"  value="'.$parcel[$post].'">
                   <ul class="pcode" id="pcode1">
                   </ul>
@@ -444,9 +444,7 @@ menu_link_save($item);
                           $(".order ul").append(zone.parcels);
                           if( zone.error=="1"){
                               $(".header-warning").show();
-                                $(".parcelsPost").val("");
-                            }else{
-                              
+                            }
                                 var parcelsjson=eval("(" +"{\\"parcels\\":["+ ajaxrequest +"]}"+ ")");
                                   for (k in zone.pprice){
                                       parcelsjson.parcels[k].price=zone.pprice[k];
@@ -456,7 +454,7 @@ menu_link_save($item);
                                     parcelsjson.discount= zone.discount; 
                                      
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
-                            }
+                            
                             '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
                             var totals=zone.totals-zone.discount; 
                             $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
@@ -515,7 +513,7 @@ menu_link_save($item);
 	       $(".add_new").hide();
 	       $(this).attr("value","Modify");
 	    }else{
-           $(".parcelsPost").val("");
+           //$(".parcelsPost").val("");
 	       if(postfroms == ""){
 	          $(".pnum-from").val("");
 	       }

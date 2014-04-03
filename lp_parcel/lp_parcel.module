@@ -181,9 +181,9 @@ function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0
  * update_parcel_address($address)
  * parcels info,parcels type
  * */
-function lp_parcel_update_parcel_address($address){
+function lp_parcel_update_parcel_address($address,$uid){
         if(module_exists('lp_address')){
-            return  lp_address_address_update($address);
+            return  lp_address_address_update($address,$uid);
         }else{
         return 0;    
         }
