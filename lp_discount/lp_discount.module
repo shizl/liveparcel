@@ -47,7 +47,7 @@ function lp_discount_theme(){
 }
 function lp_discount_get_pricing($amount) {
   if(!$amount) {
-    return;
+    return 0;
   }
   global $user;
   $user_rate = lp_discount_user_rate($user->uid);
