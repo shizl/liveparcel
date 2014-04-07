@@ -136,19 +136,32 @@ function liveparcels_menu() {
   return $items;
 }
 /*get zonelistdata*/
-function liveparcels_getZonelistData() {
+function liveparcels_getZonelistData($key='',$action='json') {
 	$postlist =array();
+  
 	$result= db_query("SELECT `pcode`,`state`,`locality`,`zone_number` 
 	FROM `{liveparcels_zone_post}` ");
-	foreach($result as $row){
-			$postlist[] = array(
-			  'pcode' => $row->pcode,
-			  'locality' => $row->locality,	
-               'state' => $row->state,	
-              'pnum'=>$row->zone_number		  
-			);
-	}
-	return json_encode($postlist);
+      if($action=='string' && $key!=''){
+            $str='';
+            $zarray=explode('_',$key);   
+            foreach($result as $row){
+                if( $zarray[0]==$row->zone_number && $zarray[1]==$row->state && $zarray[2]==$row->pcode ){
+                       $str = $row->locality.' '.$row->pcode;
+                       break;
+                }
+            }
+            return $str;
+    }else{
+            foreach($result as $row){
+                $postlist[] = array(
+                  'pcode' => $row->pcode,
+                  'locality' => $row->locality,	
+                   'state' => $row->state,	
+                  'pnum'=>$row->zone_number		  
+                );
+            }
+            return json_encode($postlist);
+    }	
 }
 /* create liveparcels pane */
 function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_state = NULL){
