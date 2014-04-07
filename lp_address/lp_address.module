@@ -18,6 +18,7 @@ function lp_address_menu() {
     'description' => 'lp_address_update_render.',
     'page callback' => 'lp_address_update_render',
     'access callback' => true,
+    'menu_name'=>'liveparcels',
   );
   return $items;
 }
@@ -50,14 +51,14 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
      
       $contents['address'] = array('first_name'=>array(
     '#type' => 'textfield',
-    '#title' => t('First name'),
+    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_first_name')),
     '#default_value' =>'',
     '#maxlength' => 100,
 
   ),'last_name'=>array(
     '#type' => 'textfield',
-    '#title' => t('Last name'),
+    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_last_name')),
     '#default_value' =>'',
     '#maxlength' => 100,
@@ -70,7 +71,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#maxlength' => 100,
   ),'street1'=>array(
     '#type' => 'textfield',
-    '#title' => t('Street address:'),
+    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
     '#default_value' =>'',
     '#maxlength' => 100,
     '#attributes' => array('class'=>array($parcel_type.'_street1')),
@@ -108,11 +109,9 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#maxlength' => 100,
 
   ),'address_name'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Save as'),
-    '#default_value' =>'',
-    '#attributes' => array('class'=>array($parcel_type.'_address_name')),
-    '#maxlength' => 100,
+    '#type' => 'hidden',
+    '#value' =>'',
+    '#maxlength' => 4,
   ),'default_shipping'=>array(
     '#type' => 'hidden',
     '#value' =>'0',
@@ -154,12 +153,38 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
  * */
 function lp_address_address_update($address){
 global $user;
-    if($address['select_address']>0){
+   //$aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
+    if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
-            db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
+       $addressbook =UcAddressesAddressBook::loadAddress($address_id);
+       $addressbook->setField('first_name', $address['address']['first_name']);
+       $addressbook->setField('last_name', $address['address']['last_name']);
+       $addressbook->setField('company', $address['address']['company']);
+       $addressbook->setField('street1', $address['address']['street1']);
+        $addressbook->setField('street2', $address['address']['street2']);
+       $addressbook->setField('city', $address['address']['city']);
+        $addressbook->setField('postal_code', $address['address']['postal_code']);
+       $addressbook->setField('zone', $address['address']['zone']);
+       $addressbook->setField('country', $address['address']['country']);
+       $addressbook->setField('phone', $address['address']['phone']);
+       $addressbook->save();
+       // db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
-        $address['address']['uid']=$user->uid;
-             $address_id=db_insert('uc_addresses')->fields($address['address'])->execute();
+       $addressbook=UcAddressesAddressBook::get($user->uid)->addAddress();
+       $addressbook->setField('first_name', $address['address']['first_name']);
+       $addressbook->setField('last_name', $address['address']['last_name']);
+       $addressbook->setField('company', $address['address']['company']);
+       $addressbook->setField('street1', $address['address']['street1']);
+        $addressbook->setField('street2', $address['address']['street2']);
+       $addressbook->setField('city', $address['address']['city']);
+        $addressbook->setField('postal_code', $address['address']['postal_code']);
+       $addressbook->setField('zone', $address['address']['zone']);
+       $addressbook->setField('country', $address['address']['country']);
+       $addressbook->setField('phone', $address['address']['phone']);
+       $addressbook->setField('default_shipping', '0');
+       $addressbook->setField('default_billing', '0');
+       $addressbook->save();
+       $address_id=$addressbook->getField('aid');
     }
       return $address_id;
 }

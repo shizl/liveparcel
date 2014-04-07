@@ -104,7 +104,7 @@ menu_link_save($item);
       <div class="order sidebar">
 	 <div class="block">	
           <h2>Order summary</h2>
-          <ul>
+          <ul class="parcel-line">
           <li class="order-first">Pending...</li>
           </ul>
            '.(module_exists('lp_discount') ? '<div class="order-discount">Discount : Pending...</div>':'').'
@@ -402,9 +402,8 @@ menu_link_save($item);
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             }
                             '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
-                             
-							
-                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + zone.totals);
+                            var totals=zone.totals-zone.discount; 
+                            $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
 					    }else{
                             $(".header-warning").show();
                              '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount:  Pending...");':'').'
@@ -642,7 +641,11 @@ function liveparcels_getZoneprice() {
             $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
         }
 	}
-    $discount=lp_discount_get_pricing($totals);
+     if(module_exists('lp_discount')){
+        $discount=lp_discount_get_pricing($totals);
+    }else{
+        $discount=0;
+    }
     $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
 		echo json_encode($returndata);		

@@ -1,5 +1,5 @@
-name = Live Parcels-Parcel
-description = Live Parcels-Parcel.
+name =Parcel
+description =Parcel.
 package = Live Parcels - core
 core = 7.x
 dependencies[] = liveparcels

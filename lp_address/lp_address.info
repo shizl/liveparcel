@@ -1,9 +1,10 @@
-name = Checkout Address
+name =Address
 description = checkout panel lp address .
 package = Live Parcels - core
 dependencies[] = uc_store
 dependencies[] = uc_addresses
 dependencies[] = liveparcels
+configure = admin/liveparcels/lp_address_country_setting
 version = "7.x-1.0"
 core = "7.x"
 project = "liveparcels"
