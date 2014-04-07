@@ -65,7 +65,6 @@ function lp_discount_settings($form,$form_state) {
   $form['user']['add']['add_more_submit'] = array(
       '#type' => 'button',
       '#value' => t('Add User'),
-      '#validate' => array('lp_discount_add_more_validate'),
       '#ajax' => array(
         'callback' => 'lp_discount_add_more',
         'wrapper' => 'user-wrapper',
@@ -150,18 +149,7 @@ function lp_discount_settings_submit($form,&$form_state) {
       }
     }
   }
-  //  drupal_set_message('<pre>'.print_r($user,TRUE).'</pre>');
   drupal_set_message(t('Save Ok'));
-}
-
-function lp_discount_add_more_validate($form,&$form_state) {
-
-  if($form_state['input']['add_more_user'] == '' || $form_state['input']['add_more_rate'] == ''){
-  form_set_error('add_more_rate',t('asdfasdf'));
-  }
-  //print_r($form_state);
-  //exit();
-
 }
 
 function lp_discount_add_more($form,$form_state){
