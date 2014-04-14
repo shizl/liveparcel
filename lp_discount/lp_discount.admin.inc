@@ -1,9 +1,9 @@
 <?php
 function lp_discount_settings($form,$form_state) {
   $form['removed'] = array(
-      '#title' => t('Shoe size'),
+      '#title' => t(''),
       '#type' => 'item',
-      '#description' => t('This question has been removed because the law prohibits us from asking your shoe size.'),
+      '#description' => t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
       );
 
   $form['roles'] = array(
