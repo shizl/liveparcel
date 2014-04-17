@@ -115,10 +115,11 @@ $(document).ready(function(){
 			var ndata="";
 			packageData=eval('(' + data + ')');	
 			for (k in packageData){
-				ndata+='<li class="package-line" id="n'+packageData[k].position+'"><div class="field-small"><input type="hidden" class="oldposition small-text" value="'+packageData[k].position+'" ><input type="text" class="position small-text hide" value="'+packageData[k].position+'" size="4">'+packageData[k].position+'</div><div class="field"><input type="text" value="'+packageData[k].package_name+'" class="package_name small-text"></div><div class="field"><input type="text" class="weight small-text" value="'+packageData[k].weight+'"></div><div class="field-small"><input type="text" class="plength small-text" value="'+packageData[k].plength+'"></div><div class="field-small"><input type="text" class="pprice small-text" value="'+packageData[k].pprice+'"></div><div class="field"><a href="####" onclick="savenote('+packageData[k].position+',\'update\')">Edit </a> / <a href="####" onclick="savenote('+packageData[k].position+',\'delete\')">Delete</a></div></li>';		
+				ndata+='<li class="package-line" id="n'+packageData[k].position+'"><div class="field-small"><input type="hidden" class="oldposition small-text" value="'+packageData[k].position+'" ><input type="text" class="position small-text hide" value="'+packageData[k].position+'" size="4">'+packageData[k].position+'</div><div class="field"><input type="text" value="'+packageData[k].package_name+'" class="package_name small-text"></div><div class="field"><input type="text" class="weight small-text" value="'+packageData[k].weight+'"></div><div class="field-small"><input type="text" class="plength small-text" value="'+packageData[k].plength+'"></div><div class="field-small"><input type="text" class="pprice small-text" value="'+packageData[k].pprice+'"></div><div class="field field-action"><a href="####" onclick="savenote('+packageData[k].position+',\'update\')">Edit </a> / <a href="####" onclick="savenote('+packageData[k].position+',\'delete\')">Delete</a></div></li>';		
 					}
 			
 			jQuery(".packagedata li:first").after(ndata);
+               $(".parcels-list input").attr("disabled","disabled");      
 		}
 	});
 	
@@ -158,7 +159,7 @@ $(document).ready(function(){
                     }else{
                         var region_id='';
                     }
-                 $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+                 $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -185,7 +186,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -207,7 +208,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -228,7 +229,7 @@ $(document).ready(function(){
         }else{
             var region_id='';
         }
-        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+        $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                     $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);
@@ -247,7 +248,7 @@ $(document).ready(function(){
         $.post('/admin/liveparcels/settings/updatezone/ajax',{region:region_id},function(msg){
                 if(msg){
                      $('.zone-pickup').html(msg);
-                 $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val()},function(msg){
+                 $.post('/admin/liveparcels/settings/zoneresult/ajax',{region:region_id,zone:$('.zone-pickup').val(),oid:$('.oid').val(),oname:$('.oname').val(),ostate:$('.ostate').val(),path:$('.path_page').val()},function(msg){
                 if(msg){
                      $('.pickup-result .draggable').remove();
                     $('.table-head').after(msg);

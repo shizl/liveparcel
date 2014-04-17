@@ -227,9 +227,10 @@ function theme_liveparcels_review_table($variables) {
   // Set up table header.
   $header = array(
     array('data' => t('Products'), 'class' => array('products')),
-    array('data' =>"", 'class' => array('price')),
-    array('data' => "", 'class' => array('price')),
-    array('data' => "", 'class' => array('price')),
+    array('data' =>"", 'class' => array('Dimensions (cm)')),
+    array('data' =>"", 'class' => array('Dimensional weight(kg)')),
+    array('data' => "", 'class' => array('Dead weight (kg)')),
+    array('data' => "", 'class' => array('Price')),
   );
 
   // Set up table rows.
@@ -237,6 +238,7 @@ function theme_liveparcels_review_table($variables) {
       $rows[] = array(
         array('data' => $parcel['parcelnum'], 'class' => array('products')),
         array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
+        array('data' => $parcel['dimenstext'],'class' => array('price')),
         array('data' => $parcel['weighttext'],'class' => array('price')),
         array('data' =>  $parcel['price'],'class' => array('price')),
       );
@@ -253,7 +255,7 @@ function theme_liveparcels_review_table($variables) {
             '#price' => $parcels['totals'],
           ),
           // Cell attributes
-          'colspan' => 4,
+          'colspan' => 5,
           'class' => array('subtotal'),
         ),
       ),
@@ -340,7 +342,7 @@ function liveparcels_subtotal($order) {
 function liveparcels_uc_cart_pane_alter($items) {
   $parcels=liveparcels_getparcelsdata();
      if($parcels){
-                 header("location:/cart/checkout");exit;
+                 header("location:/liveparcels/parcel_quote");exit;
     }
 }
 /*if product_id is liveparcel,checkout cart pane hiddren*/

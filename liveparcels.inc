@@ -50,7 +50,7 @@ if($parcels>0){
                   <span class="package-to">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</span>
                </td>
                <td class="des-text">
-                 <input class="postcode-suburb"  id="'.$pid.'" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
+                 <input class="postcode-suburb"  id="'.($pid+1).'" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
                  <input class="pnum-to" type="hidden"  value="'.$parcel[$post].'">
                   <ul class="pcode" id="pcode1">
                   </ul>
@@ -102,7 +102,7 @@ menu_link_save($item);
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postto' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
-           <input id="0" class="post-suburb" type="text"  value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
+           <input class="post-suburb" type="text" id="0" value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
            <input class="pnum-from" type="hidden"  value="'.$postfrom.'">
            <ul class="fpcode" id="pcode0"></ul>
       </div>
@@ -412,15 +412,15 @@ menu_link_save($item);
 			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-              var ptype=1;
+              var ptype=2;
               if($(".deliver").attr("checked")){
                    var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postto =$(".pnum-from").val();
-                    ptype=1;
+                    ptype=2;
                 }else{
                     var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
                     var postfrom =$(".pnum-from").val();
-                    ptype=2;
+                    ptype=1;
                 }
 			  if(dimfirst > max){
 				  max = dimfirst; 

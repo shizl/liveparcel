@@ -48,7 +48,29 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
           '#options' => $options, 
         );
        }
-     
+            if(count($parcel_info['parcels'])>1){
+            if($parcel_info['ptype']==1 && $parcel_type=='pickup' ){
+                $parcel_select=array();
+               foreach($parcel_info['parcels'] as $p=>$parcel){
+                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
+                }
+                $contents['use_parcel']=array('#type' => 'select', 
+                '#title' => t('Use addresses as '), 
+                 '#attributes' => array('class'=>array('parcel_use_parcel')),
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
+            }
+             if($parcel_info['ptype']==2 && $parcel_type=='delivery' ){
+                $parcel_select=array();
+               foreach($parcel_info['parcels']  as $p=>$parcel){
+                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
+                }
+                $contents['use_parcel']=array('#type' => 'select', 
+                '#title' => t('Use addresses as '), 
+                '#attributes' => array('class'=>array('parcel_use_parcel')),
+                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
+            }
+          
+      }
       $contents['address'] = array('first_name'=>array(
     '#type' => 'textfield',
     '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
@@ -122,29 +144,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#maxlength' => 4,
   )  
       );
-        if(count($parcel_info['parcels'])>1){
-            if($parcel_info['ptype']==1 && $parcel_type=='pickup' ){
-                $parcel_select=array();
-               foreach($parcel_info['parcels'] as $p=>$parcel){
-                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
-                }
-                $contents['use_parcel']=array('#type' => 'select', 
-                '#title' => t('Use addresses as '), 
-                 '#attributes' => array('class'=>array('parcel_use_parcel')),
-                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
-            }
-             if($parcel_info['ptype']==2 && $parcel_type=='delivery' ){
-                $parcel_select=array();
-               foreach($parcel_info['parcels']  as $p=>$parcel){
-                   $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
-                }
-                $contents['use_parcel']=array('#type' => 'select', 
-                '#title' => t('Use addresses as '), 
-                '#attributes' => array('class'=>array('parcel_use_parcel')),
-                '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
-            }
-          
-      }
+ 
 
   return  $contents;
 }
