@@ -268,6 +268,11 @@ function theme_liveparcels_review_table($variables) {
  * Implements hook_uc_checkout_pane().
  */
 function liveparcels_uc_checkout_pane() {
+   // liveparcels_create_field('aaa','field_aaa',array('type'=>'datetime','widge_type'=>"date_popup","setting"=>array()));
+    field_delete_field('field_aaa');
+   field_purge_batch();
+    echo 111;exit;
+    
     $parcels=liveparcels_getparcelsdata();
           $panes['parcels'] = array(
           'id' => 'parcels',
@@ -355,4 +360,23 @@ function liveparcels_uc_checkout_pane_alter(&$panes) {
         $panes['parcels']['enabled'] = false;
     }
 }
+    function liveparcels_create_field($field_description,$field_name,$field_set){
+          if (!field_info_field($field_name)) {
+            $field = array(
+                'field_name' => $field_name, 
+                'type' => $field_set['type'], 
+                );
+            field_create_field($field);
+            $instance = array(
+                'field_name' =>$field_name, 
+                'entity_type' => 'node', 
+                'label' =>$field_description, 
+                'bundle' => 'live_parcel', 
+                'default_widget'=>$field_set['widge_type'],
+                'required' => false,
+                'settings' => $field_set['setting']
+            );
+            field_create_instance($instance);
+          }
+    }
 

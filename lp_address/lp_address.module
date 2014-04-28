@@ -148,12 +148,12 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
 
   return  $contents;
 }
-/*address_update($address_id,$address)
- * address parel update 
+/*address_update($address,$uid)
+ * address parel update
+ * $address :address info,$uid: order user id
  * */
 function lp_address_address_update($address,$uid){
-//global $user;
-   //$aid=db_query("SELECT `aid` FROM `uc_addresses` WHERE `address_name`='".trim($address['address']['address_name'])."'")->fetchField();
+
     if(!empty($address['select_address']) && $address['select_address']>0){
         $address_id=$address['select_address'];
        $addressbook =UcAddressesAddressBook::loadAddress($address_id);
@@ -168,7 +168,6 @@ function lp_address_address_update($address,$uid){
        $addressbook->setField('country', $address['address']['country']);
        $addressbook->setField('phone', $address['address']['phone']);
        $addressbook->save();
-       // db_update('uc_addresses')->fields($address['address'])->condition('aid',$address_id,'=')->execute();
     }else{
        $addressbook=UcAddressesAddressBook::get($uid)->addAddress();
        $addressbook->setField('first_name', $address['address']['first_name']);
@@ -187,6 +186,27 @@ function lp_address_address_update($address,$uid){
        $address_id=$addressbook->getField('aid');
     }
       return $address_id;
+}
+
+/*location_update($address)
+ * $address :address info
+ * */
+function lp_address_location_update($address){
+        $lid = db_insert('location') 
+        ->fields(array(
+          'name' => $address['address']['first_name'].' '.$address['address']['last_name'],
+          'additional'=>$address['address']['street1'], 
+          'city' =>$address['address']['city'],
+          'province'=>$address['address']['zone'],
+           'postal_code'=>$address['address']['postal_code'],
+          'country' =>$address['address']['country'] ,
+          'latitude'=>'0.000000',
+          'longitude'=>'0.000000',
+          'source'=>'0',
+          'is_primary'=>'0',
+        ))->execute();
+      return $lid;
+      
 }
 
 /*
