@@ -72,8 +72,8 @@ function lp_parcel_requirements($phase) {
      liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
     liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
      liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Note','field_delivery_note',array('type'=>'text_long','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Note','field_pickup_note',array('type'=>'text_long','widget'=>"text_textfield","setting"=>array()));
+     liveparcels_create_field('Delivery Note','field_delivery_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
+     liveparcels_create_field('Pickup Note','field_pickup_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
      liveparcels_create_field('Pick up Time','field_pick_up_time',array('type'=>'datetime','widget'=>"date_popup","setting"=>array()));
      liveparcels_create_field('Pick up Time ampm','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","setting"=>array('allowed_values' =>array('AM'=>'AM','PM'=>'PM'),'allowed_values_function' => '')));
      
