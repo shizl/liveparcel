@@ -52,8 +52,9 @@ function lp_parcel_requirements($phase) {
     field_delete_field('field_pickup_street2');    
     field_delete_field('field_pickup_phone');  
     field_delete_field('field_delivery_location'); 
-    field_delete_field('field_pickup_first_name'); 
-    field_delete_field('field_pickup_last_name'); 
+    field_delete_field('field_delivery_first_name'); 
+    field_delete_field('field_delivery_last_name'); 
+    field_delete_field('field_delivery_company'); 
     field_delete_field('field_delivery_street'); 
     field_delete_field('field_delivery_street2'); 
     field_delete_field('field_delivery_phone');  
