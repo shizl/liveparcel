@@ -338,9 +338,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
                 $pickup_address_id=$key>0 ? $pickup_address_id : lp_parcel_update_parcel_address($extra_info['pickupdata'][0]['field_parcel_pickup_address'],$order->uid);
                 $delivery_address_id=lp_parcel_update_parcel_address($extra_info['deliverydata'][$key]['field_parcel_delivery_address'],$order->uid);
 
-               $pickup_location_id=$key>0 ? $pickup_location_id : lp_parcel_update_parcel_location($extra_info['pickupdata'][$key]['field_parcel_pickup_address'],$order->uid);
+               $pickup_location_id= $key>0 ? $pickup_location_id :lp_parcel_update_parcel_location($extra_info['pickupdata'][0]['field_parcel_pickup_address'],$order->uid);
                
-               $delivery_location_id=lp_parcel_update_parcel_location($extra_info['deliverydata'][0]['field_parcel_delivery_address'],$order->uid);
+               $delivery_location_id= lp_parcel_update_parcel_location($extra_info['deliverydata'][$key]['field_parcel_delivery_address'],$order->uid);
               
               
                 $field_pickup_first_name=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['first_name'];
@@ -366,9 +366,8 @@ function lp_parcel_uc_checkout_complete($order, $account) {
                 $field_customer_reference=$extra_info['deliverydata'][$key]['field_customer_reference'];
                 $field_delivery_note=$extra_info['deliverydata'][$key]['field_delivery_note'];
           }
-          
-        $node->field_pickup_location[$node->language][0]['value'] =$pickup_location_id;
-        $node->field_delivery_location[$node->language][0]['value'] =$delivery_location_id;
+        $node->field_pickup_location[$node->language][0]['lid'] =$pickup_location_id;
+        $node->field_delivery_location[$node->language][0]['lid'] =$delivery_location_id;
         
         $node->field_pickup_first_name[$node->language][0]['value'] =$field_pickup_first_name;
         $node->field_pickup_last_name[$node->language][0]['value'] =$field_pickup_last_name;

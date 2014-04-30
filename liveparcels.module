@@ -268,12 +268,14 @@ function theme_liveparcels_review_table($variables) {
  * Implements hook_uc_checkout_pane().
  */
 function liveparcels_uc_checkout_pane() {
-   // liveparcels_create_field('aaa','field_aaa',array('type'=>'datetime','widge_type'=>"date_popup","setting"=>array()));
-    field_delete_field('field_aaa');
-   field_purge_batch();
-    echo 111;exit;
-    
-    $parcels=liveparcels_getparcelsdata();
+  //  liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
+    //  liveparcels_create_field('Pick up Time ampm','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","setting"=>array('allowed_values' =>array('on'=>'Yes','off'=>'No'),'allowed_values_function' => '')));
+      
+ //  field_delete_field('field_authority_to_leave');
+  //  field_delete_field('field_pick_up_time_ampm');
+   // field_purge_batch();
+     // exit;
+          $parcels=liveparcels_getparcelsdata();
           $panes['parcels'] = array(
           'id' => 'parcels',
           'callback' => 'liveparcels_uc_checkout_pane_parcels',
@@ -365,6 +367,7 @@ function liveparcels_uc_checkout_pane_alter(&$panes) {
             $field = array(
                 'field_name' => $field_name, 
                 'type' => $field_set['type'], 
+                'settings' => $field_set['setting']
                 );
             field_create_field($field);
             $instance = array(
@@ -372,9 +375,12 @@ function liveparcels_uc_checkout_pane_alter(&$panes) {
                 'entity_type' => 'node', 
                 'label' =>$field_description, 
                 'bundle' => 'live_parcel', 
-                'default_widget'=>$field_set['widge_type'],
+                'widget'=> array(
+                    'type' => $field_set['widget'],
+                    'settings' => array(),
+                  ),
                 'required' => false,
-                'settings' => $field_set['setting']
+                
             );
             field_create_instance($instance);
           }
