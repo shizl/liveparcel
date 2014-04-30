@@ -470,6 +470,10 @@ function liveparcels_configpage() {
 }
 
 function liveparcels_live_parcel_price() {
+    global $user;
+    if ($user->uid==0) {
+         header("location:/user");
+        }
     $rows['package'] = array(array('data' => '<div class="parcels-list"><div class="parcels-title">Define package maximum values and price</div><div class="parcels-body"><div class="parcels-note"><p>To calculate the parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.</p>
         <p>For more information, visit <a href="http://en.wikipedia.org/wiki/Dimensional_weight" target="_blank">http://en.wikipedia.org/wiki/Dimensional_weight</a></p>
         <p>Dimensional weight = (L cm x W cm x H cm) x Dimensional Factor</p></div> <div class="parcels-factor">Dimensional Factor:'.variable_get('liveparcels_factor',0.0002).'</div>

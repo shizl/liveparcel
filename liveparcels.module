@@ -13,6 +13,7 @@
  * Implements hook_menu().
  */
 function liveparcels_menu() {
+    global $user;
   $items = array();
 
     $items['admin/liveparcels'] = array(
@@ -129,11 +130,40 @@ function liveparcels_menu() {
     'title' => 'Price list',
     'description' => ' package show.',
     'page callback' => array('liveparcels_live_parcel_price'),
-    'access callback' => true,
+     'access callback'=>user_access('view parcel price'),
     'file' => 'liveparcels.admin.inc',
     'type'=>MENU_LOCAL_TASK,
   );
+    if($user->uid > 0){
+        $items['live_parcel_price'] = array(
+        'title' => 'Price list set',
+        'description' => 'package show.',
+        'page callback' => array('liveparcels_live_parcel_price_set'),
+         'access callback'=>user_access('View parcel price'),
+        'menu_name'=>'navigation',
+        'weight'=>100,
+        );
+    }
   return $items;
+}
+/**
+ * Implements hook_permission().
+ */
+function liveparcels_permission() {
+    
+    return array(
+    'View parcel price' => array(
+      'title' => t('View parcel price'),
+    ));
+    
+}
+function liveparcels_live_parcel_price_set(){
+        global $user;
+    if($user->uid>0){
+            header("location:/user/".$user->uid."/live_parcel_price");
+    }else{
+         header("location:/user");
+    }  
 }
 /*get zonelistdata*/
 function liveparcels_getZonelistData($key='',$action='json') {
@@ -268,13 +298,7 @@ function theme_liveparcels_review_table($variables) {
  * Implements hook_uc_checkout_pane().
  */
 function liveparcels_uc_checkout_pane() {
-  //  liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
-    //  liveparcels_create_field('Pick up Time ampm','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","setting"=>array('allowed_values' =>array('on'=>'Yes','off'=>'No'),'allowed_values_function' => '')));
-      
- //  field_delete_field('field_authority_to_leave');
-  //  field_delete_field('field_pick_up_time_ampm');
-   // field_purge_batch();
-     // exit;
+
           $parcels=liveparcels_getparcelsdata();
           $panes['parcels'] = array(
           'id' => 'parcels',
