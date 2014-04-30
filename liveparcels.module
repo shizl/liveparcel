@@ -136,8 +136,8 @@ function liveparcels_menu() {
   );
     if($user->uid > 0){
         $items['live_parcel_price'] = array(
-        'title' => 'Price list set',
-        'description' => 'package show.',
+        'title' => 'User price list ',
+        'description' => 'User price list .',
         'page callback' => array('liveparcels_live_parcel_price_set'),
          'access callback'=>user_access('View parcel price'),
         'menu_name'=>'navigation',
