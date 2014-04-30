@@ -179,7 +179,7 @@ $(document).ready(function(){
         $(this).parent().addClass('active');
         $('.table-head input').val('');
         $(this).find('img').removeClass('hide');
-        $(this).find('img').attr('src','/sites/all/modules/liveparcels/resource/arrow-'+zid+'.png');
+        $(this).find('img').attr('src','/sites/all/modules/live_parcel/resource/arrow-'+zid+'.png');
        $('.oid').val(zid);
        if($('.useregion').attr('checked')==true){
             var region_id=$('.state-pickup').val();
@@ -201,7 +201,7 @@ $(document).ready(function(){
         $(this).parent().addClass('active');
         $('.table-head input').val('');
         $(this).find('img').removeClass('hide');
-        $(this).find('img').attr('src','/sites/all/modules/liveparcels/resource/arrow-'+zid+'.png');
+        $(this).find('img').attr('src','/sites/all/modules/live_parcel/resource/arrow-'+zid+'.png');
        $('.oname').val( zid);
        if($('.useregion').attr('checked')==true){
             var region_id=$('.state-pickup').val();
@@ -222,7 +222,7 @@ $(document).ready(function(){
         $(this).parent().addClass('active');
          $('.table-head input').val('');
         $(this).find('img').removeClass('hide');
-        $(this).find('img').attr('src','/sites/all/modules/liveparcels/resource/arrow-'+zid+'.png');
+        $(this).find('img').attr('src','/sites/all/modules/live_parcel/resource/arrow-'+zid+'.png');
        $('.ostate').val( zid);
         if($('.useregion').attr('checked')==true){
             var region_id=$('.state-pickup').val();

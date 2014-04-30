@@ -34,11 +34,15 @@ function lp_parcel_requirements($phase) {
  * Implements hook_uninstall().
  */
   function lp_parcel_uninstall() {
+      
+    field_delete_field('field_parcel_delivery_address'); 
+    field_delete_field('field_parcel_pickup_address'); 
    field_delete_field('field_parcel_order_id'); 
    field_delete_field('field_parcel_price');    
    field_delete_field('field_parcel_size');    
    field_delete_field('field_parcel_weight');    
-   field_delete_field('field_authority_to_leave');    
+   field_delete_field('field_customer_reference');  
+     
    field_delete_field('field_cash_to_collect');    
    field_delete_field('field_delivery_note');  
     field_delete_field('field_pickup_note');     
@@ -67,13 +71,15 @@ function lp_parcel_requirements($phase) {
       if(db_query("SELECT  `type` FROM `node_type` WHERE type='live_parcel'")->fetchField()==''){
             db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel', 'Live Parcel', 'node_content', 'node', 'Live Parcel', '', 1, 'Title', 1, 1, 0, 0, 'live_parcel');");  
         }
-          liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
+    liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
      liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_float','widget'=>"text_textfield","setting"=>array()));
      liveparcels_create_field('Parcel Size','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
      liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
     liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
      liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
+     liveparcels_create_field('Customer reference','field_customer_reference',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
      liveparcels_create_field('Delivery Note','field_delivery_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
+     
      liveparcels_create_field('Pickup Note','field_pickup_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
      liveparcels_create_field('Pick up Time','field_pick_up_time',array('type'=>'datetime','widget'=>"date_popup","setting"=>array()));
      liveparcels_create_field('Pick up Time ampm','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","setting"=>array('allowed_values' =>array('AM'=>'AM','PM'=>'PM'),'allowed_values_function' => '')));
