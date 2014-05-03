@@ -71,32 +71,194 @@ function lp_parcel_requirements($phase) {
       if(db_query("SELECT  `type` FROM `node_type` WHERE type='live_parcel'")->fetchField()==''){
             db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel', 'Live Parcel', 'node_content', 'node', 'Live Parcel', '', 1, 'Title', 1, 1, 0, 0, 'live_parcel');");  
         }
-    liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_float','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Parcel Size','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
+    liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_float','widget'=>"number","setting"=>array()));
+     liveparcels_create_field('Parcel Size','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
     liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
-     liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Customer reference','field_customer_reference',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
+     liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Customer reference','field_customer_reference',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
      liveparcels_create_field('Delivery Note','field_delivery_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
      
      liveparcels_create_field('Pickup Note','field_pickup_note',array('type'=>'text_long','widget'=>"text_textarea","setting"=>array()));
      liveparcels_create_field('Pick up Time','field_pick_up_time',array('type'=>'datetime','widget'=>"date_popup","setting"=>array()));
      liveparcels_create_field('Pick up Time ampm','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","setting"=>array('allowed_values' =>array('AM'=>'AM','PM'=>'PM'),'allowed_values_function' => '')));
      
-     liveparcels_create_field('Pickup Location','field_pickup_location',array('type'=>'location','widget'=>"location","setting"=>array()));
-     liveparcels_create_field('Pickup First name','field_pickup_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Last name','field_pickup_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Company','field_pickup_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Street','field_pickup_street',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Street2','field_pickup_street2',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Pickup Phone','field_pickup_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-    liveparcels_create_field('Delivery Location','field_delivery_location',array('type'=>'location','widget'=>"location","setting"=>array()));
-     liveparcels_create_field('Delivery First name','field_delivery_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Last name','field_delivery_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Company','field_delivery_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Street','field_delivery_street',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Street2','field_delivery_street2',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
-     liveparcels_create_field('Delivery Phone','field_delivery_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array()));
+     liveparcels_create_field('Pickup Location','field_pickup_location',array('type'=>'location','widget'=>"location","setting"=>array('location_settings'=> Array
+                (
+                    'form' => Array
+                        (
+                            'fields'  => Array
+                                (
+                                    'name'  => Array
+                                        (
+                                            'collect'  => 1,
+                                            'default'  => '',
+                                            'weight' => 2,
+                                        ),
+
+                                    'street' => Array
+                                        (
+                                            'collect'=> 1,
+                                            'default' => '',
+                                            'weight' => 4,
+                                        ),
+
+                                    'additional'=> Array
+                                        (
+                                            'collect' => 1,
+                                            'default' =>'', 
+                                            'weight'=> 6,
+                                        ),
+
+                                   'city' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' => '',
+                                            'weight' => 8
+                                        ),
+
+                                    'province' => Array
+                                        (
+                                            'collect' => 1,
+                                            'widget' => 'autocomplete',
+                                            'default' => '',
+                                            'weight' => 10
+                                        ),
+
+                                    'postal_code' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' =>'',
+                                            'weight' => 12
+                                        ),
+
+                                    'country' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' => '',
+                                           'weight' => 14,
+                                        ),
+
+                                    'locpick' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
+                                ),
+                        ),
+
+                    'display' => Array
+                        (
+                            'hide' => Array
+                                (
+                                    'name' => 0,
+                                    'street' => 0,
+                                    'additional' => 0,
+                                    'city' => 0,
+                                    'province' => 0,
+                                    'postal_code' => 0,
+                                    'country' => 0,
+                                    'locpick' => 0,
+                                    'province_name' => 0,
+                                    'country_name'=> 0,
+                                    'map_link' => 0,
+                                    'coords' => 0,
+                                )
+                        )
+                    )
+                )));
+     liveparcels_create_field('Pickup First name','field_pickup_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Pickup Last name','field_pickup_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Pickup Company','field_pickup_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+        liveparcels_create_field('Pickup Phone','field_pickup_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+    liveparcels_create_field('Delivery Location','field_delivery_location',array('type'=>'location','widget'=>"location","setting"=>array('location_settings'=> Array
+                (
+                    'form' => Array
+                        (
+                            'fields'  => Array
+                                (
+                                    'name'  => Array
+                                        (
+                                            'collect'  => 1,
+                                            'default'  => '',
+                                            'weight' => 2,
+                                        ),
+
+                                    'street' => Array
+                                        (
+                                            'collect'=> 1,
+                                            'default' => '',
+                                            'weight' => 4,
+                                        ),
+
+                                    'additional'=> Array
+                                        (
+                                            'collect' => 1,
+                                            'default' =>'', 
+                                            'weight'=> 6,
+                                        ),
+
+                                   'city' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' => '',
+                                            'weight' => 8,
+                                        ),
+
+                                    'province' => Array
+                                        (
+                                            'collect' => 1,
+                                            'widget' => 'autocomplete',
+                                            'default' => '',
+                                            'weight' => 10
+                                        ),
+
+                                    'postal_code' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' =>'',
+                                            'weight' => 12
+                                        ),
+
+                                    'country' => Array
+                                        (
+                                            'collect' => 1,
+                                            'default' => '',
+                                           'weight' => 14,
+                                        ),
+
+                                    'locpick' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
+                                ),
+                        ),
+
+                    'display' => Array
+                        (
+                            'hide' => Array
+                                (
+                                    'name' => 0,
+                                    'street' => 0,
+                                    'additional' => 0,
+                                    'city' => 0,
+                                    'province' => 0,
+                                    'postal_code' => 0,
+                                    'country' => 0,
+                                    'locpick' => 0,
+                                    'province_name' => 0,
+                                    'country_name'=> 0,
+                                    'map_link' => 0,
+                                    'coords' => 0,
+                                )
+                        )
+                    )
+                )));
+     liveparcels_create_field('Delivery First name','field_delivery_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Delivery Last name','field_delivery_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Delivery Company','field_delivery_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+    liveparcels_create_field('Delivery Phone','field_delivery_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
 }
 

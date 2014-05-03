@@ -38,7 +38,12 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
          'PM' => t('PM'),
        ),
        '#default_value' => 'AM',
-   ),'field_cash_to_collect'=>array(
+   ),'field_customer_reference'=>array(
+    '#type' => 'textfield',
+    '#title' => t('Customer reference'),
+    '#default_value' =>'',
+    '#description' => t('Enter any reference number here to help you find this item.')
+  ),'field_cash_to_collect'=>array(
     '#type' => 'textfield',
     '#title' => t('Cash to collect'),
     '#default_value' =>'',
@@ -103,11 +108,6 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
              $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0),'field_authority_to_leave'=>array(
       '#type' =>'checkbox', 
   '#title' => t('Authority to leave'),
-  ),'field_customer_reference'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Customer reference'),
-    '#default_value' =>'',
-    '#description' => t('Enter any reference number here to help you find this item.')
   ),'field_delivery_note'=>array(
 '#title' => t('Delivery Note'),
 '#type' => 'textarea',
@@ -313,15 +313,12 @@ function lp_parcel_uc_checkout_complete($order, $account) {
                 $field_pickup_first_name=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['first_name'];
                 $field_pickup_last_name=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['last_name'];
                 $field_pickup_company=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['company'];
-                $field_pickup_street1=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['street1'];
-                $field_pickup_street2=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['street2'];
                 $field_pickup_phone=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['phone'];
                 
                 $field_delivery_first_name=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['first_name'];
                 $field_delivery_last_name=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['last_name'];
                 $field_delivery_company=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['company'];
-                $field_delivery_street1=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['street1'];
-                $field_delivery_street2=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['street2'];
+             
                 $field_delivery_phone=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['phone'];
                 
               $field_pick_up_time=$extra_info['pickupdata'][$key]['field_pick_up_time'];
@@ -346,15 +343,11 @@ function lp_parcel_uc_checkout_complete($order, $account) {
                 $field_pickup_first_name=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['first_name'];
                 $field_pickup_last_name=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['last_name'];
                 $field_pickup_company=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['company'];
-                $field_pickup_street1=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['street1'];
-                $field_pickup_street2=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['street2'];
                 $field_pickup_phone=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['phone'];
                 
                 $field_delivery_first_name=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['first_name'];
                 $field_delivery_last_name=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['last_name'];
                 $field_delivery_company=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['company'];
-                $field_delivery_street1=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['street1'];
-                $field_delivery_street2=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['street2'];
                 $field_delivery_phone=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['phone'];
                 
                 $field_pick_up_time=$extra_info['pickupdata'][0]['field_pick_up_time'];
@@ -372,15 +365,12 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $node->field_pickup_first_name[$node->language][0]['value'] =$field_pickup_first_name;
         $node->field_pickup_last_name[$node->language][0]['value'] =$field_pickup_last_name;
         $node->field_pickup_company[$node->language][0]['value'] =$field_pickup_company;
-        $node->field_pickup_street1[$node->language][0]['value'] =$field_pickup_street1;
-        $node->field_pickup_street2[$node->language][0]['value'] =$field_pickup_street2;
+    
         $node->field_pickup_phone[$node->language][0]['value'] =$field_pickup_phone;
         
         $node->field_delivery_first_name[$node->language][0]['value'] =$field_delivery_first_name;
         $node->field_delivery_last_name[$node->language][0]['value'] =$field_delivery_last_name;
         $node->field_delivery_company[$node->language][0]['value'] =$field_delivery_company;
-        $node->field_delivery_street1[$node->language][0]['value'] =$field_delivery_street1;
-        $node->field_delivery_street2[$node->language][0]['value'] =$field_delivery_street2;
         $node->field_delivery_phone[$node->language][0]['value'] =$field_delivery_phone;
         
         $node->field_pick_up_time[$node->language][0]['value'] =$field_pick_up_time;

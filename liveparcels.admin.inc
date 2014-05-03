@@ -331,7 +331,7 @@ function liveparcels_zoneresult(){
 if($_REQUEST['path'] == 'ouser'){
 
 
-if(module_exists(lp_discount)){
+if(module_exists('lp_discount')){
 
   $s=0;
   $trs='';
@@ -340,7 +340,8 @@ if(module_exists(lp_discount)){
     foreach ($result as $row) {
     $packdata="";
     foreach($tprice as $pprice){
-      $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$').lp_discount_get_pricing($pprice*floatval($row->multiplier)).'</td>':'<td>Undefined</td>';
+       $user_price=$pprice*floatval($row->multiplier)-lp_discount_get_pricing($pprice*floatval($row->multiplier));
+      $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$'). $user_price.'</td>':'<td>Undefined</td>';
     }
     $s++;
     $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
@@ -360,10 +361,6 @@ if(module_exists(lp_discount)){
     $s++;
     $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
   }
-
-
-
-
 }
   
 }elseif($_REQUEST['path'] == 'oadmin'){
@@ -472,7 +469,7 @@ function liveparcels_configpage() {
 function liveparcels_live_parcel_price() {
     global $user;
     if ($user->uid==0) {
-         header("location:/user");
+         header("location:/user");exit;
         }
     $rows['package'] = array(array('data' => '<div class="parcels-list"><div class="parcels-title">Define package maximum values and price</div><div class="parcels-body"><div class="parcels-note"><p>To calculate the parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.</p>
         <p>For more information, visit <a href="http://en.wikipedia.org/wiki/Dimensional_weight" target="_blank">http://en.wikipedia.org/wiki/Dimensional_weight</a></p>

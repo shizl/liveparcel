@@ -140,8 +140,8 @@ function liveparcels_menu() {
         'description' => 'User price list .',
         'page callback' => array('liveparcels_live_parcel_price_set'),
          'access callback'=>user_access('View parcel price'),
-        'menu_name'=>'navigation',
-        'weight'=>100,
+        'menu_name'=>'user-menu',
+        'weight'=>0,
         );
     }
   return $items;
@@ -257,10 +257,9 @@ function theme_liveparcels_review_table($variables) {
   // Set up table header.
   $header = array(
     array('data' => t('Products'), 'class' => array('products')),
-    array('data' =>"", 'class' => array('Dimensions (cm)')),
-    array('data' =>"", 'class' => array('Dimensional weight(kg)')),
-    array('data' => "", 'class' => array('Dead weight (kg)')),
-    array('data' => "", 'class' => array('Price')),
+    array('data' =>t('Dimension'), 'class' => array('price')),
+    array('data' =>t('Weight'), 'class' => array('price')),
+    array('data' =>t('Price'), 'class' => array('price')),
   );
 
   // Set up table rows.
@@ -268,7 +267,6 @@ function theme_liveparcels_review_table($variables) {
       $rows[] = array(
         array('data' => $parcel['parcelnum'], 'class' => array('products')),
         array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
-        array('data' => $parcel['dimenstext'],'class' => array('price')),
         array('data' => $parcel['weighttext'],'class' => array('price')),
         array('data' =>  $parcel['price'],'class' => array('price')),
       );
@@ -285,7 +283,7 @@ function theme_liveparcels_review_table($variables) {
             '#price' => $parcels['totals'],
           ),
           // Cell attributes
-          'colspan' => 5,
+          'colspan' => 4,
           'class' => array('subtotal'),
         ),
       ),
@@ -298,7 +296,6 @@ function theme_liveparcels_review_table($variables) {
  * Implements hook_uc_checkout_pane().
  */
 function liveparcels_uc_checkout_pane() {
-
           $parcels=liveparcels_getparcelsdata();
           $panes['parcels'] = array(
           'id' => 'parcels',

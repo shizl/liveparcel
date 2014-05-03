@@ -39,7 +39,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     $zone_id=lp_address_get_zone_id($pdata[1]);//zone_id
 	 if ($user->uid && $addresses = lp_address_get_uc_address_book($user->uid,$parcel_array,$zone_id,$post_code)) {
           foreach($addresses as $adr){
-            $options[$parcel_type.'_'.$key.'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').$adr->company.', '.$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
+            $options[$parcel_type.'_'.$key.'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
           }
         $contents['select_address'] = array(
           '#type' => 'select', 
@@ -200,7 +200,8 @@ function lp_address_location_update($address){
         $lid = db_insert('location') 
         ->fields(array(
           'name' => $address['address']['first_name'].' '.$address['address']['last_name'],
-          'additional'=>$address['address']['street1'], 
+           'street'=>$address['address']['street1'], 
+          'additional'=>$address['address']['street2'], 
           'city' =>$address['address']['city'],
           'province'=>$address['address']['zone'],
            'postal_code'=>$address['address']['postal_code'],

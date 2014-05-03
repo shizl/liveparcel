@@ -76,7 +76,6 @@ $count = db_query("SELECT count(*) FROM {menu_links} where menu_name = 'navigati
 if($count == 0){
 menu_link_save($item);
 }
-
 	$rows['package'] = array(array('data' => '<div class="page-main">
 	<div class="header-warning">
 	  '.variable_get('liveparcels_error_message').'
@@ -95,9 +94,9 @@ menu_link_save($item);
       <div class="page-content-select"><h4>Please select the service 
       you requires:</h4></div>
       <div class="page-content-choose">
-		 <input class="deliver" type="radio" name="items" '.(count($parcels)>0 && $parcels['ptype']==2 ? '':'checked').' value="1" >
+		 <input class="deliver" type="radio" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
 		 Deliver one or more items
-         <input class="pick-up" type="radio" name="items" '.(count($parcels)>0 && $parcels['ptype']==2 ? 'checked':'').' value="2" >
+         <input class="pick-up" type="radio" name="items" '.($parcels['ptype']==1 ? 'checked':'').' value="1" >
          Pick-up one or more items
       </div>
       <div class="page-content-address" >
@@ -484,7 +483,6 @@ menu_link_save($item);
 	      
 	       if(postfroms == ""){
 	         $(".pnum-from").val("");
-	        
 	       }
 		   if(postfrom ==""){
 		      $(".post-suburb").css("border","1px dashed red");
@@ -513,7 +511,7 @@ menu_link_save($item);
 	       $(".add_new").hide();
 	       $(this).attr("value","Modify");
 	    }else{
-           //$(".parcelsPost").val("");
+           $(".parcelsPost").val("");
 	       if(postfroms == ""){
 	          $(".pnum-from").val("");
 	       }

@@ -16,7 +16,7 @@ function lp_discount_roles_rate($tid){
   if($rate){
     return $rate;
   }else{
-    return 0;
+    return 1;
   }
 }
 function lp_discount_user_rate($tid){
@@ -24,7 +24,7 @@ function lp_discount_user_rate($tid){
   if($rate){
     return $rate;
   }else{
-    return 0;
+    return 1;
   }
 }
 
@@ -46,19 +46,22 @@ function lp_discount_theme(){
   return  $theme_hooks;
 }
 function lp_discount_get_pricing($amount) {
+    $amount=intval($amount);
   if(!$amount) {
     return 0;
   }
+
   global $user;
   $user_rate = lp_discount_user_rate($user->uid);
   if($user_rate != 1) {
     return ($amount*$user_rate);
-  }
-  $user_roles = user_roles();
-  $user_role = $user->roles;
-  $temp = (array_intersect_key($user_roles,$user_role));
-  $temp = (array_slice($temp,-1,1,TRUE));
-  $roles = (key($temp));
-  $roles_rate = lp_discount_roles_rate($roles);
-  return ($amount*$roles_rate);
+  }else{
+      $user_roles = user_roles();
+      $user_role = $user->roles;
+      $temp = (array_intersect_key($user_roles,$user_role));
+      $temp = (array_slice($temp,-1,1,TRUE));
+      $roles = (key($temp));
+      $roles_rate = lp_discount_roles_rate($roles);
+      return ($amount*$roles_rate);
+    }
 }
