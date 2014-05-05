@@ -211,7 +211,7 @@ function lp_address_location_update($address){
           'city' =>$address['address']['city'],
           'province'=>$address['address']['zone_name'],
            'postal_code'=>$address['address']['postal_code'],
-          'country' =>$address['address']['country_code'] ,
+          'country' =>strtolower($address['address']['country_code']) ,
           'latitude'=>'0.000000',
           'longitude'=>'0.000000',
           'source'=>'0',

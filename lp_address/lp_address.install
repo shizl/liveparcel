@@ -13,7 +13,7 @@ function lp_address_install() {
         ->fields(array(
           'country_id' => 8888,
           'country_name' => 'Live parcel',
-          'country_iso_code_2' => 'LP',
+          'country_iso_code_2' => 'AU',
           'country_iso_code_3' => 'LPL',
           'version' => 1,
         ))->execute();
