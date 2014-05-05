@@ -299,7 +299,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
 
        $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
         $node->field_parcel_weight[$node->language][0]['value'] =$parcel['weighttext'];
-        $node->field_parcel_price[$node->language][0]['value'] =str_replace('$','',$parcel['price']);
+        $node->field_parcel_price[$node->language][0]['value'] =str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
         $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){

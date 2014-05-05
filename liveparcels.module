@@ -267,7 +267,7 @@ function theme_liveparcels_review_table($variables) {
       $rows[] = array(
         array('data' => $parcel['parcelnum'], 'class' => array('products')),
         array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
-        array('data' => $parcel['weighttext'],'class' => array('price')),
+        array('data' => $parcel['weighttext'].' kg','class' => array('price')),
         array('data' =>  $parcel['price'],'class' => array('price')),
       );
     }

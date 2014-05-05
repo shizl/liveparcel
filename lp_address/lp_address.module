@@ -113,6 +113,12 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#default_value' =>$zone_id,
     '#maxlength' => 100,
  
+  ), 'zone_name'=>array(
+    '#type' => 'hidden',
+    '#title' => t('State/Province'),
+    '#default_value' =>$pdata[1],
+    '#maxlength' => 100,
+ 
   ),'country'=>array(
     '#type' => 'hidden',
     '#title' => t('Country'),
@@ -203,7 +209,7 @@ function lp_address_location_update($address){
            'street'=>$address['address']['street1'], 
           'additional'=>$address['address']['street2'], 
           'city' =>$address['address']['city'],
-          'province'=>$address['address']['zone'],
+          'province'=>$address['address']['zone_name'],
            'postal_code'=>$address['address']['postal_code'],
           'country' =>$address['address']['country_code'] ,
           'latitude'=>'0.000000',
