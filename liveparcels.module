@@ -93,6 +93,14 @@ function liveparcels_menu() {
     'menu_name'=>'main-menu',
     'weight'=>2,
   );
+  $items['parcel_quote'] = array(
+        'title' => 'Quote and book ',
+        'description' => 'Obtain quotation and book delivery/pickup.',
+        'page callback' => array('liveparcels_parcel_quote_set'),
+         'access callback'=>true,
+        'menu_name'=>'navigation',
+        'weight'=>1,
+        );
       $items['liveparcels/parcels_addtocart'] = array(
     'title' => 'Parcels add to cart',
     'description' => 'Parcels add to cart',
@@ -150,7 +158,6 @@ function liveparcels_menu() {
  * Implements hook_permission().
  */
 function liveparcels_permission() {
-    
     return array(
     'View parcel price' => array(
       'title' => t('View parcel price'),
@@ -164,6 +171,9 @@ function liveparcels_live_parcel_price_set(){
     }else{
          header("location:/user");
     }  
+}
+function liveparcels_parcel_quote_set(){
+            header("location:/liveparcels/parcel_quote");
 }
 /*get zonelistdata*/
 function liveparcels_getZonelistData($key='',$action='json') {

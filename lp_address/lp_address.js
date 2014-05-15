@@ -52,6 +52,20 @@ jQuery(".parcel_select_address").change(function(){
                     a=false;
               }
         });
+         jQuery("."+pickup+"_phone").each(function(){
+             var phone=jQuery(this).val();
+             if(phone!='' && (phone.length != 11 ||  !/^[0-9]*$/.test(phone)) ){
+                jQuery(this).css('border','1px solid red');
+                    a=false;
+              }
+        });
+         jQuery("."+pickup+"_cash_to_collect").each(function(){
+             var cash_to_collect=jQuery(this).val();
+             if(cash_to_collect.length != ''  &&  !/^[0-9]*$/.test(cash_to_collect)){
+                jQuery(this).css('border','1px solid red');
+                    a=false;
+              }
+        });
        jQuery("."+delivery+"_first_name").each(function(){
              if(jQuery(this).val()=="" || jQuery(this).val()==" "){
                 jQuery(this).css('border','1px solid red');
@@ -67,6 +81,13 @@ jQuery(".parcel_select_address").change(function(){
         jQuery("."+delivery+"_street1").each(function(){
              if(jQuery(this).val()=="" || jQuery(this).val()==" "){
                 jQuery(this).css('border','1px solid red');
+                    a=false;
+              }
+        });
+         jQuery("."+delivery+"_phone").each(function(){
+             var phone=jQuery(this).val();
+                 if(phone!='' && (phone.length != 11 ||  !/^[0-9]*$/.test(phone)) ){
+                    jQuery(this).css('border','1px solid red');
                     a=false;
               }
         });

@@ -3,13 +3,13 @@ function lp_discount_settings($form,$form_state) {
   $form['removed'] = array(
       '#title' => t(''),
       '#type' => 'item',
-      '#description' => t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
+      '#description' => '',
       );
 
   $form['roles'] = array(
       '#type'=>'fieldset',
       '#title' =>'Roles Discount',
-      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
+      '#description' => t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
       '#collapsible' => TRUE,
       );
   foreach(user_roles() as $tid => $roles){

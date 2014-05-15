@@ -15,7 +15,7 @@
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
         $parcels=liveparcels_getparcelsdata();
-   
+   drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
       switch ($op) {
         case 'view':        
@@ -38,6 +38,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
          'PM' => t('PM'),
        ),
        '#default_value' => 'AM',
+       '#attributes' => array('class'=>array('pick_up_time_ampm')),
    ),'field_customer_reference'=>array(
     '#type' => 'textfield',
     '#title' => t('Customer reference'),
@@ -47,12 +48,16 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
     '#type' => 'textfield',
     '#title' => t('Cash to collect'),
     '#default_value' =>'',
+     '#size'=>'30',
+      '#maxlength'=>'30',
+      '#attributes' => array('class'=>array('pickup_cash_to_collect')),
     '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
   ),'field_pickup_note'=>array(
 '#title' => t('Pickup Note'),
 '#type' => 'textarea',
 '#description' => t('Enter any information here that would assist with the pick up process'),
 '#default_value' =>'',
+'#attributes' => array('class'=>array('pickup_note')),
 ));
             }
 
@@ -72,17 +77,21 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
          'PM' => t('PM'),
        ),
        '#default_value' => 'AM',
+       '#attributes' => array('class'=>array('pick_up_time_ampm')),
    ),'field_cash_to_collect'=>array(
     '#type' => 'textfield',
     '#title' => t('Cash to collect'),
     '#default_value' =>'',
-    '#maxlength' => 100,
+    '#size'=>'30',
+    '#maxlength'=>'30',
+    '#attributes' => array('class'=>array('pickup_cash_to_collect')),
     '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
   ),'field_pickup_note'=>array(
 '#title' => t('Pickup Note'),
 '#type' => 'textarea',
 '#description' => t('Enter any information here that would assist with the pick up process'),
 '#default_value' =>'',
+'#attributes' => array('class'=>array('pickup_note')),
 ));
         }
         $contents=$pickup_extra;
@@ -106,20 +115,23 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
     $delivery_extra=array();
         if($parcels['ptype']=="1"){
              $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0),'field_authority_to_leave'=>array(
+              '#title' => t('Authority to leave'),
       '#type' =>'checkbox', 
-  '#title' => t('Authority to leave'),
+         '#attributes' => array('class'=>array('authority_to_leave')),
   ),'field_delivery_note'=>array(
 '#title' => t('Delivery Note'),
 '#type' => 'textarea',
 '#description' => t('Enter any information here that would assist with the delivery process'),
 '#default_value' =>'',
+'#attributes' => array('class'=>array('delivery_note')),
 ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
                    $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f),
                    'field_authority_to_leave'=>array(
+                     '#title' => t('Authority to leave'),
       '#type' =>'checkbox', 
-  '#title' => t('Authority to leave'),
+         '#attributes' => array('class'=>array('authority_to_leave')),
   ),'field_customer_reference'=>array(
     '#type' => 'textfield',
     '#title' => t('Customer reference'),
@@ -130,6 +142,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
 '#type' => 'textarea',
 '#description' => t('Enter any information here that would assist with the delivery process'),
 '#default_value' =>'',
+ '#attributes' => array('class'=>array('delivery_note')),
 ));
             }
         }
@@ -288,7 +301,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
     foreach($parcel_info['parcels'] as $key=>$parcel){
         
         $newnode = new stdClass();
-       $newnode->uid=1;
+       $newnode->uid=$order->uid;
        $newnode->language='und';
        $newnode->title='order-'.$order_id.'-'.$parcel['parcelnum'];
        $newnode->type='live_parcel';

@@ -241,6 +241,15 @@ $schema['liveparcels_cart'] = array(
 function liveparcels_uninstall() {
     
     db_query("DROP TABLE `liveparcels_package`,`liveparcels_cart`,`liveparcels_order`, `liveparcels_zone_post`, `liveparcels_zone_price`;DELETE FROM `node` WHERE `nid`='". variable_get('liveparcels_product_id')."';DELETE FROM `uc_products` WHERE `nid`='". variable_get('liveparcels_product_id')."'; ");
+       db_delete('node')
+      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+    ->execute();
+       db_delete('node_revision')
+      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+    ->execute();
+       db_delete('uc_products')
+      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+    ->execute();
     db_delete('variable')
       ->condition('name', 'liveparcels%', 'LIKE')
     ->execute();
@@ -251,6 +260,7 @@ function liveparcels_uninstall() {
       ->condition('pcid', 'live_parcel_product', '=')
     ->execute();
 }
+
 /**
  * Implements hook_install().
  */
@@ -265,9 +275,7 @@ $nid=db_query("SELECT `nid` FROM `node` ORDER BY `nid` DESC LIMIT 1")->fetchFiel
 $nid=$nid > 0 ? $nid+1:1;
  variable_set('liveparcels_product_id',$nid);
 db_query("INSERT INTO `node` (`nid`, `vid`, `type`, `language`, `title`, `uid`, `status`, `created`, `changed`, `comment`, `promote`, `sticky`, `tnid`, `translate`) VALUES
-($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 0, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES
-($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 0, 1, 0);
-INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
+($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 2, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
 (".$nid.", ".$nid.", 'parcels', 0.00000, 0.00000, 0.00000, 0, 'lb', 0, 0, 0, 'in', 1, 1, 0, 1);");
 
 }

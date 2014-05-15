@@ -1,6 +1,6 @@
 
 .live-parcels-status h2{height: 30px;margin-bottom:15px;}
-.small-text{width:50px;padding:3px 5px;border: 1px solid #ccc;}
+.small-text{width:70px;padding:3px 5px;border: 1px solid #ccc;}
 .field{float:left;width:140px;text-align:center;}
 
 .parcels-list ul{
@@ -17,14 +17,12 @@ display:none;
  height:30px;line-height:30px;
 }
 
-#phead div{border-right:1px solid #ccc;border-bottom: 1px solid #ccc;
+#phead div, .package-line div{border-right:1px solid #ccc;border-bottom: 1px solid #ccc;
 display: inline-block;
 margin-right: -1px;
 }
 .package-line{
  height:30px;line-height:30px;
- padding:5px 0px;
-border-top: 1px solid #ccc;
 }
 .parcels-title{font-size:16px; font-size:16px; height:30px;line-height:30px;border-bottom:1px solid #ccc;}
 .pickup-search{margin:10px 0px;}

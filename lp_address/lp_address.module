@@ -76,6 +76,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_first_name')),
     '#default_value' =>'',
+    '#size'=>32,
     '#maxlength' => 100,
 
   ),'last_name'=>array(
@@ -83,6 +84,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_last_name')),
     '#default_value' =>'',
+    '#size'=>32,
     '#maxlength' => 100,
 
   ),'company'=>array(
@@ -90,17 +92,20 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#title' => t('Company'),
     '#attributes' => array('class'=>array($parcel_type.'_company')),
     '#default_value' =>'',
+    '#size'=>32,
     '#maxlength' => 100,
   ),'street1'=>array(
     '#type' => 'textfield',
     '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
     '#default_value' =>'',
     '#maxlength' => 100,
+    '#size'=>32,
     '#attributes' => array('class'=>array($parcel_type.'_street1')),
   ),'street2'=>array(
     '#type' => 'textfield',
     '#default_value' =>'',
     '#maxlength' => 100,
+    '#size'=>32,
 '#attributes' => array('class'=>array($parcel_type.'_street2')),
   ),'parcel_data'=>array('#markup'=>'<div class="parcel_data"><strong>City:</strong> '. $parcel_array['locality'].'&nbsp;&nbsp;&nbsp;<strong>State/Province:</strong> '. $pdata[1].' &nbsp;&nbsp;&nbsp;<strong>Country:</strong> '.$countryinfo['country_name'].' &nbsp;&nbsp;&nbsp;<strong>Postal code:</strong> '.$post_code.'</div>'),'city'=>array(
     '#type' => 'hidden',
@@ -139,7 +144,8 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#title' => t('Phone number'),
     '#attributes' => array('class'=>array($parcel_type.'_phone')),
     '#default_value' =>'',
-    '#maxlength' => 100,
+    '#size'=>'11',
+    '#maxlength' => 11,
 
   ),'address_name'=>array(
     '#type' => 'hidden',

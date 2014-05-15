@@ -66,16 +66,7 @@ if($parcels>0){
       </div>';
     }  
 }
-$items = menu_get_item('liveparcels/parcel_quote');
-$item = array(
-  'link_path'=>$items['path'],
-  'link_title'=>$items['title'],
-  'description'=>$items['description']
- );
-$count = db_query("SELECT count(*) FROM {menu_links} where menu_name = 'navigation' and link_path ='liveparcels/parcel_quote' ")->fetchField();
-if($count == 0){
-menu_link_save($item);
-}
+
 	$rows['package'] = array(array('data' => '<div class="page-main">
 	<div class="header-warning">
 	  '.variable_get('liveparcels_error_message').'
