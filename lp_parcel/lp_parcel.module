@@ -306,6 +306,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
        $newnode->title='order-'.$order_id.'-'.$parcel['parcelnum'];
        $newnode->type='live_parcel';
        $newnode->status=1;
+        $newnode->comment=2;
        node_save($newnode);
        
         $node = node_load($newnode->nid);
