@@ -3,7 +3,7 @@ function lp_discount_settings($form,$form_state) {
   $form['removed'] = array(
       '#title' => t(''),
       '#type' => 'item',
-      '#description' => '',
+      '#description' =>t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
       );
 
   $form['roles'] = array(

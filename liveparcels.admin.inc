@@ -517,13 +517,5 @@ function liveparcels_admin_message_form($form, &$form_state) {
       '#default_value' => variable_get('liveparcels_note_message'),
 
       );
-  $form['liveparcels_discount_message'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Discount Message'),
-      '#description' => t('This message will be shown at the bottom of the quote and book page.'),
-      '#default_value' => variable_get('liveparcels_discount_message'),
-
-      );
-
   return system_settings_form($form);
 }
