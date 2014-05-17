@@ -1,0 +1,40 @@
+
+#parcel_pickup-pane .form-item,#parcel_delivery-pane .form-item,.parcel_data {
+line-height:35px;
+width:580px;
+text-align:center;
+display: inline-block;
+}
+
+#parcel_pickup-pane .form-item label,#parcel_delivery-pane .form-item label{
+width:150px;
+text-align:right;
+float:left;
+}
+#parcel_pickup-pane .form-item input,#parcel_pickup-pane .form-item select,#parcel_delivery-pane .form-item input,#parcel_delivery-pane .form-item select, #parcel_pickup-pane  .form-textarea-wrapper,#parcel_delivery-pane  .form-textarea-wrapper{
+margin-left:15px;
+float:left;
+}
+.date-padding{
+margin-left:15px;
+float:left;
+width:400px;
+padding:0 !important;
+}
+#parcel_pickup-pane .form-item .pickup_street2,#parcel_delivery-pane .form-item .delivery_street2{
+margin-left:165px;
+}
+.date-padding .form-item{
+width:250px !important;
+}
+.date-padding .form-item label{display:none}
+.pick_up_time_ampm{
+margin-left: 350px !important;
+margin-top: -80px;
+}
+.authority_to_leave{margin-left:165px !important;  margin-top:10px;margin-right: -40px;}
+#parcel_pickup-pane .form-textarea-wrapper ,#parcel_delivery-pane .form-textarea-wrapper{
+width:300px !important;
+} 
+ .description{clear:both}
+
