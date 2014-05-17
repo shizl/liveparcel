@@ -54,7 +54,7 @@ jQuery(".parcel_select_address").change(function(){
         });
          jQuery("."+pickup+"_phone").each(function(){
              var phone=jQuery(this).val();
-             if(phone!='' && (phone.length != 11 ||  !/^[0-9]*$/.test(phone)) ){
+             if(phone!='' &&  !/^[0-9]*$/.test(phone) ){
                 jQuery(this).css('border','1px solid red');
                     a=false;
               }
@@ -86,7 +86,7 @@ jQuery(".parcel_select_address").change(function(){
         });
          jQuery("."+delivery+"_phone").each(function(){
              var phone=jQuery(this).val();
-                 if(phone!='' && (phone.length != 11 ||  !/^[0-9]*$/.test(phone)) ){
+                 if(phone!='' && !/^[0-9]*$/.test(phone) ){
                     jQuery(this).css('border','1px solid red');
                     a=false;
               }
