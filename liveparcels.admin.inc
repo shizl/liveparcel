@@ -4,7 +4,21 @@
  * @file
  * Store administration menu items.
  */
+/**
+ * Menu callback which provides the store administration overview page.
+ */
+function liveparcels_custom_message_form($form, &$form_state) {
 
+  $form['liveparcels_info_message'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Welcome message'),
+      '#description' => t('This message will be shown just below the heading of the quote and book page.'),
+      '#default_value' => variable_get('liveparcels_info_message'),
+
+      );
+  
+  return system_settings_form($form);
+}
 /**
  * Menu callback which provides the store administration overview page.
  */
@@ -494,6 +508,7 @@ $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Pri
 
   return $build;
 }
+
 function liveparcels_admin_message_form($form, &$form_state) {
 
   $form['liveparcels_info_message'] = array(

@@ -437,7 +437,8 @@ if($parcels>0){
                             }
                                 var parcelsjson=eval("(" +"{\\"parcels\\":["+ ajaxrequest +"]}"+ ")");
                                   for (k in zone.pprice){
-                                      parcelsjson.parcels[k].price=zone.pprice[k];
+                                      parcelsjson.parcels[k].price=zone.pprice[k][\'pprice\'];
+                                      parcelsjson.parcels[k].package_name=zone.pprice[k][\'package_name\'];
                                     }
                                     parcelsjson.ptype= ptype;
                                     parcelsjson.totals= zone.totals;
@@ -620,32 +621,31 @@ if($parcels>0){
 function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 
 	$weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
-	$items=0;
+	$items=array('pprice'=>0,'package_name'=>'');
 	if($max>0 && $dimenstext>0 && $weighttext>0){ 
-		
 		$arr = db_query("SELECT `weight`,`plength` FROM 
 		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
 		if($arr['weight'] < $weight || $arr['plength'] < $max){
-		     $items=0;
-                }else{
-                                        
-                    $pprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+		     $items=array('pprice'=>0,'package_name'=>'');
+        }else{
+                $pprice = db_query("SELECT `pprice`,`package_name` FROM `{liveparcels_package}` 
                    WHERE `plength`>=". $max ." ORDER BY `pprice` ASC  LIMIT 1")
-                   ->fetchField();
-        $lprice = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
+                   ->fetchAssoc();
+        $lprice = db_query("SELECT `pprice`,`package_name` FROM `{liveparcels_package}` 
                    WHERE `weight`>=". $weight ." 
                    ORDER BY `pprice` ASC  LIMIT 1")
-                   ->fetchField();
-        $nowprice=$lprice >$pprice ? $lprice:$pprice;
-                    if($nowprice>0){
+                   ->fetchAssoc();
+                    $nowprice=$lprice['pprice'] >$pprice['pprice'] ? $lprice:$pprice;
+                    if($nowprice['pprice']>0){
                       $items= $nowprice;
                     }else{
-                    $items = db_query("SELECT `pprice` FROM `{liveparcels_package}` 
-                    ORDER BY `pprice` ASC LIMIT 1 ")->fetchField();
+                    $items = db_query("SELECT `pprice`,`package_name` FROM `{liveparcels_package}` 
+                    ORDER BY `pprice` ASC LIMIT 1 ")->fetchAssoc();
                     }
               }
       }
-		return $items;
+     
+		return  array("pprice"=>$items['pprice'],"package_name"=>$items['package_name']);
 }  
 
 function liveparcels_getZoneprice() {
@@ -660,7 +660,7 @@ function liveparcels_getZoneprice() {
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
             
-            if($pprice>0){
+            if($pprice['pprice']>0){
                 $pfrom=explode('_',$pdata['postfrom']);
                  $pto=explode('_',$pdata['postto']);
                 $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
@@ -668,7 +668,7 @@ function liveparcels_getZoneprice() {
 		`zone_to_number`='".$pto[0]."'")->fetchField();	
         
                 if($pzon>0){
-                    $pzone=$pzon*$pprice; 
+                    $pzone=$pzon*$pprice['pprice']; 
                 }else{
                     $pzone=0;
                 }
@@ -676,7 +676,7 @@ function liveparcels_getZoneprice() {
             }else{
                   $pzone=0;  
             }
-            $parcels_price[]=variable_get('uc_currency_sign','$').$pzone;
+            $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').$pzone,"package_name"=>$pprice['package_name']);
             $totals+=$pzone;
             if($pzone=='0'){
             $error=1;    

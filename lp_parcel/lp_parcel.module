@@ -8,7 +8,35 @@
  * settings pages for use in store administration.
  */
 
+/**
+ * Implements hook_menu().
+ */
+function lp_parcel_menu(){
+    $items=array();
+    $items['node/%node/order_view'] = array(
+    'title' => 'View Order',
+    'menu_name'=>'liveparcels_view_order',
+    'description' => ' View Order.',
+    'page callback' => array('lp_parcel_order_view'),
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+  );
+  return $items;
+}
 
+function lp_parcel_order_view($node){
+ 
+  $order_id=isset($node->field_parcel_order_id[$node->language][0]['value']) && $node->field_parcel_order_id[$node->language][0]['value'] > 0 ? $node->field_parcel_order_id[$node->language][0]['value']:0;
+  if($order_id>0 ){
+    header("Location: /user/".$node->uid."/orders/".$order_id);
+    exit;
+    }else{
+        drupal_set_message('This node is not a live parcel. so it no order id', 'error');
+       header("Location: ".$_SERVER["HTTP_HOST"]."/node/".$node->nid);  
+    }
+}
 /**
  * Implements hook_uc_checkout_pane().
  create liveparcels extra pane 
@@ -211,18 +239,7 @@ function lp_parcel_update_parcel_address($address,$uid){
         return 0;    
         }
 }
-/*
- * get_parcel_address_update()
- * parcels info,parcels type
- *
-function lp_parcel_get_parcel_address_update($address_id,$address){
-        if(module_exists('lp_address')){
-            return  lp_address_address_update($address_id,$address);
-        }else{
-        return array();    
-        }
-        
-} */
+
 /*
  * lp_parcel_table theme
  * */
@@ -312,6 +329,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $node = node_load($newnode->nid);
 
        $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
+       $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'];
         $node->field_parcel_weight[$node->language][0]['value'] =$parcel['weighttext'];
         $node->field_parcel_price[$node->language][0]['value'] =str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
         $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
@@ -326,14 +344,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
               
                 $field_pickup_first_name=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['first_name'];
                 $field_pickup_last_name=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['last_name'];
-                $field_pickup_company=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['company'];
-                $field_pickup_phone=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['phone'];
                 
                 $field_delivery_first_name=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['first_name'];
                 $field_delivery_last_name=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['last_name'];
-                $field_delivery_company=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['company'];
-             
-                $field_delivery_phone=$extra_info['deliverydata'][0]['field_parcel_delivery_address']['address']['phone'];
                 
               $field_pick_up_time=$extra_info['pickupdata'][$key]['field_pick_up_time'];
               $field_pick_up_time_ampm=$extra_info['pickupdata'][$key]['field_pick_up_time_ampm'];
@@ -356,13 +369,10 @@ function lp_parcel_uc_checkout_complete($order, $account) {
               
                 $field_pickup_first_name=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['first_name'];
                 $field_pickup_last_name=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['last_name'];
-                $field_pickup_company=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['company'];
-                $field_pickup_phone=$extra_info['pickupdata'][0]['field_parcel_pickup_address']['address']['phone'];
+
                 
                 $field_delivery_first_name=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['first_name'];
                 $field_delivery_last_name=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['last_name'];
-                $field_delivery_company=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['company'];
-                $field_delivery_phone=$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['phone'];
                 
                 $field_pick_up_time=$extra_info['pickupdata'][0]['field_pick_up_time'];
                 $field_pick_up_time_ampm=$extra_info['pickupdata'][0]['field_pick_up_time_ampm'];
@@ -378,14 +388,11 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         
         $node->field_pickup_first_name[$node->language][0]['value'] =$field_pickup_first_name;
         $node->field_pickup_last_name[$node->language][0]['value'] =$field_pickup_last_name;
-        $node->field_pickup_company[$node->language][0]['value'] =$field_pickup_company;
-    
-        $node->field_pickup_phone[$node->language][0]['value'] =$field_pickup_phone;
+
         
         $node->field_delivery_first_name[$node->language][0]['value'] =$field_delivery_first_name;
         $node->field_delivery_last_name[$node->language][0]['value'] =$field_delivery_last_name;
-        $node->field_delivery_company[$node->language][0]['value'] =$field_delivery_company;
-        $node->field_delivery_phone[$node->language][0]['value'] =$field_delivery_phone;
+
         
         $node->field_pick_up_time[$node->language][0]['value'] =$field_pick_up_time;
         $node->field_pick_up_time_ampm[$node->language][0]['value'] =$field_pick_up_time_ampm;

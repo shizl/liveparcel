@@ -24,21 +24,45 @@ function liveparcels_menu() {
     'weight' => -13,
     'file' => 'liveparcels.admin.inc',
   );
-  $items['admin/liveparcels/settings'] = array(
+       $items['admin/liveparcels/adminsetting'] = array(
+    'title' => 'Admin Setting',
+    'description' => 'Adjust configuration settings for liveparcels.',
+    'page callback' => 'liveparcels_configuration_page',
+    'access arguments' => array('administer liveparcel'),
+      'weight' => 1,
+    'position' => 'right',
+  );
+    $items['admin/liveparcels/configuration'] = array(
+    'title' => 'Configuration',
+    'description' => 'Adjust add  menu for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 2,
+    'position' => 'right',
+  );
+   
+  $items['admin/liveparcels/configuration/settings'] = array(
+    'title' => 'Custom setting',
+    'description' => 'Custom setting',
+    'page callback' => 'drupal_get_form',
+    'page arguments'=>array('liveparcels_custom_message_form'),
+    'access arguments' => array('administer liveparcel'),
+    'file' => 'liveparcels.admin.inc',
+  );
+    $items['admin/liveparcels/adminsetting/settings'] = array(
     'title' => 'Pricing and postcode',
     'description' => 'Configure pricing and postcode. View price table.',
     'page callback' => 'liveparcels_admin_settings',
-    'access arguments' => array('administer actions'),
-    'weight' => -13,
+    'access arguments' => array('administer liveparcel'),
+ 
     'file' => 'liveparcels.admin.inc',
   );
-  $items['admin/liveparcels/message'] = array(
+  $items['admin/liveparcels/adminsetting/message'] = array(
     'title' => 'Quote and book messages',
     'description' => 'Customize the messages to show at the quote and book page.',
     'page callback' => 'drupal_get_form',
     'page arguments'=>array('liveparcels_admin_message_form'),
-    'access arguments' => array('administer actions'),
-    'weight' => -13,
+    'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
   );
   
@@ -152,7 +176,35 @@ function liveparcels_menu() {
         'weight'=>0,
         );
     }
+
   return $items;
+}
+/**
+ * Displays liveparcel configuration page.
+ */
+function liveparcels_configuration_page() {
+ $menu = menu_get_item('admin/liveparcels/adminsetting');
+  $content = system_admin_menu_block($menu);
+  $build['menu'] = array(
+    '#theme' => 'admin_block_content',
+    '#content' => $content,
+  );
+
+  return $build;
+}
+/**
+ * Displays liveparcel configuration page.
+ */
+function liveparcels_menu_page() {
+ $menu = menu_get_item('admin/liveparcels/configuration');
+  $content = system_admin_menu_block($menu);
+
+  $build['menu'] = array(
+    '#theme' => 'admin_block_content',
+    '#content' => $content,
+  );
+
+  return $build;
 }
 /**
  * Implements hook_permission().
@@ -161,7 +213,13 @@ function liveparcels_permission() {
     return array(
     'View parcel price' => array(
       'title' => t('View parcel price'),
-    ));
+    ),
+     'administer liveparcel' => array(
+      'title' => t('Administer liveparcel'),
+      'restrict access' => TRUE,
+    ),
+    );
+    
     
 }
 function liveparcels_live_parcel_price_set(){
