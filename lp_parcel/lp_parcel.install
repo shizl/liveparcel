@@ -40,9 +40,11 @@ function lp_parcel_requirements($phase) {
    field_delete_field('field_parcel_order_id'); 
    field_delete_field('field_parcel_price');    
    field_delete_field('field_parcel_size');    
-   field_delete_field('field_parcel_weight');    
+    field_delete_field('field_parcel_package_name');   
+   field_delete_field('field_parcel_weight');  
+
    field_delete_field('field_customer_reference');  
-     
+   
    field_delete_field('field_cash_to_collect');    
    field_delete_field('field_delivery_note');  
     field_delete_field('field_pickup_note');     
@@ -51,17 +53,19 @@ function lp_parcel_requirements($phase) {
     field_delete_field('field_pickup_location');    
     field_delete_field('field_pickup_first_name');    
     field_delete_field('field_pickup_last_name');    
-    field_delete_field('field_pickup_company');    
     field_delete_field('field_pickup_street');    
-    field_delete_field('field_pickup_street2');    
+    field_delete_field('field_pickup_street2');   
     field_delete_field('field_pickup_phone');  
+    field_delete_field('field_pickup_company');   
+    field_delete_field('field_delivery_phone');   
+    field_delete_field('field_delivery_company');      
     field_delete_field('field_delivery_location'); 
     field_delete_field('field_delivery_first_name'); 
     field_delete_field('field_delivery_last_name'); 
-    field_delete_field('field_delivery_company'); 
+
     field_delete_field('field_delivery_street'); 
     field_delete_field('field_delivery_street2'); 
-    field_delete_field('field_delivery_phone');  
+
     field_purge_batch(100);  
 }
 /**
@@ -74,6 +78,7 @@ function lp_parcel_requirements($phase) {
     liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
      liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_float','widget'=>"number","setting"=>array()));
      liveparcels_create_field('Parcel Size','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     liveparcels_create_field('Parcel package name','field_parcel_package_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
      liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
     liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
      liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'number_float','widget'=>"number","setting"=>array()));
@@ -145,6 +150,16 @@ function lp_parcel_requirements($phase) {
                                            'collect' => 1,
                                             'weight' => 20,
                                         ),
+                                        'phone' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
+                                        'company' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
                                 ),
                         ),
 
@@ -164,14 +179,16 @@ function lp_parcel_requirements($phase) {
                                     'country_name'=> 0,
                                     'map_link' => 0,
                                     'coords' => 0,
+                                    'phone' => 0,
+                                    'company' => 0,
                                 )
                         )
                     )
                 )));
      liveparcels_create_field('Pickup First name','field_pickup_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
      liveparcels_create_field('Pickup Last name','field_pickup_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
-     liveparcels_create_field('Pickup Company','field_pickup_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
-        liveparcels_create_field('Pickup Phone','field_pickup_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>20,'text_processing'=>0)));
+     //liveparcels_create_field('Pickup Company','field_pickup_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+        //liveparcels_create_field('Pickup Phone','field_pickup_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>20,'text_processing'=>0)));
     liveparcels_create_field('Delivery Location','field_delivery_location',array('type'=>'location','widget'=>"location","setting"=>array('location_settings'=> Array
                 (
                     'form' => Array
@@ -233,6 +250,16 @@ function lp_parcel_requirements($phase) {
                                            'collect' => 1,
                                             'weight' => 20,
                                         ),
+                                    'phone' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
+                                    'company' => Array
+                                        (
+                                           'collect' => 1,
+                                            'weight' => 20,
+                                        ),
                                 ),
                         ),
 
@@ -252,13 +279,15 @@ function lp_parcel_requirements($phase) {
                                     'country_name'=> 0,
                                     'map_link' => 0,
                                     'coords' => 0,
+                                    'phone' => 0,
+                                    'company' => 0,
                                 )
                         )
                     )
                 )));
      liveparcels_create_field('Delivery First name','field_delivery_first_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
      liveparcels_create_field('Delivery Last name','field_delivery_last_name',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
-     liveparcels_create_field('Delivery Company','field_delivery_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
-    liveparcels_create_field('Delivery Phone','field_delivery_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+     //liveparcels_create_field('Delivery Company','field_delivery_company',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
+   // liveparcels_create_field('Delivery Phone','field_delivery_phone',array('type'=>'text','widget'=>"text_textfield","setting"=>array('max_length'=>100,'text_processing'=>0)));
 }
 

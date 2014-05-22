@@ -4,7 +4,21 @@
  * @file
  * Store administration menu items.
  */
+/**
+ * Menu callback which provides the store administration overview page.
+ */
+function liveparcels_custom_message_form($form, &$form_state) {
 
+  $form['liveparcels_info_message'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Welcome message'),
+      '#description' => t('This message will be shown just below the heading of the quote and book page.'),
+      '#default_value' => variable_get('liveparcels_info_message'),
+
+      );
+  
+  return system_settings_form($form);
+}
 /**
  * Menu callback which provides the store administration overview page.
  */
@@ -344,7 +358,7 @@ if(module_exists('lp_discount')){
       $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$'). $user_price.'</td>':'<td>Undefined</td>';
     }
     $s++;
-    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'even':'odd').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
+    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
   }
 
 }else{
@@ -359,7 +373,7 @@ if(module_exists('lp_discount')){
       $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$').$pprice*floatval($row->multiplier).'</td>':'<td>Undefined</td>';
     }
     $s++;
-    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'even':'odd').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
+    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
   }
 }
   
@@ -373,7 +387,7 @@ if(module_exists('lp_discount')){
       $packdata.=$row->multiplier > 0 ? '<td>'.variable_get('uc_currency_sign','$').$pprice*floatval($row->multiplier).'</td>':'<td>Undefined</td>';
     }
     $s++;
-    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'even':'odd').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
+    $trs .= '<tr class="draggable '.($s%2 ==0 ? 'old':'even').'"><td>'. $row->zone_to_number.'</td><td>'.$row->zone_to.'</td><td>'.$row->zone_to_region.'</td>'.$packdata.'</tr>';
   }
 
 }
@@ -489,12 +503,12 @@ $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Pri
       '#rows' => $rows,
       '#attributes' => array('class' => array('live-parcels-status')),
       );
-   
   drupal_add_js(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.js');
   drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 
   return $build;
 }
+
 function liveparcels_admin_message_form($form, &$form_state) {
 
   $form['liveparcels_info_message'] = array(

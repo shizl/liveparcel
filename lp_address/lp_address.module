@@ -4,13 +4,13 @@
  */
 function lp_address_menu() {
   $items = array();
- $items['admin/liveparcels/lp_address_country_setting'] = array(
+ $items['admin/liveparcels/adminsetting/lp_address_country_setting'] = array(
     'title' => 'Parcels Country code setting',
     'description' => 'Customize the Parcels Country code setting.',
     'page callback' => 'drupal_get_form',
     'page arguments'=>array('lp_address_country_setting_form'),
     'access arguments' => array('administer actions'),
-    'weight' => -13,
+
    'file' => 'lp_address.inc',
   );
   $items['liveparcels/lp_address_update_render/ajax'] = array(
@@ -223,6 +223,9 @@ function lp_address_location_update($address){
           'source'=>'0',
           'is_primary'=>'0',
         ))->execute();
+        $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone'],"company"=>$address['address']['phone']);
+        location_company_locationapi($location_extra,'save');
+        location_phone_locationapi($location_extra,'save');
       return $lid;
       
 }

@@ -1,11 +1,10 @@
 <?php
 function lp_discount_menu(){
-  $items['admin/liveparcels/discounts'] = array(
+  $items['admin/liveparcels/adminsetting/discounts'] = array(
       'title' => t('Discount settings'), 
       'page callback' => 'drupal_get_form',
       'page arguments' => array('lp_discount_settings'),
       'access arguments' => array('administer actions'),
-      'type' => MENU_NORMAL_ITEM,
       'file' => 'lp_discount.admin.inc',
       );
   return $items;

@@ -2,20 +2,7 @@
 .live-parcels-status h2{height: 30px;margin-bottom:15px;}
 .small-text{width:70px;padding:3px 5px;border: 1px solid #ccc;}
 .field{float:left;width:140px;text-align:center;}
-.live-parcels-status tr.odd{
-background:#fff !important;
-}
-.live-parcels-status tr.even{
-background:#fff !important;
-}
-.pickup-result tr.even{
-background: #efefef!important; 
-background: rgba(0, 0, 0, 0.063) !important;   
-}
-.pickup-result tr.odd{
-background: #e4e4e4 !important; 
-background: rgba(0, 0, 0, 0.105) !important; 
-}
+
 .parcels-list ul{
 margin:10px 0px !important;
 padding:0 !important;
