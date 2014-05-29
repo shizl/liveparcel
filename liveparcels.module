@@ -13,10 +13,10 @@
  * Implements hook_menu().
  */
 function liveparcels_menu() {
-    global $user;
+  global $user;
   $items = array();
 
-    $items['admin/liveparcels'] = array(
+  $items['admin/liveparcels'] = array(
     'title' => 'Live Parcels',
     'description' => 'Administer Live Parcels .',
     'page callback' => 'liveparcels_configpage',
@@ -24,15 +24,15 @@ function liveparcels_menu() {
     'weight' => -13,
     'file' => 'liveparcels.admin.inc',
   );
-       $items['admin/liveparcels/adminsetting'] = array(
+  $items['admin/liveparcels/adminsetting'] = array(
     'title' => 'Admin Setting',
     'description' => 'Adjust configuration settings for liveparcels.',
     'page callback' => 'liveparcels_configuration_page',
     'access arguments' => array('administer liveparcel'),
-      'weight' => 1,
+    'weight' => 1,
     'position' => 'right',
   );
-    $items['admin/liveparcels/configuration'] = array(
+  $items['admin/liveparcels/configuration'] = array(
     'title' => 'Configuration',
     'description' => 'Adjust add  menu for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
@@ -40,7 +40,7 @@ function liveparcels_menu() {
     'weight' => 2,
     'position' => 'right',
   );
-   
+
   $items['admin/liveparcels/configuration/settings'] = array(
     'title' => 'Custom setting',
     'description' => 'Custom setting',
@@ -49,12 +49,12 @@ function liveparcels_menu() {
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/adminsetting/settings'] = array(
+  $items['admin/liveparcels/adminsetting/settings'] = array(
     'title' => 'Pricing and postcode',
     'description' => 'Configure pricing and postcode. View price table.',
     'page callback' => 'liveparcels_admin_settings',
     'access arguments' => array('administer liveparcel'),
- 
+
     'file' => 'liveparcels.admin.inc',
   );
   $items['admin/liveparcels/adminsetting/message'] = array(
@@ -65,7 +65,7 @@ function liveparcels_menu() {
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
   );
-  
+
   $items['admin/liveparcels/settings/updatefactor/ajax'] = array(
     'title' => 'Update factor',
     'description' => 'Update factor.',
@@ -75,7 +75,7 @@ function liveparcels_menu() {
     'type'=>MENU_CALLBACK,
   );
 
-  
+
   $items['admin/liveparcels/settings/managepackage/ajax'] = array(
     'title' => 'manage package  ',
     'description' => 'manage package.',
@@ -92,7 +92,7 @@ function liveparcels_menu() {
     'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/settings/zoneresult/ajax'] = array(
+  $items['admin/liveparcels/settings/zoneresult/ajax'] = array(
     'title' => 'manage zoneresult  ',
     'description' => 'manage zoneresult.',
     'page callback' => 'liveparcels_zoneresult',
@@ -100,7 +100,7 @@ function liveparcels_menu() {
     'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
-    $items['admin/liveparcels/settings/updatezone/ajax'] = array(
+  $items['admin/liveparcels/settings/updatezone/ajax'] = array(
     'title' => ' updatezone  ',
     'description' => ' updatezone.',
     'page callback' => 'liveparcels_updatezone',
@@ -108,7 +108,7 @@ function liveparcels_menu() {
     'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
-     $items['liveparcels/parcel_quote'] = array(
+  $items['liveparcels/parcel_quote'] = array(
     'title' => 'Quote and book',
     'description' => 'Obtain quotation and book delivery/pickup',
     'page callback' => 'liveparcels_packageshow',
@@ -118,14 +118,14 @@ function liveparcels_menu() {
     'weight'=>2,
   );
   $items['parcel_quote'] = array(
-        'title' => 'Quote and book ',
-        'description' => 'Obtain quotation and book delivery/pickup.',
-        'page callback' => array('liveparcels_parcel_quote_set'),
-         'access callback'=>true,
-        'menu_name'=>'navigation',
-        'weight'=>1,
-        );
-      $items['liveparcels/parcels_addtocart'] = array(
+    'title' => 'Quote and book ',
+    'description' => 'Obtain quotation and book delivery/pickup.',
+    'page callback' => array('liveparcels_parcel_quote_set'),
+    'access callback'=>true,
+    'menu_name'=>'navigation',
+    'weight'=>1,
+  );
+  $items['liveparcels/parcels_addtocart'] = array(
     'title' => 'Parcels add to cart',
     'description' => 'Parcels add to cart',
     'page callback' => 'liveparcels_addToCart',
@@ -134,7 +134,7 @@ function liveparcels_menu() {
     'menu_name'=>'liveparcels',
     'weight'=>2,
   );
-     $items['admin/liveparcels/getpackageprice/ajax'] = array(
+  $items['admin/liveparcels/getpackageprice/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getPackageprice',
@@ -142,7 +142,7 @@ function liveparcels_menu() {
     'file' => 'liveparcels.inc',
     'type'=>MENU_CALLBACK,
   );
-     $items['admin/liveparcels/getzoneprice/ajax'] = array(
+  $items['admin/liveparcels/getzoneprice/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getZoneprice',
@@ -150,7 +150,7 @@ function liveparcels_menu() {
     'file' => 'liveparcels.inc',
     'type'=>MENU_CALLBACK,
   );
-     $items['admin/liveparcels/getzonelistdata/ajax'] = array(
+  $items['admin/liveparcels/getzonelistdata/ajax'] = array(
     'title' => ' package show  ',
     'description' => ' package show.',
     'page callback' => 'liveparcels_getZonelistData',
@@ -158,24 +158,24 @@ function liveparcels_menu() {
     'file' => 'liveparcels.inc',
     'type'=>MENU_CALLBACK,
   );
-    $items['user/%user/live_parcel_price'] = array(
+  $items['user/%user/live_parcel_price'] = array(
     'title' => 'Price list',
     'description' => ' package show.',
     'page callback' => array('liveparcels_live_parcel_price'),
-     'access callback'=>user_access('view parcel price'),
+    'access callback'=>user_access('view parcel price'),
     'file' => 'liveparcels.admin.inc',
     'type'=>MENU_LOCAL_TASK,
   );
-    if($user->uid > 0){
-        $items['live_parcel_price'] = array(
-        'title' => 'User price list ',
-        'description' => 'User price list .',
-        'page callback' => array('liveparcels_live_parcel_price_set'),
-         'access callback'=>user_access('View parcel price'),
-        'menu_name'=>'user-menu',
-        'weight'=>0,
-        );
-    }
+  if($user->uid > 0){
+    $items['live_parcel_price'] = array(
+      'title' => 'User price list ',
+      'description' => 'User price list .',
+      'page callback' => array('liveparcels_live_parcel_price_set'),
+      'access callback'=>user_access('View parcel price'),
+      'menu_name'=>'user-menu',
+      'weight'=>0,
+    );
+  }
 
   return $items;
 }
@@ -183,7 +183,7 @@ function liveparcels_menu() {
  * Displays liveparcel configuration page.
  */
 function liveparcels_configuration_page() {
- $menu = menu_get_item('admin/liveparcels/adminsetting');
+  $menu = menu_get_item('admin/liveparcels/adminsetting');
   $content = system_admin_menu_block($menu);
   $build['menu'] = array(
     '#theme' => 'admin_block_content',
@@ -196,7 +196,7 @@ function liveparcels_configuration_page() {
  * Displays liveparcel configuration page.
  */
 function liveparcels_menu_page() {
- $menu = menu_get_item('admin/liveparcels/configuration');
+  $menu = menu_get_item('admin/liveparcels/configuration');
   $content = system_admin_menu_block($menu);
 
   $build['menu'] = array(
@@ -210,114 +210,114 @@ function liveparcels_menu_page() {
  * Implements hook_permission().
  */
 function liveparcels_permission() {
-    return array(
+  return array(
     'View parcel price' => array(
       'title' => t('View parcel price'),
     ),
-     'administer liveparcel' => array(
+    'administer liveparcel' => array(
       'title' => t('Administer liveparcel'),
       'restrict access' => TRUE,
     ),
-    );
-    
-    
+  );
+
+
 }
 function liveparcels_live_parcel_price_set(){
-        global $user;
-    if($user->uid>0){
-            header("location:/user/".$user->uid."/live_parcel_price");
-    }else{
-         header("location:/user");
-    }  
+  global $user;
+  if($user->uid>0){
+    header("location:/user/".$user->uid."/live_parcel_price");
+  }else{
+    header("location:/user");
+  }  
 }
 function liveparcels_parcel_quote_set(){
-            header("location:/liveparcels/parcel_quote");
+  header("location:/liveparcels/parcel_quote");
 }
 /*get zonelistdata*/
 function liveparcels_getZonelistData($key='',$action='json') {
-	$postlist =array();
-  
-	$result= db_query("SELECT `pcode`,`state`,`locality`,`zone_number` 
-	FROM `{liveparcels_zone_post}` ");
-      if($action=='string' && $key!=''){
-            $str='';
-            $zarray=explode('_',$key);   
-            foreach($result as $row){
-                if( $zarray[0]==$row->zone_number && $zarray[1]==$row->state && $zarray[2]==$row->pcode ){
-                       $str = $row->locality.' '.$row->pcode;
-                       break;
-                }
-            }
-            return $str;
-    }else{
-            foreach($result as $row){
-                $postlist[] = array(
-                  'pcode' => $row->pcode,
-                  'locality' => $row->locality,	
-                   'state' => $row->state,	
-                  'pnum'=>$row->zone_number		  
-                );
-            }
-            return json_encode($postlist);
-    }	
+  $postlist =array();
+
+  $result= db_query("SELECT `pcode`,`state`,`locality`,`zone_number` 
+    FROM `{liveparcels_zone_post}` ");
+  if($action=='string' && $key!=''){
+    $str='';
+    $zarray=explode('_',$key);   
+    foreach($result as $row){
+      if( $zarray[0]==$row->zone_number && $zarray[1]==$row->state && $zarray[2]==$row->pcode ){
+        $str = $row->locality.' '.$row->pcode;
+        break;
+      }
+    }
+    return $str;
+  }else{
+    foreach($result as $row){
+      $postlist[] = array(
+        'pcode' => $row->pcode,
+        'locality' => $row->locality,	
+        'state' => $row->state,	
+        'pnum'=>$row->zone_number		  
+      );
+    }
+    return json_encode($postlist);
+  }	
 }
 /* create liveparcels pane */
 function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_state = NULL){
-        $parcels=liveparcels_getparcelsdata();
-     if($parcels){
-      switch ($op) {
-        case 'view':
-     
-  
-            $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
-            if($check_order>0){
-                db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
-            }else{
-                db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
-            }
-            $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
-              if($lid_tax){
-                  uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
-              }else{
-                uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
-              }
-              if(module_exists('lp_discount')){
-                 $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
-                  if($discount){
-                      uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
-                  }else{
-                    uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
-                  }
-            }
+  $parcels=liveparcels_getparcelsdata();
+  if($parcels){
+    switch ($op) {
+    case 'view':
 
-      
-          $contents['liveparcels_review_table'] = array(
-            '#theme' => 'liveparcels_review_table',
-            '#items' => $parcels,
-            '#weight' => variable_get('uc_pane_cart_field_cart_weight', 2),
-          );
 
-          return array('contents' => $contents, 'next-button' => FALSE);
-     
-        case 'review':
-          $review[] = theme('liveparcels_review_table', array('items' => $parcels, 'show_subtotal' => FALSE));
-          return $review;
+      $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
+      if($check_order>0){
+        db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
+      }else{
+        db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
       }
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      if($lid_tax){
+        uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
+      }else{
+        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+      }
+      if(module_exists('lp_discount')){
+        $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        if($discount){
+          uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
+        }else{
+          uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
+        }
+      }
+
+
+      $contents['liveparcels_review_table'] = array(
+        '#theme' => 'liveparcels_review_table',
+        '#items' => $parcels,
+        '#weight' => variable_get('uc_pane_cart_field_cart_weight', 2),
+      );
+
+      return array('contents' => $contents, 'next-button' => FALSE);
+
+    case 'review':
+      $review[] = theme('liveparcels_review_table', array('items' => $parcels, 'show_subtotal' => FALSE));
+      return $review;
     }
+  }
 }
 /*get parcels data*/
 function liveparcels_getparcelsdata(){
-    $cart_id=uc_cart_get_id();
-    $pid=db_query("SELECT COUNT(`nid`) AS cid,`nid` FROM `uc_cart_products` WHERE `cart_id`='$cart_id'")->fetchAssoc();
-    if($pid['cid']==1 && $pid['nid']==variable_get('liveparcels_product_id')){
-        $pdata=db_query("SELECT `parcel_info` FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'")->fetchField();
-        $pdata=!empty($pdata) ? unserialize($pdata):0;
-    }else{
-        db_query("DELETE FROM `uc_cart_products` WHERE `nid`='".variable_get('liveparcels_product_id')."' AND `cart_id`='$cart_id'");
-        db_query("DELETE FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'");
-        $pdata=0;
-    }
-    return  $pdata;
+  $cart_id=uc_cart_get_id();
+  $pid=db_query("SELECT COUNT(`nid`) AS cid,`nid` FROM `uc_cart_products` WHERE `cart_id`='$cart_id'")->fetchAssoc();
+  if($pid['cid']==1 && $pid['nid']==variable_get('liveparcels_product_id')){
+    $pdata=db_query("SELECT `parcel_info` FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'")->fetchField();
+    $pdata=!empty($pdata) ? unserialize($pdata):0;
+  }else{
+    db_query("DELETE FROM `uc_cart_products` WHERE `nid`='".variable_get('liveparcels_product_id')."' AND `cart_id`='$cart_id'");
+    db_query("DELETE FROM `liveparcels_cart` WHERE `cart_id`='$cart_id'");
+    $pdata=0;
+  }
+  return  $pdata;
 }
 
 function theme_liveparcels_review_table($variables) {
@@ -331,147 +331,147 @@ function theme_liveparcels_review_table($variables) {
   );
 
   // Set up table rows.
-    foreach ($parcels['parcels'] as $parcel ) {
-      $rows[] = array(
-        array('data' => $parcel['parcelnum'], 'class' => array('products')),
-        array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
-        array('data' => $parcel['weighttext'].' kg','class' => array('price')),
-        array('data' =>  $parcel['price'],'class' => array('price')),
-      );
-    }
+  foreach ($parcels['parcels'] as $parcel ) {
+    $rows[] = array(
+      array('data' => $parcel['parcelnum'], 'class' => array('products')),
+      array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
+      array('data' => $parcel['weighttext'].' kg','class' => array('price')),
+      array('data' =>  $parcel['price'],'class' => array('price')),
+    );
+  }
 
   // Add the subtotal as the final row.
-    $rows[] = array(
-      'data' => array(
-        // One cell
-        array(
-          'data' => array(
-            '#theme' => 'uc_price',
-            '#prefix' => '<span id="subtotal-title">' . t('Parcels price:') . '</span> ',
-            '#price' => $parcels['totals'],
-          ),
-          // Cell attributes
-          'colspan' => 4,
-          'class' => array('subtotal'),
+  $rows[] = array(
+    'data' => array(
+      // One cell
+      array(
+        'data' => array(
+          '#theme' => 'uc_price',
+          '#prefix' => '<span id="subtotal-title">' . t('Parcels price:') . '</span> ',
+          '#price' => $parcels['totals'],
         ),
+        // Cell attributes
+        'colspan' => 4,
+        'class' => array('subtotal'),
       ),
-      // Row attributes
-      'class' => array('subtotal'),
-    );
+    ),
+    // Row attributes
+    'class' => array('subtotal'),
+  );
   return theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('class' => array('cart-review'))));
 }
 /**
  * Implements hook_uc_checkout_pane().
  */
 function liveparcels_uc_checkout_pane() {
-          $parcels=liveparcels_getparcelsdata();
-          $panes['parcels'] = array(
-          'id' => 'parcels',
-          'callback' => 'liveparcels_uc_checkout_pane_parcels',
-        'title' => t('Parcels contents'),
-        'desc' => t("Display the contents of a customer's shopping cart."),
-          'enabled' => FALSE,
-          'weight' => 1,
-          ); 
+  $parcels=liveparcels_getparcelsdata();
+  $panes['parcels'] = array(
+    'id' => 'parcels',
+    'callback' => 'liveparcels_uc_checkout_pane_parcels',
+    'title' => t('Parcels contents'),
+    'desc' => t("Display the contents of a customer's shopping cart."),
+    'enabled' => FALSE,
+    'weight' => 1,
+  ); 
   return $panes;    
 }
 /**
  * Implements hook_theme().
  */
 function liveparcels_theme() {
-    return array( 'liveparcels_review_table' => array(
-      'variables' => array('items' => array(), 'show_subtotal' => TRUE)
-    ));
+  return array( 'liveparcels_review_table' => array(
+    'variables' => array('items' => array(), 'show_subtotal' => TRUE)
+  ));
 }
 
 /*
  * Implement hook_uc_line_item()
-*/
+ */
 function liveparcels_uc_line_item(){
-    $items=array();
-    $parcels=liveparcels_getparcelsdata();
+  $items=array();
+  $parcels=liveparcels_getparcelsdata();
 
-         $items['subtotal'] = array(
-         'id'=>'subtotal',
-          'title' => t('Parcels price'), 
-            'weight' => 1, 
-            'default' => FALSE, 
-            'stored' => TRUE, 
-            'add_list' =>  isset($parcels['totals']) && $parcels['totals']>0 ? true:false, 
-            'calculated' => isset($parcels['totals']) && $parcels['totals']>0 ? false:true, 
+  $items['subtotal'] = array(
+    'id'=>'subtotal',
+    'title' => t('Parcels price'), 
+    'weight' => 1, 
+    'default' => FALSE, 
+    'stored' => TRUE, 
+    'add_list' =>  isset($parcels['totals']) && $parcels['totals']>0 ? true:false, 
+    'calculated' => isset($parcels['totals']) && $parcels['totals']>0 ? false:true, 
     'callback' => 'liveparcels_subtotal');
-        $items[] = array(
-            'id' => 'parcel', 
-            'title' => t('Parcels price'), 
-            'weight' => 1, 
-            'default' => FALSE, 
-            'stored' => TRUE, 
-             'add_list' => isset($parcels['totals']) && $parcels['totals']>0 ? false:true, 
-            'calculated' => isset($parcels['totals']) && $parcels['totals']>0 ? true:false, 
-            'callback' => 'uc_line_item_generic',
-          );
-          
-          if(module_exists('lp_discount')){
-           $items[] = array(
-            'id' => 'discount', 
-            'title' => t('Parcel discount'), 
-            'weight' => 9, 
-            'default' => FALSE, 
-            'stored' => TRUE, 
-            'add_list' => TRUE, 
-            'calculated' => TRUE, 
-            'callback' => 'uc_line_item_generic',
-          );   
-        }
+  $items[] = array(
+    'id' => 'parcel', 
+    'title' => t('Parcels price'), 
+    'weight' => 1, 
+    'default' => FALSE, 
+    'stored' => TRUE, 
+    'add_list' => isset($parcels['totals']) && $parcels['totals']>0 ? false:true, 
+    'calculated' => isset($parcels['totals']) && $parcels['totals']>0 ? true:false, 
+    'callback' => 'uc_line_item_generic',
+  );
+
+  if(module_exists('lp_discount')){
+    $items[] = array(
+      'id' => 'discount', 
+      'title' => t('Parcel discount'), 
+      'weight' => 9, 
+      'default' => FALSE, 
+      'stored' => TRUE, 
+      'add_list' => TRUE, 
+      'calculated' => TRUE, 
+      'callback' => 'uc_line_item_generic',
+    );   
+  }
   return $items;
 } 
 function liveparcels_subtotal($order) {
-      $lines[] = array(
-        'id' => 'subtotal',
-        'title' => t('Parcel price'),
-        'amount' => $order->order_total,
-      );
-      return $lines;
-  
+  $lines[] = array(
+    'id' => 'subtotal',
+    'title' => t('Parcel price'),
+    'amount' => $order->order_total,
+  );
+  return $lines;
+
 }
 /* if product_id is liveparcel,cart hiddren */
 function liveparcels_uc_cart_pane_alter($items) {
   $parcels=liveparcels_getparcelsdata();
-     if($parcels){
-                 header("location:/liveparcels/parcel_quote");exit;
-    }
+  if($parcels){
+    header("location:/liveparcels/parcel_quote");exit;
+  }
 }
 /*if product_id is liveparcel,checkout cart pane hiddren*/
 function liveparcels_uc_checkout_pane_alter(&$panes) {
-     $parcels=liveparcels_getparcelsdata();
-     if($parcels){
-          $panes['cart']['enabled'] = false;
-          $panes['parcels']['enabled'] = true;
-    }else{
-        $panes['parcels']['enabled'] = false;
-    }
+  $parcels=liveparcels_getparcelsdata();
+  if($parcels){
+    $panes['cart']['enabled'] = false;
+    $panes['parcels']['enabled'] = true;
+  }else{
+    $panes['parcels']['enabled'] = false;
+  }
 }
-    function liveparcels_create_field($field_description,$field_name,$field_set){
-          if (!field_info_field($field_name)) {
-            $field = array(
-                'field_name' => $field_name, 
-                'type' => $field_set['type'], 
-                'settings' => $field_set['setting']
-                );
-            field_create_field($field);
-            $instance = array(
-                'field_name' =>$field_name, 
-                'entity_type' => 'node', 
-                'label' =>$field_description, 
-                'bundle' => 'live_parcel', 
-                'widget'=> array(
-                    'type' => $field_set['widget'],
-                    'settings' => array(),
-                  ),
-                'required' => false,
-                
-            );
-            field_create_instance($instance);
-          }
-    }
+function liveparcels_create_field($field_description,$field_name,$field_set){
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => $field_set['type'], 
+      'settings' => $field_set['setting']
+    );
+    field_create_field($field);
+    $instance = array(
+      'field_name' =>$field_name, 
+      'entity_type' => 'node', 
+      'label' =>$field_description, 
+      'bundle' => 'live_parcel', 
+      'widget'=> array(
+        'type' => $field_set['widget'],
+        'settings' => array(),
+      ),
+      'required' => false,
+
+    );
+    field_create_instance($instance);
+  }
+}
 

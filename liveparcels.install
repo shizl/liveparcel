@@ -41,7 +41,7 @@ function liveparcels_schema() {
     'fields' => array(
       'position' => array(
         'description' => ' position id',
-         'type' => 'serial',
+        'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
@@ -52,7 +52,7 @@ function liveparcels_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      
+
       'weight' => array(
         'description' => ' Weight (kg)',
         'type' => 'numeric',
@@ -69,7 +69,7 @@ function liveparcels_schema() {
         'not null' => TRUE,
         'default' => 0.0,
       ),
-       'pprice' => array(
+      'pprice' => array(
         'description' => ' Price ($)',
         'type' => 'numeric',
         'precision' => 16,
@@ -80,8 +80,8 @@ function liveparcels_schema() {
     ),
     'primary key' => array('position'),
   );
-  
- $schema['liveparcels_zone_post'] = array(
+
+  $schema['liveparcels_zone_post'] = array(
     'description' => 'liveparcels zone post information.',
     'fields' => array(
       'pcode' => array(
@@ -91,7 +91,7 @@ function liveparcels_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      
+
       'locality' => array(
         'description' => 'locality',
         'type' => 'varchar',
@@ -131,17 +131,17 @@ function liveparcels_schema() {
   );
 
 
- $schema['liveparcels_zone_price'] = array(
+  $schema['liveparcels_zone_price'] = array(
     'description' => 'liveparcels zone post information.',
     'fields' => array(
       'zone_from_number' => array(
         'description' => 'zone_from_number',
-         'type' => 'int',
+        'type' => 'int',
         'unsigned' => FALSE,
         'not null' => TRUE,
         'default' => 0,
       ),
-      
+
       'zone_from' => array(
         'description' => 'zone_from',
         'type' => 'varchar',
@@ -156,10 +156,10 @@ function liveparcels_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      
+
       'zone_to_number' => array(
         'description' => 'zone_to_number',
-         'type' => 'int',
+        'type' => 'int',
         'unsigned' => FALSE,
         'not null' => TRUE,
         'default' => 0,
@@ -178,7 +178,7 @@ function liveparcels_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-       'multiplier' => array(
+      'multiplier' => array(
         'description' => 'multiplier ',
         'type' => 'numeric',
         'precision' => 16,
@@ -188,7 +188,7 @@ function liveparcels_schema() {
       ),
     ),
   );
-$schema['liveparcels_cart'] = array(
+  $schema['liveparcels_cart'] = array(
     'description' => 'liveparcels cart information.',
     'fields' => array(
       'cart_id' => array(
@@ -196,7 +196,7 @@ $schema['liveparcels_cart'] = array(
         'type' => 'varchar',
         'length' => 50,
       ),
-      
+
       'parcel_info' => array(
         'description' => 'parcel_name',
         'type' => 'text',
@@ -208,7 +208,7 @@ $schema['liveparcels_cart'] = array(
     'fields' => array(
       'order_id' => array(
         'description' => 'order_id',
-         'type' => 'int',
+        'type' => 'int',
         'unsigned' => FALSE,
         'not null' => TRUE,
         'default' => 0,
@@ -232,32 +232,32 @@ $schema['liveparcels_cart'] = array(
       ),
     ),
   );
- 
+
   return $schema;
 }
 /**
  * Implements hook_uninstall().
  */
 function liveparcels_uninstall() {
-    
-    db_query("DROP TABLE `liveparcels_package`,`liveparcels_cart`,`liveparcels_order`, `liveparcels_zone_post`, `liveparcels_zone_price`;DELETE FROM `node` WHERE `nid`='". variable_get('liveparcels_product_id')."';DELETE FROM `uc_products` WHERE `nid`='". variable_get('liveparcels_product_id')."'; ");
-       db_delete('node')
-      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+
+  db_query("DROP TABLE `liveparcels_package`,`liveparcels_cart`,`liveparcels_order`, `liveparcels_zone_post`, `liveparcels_zone_price`;DELETE FROM `node` WHERE `nid`='". variable_get('liveparcels_product_id')."';DELETE FROM `uc_products` WHERE `nid`='". variable_get('liveparcels_product_id')."'; ");
+  db_delete('node')
+    ->condition('nid', variable_get('liveparcels_product_id'), '=')
     ->execute();
-       db_delete('node_revision')
-      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+  db_delete('node_revision')
+    ->condition('nid', variable_get('liveparcels_product_id'), '=')
     ->execute();
-       db_delete('uc_products')
-      ->condition('nid', variable_get('liveparcels_product_id'), '=')
+  db_delete('uc_products')
+    ->condition('nid', variable_get('liveparcels_product_id'), '=')
     ->execute();
-    db_delete('variable')
-      ->condition('name', 'liveparcels%', 'LIKE')
+  db_delete('variable')
+    ->condition('name', 'liveparcels%', 'LIKE')
     ->execute();
-    db_delete('node_type')
-      ->condition('type', 'live_parcel_product', '=')
+  db_delete('node_type')
+    ->condition('type', 'live_parcel_product', '=')
     ->execute();
-    db_delete('uc_product_classes')
-      ->condition('pcid', 'live_parcel_product', '=')
+  db_delete('uc_product_classes')
+    ->condition('pcid', 'live_parcel_product', '=')
     ->execute();
 }
 
@@ -265,17 +265,17 @@ function liveparcels_uninstall() {
  * Implements hook_install().
  */
 function liveparcels_install() {
-    variable_set('liveparcels_factor',0.0002);
-    variable_set('liveparcels_postcount','');
-    variable_set('liveparcels_info_message','To obtain a free, instant quote on your shipment, please select the service you requires, enter the pickup/destination postcode/suburb as well as the parcel&#39s details. You may enter the details of multiple parcels to send to or pick up from different places on this form. If you would like to proceed with the booking, press the Checkout button.');
-    variable_set('liveparcels_error_message','Warning: The calculator is unable to determine the cost to deliver one of your parcels to the location you have entered. You may proceed and complete the checkout but the parcel will not be picked up until you have accepted the price that the administrator will provide and notify you within one working day.');
-    variable_set('liveparcels_note_message','Note: To calculate your parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.');
-    db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel_product', 'Live Parcel Product', 'uc_product', 'uc_product', 'Live Parcel Product', '', 1, 'Name', 0, 0, 0, 0, 'live_parcel_product');INSERT INTO `uc_product_classes` (`pcid`, `name`, `description`) VALUES('live_parcel_product', 'Live Parcel Product', 'Live Parcel Product');");
-$nid=db_query("SELECT `nid` FROM `node` ORDER BY `nid` DESC LIMIT 1")->fetchField();
-$nid=$nid > 0 ? $nid+1:1;
- variable_set('liveparcels_product_id',$nid);
-db_query("INSERT INTO `node` (`nid`, `vid`, `type`, `language`, `title`, `uid`, `status`, `created`, `changed`, `comment`, `promote`, `sticky`, `tnid`, `translate`) VALUES
-($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 2, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
-(".$nid.", ".$nid.", 'parcels', 0.00000, 0.00000, 0.00000, 0, 'lb', 0, 0, 0, 'in', 1, 1, 0, 0);");
+  variable_set('liveparcels_factor',0.0002);
+  variable_set('liveparcels_postcount','');
+  variable_set('liveparcels_info_message','To obtain a free, instant quote on your shipment, please select the service you requires, enter the pickup/destination postcode/suburb as well as the parcel&#39s details. You may enter the details of multiple parcels to send to or pick up from different places on this form. If you would like to proceed with the booking, press the Checkout button.');
+  variable_set('liveparcels_error_message','Warning: The calculator is unable to determine the cost to deliver one of your parcels to the location you have entered. You may proceed and complete the checkout but the parcel will not be picked up until you have accepted the price that the administrator will provide and notify you within one working day.');
+  variable_set('liveparcels_note_message','Note: To calculate your parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.');
+  db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel_product', 'Live Parcel Product', 'uc_product', 'uc_product', 'Live Parcel Product', '', 1, 'Name', 0, 0, 0, 0, 'live_parcel_product');INSERT INTO `uc_product_classes` (`pcid`, `name`, `description`) VALUES('live_parcel_product', 'Live Parcel Product', 'Live Parcel Product');");
+  $nid=db_query("SELECT `nid` FROM `node` ORDER BY `nid` DESC LIMIT 1")->fetchField();
+  $nid=$nid > 0 ? $nid+1:1;
+  variable_set('liveparcels_product_id',$nid);
+  db_query("INSERT INTO `node` (`nid`, `vid`, `type`, `language`, `title`, `uid`, `status`, `created`, `changed`, `comment`, `promote`, `sticky`, `tnid`, `translate`) VALUES
+    ($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 2, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
+    (".$nid.", ".$nid.", 'parcels', 0.00000, 0.00000, 0.00000, 0, 'lb', 0, 0, 0, 'in', 1, 1, 0, 0);");
 
 }
