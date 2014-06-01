@@ -95,7 +95,6 @@ function lp_address_update_zone_form_submit($form,$form_state){
     $insertstate=$parcel_state;
   }
   $zones=array();
-  //print_r($insertstate);exit;
   foreach($insertstate as $state){
     $zones[]=array(8888, $state, $state);
   }
