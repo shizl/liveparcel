@@ -26,7 +26,7 @@ function lp_address_menu() {
 /*
  * parceal address view function
  * */
-function lp_address_address_view($parcel_info,$parcel_type,$key){
+function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info){
   global $user;
   $options = array();
   array_push($options,'Select one...');
@@ -45,6 +45,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
       '#title' => t('Select addresses'), 
       '#attributes' => array('class'=>array('parcel_select_address')),
       '#options' => $options, 
+      '#default_value'=>!empty($default_info['select_address']) ? $default_info['select_address']:'',
     );
   }
   if(count($parcel_info['parcels'])>1){
@@ -74,7 +75,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#type' => 'textfield',
     '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_first_name')),
-    '#default_value' =>'',
+     '#default_value'=>!empty($default_info['address']['first_name']) ? $default_info['address']['first_name']:'',
     '#size'=>32,
     '#maxlength' => 100,
 
@@ -82,7 +83,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#type' => 'textfield',
     '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
     '#attributes' => array('class'=>array($parcel_type.'_last_name')),
-    '#default_value' =>'',
+   '#default_value'=>!empty($default_info['address']['last_name']) ? $default_info['address']['last_name']:'',
     '#size'=>32,
     '#maxlength' => 100,
 
@@ -90,19 +91,19 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#type' => 'textfield',
     '#title' => t('Company'),
     '#attributes' => array('class'=>array($parcel_type.'_company')),
-    '#default_value' =>'',
+    '#default_value'=>!empty($default_info['address']['company']) ? $default_info['address']['company']:'',
     '#size'=>32,
     '#maxlength' => 100,
   ),'street1'=>array(
     '#type' => 'textfield',
     '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
-    '#default_value' =>'',
+    '#default_value'=>!empty($default_info['address']['street1']) ? $default_info['address']['street1']:'',
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array($parcel_type.'_street1')),
   ),'street2'=>array(
     '#type' => 'textfield',
-    '#default_value' =>'',
+    '#default_value'=>!empty($default_info['address']['street2']) ? $default_info['address']['street2']:'',
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array($parcel_type.'_street2')),
@@ -142,7 +143,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key){
     '#type' => 'textfield',
     '#title' => t('Phone number'),
     '#attributes' => array('class'=>array($parcel_type.'_phone')),
-    '#default_value' =>'',
+   '#default_value'=>!empty($default_info['address']['phone']) ? $default_info['address']['phone']:'',
     '#size'=>'32',
 
   ),'address_name'=>array(

@@ -97,7 +97,7 @@ if($parcels>0){
            <ul class="fpcode" id="pcode0"></ul>
       </div>
     '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
-          <div class="parcel"><strong>Parcel #1</strong>
+          <div class="parcel"><strong>Parcel#1</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
             <input type="button" value="X">
           </div>
@@ -356,7 +356,7 @@ if($parcels>0){
 		var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
 		divText.after(newDiv);
-		$(".post-all:last .parcel strong").html("Parcel #" + num);
+		$(".post-all:last .parcel strong").html("Parcel#" + num);
          $(".post-all:last .pcode").attr("id","pcode"+num);
           $(".post-all:last .postcode-suburb").attr("id",num);
 		$(".post-all:last .parcel input").show();
@@ -368,7 +368,7 @@ if($parcels>0){
 		var divText = $(this).parent().parent().parent();
         var newDiv = divText.clone(true);
 		$(".post-all:last").after(newDiv);
-		$(".post-all:last .parcel strong").html("Parcel #" + num);
+		$(".post-all:last .parcel strong").html("Parcel#" + num);
         $(".post-all:last .pcode").attr("id","pcode"+num);
          $(".post-all:last .postcode-suburb").attr("id",+num);
 		$(".post-all:last .parcel input").show();
@@ -446,7 +446,8 @@ if($parcels>0){
                                      
                                     $(".parcelsPost").val(json2str(parcelsjson)); 
                             
-                            '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);':'').'
+                            '.(module_exists('lp_discount') ? ' 
+                            if(zone.discount>0 ){ $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);}else{$(".order-discount").html(""); }':'').'
                             var totals=zone.totals-zone.discount; 
                             $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
 					    }else{

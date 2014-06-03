@@ -47,6 +47,86 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
      if($parcels){
       switch ($op) {
         case 'view':        
+            $parceldata=lp_parcel_get_parcel_data($order->order_id);
+    $extra_info=$parceldata['extra_info'];
+    if(is_array($extra_info) && count($extra_info)>0){
+        $pickup_extra=array();
+          if($parcels['ptype']=="1"){
+            for($f=0;$f<count($parcels['parcels']);$f++){
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,$extra_info['pickupdata'][$f]['field_parcel_pickup_address']),
+               'field_pick_up_time'=> array(
+                  '#title' => t('Pickup time'),
+                  '#type' => 'date_popup', 
+                  '#date_format' => 'm/d/Y', 
+                  '#date_year_range' => '0:+2', 
+                  '#date_month_range' => '0:12', 
+                   '#date_day_range' => '0:30', 
+                  '#required' => TRUE,
+                  '#default_value' => $extra_info['pickupdata'][$f]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
+                ),'field_pick_up_time_ampm'=>array(
+               '#type' => 'select',
+               '#title' => '',
+               '#options' => array(
+                  'AM' => t('AM'),
+                 'PM' => t('PM'),
+               ),'#default_value' => $extra_info['pickupdata'][$f]['field_pick_up_time_ampm'],
+               '#attributes' => array('class'=>array('pick_up_time_ampm')),
+               ),'field_customer_reference'=>array(
+                '#type' => 'textfield',
+                '#title' => t('Customer reference'),
+                '#default_value' =>'',
+                '#description' => t('Enter any reference number here to help you find this item.')
+                ),'field_cash_to_collect'=>array(
+                '#type' => 'textfield',
+                '#title' => t('Cash to collect'),
+                '#default_value' =>$extra_info['pickupdata'][$f]['field_cash_to_collect'],
+                 '#size'=>'30',
+                  '#maxlength'=>'30',
+                  '#attributes' => array('class'=>array('pickup_cash_to_collect')),
+                '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+                  ),'field_pickup_note'=>array(
+                '#title' => t('Pickup Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the pick up process'),
+                '#default_value' =>$extra_info['pickupdata'][$f]['field_pickup_note'],
+                '#attributes' => array('class'=>array('pickup_note')),
+                ));
+            }
+
+        }else{
+                $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,$extra_info['pickupdata'][0]['field_parcel_pickup_address']),'field_pick_up_time'=> array(
+                  '#title' => t('Pickup time'),
+                  '#type' => 'date_popup', 
+                  '#date_format' => 'm/d/Y', 
+                  '#date_year_range' => '0:+2', 
+                  '#required' => TRUE,
+                  '#default_value' => $extra_info['pickupdata'][0]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
+                ),'field_pick_up_time_ampm'=>array(
+               '#type' => 'select',
+               '#title' => '',
+               '#options' => array(
+                  'AM' => t('AM'),
+                 'PM' => t('PM'),
+               ),
+               '#default_value' => $extra_info['pickupdata'][0]['field_pick_up_time_ampm'],
+               '#attributes' => array('class'=>array('pick_up_time_ampm')),
+               ),'field_cash_to_collect'=>array(
+                '#type' => 'hiddden',
+                '#title' => t('Cash to collect'),
+                '#default_value' =>'',
+                '#size'=>'30',
+                '#maxlength'=>'30',
+                '#attributes' => array('class'=>array('pickup_cash_to_collect')),
+                '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+                  ),'field_pickup_note'=>array(
+                '#title' => t('Pickup Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the pick up process'),
+                '#default_value' =>$extra_info['pickupdata'][0]['field_pickup_note'],
+                '#attributes' => array('class'=>array('pickup_note')),
+                ));
+        } 
+    }else{
        $pickup_extra=array();
         if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
@@ -59,36 +139,35 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#date_month_range' => '0:12', 
                    '#date_day_range' => '0:30', 
                   '#required' => TRUE,
-                  '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
+                  '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
-       '#type' => 'select',
-       '#title' => '',
-       '#options' => array(
-          'AM' => t('AM'),
-         'PM' => t('PM'),
-       ),
-       '#default_value' => 'AM',
-       '#attributes' => array('class'=>array('pick_up_time_ampm')),
-   ),'field_customer_reference'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Customer reference'),
-    '#default_value' =>'',
-    '#description' => t('Enter any reference number here to help you find this item.')
-  ),'field_cash_to_collect'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Cash to collect'),
-    '#default_value' =>'',
-     '#size'=>'30',
-      '#maxlength'=>'30',
-      '#attributes' => array('class'=>array('pickup_cash_to_collect')),
-    '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
-  ),'field_pickup_note'=>array(
-'#title' => t('Pickup Note'),
-'#type' => 'textarea',
-'#description' => t('Enter any information here that would assist with the pick up process'),
-'#default_value' =>'',
-'#attributes' => array('class'=>array('pickup_note')),
-));
+               '#type' => 'select',
+               '#title' => '',
+               '#options' => array(
+                  'AM' => t('AM'),
+                 'PM' => t('PM'),
+               ),'#default_value' => 'AM',
+               '#attributes' => array('class'=>array('pick_up_time_ampm')),
+               ),'field_customer_reference'=>array(
+                '#type' => 'textfield',
+                '#title' => t('Customer reference'),
+                '#default_value' =>'',
+                '#description' => t('Enter any reference number here to help you find this item.')
+                ),'field_cash_to_collect'=>array(
+                '#type' => 'textfield',
+                '#title' => t('Cash to collect'),
+                '#default_value' =>'',
+                 '#size'=>'30',
+                  '#maxlength'=>'30',
+                  '#attributes' => array('class'=>array('pickup_cash_to_collect')),
+                '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+                  ),'field_pickup_note'=>array(
+                '#title' => t('Pickup Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the pick up process'),
+                '#default_value' =>'',
+                '#attributes' => array('class'=>array('pickup_note')),
+                ));
             }
 
         }else{
@@ -98,35 +177,66 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
                   '#required' => TRUE,
-                  '#default_value' => date('Y-m-d'), // Default value must be in 'Y-m-d' format.
+                  '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
-       '#type' => 'select',
-       '#title' => '',
-       '#options' => array(
-          'AM' => t('AM'),
-         'PM' => t('PM'),
-       ),
-       '#default_value' => 'AM',
-       '#attributes' => array('class'=>array('pick_up_time_ampm')),
-   ),'field_cash_to_collect'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Cash to collect'),
-    '#default_value' =>'',
-    '#size'=>'30',
-    '#maxlength'=>'30',
-    '#attributes' => array('class'=>array('pickup_cash_to_collect')),
-    '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
-  ),'field_pickup_note'=>array(
-'#title' => t('Pickup Note'),
-'#type' => 'textarea',
-'#description' => t('Enter any information here that would assist with the pick up process'),
-'#default_value' =>'',
-'#attributes' => array('class'=>array('pickup_note')),
-));
-        }
+               '#type' => 'select',
+               '#title' => '',
+               '#options' => array(
+                  'AM' => t('AM'),
+                 'PM' => t('PM'),
+               ),
+               '#default_value' => 'AM',
+               '#attributes' => array('class'=>array('pick_up_time_ampm')),
+               ),'field_cash_to_collect'=>array(
+                '#type' => 'hiddden',
+                '#title' => t('Cash to collect'),
+                '#default_value' =>'',
+                '#size'=>'30',
+                '#maxlength'=>'30',
+                '#attributes' => array('class'=>array('pickup_cash_to_collect')),
+                '#description' => t('Enter the amount of cash you would like us to collect on your behalf and deliver to you.')
+                  ),'field_pickup_note'=>array(
+                '#title' => t('Pickup Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the pick up process'),
+                '#default_value' =>'',
+                '#attributes' => array('class'=>array('pickup_note')),
+                ));
+        } 
+    }
         $contents=$pickup_extra;
           return array('contents' => $contents);
-      }
+      
+            case 'process':
+                $parcel_pickup = $form_state['values']['panes']['parcel_pickup'];
+                $parcel_delivery = $form_state['values']['panes']['parcel_delivery'];
+                foreach($parcel_pickup as $key=>$pinfo){
+                     if (empty($pinfo['field_parcel_pickup_address_data']['address']['first_name']) ) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][first_name', t('Parcel#'.($key+1).': must enter pickup first name.'));
+                    }
+                    if (empty($pinfo['field_parcel_pickup_address_data']['address']['last_name']) ) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][last_name', t('Parcel#'.($key+1).': must enter pickup last name.'));
+                    }
+                    if (empty($pinfo['field_parcel_pickup_address_data']['address']['street1']) ) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][street1', t('Parcel#'.($key+1).': must enter pickup street.'));
+                    }
+                    if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24) ) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': parcel pickup time must more than today.'));
+                    }   
+                }
+                foreach($parcel_delivery as $key=>$pinfo){
+                     if (empty($pinfo['field_parcel_delivery_address_data']['address']['first_name']) ) {
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][first_name', t('Parcel#'.($key+1).': must enter delivery first name.'));
+                    }
+                    if (empty($pinfo['field_parcel_delivery_address_data']['address']['last_name']) ) {
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][last_name', t('Parcel#'.($key+1).': must enter delivery last name.'));
+                    }
+                    if (empty($pinfo['field_parcel_delivery_address_data']['address']['street1']) ) {
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][street1', t('Parcel#'.($key+1).': must enter delivery street name.'));
+                    }
+                }
+                return true;
+        }
     }
 }
 /**
@@ -142,40 +252,81 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         if(module_exists('lp_address')){  
           drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
           }
-    $delivery_extra=array();
+    $parceldata=lp_parcel_get_parcel_data($order->order_id);
+    $extra_info=$parceldata['extra_info'];
+    if(is_array($extra_info) && count($extra_info)>0){
+        $delivery_extra=array();
+        if($parcels['ptype']=="1"){
+             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0,$extra_info['deliverydata'][0]['field_parcel_delivery_address']),'field_authority_to_leave'=>array(
+              '#title' => t('Authority to leave'),
+                '#type' =>'checkbox', 
+                '#default_value'=>$extra_info['deliverydata'][0]['field_authority_to_leave'],
+                '#attributes' => array('class'=>array('authority_to_leave')),
+                  ),'field_delivery_note'=>array(
+                '#title' => t('Delivery Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the delivery process'),
+                '#default_value' =>$extra_info['deliverydata'][0]['field_delivery_note'],
+                '#attributes' => array('class'=>array('delivery_note')),
+                ));
+        }else{
+            for($f=0;$f<count($parcels['parcels']);$f++){
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f,$extra_info['deliverydata'][$f]['field_parcel_delivery_address']),
+                   'field_authority_to_leave'=>array(
+                    '#title' => t('Authority to leave'),
+                    '#type' =>'checkbox', 
+                    '#default_value'=>$extra_info['deliverydata'][$f]['field_authority_to_leave'],
+                    '#attributes' => array('class'=>array('authority_to_leave')),
+                      ),'field_customer_reference'=>array(
+                        '#type' => 'textfield',
+                        '#title' => t('Customer reference'),
+                        '#default_value' =>$extra_info['deliverydata'][$f]['field_customer_reference'],
+                        '#description' => t('Enter any reference number here to help you find this item.')
+                      ),'field_delivery_note'=>array(
+                    '#title' => t('Delivery Note'),
+                    '#type' => 'textarea',
+                    '#description' => t('Enter any information here that would assist with the delivery process'),
+                    '#default_value' =>$extra_info['deliverydata'][$f]['field_delivery_note'],
+                     '#attributes' => array('class'=>array('delivery_note')),
+                    ));
+            }
+        }
+    }else{
+        $delivery_extra=array();
         if($parcels['ptype']=="1"){
              $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0),'field_authority_to_leave'=>array(
               '#title' => t('Authority to leave'),
-      '#type' =>'checkbox', 
-         '#attributes' => array('class'=>array('authority_to_leave')),
-  ),'field_delivery_note'=>array(
-'#title' => t('Delivery Note'),
-'#type' => 'textarea',
-'#description' => t('Enter any information here that would assist with the delivery process'),
-'#default_value' =>'',
-'#attributes' => array('class'=>array('delivery_note')),
-));
+                '#type' =>'checkbox', 
+                '#attributes' => array('class'=>array('authority_to_leave')),
+                  ),'field_delivery_note'=>array(
+                '#title' => t('Delivery Note'),
+                '#type' => 'textarea',
+                '#description' => t('Enter any information here that would assist with the delivery process'),
+                '#default_value' =>'',
+                '#attributes' => array('class'=>array('delivery_note')),
+                ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
                    $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f),
                    'field_authority_to_leave'=>array(
-                     '#title' => t('Authority to leave'),
-      '#type' =>'checkbox', 
-         '#attributes' => array('class'=>array('authority_to_leave')),
-  ),'field_customer_reference'=>array(
-    '#type' => 'textfield',
-    '#title' => t('Customer reference'),
-    '#default_value' =>'',
-    '#description' => t('Enter any reference number here to help you find this item.')
-  ),'field_delivery_note'=>array(
-'#title' => t('Delivery Note'),
-'#type' => 'textarea',
-'#description' => t('Enter any information here that would assist with the delivery process'),
-'#default_value' =>'',
- '#attributes' => array('class'=>array('delivery_note')),
-));
+                    '#title' => t('Authority to leave'),
+                    '#type' =>'checkbox', 
+                    '#attributes' => array('class'=>array('authority_to_leave')),
+                      ),'field_customer_reference'=>array(
+                        '#type' => 'textfield',
+                        '#title' => t('Customer reference'),
+                        '#default_value' =>'',
+                        '#description' => t('Enter any reference number here to help you find this item.')
+                      ),'field_delivery_note'=>array(
+                    '#title' => t('Delivery Note'),
+                    '#type' => 'textarea',
+                    '#description' => t('Enter any information here that would assist with the delivery process'),
+                    '#default_value' =>'',
+                     '#attributes' => array('class'=>array('delivery_note')),
+                    ));
             }
         }
+    }
            $contents=$delivery_extra;
           
           return array('contents' => $contents);
@@ -212,9 +363,9 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
  * get_parcel_address($parcel_info,'pickup')
  * parcels info,parcels type
  * */
-function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0'){
+function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0',$default_info=array()){
         if(module_exists('lp_address')){
-            return  lp_address_address_view($parcel_info,$parcel_type,$key);
+            return  lp_address_address_view($parcel_info,$parcel_type,$key,$default_info);
         }else{
         return array();    
         }
@@ -322,7 +473,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $newnode = new stdClass();
        $newnode->uid=$order->uid;
        $newnode->language='und';
-       $newnode->title='order-'.$order_id.'-'.$parcel['parcelnum'];
+       $newnode->title='Order#'.$order_id.$parcel['parcelnum'];
        $newnode->type='live_parcel';
        $newnode->status=1;
         $newnode->comment=2;
@@ -398,7 +549,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         
         $node->field_pick_up_time[$node->language][0]['value'] =$field_pick_up_time;
         $node->field_pick_up_time_ampm[$node->language][0]['value'] =$field_pick_up_time_ampm;
-        $node->field_cash_to_collect[$node->language][0]['value'] =$field_cash_to_collect;
+        $node->field_cash_to_collect[$node->language][0]['value'] =intval($field_cash_to_collect)>0 ? intval($field_cash_to_collect):0;
         $node->field_pickup_note[$node->language][0]['value'] =$field_pickup_note;
         
         $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave;
