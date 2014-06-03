@@ -1,0 +1,4 @@
+name = Tracking
+description = lp Tracking
+package = Live Parcels - core
+core = 7.x
