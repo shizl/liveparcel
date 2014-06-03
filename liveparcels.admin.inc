@@ -34,12 +34,12 @@ function liveparcels_admin_settings() {
         <li id="phead"><div class="field-small">Position</div><div class="field">Package Name</div><div class="field">Weight (kg)</div><div class="field-small">Length (cm)</div><div class="field-small">Price ('.variable_get('uc_currency_sign','$').')</div><div class="field">Edit/Delete</div></li>
         <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="package_name small-text"></div><div class="field"><input type="text" class="weight small-text"></div><div class="field-small"><input type="text" class="plength small-text"></div><div class="field-small"><input type="text" class="pprice small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div></div>'));
   $rows['zone_post'] = array(array('data' => '<div class="parcels-title">Postcode, region and zone settings</div><div class="parcels-body"><div class="parcels-note"><p>If you would like to check the complete list of postcodes/regions/zones stored in LiveParcels, click export and open the saved csv file using spreadsheet software such as Microsoft Excel or <a href="http://www.libreoffice.org/" target="_blank">LibreOffice</a>. After you have modified the csv, you can update the postcode, region and zone settings on LiveParcels by clicking the Choose File button, browse and import the csv file you have modified. Please make sure the csv you import follows the same structure as the csv exported from LiveParcels or it will not be processed correctly.</p> <p>In order to allow you to manage/set the pricing more easily, multiple postcodes (associated with suburb/state) are grouped into zones; multiple zones are grouped into regions. Grouping of zones into region is optional, its only purpose is to allow you to find the zones more easily in the price table below. You can leave the region column blank if you don&#39t want to use region grouping. If you decide to group zones into region, please make sure that each zone only belongs to one region or it will be ignored.</p><p>By default, we do not provide the postcode database. You would have to provide your own. You are encouraged to find the postcode database(csv) of the country you requires from your local post office&#39s web site or you may can try <a href="http://download.geonames.org/export/zip/" target="_blank">geoname&#39s postcode database</a>. Do note that geoname&#39s postcode database tends to have missing information for each postcode and you may have to fill it in manually. We can provide some assistance if you have troubles here.</p>
-        </div> <div class="parcels-factor">Postcode Settings: The current data contain '.(variable_get('liveparcels_postcount') >0 ? variable_get('liveparcels_postcount').' rows':variable_get('liveparcels_postcount').'row').'<br><form id="zonepost" class="submit_form1" method="post" action="/admin/liveparcels/settings" enctype="multipart/form-data"> <input type="hidden" name="fact" value="importzonepost"> <input type="file" id="zone-import" name="zonepost">  <input type="submit" value="Upload" class="form-submit" id="import-zone"> <input type="button" value="Export" class="form-submit" id="export-zone"  onclick="location.href=\'/admin/liveparcels/settings/fileupload/ajax/?act=exportzonepost\'"></form></div>
+        </div> <div class="parcels-factor">Postcode Settings: The current data contain '.(variable_get('liveparcels_postcount') >0 ? variable_get('liveparcels_postcount').' rows':variable_get('liveparcels_postcount').'row').'<br><form id="zonepost" class="submit_form1" method="post" action="/admin/liveparcels/adminsetting/settings" enctype="multipart/form-data"> <input type="hidden" name="fact" value="importzonepost"> <input type="file" id="zone-import" name="zonepost">  <input type="submit" value="Upload" class="form-submit" id="import-zone"> <input type="button" value="Export" class="form-submit" id="export-zone"  onclick="location.href=\'/admin/liveparcels/settings/fileupload/ajax/?act=exportzonepost\'"></form></div>
         <div class="parcels-note"><strong style="color:#ff0000">Warning: Uploading a new csv file will replace the existing postcode/zone settings on the system and reset zone price multiplier to zero. Please make sure you have made a backup before you do this.
         </strong></div>
         <div class="parcels-title">Zone price multiplier</div><div class="parcels-body"><div class="parcels-note"><p>To calculate the price to deliver a package from one zone to another, you need to configure the zone multipler here which multiples the base price of a package as configured above.</p>
         <p>After you have imported the postcode region and zone settings, click the export button below to obtain the default zone price multipler csv, modify and then import it. </p>
-        </div> <div class="parcels-factor">Import/Export zone price multipler: The current data contain '.(variable_get('liveparcels_pricecount') >0 ? variable_get('liveparcels_pricecount').' rows':variable_get('liveparcels_pricecount').'row').'<br><form id="zoneprice" class="submit_form1" method="post" action="/admin/liveparcels/settings" enctype="multipart/form-data" > <input type="hidden" name="fact" value="importzoneprice"> <input type="file" id="zone-pirce-import" name="zoneprice">  <input type="submit" value="Upload" class="form-submit" id="import-zone-pirce"> <input type="button" value="Export" class="form-submit" id="export-zone-pirce" onclick="location.href=\'/admin/liveparcels/settings/fileupload/ajax/?act=exportzoneprice\'" ></form></div><div class="parcels-note"><strong style="color:#ff0000">Warning: Uploading a new csv file will replace the existing zone price multipler on the system. Please make sure you have made a backup before you do this.</strong></div>'));
+        </div> <div class="parcels-factor">Import/Export zone price multipler: The current data contain '.(variable_get('liveparcels_pricecount') >0 ? variable_get('liveparcels_pricecount').' rows':variable_get('liveparcels_pricecount').'row').'<br><form id="zoneprice" class="submit_form1" method="post" action="/admin/liveparcels/adminsetting/settings" enctype="multipart/form-data" > <input type="hidden" name="fact" value="importzoneprice"> <input type="file" id="zone-pirce-import" name="zoneprice">  <input type="submit" value="Upload" class="form-submit" id="import-zone-pirce"> <input type="button" value="Export" class="form-submit" id="export-zone-pirce" onclick="location.href=\'/admin/liveparcels/settings/fileupload/ajax/?act=exportzoneprice\'" ></form></div><div class="parcels-note"><strong style="color:#ff0000">Warning: Uploading a new csv file will replace the existing zone price multipler on the system. Please make sure you have made a backup before you do this.</strong></div>'));
 
   $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Price table (calculated)</div><div class="parcels-body"><div class="parcels-note"><p>The price table below is calculated based on your settings above. It shows you the cost to deliver a parcel from the pickup zone to different delivery zone. Please select a pickup zone to see the corresponding price.</p>
         <p><input type="checkbox" value="1" class="useregion"> Enable grouping of zones into region.</p>
@@ -468,15 +468,48 @@ function liveparcels_updatezone(){
 
 }
 function liveparcels_configpage() {
-  $menu = menu_get_item('admin/liveparcels');
-  $content = system_admin_menu_block($menu);
 
-  $build['menu'] = array(
-      '#theme' => 'admin_block_content',
-      '#content' => $content,
-      '#weight' => 5,
-      );
+  module_load_include('inc', 'system', 'system.admin');
+  // Check for status report errors.
+  if (system_status(TRUE) && user_access('administer site configuration')) {
+    drupal_set_message(t('One or more problems were detected with your Drupal installation. Check the <a href="@status">status report</a> for more information.', array('@status' => url('admin/reports/status'))), 'error');
+  }
+  $blocks = array();
+  if ($admin = db_query("SELECT menu_name, mlid FROM {menu_links} WHERE link_path = 'admin/liveparcels' AND module = 'system'")->fetchAssoc()) {
+    $result = db_query("
+      SELECT m.*, ml.*
+      FROM {menu_links} ml
+      INNER JOIN {menu_router} m ON ml.router_path = m.path
+      WHERE ml.link_path != 'admin/help' AND menu_name = :menu_name AND ml.plid = :mlid AND hidden = 0", $admin, array('fetch' => PDO::FETCH_ASSOC));
+    foreach ($result as $item) {
+      _menu_link_translate($item);
+      if (!$item['access']) {
+        continue;
+      }
+      // The link 'description' either derived from the hook_menu 'description'
+      // or entered by the user via menu module is saved as the title attribute.
+      if (!empty($item['localized_options']['attributes']['title'])) {
+        $item['description'] = $item['localized_options']['attributes']['title'];
+      }
+      $item['position']="left"; 
+      $block = $item;
+      $block['content'] = theme('admin_block_content', array('content' => system_admin_menu_block($item)));
+      if (!empty($block['content'])) {
+        $block['show'] = TRUE;
+      }
 
+      // Prepare for sorting as in function _menu_tree_check_access().
+      // The weight is offset so it is always positive, with a uniform 5-digits.
+      $blocks[(50000 + $item['weight']) . ' ' . $item['title'] . ' ' . $item['mlid']] = $block;
+    }
+  }
+
+  ksort($blocks);
+  $build['blocks'] = array(
+    '#theme' => 'admin_page',
+    '#blocks' => $blocks,
+    '#attributes' => array('class' => array('live-parcels-status')),
+  );
   return $build;
 }
 

@@ -24,7 +24,9 @@ function liveparcels_menu() {
     'weight' => -13,
     'file' => 'liveparcels.admin.inc',
   );
+
   $items['admin/liveparcels/adminsetting'] = array(
+
     'title' => 'Admin Setting',
     'description' => 'Adjust configuration settings for liveparcels.',
     'page callback' => 'liveparcels_configuration_page',
@@ -33,6 +35,7 @@ function liveparcels_menu() {
     'position' => 'right',
   );
   $items['admin/liveparcels/configuration'] = array(
+
     'title' => 'Configuration',
     'description' => 'Adjust add  menu for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
@@ -49,12 +52,12 @@ function liveparcels_menu() {
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
   );
+  
   $items['admin/liveparcels/adminsetting/settings'] = array(
     'title' => 'Pricing and postcode',
     'description' => 'Configure pricing and postcode. View price table.',
     'page callback' => 'liveparcels_admin_settings',
     'access arguments' => array('administer liveparcel'),
-
     'file' => 'liveparcels.admin.inc',
   );
   $items['admin/liveparcels/adminsetting/message'] = array(
@@ -176,7 +179,6 @@ function liveparcels_menu() {
       'weight'=>0,
     );
   }
-
   return $items;
 }
 /**
@@ -219,7 +221,6 @@ function liveparcels_permission() {
       'restrict access' => TRUE,
     ),
   );
-
 
 }
 function liveparcels_live_parcel_price_set(){

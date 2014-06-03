@@ -10,7 +10,6 @@ function lp_address_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments'=>array('lp_address_country_setting_form'),
     'access arguments' => array('administer actions'),
-
     'file' => 'lp_address.inc',
   );
   $items['liveparcels/lp_address_update_render/ajax'] = array(
