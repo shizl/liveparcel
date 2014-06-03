@@ -1,0 +1,9 @@
+name = Tracking
+description = lp Tracking
+package = Live Parcels - core
+
+dependencies[] = liveparcels
+dependencies[] = comment
+dependencies[] = field
+
+core = 7.x

@@ -1,0 +1,67 @@
+<?php
+function lp_tracking_disable() {
+  if (field_info_field('field_lp_tracking')) {
+    $field = array(
+      'field_name' => 'field_lp_tracking', 
+      'type' => 'list_text',
+      'settings' => array(
+        'allowed_values' => array(
+          'pending' => 'pending',
+          'scheduled' => 'scheduled',
+          'picked-up' => 'picked-up',
+          'pick-up attempted' => 'pick-up attempted',
+          'unloaded' => 'unloaded',
+          'loaded' => 'loaded',
+          'delivered' => 'delivered',
+          'delivery attempted' => 'delivery attempted',
+          'transferred' => 'transferred',
+          'cancelled' => 'cancelled',
+        ),
+      ),
+    );
+
+    field_delete_field($field);
+    if ($instance = field_info_instance('comment', 'field_lp_tracking', 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+}
+
+function lp_tracking_enable() {
+  if (!field_info_field('field_lp_tracking')) {
+    $field = array(
+      'field_name' => 'field_lp_tracking', 
+      'type' => 'list_text',
+      'settings' => array(
+        'allowed_values' => array(
+          'pending' => 'pending',
+          'scheduled' => 'scheduled',
+          'picked-up' => 'picked-up',
+          'pick-up attempted' => 'pick-up attempted',
+          'unloaded' => 'unloaded',
+          'loaded' => 'loaded',
+          'delivered' => 'delivered',
+          'delivery attempted' => 'delivery attempted',
+          'transferred' => 'transferred',
+          'cancelled' => 'cancelled',
+        ),
+      ),
+    );
+    field_create_field($field);
+
+    $instance = array(
+      'field_name' => 'field_lp_tracking', 
+      'entity_type' => 'comment', 
+      'label' => 'Status', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => TRUE,
+      'settings' => array(
+        'user_register_form' => 1,
+      ),
+      'widget' => array(
+        'type' => 'textfield',
+      ), 
+    );
+    field_create_instance($instance);
+  }
+}
