@@ -1,36 +1,76 @@
 <?php
 function lp_tracking_disable() {
-  if (field_info_field('field_lp_tracking')) {
-    $field = array(
-      'field_name' => 'field_lp_tracking', 
-      'type' => 'list_text',
-      'settings' => array(
-        'allowed_values' => array(
-          'pending' => 'pending',
-          'scheduled' => 'scheduled',
-          'picked-up' => 'picked-up',
-          'pick-up attempted' => 'pick-up attempted',
-          'unloaded' => 'unloaded',
-          'loaded' => 'loaded',
-          'delivered' => 'delivered',
-          'delivery attempted' => 'delivery attempted',
-          'transferred' => 'transferred',
-          'cancelled' => 'cancelled',
-        ),
-      ),
-    );
 
-    field_delete_field($field);
-    if ($instance = field_info_instance('comment', 'field_lp_tracking', 'comment_node_live_parcel')) {
+  //delete field_status
+  $field_name = 'field_status';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
       field_delete_instance($instance);
     }
   }
+
+  //delete field_driver_assigned
+  $field_name = 'field_driver_assigned';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+
+
+  //delete field_gps
+  $field_name = 'field_gps';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+
+
+  //delete field_photo
+  $field_name = 'field_photo';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+
+
+
+
+
+  //delete driver role
+  $roleName = 'driver';
+  user_role_delete($roleName);
+
+
+
 }
 
 function lp_tracking_enable() {
-  if (!field_info_field('field_lp_tracking')) {
+  //add driver role
+  $roleName = 'driver';
+  if(!user_role_load_by_name($roleName)){
+    $role = new stdClass();
+    $role->name = $roleName;
+    user_role_save($role);
+  }
+
+
+
+
+  //add field_status
+  $field_name = 'field_status';
+  if (!field_info_field($field_name)) {
     $field = array(
-      'field_name' => 'field_lp_tracking', 
+      'field_name' => $field_name, 
       'type' => 'list_text',
       'settings' => array(
         'allowed_values' => array(
@@ -48,20 +88,120 @@ function lp_tracking_enable() {
       ),
     );
     field_create_field($field);
-
     $instance = array(
-      'field_name' => 'field_lp_tracking', 
+      'field_name' => $field_name, 
       'entity_type' => 'comment', 
       'label' => 'Status', 
       'bundle' => 'comment_node_live_parcel', 
       'required' => TRUE,
-      'settings' => array(
-        'user_register_form' => 1,
-      ),
       'widget' => array(
-        'type' => 'textfield',
+        'type' => 'options_select',
       ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+        ),
+      ),
     );
     field_create_instance($instance);
   }
+
+
+  //add field_driver_assigned
+  $field_name = 'field_driver_assigned';
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => 'user_reference',
+      'settings' => array(
+        'referenceable_roles' => array('driver',),
+      ),
+    );
+    field_create_field($field);
+    $instance = array(
+      'field_name' => $field_name, 
+      'entity_type' => 'comment', 
+      'label' => 'Driver Assigned', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => FALSE,
+      'description' => 'Driver assigned to pick-up the parcel.',
+      'widget' => array(
+        'type' => 'options_select',
+      ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+        ),
+      ),
+    );
+    field_create_instance($instance);
+  }
+
+
+
+  //add field_gps
+  $field_name = 'field_gps';
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => 'location',
+    );
+    field_create_field($field);
+    $instance = array(
+      'field_name' => $field_name, 
+      'entity_type' => 'comment', 
+      'label' => 'GPS', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => FALSE,
+      'description' => 'GPS coordinate reported by mobile',
+      'widget' => array(
+        'type' => 'location',
+      ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'type' => 'location_map',
+        ),
+      ),
+    );
+    field_create_instance($instance);
+  }
+
+
+
+
+  //add field_photo
+  $field_name = 'field_photo';
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => 'image',
+      'settings' => array(
+
+      ),
+    );
+    field_create_field($field);
+    $instance = array(
+      'field_name' => $field_name, 
+      'entity_type' => 'comment', 
+      'label' => 'Image', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => FALSE,
+      'description' => 'For signature on delivery or photo taken for parcel left without signature (authority to leave).',
+      'widget' => array(
+        'type' => 'image_image',
+      ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'type' => 'colorbox',
+        ),
+      ),
+    );
+    field_create_instance($instance);
+  }
+
+
+
+
 }

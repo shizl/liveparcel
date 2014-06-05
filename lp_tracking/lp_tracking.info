@@ -6,4 +6,11 @@ dependencies[] = lp_parcel
 dependencies[] = comment
 dependencies[] = field
 
+dependencies[] = references
+dependencies[] = user_reference
+
+dependencies[] = location_entity
+dependencies[] = gmap_location
+
+dependencies[] = colorbox
 core = 7.x
