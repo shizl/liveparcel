@@ -2,7 +2,7 @@ name = Tracking
 description = lp Tracking
 package = Live Parcels - core
 
-dependencies[] = liveparcels
+dependencies[] = lp_parcel
 dependencies[] = comment
 dependencies[] = field
 
