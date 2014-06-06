@@ -114,7 +114,7 @@ function lp_tracking_enable() {
       'field_name' => $field_name, 
       'type' => 'user_reference',
       'settings' => array(
-        'referenceable_roles' => array('driver',),
+        'referenceable_roles' => array(user_role_load_by_name('driver')->rid,),
       ),
     );
     field_create_field($field);
@@ -174,11 +174,8 @@ function lp_tracking_enable() {
   $field_name = 'field_photo';
   if (!field_info_field($field_name)) {
     $field = array(
-      'field_name' => $field_name, 
+      'field_name' => $field_name,
       'type' => 'image',
-      'settings' => array(
-
-      ),
     );
     field_create_field($field);
     $instance = array(
@@ -190,7 +187,10 @@ function lp_tracking_enable() {
       'description' => 'For signature on delivery or photo taken for parcel left without signature (authority to leave).',
       'widget' => array(
         'type' => 'image_image',
-      ), 
+        'settings' => array(
+          'preview_image_style' => 'medium',
+        ),
+      ),
       'display' => array(
         'default' => array(
           'label' => 'inline',
