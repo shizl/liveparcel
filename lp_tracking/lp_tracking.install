@@ -1,5 +1,5 @@
 <?php
-function lp_tracking_disable() {
+function lp_tracking_uninstall() {
 
   //delete field_status
   $field_name = 'field_status';
@@ -19,8 +19,6 @@ function lp_tracking_disable() {
     }
   }
 
-
-
   //delete field_gps
   $field_name = 'field_gps';
   if (field_info_field($field_name)) {
@@ -29,8 +27,6 @@ function lp_tracking_disable() {
       field_delete_instance($instance);
     }
   }
-
-
 
   //delete field_photo
   $field_name = 'field_photo';
@@ -41,28 +37,28 @@ function lp_tracking_disable() {
     }
   }
 
-
-
-
-
-
   //delete driver role
   $roleName = 'driver';
   user_role_delete($roleName);
 
-
-
 }
 
-function lp_tracking_enable() {
+function lp_tracking_install() {
   //add driver role
   $roleName = 'driver';
   if(!user_role_load_by_name($roleName)){
     $role = new stdClass();
     $role->name = $roleName;
     user_role_save($role);
-  }
+    $roles = user_role_load_by_name($roleName);
+    user_role_change_permissions($roles->rid, 
+      array(
+        'skip comment approval' => TRUE,
+        'submit latitude/longitude' => TRUE,
+      )
+    );
 
+  }
 
 
 
@@ -106,7 +102,6 @@ function lp_tracking_enable() {
     field_create_instance($instance);
   }
 
-
   //add field_driver_assigned
   $field_name = 'field_driver_assigned';
   if (!field_info_field($field_name)) {
@@ -137,8 +132,6 @@ function lp_tracking_enable() {
     field_create_instance($instance);
   }
 
-
-
   //add field_gps
   $field_name = 'field_gps';
   if (!field_info_field($field_name)) {
@@ -166,9 +159,6 @@ function lp_tracking_enable() {
     );
     field_create_instance($instance);
   }
-
-
-
 
   //add field_photo
   $field_name = 'field_photo';
@@ -200,8 +190,5 @@ function lp_tracking_enable() {
     );
     field_create_instance($instance);
   }
-
-
-
 
 }
