@@ -1,9 +1,14 @@
 <?php
-function lp_address_country_setting_form($form,$form_state){
+function lp_address_admin_setting_form($form,$form_state){
 
   $form['lp_country'] = array(
     '#type' => 'fieldset',
     '#title' => t('Country Settings'),
+    '#collapsible' => TRUE,
+  );
+  $form['lp_pickup_time'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Pickup time Settings'),
     '#collapsible' => TRUE,
   );
   $form['lp_state'] = array(
@@ -49,6 +54,13 @@ function lp_address_country_setting_form($form,$form_state){
     '#size'=>4,
     '#description'=>'Max 3 char',
   );
+   $form['lp_pickup_time']['limit_time'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Liveparcels address pickup time begin time'),
+    '#default_value' => variable_get('liveparcels_pickup_time',0),
+    '#size'=>20,
+    '#description'=>'default 0',
+  );
   $active = array('insert' => t('keep Old and Add New States'), 'delete' => t('Delete Old and  Add New States'));
   $form['lp_state']['active'] = array(
     '#type' => 'radios',
@@ -70,6 +82,7 @@ function lp_address_country_setting_form($form,$form_state){
   return $form;  
 }
 function lp_address_country_setting_form_submit($form,$form_state){
+  variable_set('liveparcels_pickup_time',$form_state['values']['limit_time']);
   db_update("uc_countries")->fields(array(
     'country_name' =>$form_state['values']['country_name'] ,
     'country_iso_code_2' =>$form_state['values']['country_iso_code_2'],

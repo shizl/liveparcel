@@ -59,8 +59,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#date_month_range' => '0:12', 
-                   '#date_day_range' => '0:30', 
+                  '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
                   '#default_value' => $extra_info['pickupdata'][$f]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -99,6 +98,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
+                   '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
                   '#default_value' => $extra_info['pickupdata'][0]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -136,10 +136,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#date_month_range' => '0:12', 
-                   '#date_day_range' => '0:30', 
+                   '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
-                  '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24), // Default value must be in 'Y-m-d' format.
+                  '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
                '#type' => 'select',
                '#title' => '',
@@ -176,8 +175,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
+                  '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
-                  '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24), // Default value must be in 'Y-m-d' format.
+                  '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
                '#type' => 'select',
                '#title' => '',
@@ -220,6 +220,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                     if (empty($pinfo['field_parcel_pickup_address_data']['address']['street1']) ) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][street1', t('Parcel#'.($key+1).': must enter pickup street.'));
                     }
+                    if (!empty($pinfo['field_parcel_pickup_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_pickup_address_data']['address']['phone'])) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Parcel#'.($key+1).': must enter number.'));
+                    }
                     if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24) ) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': parcel pickup time must more than today.'));
                     }   
@@ -233,6 +236,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                     }
                     if (empty($pinfo['field_parcel_delivery_address_data']['address']['street1']) ) {
                         form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][street1', t('Parcel#'.($key+1).': must enter delivery street name.'));
+                    }
+                    if (!empty($pinfo['field_parcel_delivery_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_delivery_address_data']['address']['phone'])) {
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][phone', t('Parcel#'.($key+1).': must enter number.'));
                     }
                 }
                 return true;
