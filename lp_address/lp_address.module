@@ -210,7 +210,7 @@ function lp_address_address_update($address,$uid){
 function lp_address_location_update($address){
   $lid = db_insert('location') 
     ->fields(array(
-      'name' => $address['address']['first_name'].' '.$address['address']['last_name'],
+      'name' => $address['address']['first_name'].' '.$address['address']['last_name'].($address['address']['company']!="" ? ", ".$address['address']['company']:""),
       'street'=>$address['address']['street1'], 
       'additional'=>$address['address']['street2'], 
       'city' =>$address['address']['city'],

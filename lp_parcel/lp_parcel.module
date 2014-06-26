@@ -223,8 +223,8 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                     if (!empty($pinfo['field_parcel_pickup_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_pickup_address_data']['address']['phone'])) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Parcel#'.($key+1).': must enter number.'));
                     }
-                    if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24) ) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': parcel pickup time must more than today.'));
+                    if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)) ) {
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '));
                     }   
                 }
                 foreach($parcel_delivery as $key=>$pinfo){
@@ -489,8 +489,8 @@ function lp_parcel_uc_checkout_complete($order, $account) {
 
        $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
        $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'];
-        $node->field_parcel_weight[$node->language][0]['value'] =$parcel['weighttext'];
-        $node->field_parcel_price[$node->language][0]['value'] =str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
+        $node->field_parcel_weight[$node->language][0]['value'] =round($parcel['weighttext'],1);
+        $node->field_parcel_price[$node->language][0]['value'] =$parcel['price'];
         $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){
