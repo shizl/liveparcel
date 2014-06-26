@@ -49,6 +49,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
         case 'view':        
             $parceldata=lp_parcel_get_parcel_data($order->order_id);
     $extra_info=$parceldata['extra_info'];
+    
+    date_default_timezone_set(variable_get('date_default_timezone'));
+
     if(is_array($extra_info) && count($extra_info)>0){
         $pickup_extra=array();
           if($parcels['ptype']=="1"){
