@@ -422,7 +422,9 @@ if($parcels>0){
 			  if(dimthree > max){
 				  max = dimthree;  
 			  }
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
+              weighttext=parseFloat(weighttext);
+              
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -678,7 +680,7 @@ function liveparcels_getZoneprice() {
             }else{
                   $pzone=0;  
             }
-            $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').$pzone,"package_name"=>$pprice['package_name']);
+            $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').round($pzone,1),"package_name"=>$pprice['package_name']);
             $totals+=$pzone;
             if($pzone=='0'){
             $error=1;    

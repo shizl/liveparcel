@@ -42,6 +42,7 @@ function lp_parcel_order_view($node){
  create liveparcels extra pane 
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
+    global $user;
         $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
@@ -50,7 +51,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             $parceldata=lp_parcel_get_parcel_data($order->order_id);
     $extra_info=$parceldata['extra_info'];
     
-    date_default_timezone_set(variable_get('date_default_timezone'));
+    date_default_timezone_set($user->timezone<>"" ? $user->timezone:variable_get('date_default_timezone'));
 
     if(is_array($extra_info) && count($extra_info)>0){
         $pickup_extra=array();
@@ -493,7 +494,8 @@ function lp_parcel_uc_checkout_complete($order, $account) {
        $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
        $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'];
         $node->field_parcel_weight[$node->language][0]['value'] =round($parcel['weighttext'],1);
-        $node->field_parcel_price[$node->language][0]['value'] =str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
+        $pprice=str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
+        $node->field_parcel_price[$node->language][0]['value'] =round($pprice,1);
         $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){
@@ -561,7 +563,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $node->field_cash_to_collect[$node->language][0]['value'] =intval($field_cash_to_collect)>0 ? intval($field_cash_to_collect):0;
         $node->field_pickup_note[$node->language][0]['value'] =$field_pickup_note;
         
-        $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave;
+        $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave>0 ? $field_authority_to_leave:0;
         $node->field_customer_reference[$node->language][0]['value'] =$field_customer_reference;
         $node->field_delivery_note[$node->language][0]['value'] =$field_delivery_note;
         
