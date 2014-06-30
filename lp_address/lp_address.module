@@ -222,8 +222,8 @@ function lp_address_location_update($address){
       'source'=>'0',
       'is_primary'=>'0',
     ))->execute();
-  $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone'],"company"=>$address['address']['company']);
-  location_company_locationapi($location_extra,'save');
+  $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone']/*,"company"=>$address['address']['company']*/);
+  /*location_company_locationapi($location_extra,'save');*/
   location_phone_locationapi($location_extra,'save');
   return $lid;
 

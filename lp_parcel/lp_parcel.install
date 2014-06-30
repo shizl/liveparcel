@@ -55,12 +55,10 @@ function lp_parcel_uninstall() {
   field_delete_field('field_pickup_last_name');
   field_delete_field('field_pickup_street');    
   field_delete_field('field_pickup_street2');   
-  field_delete_field('field_pickup_phone');  
-  field_delete_field('field_pickup_company');   
-  field_delete_field('field_delivery_phone');   
-  field_delete_field('field_delivery_company');      
+  field_delete_field('field_pickup_phone');   
+  field_delete_field('field_delivery_phone');       
   field_delete_field('field_delivery_location'); 
-    field_delete_field('field_delivery_first_name');    
+  field_delete_field('field_delivery_first_name');    
   field_delete_field('field_delivery_last_name');
   field_delete_field('field_delivery_street'); 
   field_delete_field('field_delivery_street2'); 
@@ -74,13 +72,13 @@ function lp_parcel_install() {
   if(db_query("SELECT  `type` FROM `node_type` WHERE type='live_parcel'")->fetchField()==''){
     db_query("INSERT INTO `node_type` (`type`, `name`, `base`, `module`, `description`, `help`, `has_title`, `title_label`, `custom`, `modified`, `locked`, `disabled`, `orig_type`) VALUES('live_parcel', 'Live Parcel', 'node_content', 'node', 'Live Parcel', '', 1, 'Title', 1, 1, 0, 0, 'live_parcel');");  
   }
-  liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'number_float','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
-  liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_float','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('prefix'=>variable_get('uc_currency_sign','$'))));
+  liveparcels_create_field('Parcel Order ID','field_parcel_order_id',array('type'=>'number_integer','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array()));
+  liveparcels_create_field('Parcel Price','field_parcel_price',array('type'=>'number_decimal','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('prefix'=>variable_get('uc_currency_sign','$'),'precision'=>10,'scale'=>1)));
   liveparcels_create_field('Parcel Size','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
   liveparcels_create_field('Parcel package name','field_parcel_package_name',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
-  liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'number_float','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('suffix'=>' kg')));
+  liveparcels_create_field('Parcel Weight','field_parcel_weight',array('type'=>'number_decimal','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('suffix'=>' kg','precision'=>10,'scale'=>1)));
   liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('1'=>'Yes','0'=>'No'),'allowed_values_function' => '')));
-  liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'number_float','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('prefix'=>variable_get('uc_currency_sign','$'))));
+  liveparcels_create_field('Cash to collect','field_cash_to_collect',array('type'=>'number_decimal','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('prefix'=>variable_get('uc_currency_sign','$'),'precision'=>10,'scale'=>1)));
   liveparcels_create_field('Customer reference','field_customer_reference',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
   liveparcels_create_field('Delivery Note','field_delivery_note',array('type'=>'text_long','widget'=>"text_textarea","display"=>array("default"=>array("label"=>"inline")),"setting"=>array()));
 
@@ -153,11 +151,11 @@ function lp_parcel_install() {
             'collect' => 1,
             'weight' => 20,
           ),
-          'company' => Array
+         /* 'company' => Array
           (
             'collect' => 1,
             'weight' => 20,
-          ),
+          ),*/
         ),
       ),
 
@@ -178,7 +176,7 @@ function lp_parcel_install() {
           'map_link' => 0,
           'coords' => 0,
           'phone' => 0,
-          'company' => 0,
+         /* 'company' => 0,*/
         )
       )
     )
@@ -250,11 +248,11 @@ function lp_parcel_install() {
             'collect' => 1,
             'weight' => 20,
           ),
-          'company' => Array
+         /* 'company' => Array
           (
             'collect' => 1,
             'weight' => 20,
-          ),
+          ),*/
         ),
       ),
 
@@ -275,7 +273,7 @@ function lp_parcel_install() {
           'map_link' => 0,
           'coords' => 0,
           'phone' => 0,
-          'company' => 0,
+         /* 'company' => 0,*/
         )
       )
     )
