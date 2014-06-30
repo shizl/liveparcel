@@ -467,7 +467,7 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
       'bundle' => 'live_parcel', 
       'widget'=> array(
         'type' => $field_set['widget'],
-        'settings' => array(),
+        'settings' => !empty($field_set['wsettings']) && is_array($field_set['wsettings']) && count($field_set['wsettings'])>0 ? $field_set['wsettings']:array(),
       ),
       'settings'=>$field_set['setting'],
       'display'=>$field_set['display'],
