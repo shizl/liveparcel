@@ -210,7 +210,7 @@ function lp_address_address_update($address,$uid){
 function lp_address_location_update($address){
   $lid = db_insert('location') 
     ->fields(array(
-      'name' => $address['address']['first_name'].' '.$address['address']['last_name'].($address['address']['company']!="" ? ", ".$address['address']['company']:""),
+      'name' => $address['address']['first_name'].' '.$address['address']['last_name'],
       'street'=>$address['address']['street1'], 
       'additional'=>$address['address']['street2'], 
       'city' =>$address['address']['city'],
@@ -222,8 +222,8 @@ function lp_address_location_update($address){
       'source'=>'0',
       'is_primary'=>'0',
     ))->execute();
-  $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone']/*,"company"=>$address['address']['company']*/);
-  /*location_company_locationapi($location_extra,'save');*/
+  $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone'],"company"=>$address['address']['company']);
+  location_company_locationapi($location_extra,'save');
   location_phone_locationapi($location_extra,'save');
   return $lid;
 

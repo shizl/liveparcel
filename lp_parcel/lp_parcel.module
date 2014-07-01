@@ -495,7 +495,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
        $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'];
         $node->field_parcel_weight[$node->language][0]['value'] = $parcel['weighttext']>0 ? round($parcel['weighttext'],1):0;
         $pprice=str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
-        $node->field_parcel_price[$node->language][0]['value'] =$pprice>0 ? round($pprice,1):0;
+        $node->field_parcel_price[$node->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
         $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){
@@ -540,7 +540,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
                 
                 $field_pick_up_time=$extra_info['pickupdata'][0]['field_pick_up_time'];
                 $field_pick_up_time_ampm=$extra_info['pickupdata'][0]['field_pick_up_time_ampm'];
-                $field_cash_to_collect=intval($extra_info['pickupdata'][0]['field_cash_to_collect'])>0 ? round($extra_info['pickupdata'][0]['field_cash_to_collect'],1):0;
+                $field_cash_to_collect=intval($extra_info['pickupdata'][0]['field_cash_to_collect'])>0 ? round($extra_info['pickupdata'][0]['field_cash_to_collect'],2):0;
                 $field_pickup_note=$extra_info['pickupdata'][0]['field_pickup_note'];
 
                 $field_authority_to_leave=$extra_info['deliverydata'][$key]['field_authority_to_leave'];
@@ -560,7 +560,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         
         $node->field_pick_up_time[$node->language][0]['value'] =$field_pick_up_time;
         $node->field_pick_up_time_ampm[$node->language][0]['value'] =$field_pick_up_time_ampm;
-        $node->field_cash_to_collect[$node->language][0]['value'] =intval($field_cash_to_collect)>0 ? intval($field_cash_to_collect):0;
+        $node->field_cash_to_collect[$node->language][0]['value'] =$field_cash_to_collect;
         $node->field_pickup_note[$node->language][0]['value'] =$field_pickup_note;
         
         $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave>0 ? $field_authority_to_leave:0;
