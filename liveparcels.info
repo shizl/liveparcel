@@ -1,5 +1,5 @@
-name = Live Parcels
-description = Live Parcels.
+name = Quotation
+description = REQUIRED. Handles quotation and postcode of LiveParcels. 
 package = Live Parcels - core
 core = 7.x
 dependencies[] = uc_store
