@@ -48,7 +48,7 @@ function location_company_views_data() {
   // location_company table -- fields
 
   $data['location_company']['company'] = array(
-    'title' => t('company'),
+    'title' => t('Company'),
     'help' => t('The company name of the selected location.'),
     'field' => array(
       'click sortable' => TRUE,
