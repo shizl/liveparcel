@@ -1,5 +1,5 @@
 name = Discount
-description = Discount
+description = Optional. Handles role/user based discount.
 package = Live Parcels - core
 configure = admin/liveparcels/discounts
 dependencies[] = liveparcels
