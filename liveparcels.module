@@ -17,8 +17,8 @@ function liveparcels_menu() {
   $items = array();
 
   $items['admin/liveparcels'] = array(
-    'title' => 'Live Parcels',
-    'description' => 'Administer Live Parcels .',
+    'title' => 'LiveParcels',
+    'description' => 'Administer orders, parcels, pricing, postcode, discount, etc.',
     'page callback' => 'liveparcels_configpage',
     'access arguments' => array('administer actions'),
     'weight' => -13,
