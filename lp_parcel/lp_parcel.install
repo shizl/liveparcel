@@ -149,7 +149,7 @@ function lp_parcel_install() {
           'phone' => Array
           (
             'collect' => 1,
-            'weight' => 20,
+            'weight' => 16,
           ),
          'company' => Array
           (
@@ -246,7 +246,7 @@ function lp_parcel_install() {
           'phone' => Array
           (
             'collect' => 1,
-            'weight' => 20,
+            'weight' => 16,
           ),
           'company' => Array
           (
