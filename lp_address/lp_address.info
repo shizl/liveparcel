@@ -1,5 +1,5 @@
-name =Address
-description = checkout panel lp address .
+name = Address
+description = REQUIRED. Handles addresses and address book during checkout.
 package = Live Parcels - core
 dependencies[] = uc_store
 dependencies[] = uc_addresses
