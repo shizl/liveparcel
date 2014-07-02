@@ -8,12 +8,12 @@ function lp_address_admin_setting_form($form,$form_state){
   );
   $form['lp_pickup_time'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Pickup time Settings'),
+    '#title' => t('Checkout settings'),
     '#collapsible' => TRUE,
   );
   $form['lp_state'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Backend  State Update features'),
+    '#title' => t('State field in Address book'),
     '#collapsible' => TRUE,
   );
   $countryinfo=lp_address_get_country_info();
@@ -21,9 +21,9 @@ function lp_address_admin_setting_form($form,$form_state){
     db_insert('uc_countries')
       ->fields(array(
         'country_id' => 8888,
-        'country_name' => 'Live parcel',
-        'country_iso_code_2' => 'LP',
-        'country_iso_code_3' => 'LPL',
+        'country_name' => 'Australia',
+        'country_iso_code_2' => 'AU',
+        'country_iso_code_3' => 'AUS',
         'version' => 1,
       ))
       ->execute();
@@ -33,41 +33,41 @@ function lp_address_admin_setting_form($form,$form_state){
   }
   $form['lp_country']['country_name'] = array(
     '#type' => 'textfield',
-    '#title' => t('Liveparcels address country name'),
+    '#title' => t('Country name'),
     '#default_value' => $countryinfo['country_name'],
     '#size'=>20,
-    '#description'=>'country name',
+    '#description'=>'The country this LiveParcels system is configured for.',
   );
   $form['lp_country']['country_iso_code_2'] = array(
     '#type' => 'textfield',
-    '#title' => t('Liveparcels address country code'),
+    '#title' => t('Two letter country code'),
     '#default_value' => $countryinfo['country_iso_code_2'],
     '#maxlength'=>2,
     '#size'=>4,
-    '#description'=>'Max 2 char',
+    '#description'=>'<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">ISO 3166-1 alpha-2</a>',
   );
   $form['lp_country']['country_iso_code_3'] = array(
     '#type' => 'textfield',
-    '#title' => t('Liveparcels address country code2'),
+    '#title' => t('Three letter country code'),
     '#default_value' =>$countryinfo['country_iso_code_3'],
     '#maxlength'=>3,
     '#size'=>4,
-    '#description'=>'Max 3 char',
+    '#description'=>'<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">ISO 3166-1 alpha-3</a>',
   );
    $form['lp_pickup_time']['limit_time'] = array(
     '#type' => 'textfield',
-    '#title' => t('Liveparcels address pickup time begin time'),
+    '#title' => t('Minimum pickup date'),
     '#default_value' => variable_get('liveparcels_pickup_time',0),
     '#size'=>20,
-    '#description'=>'default 0',
+    '#description'=>'The minimum pickup date user can set during checkout. 0 means any date from today. 1 means any date from tomorrow. 2 means any date from the day after and so on.',
   );
-  $active = array('insert' => t('keep Old and Add New States'), 'delete' => t('Delete Old and  Add New States'));
+  $active = array('insert' => t('Keep old and add new States'), 'delete' => t('Delete old and add new States'));
   $form['lp_state']['active'] = array(
     '#type' => 'radios',
-    '#title' => t('State update'),
+    '#title' => t('State field),
     '#default_value' => 'insert',
     '#options' => $active,
-    '#description'=>t('keep Old and Add New States '));
+    '#description'=>t('After updating postcode, you can choose to keep or delete old States in the LiveParcels address book by selecting the option above and then click Update.'));
   $form['lp_state']['update_state'] = array(
     '#type' => 'submit',
     '#value' => 'Update',
