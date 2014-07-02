@@ -154,7 +154,7 @@ function lp_parcel_install() {
          'company' => Array
           (
             'collect' => 1,
-            'weight' => 20,
+            'weight' => 3,
           ),
         ),
       ),
