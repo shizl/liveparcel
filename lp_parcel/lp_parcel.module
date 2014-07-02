@@ -453,7 +453,7 @@ function lp_parcel_uc_checkout_pane() {
       );
       $panes['parcel_delivery'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_delivery',
-    title' => t('Parcel delivery details'),
+    'title' => t('Parcel delivery details'),
     'desc' => t("Display the contents of a customer's shopping cart."),
       'enabled' => FALSE,
       'weight' => 5,
