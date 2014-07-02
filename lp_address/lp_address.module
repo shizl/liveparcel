@@ -42,7 +42,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info){
     }
     $contents['select_address'] = array(
       '#type' => 'select', 
-      '#title' => t('Select addresses'), 
+      '#title' => t('Address book'), 
       '#attributes' => array('class'=>array('parcel_select_address')),
       '#options' => $options, 
       '#default_value'=>!empty($default_info['select_address']) ? $default_info['select_address']:'',
@@ -55,7 +55,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info){
         $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
       }
       $contents['use_parcel']=array('#type' => 'select', 
-        '#title' => t('Use addresses as '), 
+        '#title' => t('Same address as'), 
         '#attributes' => array('class'=>array('parcel_use_parcel')),
         '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
     }
@@ -65,7 +65,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info){
         $parcel_select[$parcel_type.'_'.$key.'_'.$p]=$parcel['parcelnum'];
       }
       $contents['use_parcel']=array('#type' => 'select', 
-        '#title' => t('Use addresses as '), 
+         '#title' => t('Same address as'), 
         '#attributes' => array('class'=>array('parcel_use_parcel')),
         '#options' =>$parcel_select,'#default_value'=>$parcel_type.'_'.$key.'_'.$key ); 
     }
