@@ -59,7 +59,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             for($f=0;$f<count($parcels['parcels']);$f++){
                $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,$extra_info['pickupdata'][$f]['field_parcel_pickup_address']),
                'field_pick_up_time'=> array(
-                  '#title' => t('Pickup time'),
+                  '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
@@ -98,7 +98,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 
         }else{
                 $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,$extra_info['pickupdata'][0]['field_parcel_pickup_address']),'field_pick_up_time'=> array(
-                  '#title' => t('Pickup time'),
+                  '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
