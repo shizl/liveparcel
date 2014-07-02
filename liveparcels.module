@@ -27,11 +27,11 @@ function liveparcels_menu() {
 
   $items['admin/liveparcels/adminsetting'] = array(
 
-    'title' => 'Admin Setting',
-    'description' => 'Adjust configuration settings for liveparcels.',
+    'title' => 'Settings',
+    'description' => 'Admin settings for liveparcels.',
     'page callback' => 'liveparcels_configuration_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 1,
+    'weight' => 0,
     'position' => 'right',
   );
   $items['admin/liveparcels/configuration'] = array(
@@ -51,6 +51,60 @@ function liveparcels_menu() {
     'page arguments'=>array('liveparcels_custom_message_form'),
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
+  );
+  
+      $items['admin/liveparcels/orders'] = array(
+    'title' => 'Orders',
+    'description' => 'View orders for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 2,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/parcels'] = array(
+    'title' => 'Parcels',
+    'description' => 'View parcels for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 4,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/parcels_map'] = array(
+    'title' => 'Parcels map',
+    'description' => 'View parcels map for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 6,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/drivers'] = array(
+    'title' => 'Drivers',
+    'description' => 'View drivers info for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 8,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/users'] = array(
+    'title' => 'Users',
+    'description' => 'View users info for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 10,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/reports'] = array(
+    'title' => 'Reports',
+    'description' => 'View reports for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 12,
+    'position' => 'right',
   );
   
   $items['admin/liveparcels/adminsetting/settings'] = array(
