@@ -81,7 +81,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                 '#description' => t('Enter any reference number here to help you find this item.')
                 ),'field_cash_to_collect'=>array(
                 '#type' => 'textfield',
-                '#title' => t('Cash to collect'),
+                '#title' => t('Cash to collect ('.variable_get('uc_currency_sign','$').') '),
                 '#default_value' =>$extra_info['pickupdata'][$f]['field_cash_to_collect'],
                  '#size'=>'30',
                   '#maxlength'=>'30',
@@ -116,7 +116,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                '#attributes' => array('class'=>array('pick_up_time_ampm')),
                ),'field_cash_to_collect'=>array(
                 '#type' => 'hiddden',
-                '#title' => t('Cash to collect'),
+                '#title' => t('Cash to collect ('.variable_get('uc_currency_sign','$').') '),
                 '#default_value' =>'',
                 '#size'=>'30',
                 '#maxlength'=>'30',
