@@ -163,7 +163,7 @@ function liveparcels_menu() {
   );
   $items['user/%user/live_parcel_price'] = array(
     'title' => 'Price list',
-    'description' => ' package show.',
+    'description' => 'My price list including discount',
     'page callback' => array('liveparcels_live_parcel_price'),
     'access callback'=>user_access('view parcel price'),
     'file' => 'liveparcels.admin.inc',
@@ -171,8 +171,8 @@ function liveparcels_menu() {
   );
   if($user->uid > 0){
     $items['live_parcel_price'] = array(
-      'title' => 'User price list ',
-      'description' => 'User price list .',
+      'title' => 'My price list',
+      'description' => 'My price list including discount',
       'page callback' => array('liveparcels_live_parcel_price_set'),
       'access callback'=>user_access('View parcel price'),
       'menu_name'=>'user-menu',
@@ -476,4 +476,3 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
     field_create_instance($instance);
   }
 }
-
