@@ -446,14 +446,14 @@ function lp_parcel_uc_checkout_pane() {
    
       $panes['parcel_pickup'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_pickup',
-    'title' => t('Parcel pickup extra contents'),
+    'title' => t('Parcel pickup details'),
     'desc' => t("Display the contents of a customer's shopping cart."),
       'enabled' => FALSE,
       'weight' => 4,
       );
       $panes['parcel_delivery'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_delivery',
-    'title' => t('Parcel delivery extra contents'),
+    title' => t('Parcel delivery details'),
     'desc' => t("Display the contents of a customer's shopping cart."),
       'enabled' => FALSE,
       'weight' => 5,
@@ -599,5 +599,3 @@ function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
   );  
   return   $form;   
 }
-
-
