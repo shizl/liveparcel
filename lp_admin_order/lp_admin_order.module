@@ -1,0 +1,664 @@
+<?php
+
+function lp_admin_order_menu(){
+   $items['admin/liveparcels/admin_order'] = array(
+    'title' => 'Create Order',
+    'description' => 'Admin create order',
+    'page callback' => 'redirect_store_create_order',
+    'page arguments'=> array(1),
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 1,
+  );
+   $items['add_parcels'] = array(
+      'title' => 'Add parcels',
+      'page callback' => 'drupal_get_form',
+      'page arguments'=>array('admin_add_parcels_form'), 
+      'access arguments' => array('administer liveparcel'),
+      'type'=>MENU_NORMAL_ITEM,
+ 
+   );
+
+ return $items;
+}		
+function redirect_store_create_order($args){
+
+ drupal_goto('admin/store/orders/create',array('query' => array('args' => $args )));
+
+}
+
+function lp_admin_order_form_uc_order_create_form_alter(&$form,&$form_state){
+
+  $form['actions']['submit']['#submit'][] = 'redirect_create_submit';
+
+}
+
+function redirect_create_submit(&$form,&$form_state){
+
+   $path = $form_state['redirect'];
+     if(isset($_GET['args'])){
+        $form_state['redirect'] = array($path,array('query' => array('args'=>$_GET['args'])));
+      }
+}
+
+function lp_admin_order_form_uc_order_edit_form_alter(&$form, &$form_state, $order){
+
+  if(isset($_GET['args'])){
+  $form['#submit'][] = 'redirect_add_parcels_form'; 
+
+  $form_state['products_action'] = 'products_select';
+  $form_state['refresh_products'] = TRUE;
+  $form_state['rebuild'] = TRUE;
+  $order = $form_state['build_info']['args'][0];
+
+  $data = module_invoke_all('uc_add_to_cart_data', 41);
+  $product = uc_product_load_variant(41, $data);
+  $product->qty = 1;
+
+  drupal_alter('uc_order_product', $product, $order);
+
+  if($order->product_count==0){
+    uc_order_product_save($order->order_id, $product);
+  
+  $order->products[] = $product;
+
+  uc_order_log_changes($order->order_id, array('add' => t('Added (@qty) @title to order.', array('@qty' => $product->qty, '@title' => $product->title))));
+
+  // Decrement stock.
+  if (module_exists('uc_stock')) {
+    uc_stock_adjust_product_stock($product, 0, $order);
+  }
+
+  // Add this product to the form values for accurate tax calculations.
+  $form_state['values']['products'][] = (array) $product;
+  }
+ }
+
+}
+
+function redirect_add_parcels_form(&$form, &$form_state){
+  $order = $form_state['build_info']['args'][0];
+  if(isset($_GET['args'])){
+   $form_state['redirect'] = array('add_parcels',array('query'=>array('order_id'=>$order->order_id,'uid'=>$order->uid)));
+  }
+}
+function admin_add_parcels_form($form,$form_state){
+ 
+
+drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
+drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+
+
+ $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
+
+ $user = user_load($_GET['uid']);
+
+  $form['parcel_warapper'] = array(
+    '#prefix' => '<div id="parcel_warapper">',
+    '#suffix' => '</div>',
+  );
+  //$num = isset($_SESSION['package_num'])?$_SESSION['package_num']:1;
+ $num = 1;
+  for($i=1;$i<=$num;$i++){ 
+  $form['parcel_warapper']['parcels_'.$i] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('parcel#'.$i), 
+    '#collapsible' => FALSE, 
+    '#collapsed' => TRUE,
+  );
+  $form['parcel_warapper']['parcels_'.$i]['basic_info_'.$i] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Basic Info'), 
+    '#collapsible' => FALSE, 
+    '#collapsed' => TRUE,  
+  );
+  $form['parcel_warapper']['parcels_'.$i]['pickup_location_'.$i] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Pickup Location'), 
+    '#collapsible' => FALSE, 
+    '#collapsed' => TRUE,  
+  );
+  $form['parcel_warapper']['parcels_'.$i]['delivery_location_'.$i] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Delivery Location'), 
+    '#collapsible' => FALSE, 
+    '#collapsed' => TRUE,  
+  );
+  $form['parcel_warapper']['parcels_'.$i]['parcel_price_'.$i] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Parcel Price'), 
+    '#collapsible' => FALSE, 
+    '#collapsed' => TRUE,  
+  );
+
+  $form['parcel_warapper']['parcels_'.$i]['basic_info_'.$i]['content_'.$i] = parcels_basic_info_form($i);
+  $form['parcel_warapper']['parcels_'.$i]['pickup_location_'.$i]['content_'.$i] = parcels_pickup_location_form($user,$i);
+  $form['parcel_warapper']['parcels_'.$i]['delivery_location_'.$i]['content_'.$i] = parcels_delivery_location_form($user,$i);
+  $form['parcel_warapper']['parcels_'.$i]['parcel_price_'.$i]['content_'.$i] = parcels_price_form($i);
+
+  $form['parcel_warapper']['parcels_'.$i]['actions_'.$i] = array(
+    '#markup' => '<input type="button" class="form-submit duplicate" value="Duplicate" onclick="copy_package('.$i.')" />',
+  );
+ }
+  $form['add_new'] = array(
+  //  '#type' =>'submit',
+   // '#value' => t('Add New'),
+   // '#ajax' => array(
+   //   'callback' => 'parcel_warapper_render',
+   //   'wrapper' => 'parcel_warapper',
+  //    'method' => 'replace',
+  //    'effect' => 'fade',
+  //  ),    
+   '#markup' => '<input type="button" class="form-submit add_new" value="Add new" onclick="copy_package()"/>',
+   );
+  $form['package_num'] = array(
+    '#type' =>'hidden',
+    '#value'=>$num,
+    '#attributes' => array('class'=>array('maxnum')),
+   );
+
+
+  $form['save'] = array(
+    '#type' =>'submit',
+    '#value' => t('Save'),
+   );
+
+
+  return $form;
+}
+
+
+function admin_add_parcels_form_submit(&$form, &$form_state){
+
+ $uid = isset($_GET['uid'])?$_GET['uid']:0;
+
+ $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
+  if(isset($_POST)){
+    $num = $_POST['package_num'];
+    $packages = array();
+    for($i=1;$i<=$num;$i++){
+      $package['length'] = $_POST['length_'.$i]; 
+      $package['width'] = $_POST['width_'.$i]; 
+      $package['height'] = $_POST['height_'.$i]; 
+      $package['pweight'] = $_POST['pweight_'.$i]; 
+      $package['cash'] = $_POST['cash_'.$i];
+      $package['customer_reference'] = $_POST['customer_reference_'.$i]; 
+      $package['delivery_note'] = $_POST['delivery_note_'.$i];
+      $package['pickup_note'] = $_POST['pickup_note_'.$i];
+      $package['pickup_time_date'] = $_POST['pickup_time_date_'.$i]['date']; 
+      $package['pick_up_time_ampm'] = $_POST['pick_up_time_ampm_'.$i]; 
+      $package['pickup_first_name'] = $_POST['pickup_first_name_'.$i]; 
+      $package['pickup_last_name'] = $_POST['pickup_last_name_'.$i]; 
+      $package['pickup_company'] = $_POST['pickup_company_'.$i];
+      $package['pickup_street1'] = $_POST['pickup_street1_'.$i];
+      $package['pickup_street2'] = $_POST['pickup_street2_'.$i];
+      $package['pickup_city'] = $_POST['pickup_city_'.$i];
+      $package['pickup_zone'] = $_POST['pickup_zone_'.$i];
+      $package['pickup_country'] = $_POST['pickup_country_'.$i];
+      $package['pickup_postal_code'] = $_POST['pickup_postal_code_'.$i];
+      $package['pickup_phone'] = $_POST['pickup_phone_'.$i];
+      $package['delivery_first_name'] = $_POST['delivery_first_name_'.$i];
+      $package['delivery_last_name'] = $_POST['delivery_last_name_'.$i];
+      $package['delivery_company'] = $_POST['delivery_company_'.$i];
+      $package['delivery_street1'] = $_POST['delivery_street1_'.$i];
+      $package['delivery_street2'] = $_POST['delivery_street2_'.$i];
+      $package['delivery_city'] = $_POST['delivery_city_'.$i];
+      $package['delivery_zone'] = $_POST['delivery_zone_'.$i];
+      $package['delivery_country'] = $_POST['delivery_country_'.$i];
+      $package['delivery_postal_code'] = $_POST['delivery_postal_code_'.$i];
+      $package['delivery_phone'] = $_POST['delivery_phone_'.$i];
+      $package['price'] = $_POST['price_'.$i];
+      $package['package_name'] = $_POST['package_name_'.$i];
+      $package['pickup_select_address']= $_POST['pickup'][$i]['select_address'];
+      $package['delivery_select_address']= $_POST['delivery'][$i]['select_address'];
+      $packages[] = $package;
+    }
+
+	$parcenum = 1;
+	foreach($packages as $data){
+
+	$pickup_address = array();
+          if($data['pickup_select_address']!='0'){
+		 $arr =  explode('_',$data['pickup_select_address']);
+        	$pickup_address['select_address'] = $arr[2];
+          }else{
+        	$pickup_address['select_address'] = $data['pickup_select_address'];
+          }
+	$pickup_address['address']['first_name'] = $data['pickup_first_name'];
+	$pickup_address['address']['last_name'] = $data['pickup_last_name'];
+	$pickup_address['address']['street1'] = $data['pickup_street1'];
+	$pickup_address['address']['street2'] = $data['pickup_street2'];
+	$pickup_address['address']['city'] = $data['pickup_city'];
+	$pickup_address['address']['zone_name'] = $data['pickup_zone'];
+	$pickup_address['address']['postal_code'] = $data['pickup_postal_code'];
+
+        $country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['pickup_country']))->fetchfield();
+
+	$pickup_address['address']['country_code'] = $country_code;
+	$pickup_address['address']['phone'] = $data['pickup_phone'];
+	$pickup_address['address']['company'] = $data['pickup_company'];
+
+
+	$delivery_address = array();
+          if($data['delivery_select_address']!='0'){
+		$arr =  explode('_',$data['delivery_select_address']);
+        	$delivery_address['select_address'] = $arr[2];
+          }else{
+        	$delivery_address['select_address'] = $data['delivery_select_address'];
+          }
+
+	$delivery_address['address']['first_name'] = $data['delivery_first_name'];
+	$delivery_address['address']['last_name'] = $data['delivery_last_name'];
+	$delivery_address['address']['street1'] = $data['delivery_street1'];
+	$delivery_address['address']['street2'] = $data['delivery_street2'];
+	$delivery_address['address']['city'] = $data['delivery_city'];
+	$delivery_address['address']['zone_name'] = $data['delivery_zone'];
+	$delivery_address['address']['postal_code'] = $data['delivery_postal_code'];
+        $country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['delivery_country']))->fetchfield();
+	$delivery_address['address']['country_code'] = $country_code;
+	$delivery_address['address']['phone'] = $data['delivery_phone'];
+	$delivery_address['address']['company'] = $data['delivery_company'];
+
+
+	   $newNode = (object) NULL;
+	   $newNode->type = 'live_parcel'; 
+	   $newNode->uid = $uid; 
+	   $newNode->title = 'Order#'.$order_id.'Parcel#'.$parcenum;
+	   $newNode->created = strtotime("now");
+	   $newNode->changed = strtotime("now");
+	   $newNode->status = 1; 
+	   $newNode->comment = 0; 
+	   $newNode->promote = 0; 
+	   $newNode->sticky = 0; 
+	   $newNode->tnid = 0; 
+	   $newNode->language = 'und';
+	   $newNode->field_parcel_order_id[$newNode->language][0]['value'] = $order_id;
+           $pprice = str_replace(variable_get('uc_currency_sign','$'),'',$data['price']);
+	   $newNode->field_parcel_price[$newNode->language][0]['value'] = $pprice>0 ? round($pprice,2):0;
+	   $newNode->field_parcel_size[$newNode->language][0]['value'] = $data['length'].'x'.$data['width'].'x'.$data['height'].' cm';
+	   $newNode->field_parcel_package_name[$newNode->language][0]['value'] = $data['package_name'];
+	   $newNode->field_parcel_weight[$newNode->language][0]['value'] = $data['pweight']>0 ? round($data['pweight'],1):0;
+	   $newNode->field_authority_to_leave[$newNode->language][0]['value'] = 0;
+	   $newNode->field_cash_to_collect[$newNode->language][0]['value'] = $data['cash'];
+	   $newNode->field_customer_reference[$newNode->language][0]['value'] = $data['customer_reference'];
+	   $newNode->field_delivery_note[$newNode->language][0]['value'] = $data['delivery_note'];
+	   $newNode->field_pickup_note[$newNode->language][0]['value'] = $data['pickup_note'];
+	   $newNode->field_pick_up_time[$newNode->language][0]['value'] = date('Y-m-d m:i:s',strtotime($data['pickup_time_date']));
+	   $newNode->field_pick_up_time_ampm[$newNode->language][0]['value'] = $data['pick_up_time_ampm'];
+
+           $newNode->field_pickup_location[$newNode->language][0]['lid'] = lp_address_location_update($pickup_address);
+           $newNode->field_delivery_location[$newNode->language][0]['lid'] = lp_address_location_update($delivery_address);
+
+	   node_object_prepare($newNode);
+	   $node = node_submit($newNode);
+	   node_save($node);
+
+  drupal_set_message(t('Order #@order_id #Parcel@number have been created.',array('@order_id'=>$order_id,'@number'=>$parcenum)));
+        //  $pickup_address_id =  lp_address_address_update($pickup_address,$uid);
+        //$delivery_address_id = lp_address_address_update($delivery_address,$uid);
+	$parcenum++;
+	}
+
+
+  }
+}
+
+
+/*
+function parcel_warapper_render(&$form,&$form_state){
+
+ if(!isset($_SESSION['package_num'])){
+     $_SESSION['package_num'] = 1;
+ }
+ $_SESSION['package_num'] += 1;
+ 
+  return $form['parcel_warapper'];
+}
+*/
+
+
+
+function parcels_basic_info_form($i){
+
+$form['size_'.$i] = array(
+    '#prefix' => '<div class="size">',
+    '#suffix' => '</div>', 
+  );
+  $form['size_'.$i]['length_'.$i] =array(
+    '#title' =>t('Parcel Size (cm)'),
+    '#type'=>'textfield',
+    '#size'=>5,
+    '#maxlength'=>5,
+  ); 
+  $form['size_'.$i]['width_'.$i] =array(
+    '#title' =>t('X'),
+    '#type'=>'textfield',
+    '#size'=>5,
+    '#maxlength'=>5,
+  ); 
+  $form['size_'.$i]['height_'.$i] =array(
+    '#title' =>t('X'),
+    '#type'=>'textfield',
+    '#size'=>5,
+    '#maxlength'=>5,
+  );
+  $form['dweight_'.$i] =array(
+    '#title' =>t('Dimensional weight (kg)'),
+    '#type'=>'hidden',
+    '#size'=>5,
+    '#maxlength'=>5,
+  );
+  $form['pweight_'.$i] =array(
+    '#title' =>t('Parcel weight (kg)'),
+    '#type'=>'textfield',
+    '#size'=>5,
+    '#maxlength'=>5,
+  );
+  $form['authority_'.$i] =array(
+    '#title' =>t('Authority to leave'),
+    '#type'=>'checkbox',
+  );
+  $form['cash_'.$i] =array(
+    '#title' =>t('Cash to collect($)'),
+    '#type'=>'textfield',
+    '#size'=>32,
+  );
+  $form['customer_reference_'.$i] = array(
+    '#title' =>t('Customer reference'),
+    '#type'=>'textfield',
+    '#size'=>32,
+  );
+  $form['delivery_note_'.$i] = array(
+    '#title' =>t('Delivery Note'),
+    '#type'=>'textarea',
+  );
+  $form['pickup_note_'.$i] = array(
+    '#title' =>t('Pickup Note'),
+    '#type'=>'textarea',
+  );
+  $form['pickup_time_date_'.$i] = array(
+    '#type' => 'date_popup', 
+    '#title' =>t('Pick up time date'),
+    '#date_format' => 'm/d/Y', 
+    '#date_year_range' => '0:+2', 
+    '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
+    '#required' => TRUE,
+    '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)),
+  );
+
+$form['pick_up_time_ampm_'.$i] = array(
+    '#type' => 'select',
+    '#title' => t('Pick up time ampm'),
+    '#options' => array('AM' => t('AM'),'PM' => t('PM')),
+    '#default_value' => 'AM',
+    '#attributes' => array('class'=>array('pick_up_time_ampm')),
+);
+  return $form;
+}
+
+function parcels_pickup_location_form($user,$i){
+
+  $options = array();
+  array_push($options,'Select one...');
+  if ($user->uid && $addresses = lp_admin_order_get_uc_address_book($user->uid)) {
+    foreach($addresses as $adr){
+      $options['pickup_'.($i-1).'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
+    }
+    $contents["pickup[".$i."][select_address]"] = array(
+      '#type' => 'select', 
+      '#title' => t('Select addresses'), 
+      '#attributes' => array('class'=>array('admin_parcel_select_address'),'onchange'=>'admin_parcel_select_address('.$i.',"pickup")'),
+      '#options' => $options, 
+    );
+  }
+
+
+ $contents['pickup_address_'.$i] = array('pickup_first_name_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
+    '#attributes' => array('class'=>array('pickup_first_name')),
+    '#size'=>32,
+    '#maxlength' => 100,
+  ),
+'pickup_last_name_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
+    '#attributes' => array('class'=>array('pickup_last_name')),
+    '#size'=>32,
+    '#maxlength' => 100,
+
+  ),
+'pickup_company_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Company'),
+    '#attributes' => array('class'=>array('pickup_company')),
+    '#size'=>32,
+    '#maxlength' => 100,
+  ),
+'pickup_street1_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_street1')),
+  ),
+'pickup_street2_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' =>t('Street address2'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_street2')),
+  ),
+'pickup_city_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('City'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_city')),
+  ), 
+'pickup_zone_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('State/Province'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_zone')),
+  ),
+
+'pickup_country_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Country'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_country')),
+  ),
+'pickup_postal_code_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Postal code'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('pickup_postal_code')),
+  ),
+'pickup_phone_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number'),
+    '#attributes' => array('class'=>array('pickup_phone')),
+    '#size'=>'32',
+
+  ),
+'pickup_post_'.$i=>array(
+    '#type' =>'hidden',
+    '#attributes' => array('class'=>array('pickup_post')),
+ ),
+
+
+'address_name'=>array(
+    '#type' => 'hidden',
+    '#value' =>'',
+    '#maxlength' => 4,
+  ),
+'default_shipping'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  ),
+'default_billing'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  )  
+);
+return $contents;
+}
+
+function parcels_delivery_location_form($user,$i){
+
+  $options = array();
+  array_push($options,'Select one...');
+  if ($user->uid && $addresses = lp_admin_order_get_uc_address_book($user->uid)) {
+    foreach($addresses as $adr){
+      $options['delivery_'.($i-1).'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
+    }
+    $contents["delivery[".$i."][select_address]"] = array(
+      '#type' => 'select', 
+      '#title' => t('Select addresses'), 
+      '#attributes' => array('class'=>array('admin_parcel_select_address'),'onchange'=>'admin_parcel_select_address('.$i.',"delivery")'),
+      '#options' => $options, 
+    );
+  }
+
+
+ $contents['delivery_address_'.$i] = array('delivery_first_name_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
+    '#attributes' => array('class'=>array('delivery_first_name')),
+    '#size'=>32,
+    '#maxlength' => 100,
+  ),
+'delivery_last_name_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
+    '#attributes' => array('class'=>array('delivery_last_name')),
+    '#size'=>32,
+    '#maxlength' => 100,
+
+  ),
+'delivery_company_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Company'),
+    '#attributes' => array('class'=>array('delivery_company')),
+    '#size'=>32,
+    '#maxlength' => 100,
+  ),
+'delivery_street1_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_street1')),
+  ),
+'delivery_street2_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' =>t('Street address2'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_street2')),
+  ),
+'delivery_city_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('City'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_city')),
+  ), 
+'delivery_zone_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('State/Province'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_zone')),
+  ),
+
+'delivery_country_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Country'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_country')),
+  ),
+'delivery_postal_code_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Postal code'),
+    '#maxlength' => 100,
+    '#size'=>32,
+    '#attributes' => array('class'=>array('delivery_postal_code')),
+  ),
+'delivery_phone_'.$i=>array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number'),
+    '#attributes' => array('class'=>array('delivery_phone')),
+    '#size'=>'32',
+
+  ),
+'delivery_post_'.$i =>array(
+    '#type' =>'hidden',
+    '#attributes' => array('class'=>array('delivery_post')),
+ ),
+
+'address_name'=>array(
+    '#type' => 'hidden',
+    '#value' =>'',
+    '#maxlength' => 4,
+  ),
+'default_shipping'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  ),
+'default_billing'=>array(
+    '#type' => 'hidden',
+    '#value' =>'0',
+    '#maxlength' => 4,
+  )  
+);
+return $contents;
+}
+
+function parcels_price_form($i){
+
+  $form['price_'.$i] = array(
+    '#type' =>'textfield',
+    '#title' =>'Parcel Price($)',
+    '#size' =>32,
+  );
+ $form['package_name_'.$i] = array(
+    '#type' =>'hidden',
+    '#value'=>'',
+    '#attributes' => array('class'=>array('package_name')),
+   );
+ $form['check_price_'.$i] = array(
+
+    '#markup'=>'<div class="actions"><input type="button" class="form-submit check_price" value="check reference price" onclick="check_price('.$i.')" /></div>',
+ );
+$form['parcels_factor'] = array(
+    '#type' => 'hidden',
+    '#value' =>variable_get('liveparcels_factor',0.0002),
+    '#attributes' => array('class'=>array('liveparcels_factor')),
+ );
+
+ $form['display_price_'.$i] = array(
+   '#markup' =>'<div class="display_pricre"></div>',
+ );
+
+
+
+return $form;
+}
+
+
+function lp_admin_order_get_uc_address_book($uid){
+
+  $address = db_query("SELECT * FROM {uc_addresses} WHERE uid = ".$uid); 
+
+  return $address;
+}
+
+

@@ -39,3 +39,66 @@ width:300px !important;
  .description{clear:both}
  .container-inline-date{margin-bottom:-20px}
 
+
+#admin-add-parcels-form .fieldset-wrapper .form-item{
+line-height:30px;
+width:580px;
+text-align:center;
+display: inline-block;
+}
+#admin-add-parcels-form .fieldset-wrapper .size{
+overflow:hidden;
+}
+#admin-add-parcels-form .fieldset-wrapper .size .form-item{
+width:auto;
+float:left;
+}
+
+#admin-add-parcels-form .fieldset-wrapper .size .form-item label{
+width:auto;
+}
+
+#admin-add-parcels-form .fieldset-wrapper .size div:first-child label{
+width:200px;
+}
+#admin-add-parcels-form .fieldset-wrapper .size div:first-child input{
+margin-left:15px;
+}
+
+#admin-add-parcels-form .fieldset-wrapper .form-type-checkbox {
+margin-left:200px;
+}
+#admin-add-parcels-form .fieldset-wrapper .form-type-checkbox label{
+width:auto !important;
+line-height:20px;
+}
+
+#admin-add-parcels-form .fieldset-wrapper .size .form-item input{
+margin-left:0px;
+}
+
+#admin-add-parcels-form .fieldset-wrapper .form-item label {
+  width:200px;
+text-align:right;
+float:left;
+}
+#admin-add-parcels-form .fieldset-wrapper .form-item input , 
+#admin-add-parcels-form .fieldset-wrapper .form-item select ,
+#admin-add-parcels-form .fieldset-wrapper .form-item .form-textarea-wrapper{
+margin-left:15px;
+float:left;
+}
+#admin-add-parcels-form .fieldset-wrapper .form-item .form-textarea-wrapper{
+width: 300px !important;
+}
+#admin-add-parcels-form .fieldset-wrapper .check_price{
+margin-left:200px;
+}
+#admin-add-parcels-form .pick_up_time_ampm{
+margin-top:0px ;
+margin-left:15px !important;
+}
+
+#admin-add-parcels-form .date-padding{
+width:300px;
+}

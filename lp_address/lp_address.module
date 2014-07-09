@@ -253,8 +253,16 @@ function lp_address_get_zone_id($zone_name=''){
   return   $zone_id;
 }
 function lp_address_update_render(){
+
   $address_id=$_REQUEST['address_id'];
   $address = db_query("SELECT * FROM {uc_addresses} WHERE `aid`='".$address_id."'")->fetchAssoc();
+
+  if($_REQUEST['type']=="admin_create_order"){
+    $address['zonename'] = db_query('SELECT zone_name FROM  {uc_zones} WHERE zone_id = '.$address['zone'])->fetchfield();
+    $address['countryname'] = db_query('SELECT country_name FROM  {uc_countries} WHERE country_id = '.$address['country'])->fetchfield();
+  }
+
+
   echo json_encode($address);
   exit;
 }
