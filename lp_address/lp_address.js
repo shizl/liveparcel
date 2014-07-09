@@ -73,7 +73,7 @@ ajaxrequest = '{"parcelnum":"'+'Parcel#'+parcelnum+'","dimfirst":"'+dimfirst+'",
                                         packagename = zone.pprice[k]['package_name'];
                                     }
 		
-                                 jQuery("#edit-parcel-price-"+parcelnum+" .display_pricre").html('<div> price:'+pprice+'</div>'+'<div>package name:'+packagename+'</div>'); 
+                                 jQuery("#edit-parcel-price-"+parcelnum+" .display_pricre").html('<div> price: '+pprice+'</div>'+'<div>package name: '+packagename+'</div>'); 
 			    }
 				 jQuery("#edit-parcel-price-"+parcelnum+" .package_name").val(zone.pprice[0]['package_name']);
                                 // alert(zone.pprice[0]['package_name']);
@@ -153,8 +153,7 @@ function admin_parcel_select_address(parcelnum,type){
                         jQuery("."+address_id[0]+"_postal_code:eq("+address_id[1]+")").val(data.postal_code);
                         jQuery("."+address_id[0]+"_phone:eq("+address_id[1]+")").val(data.phone);
                         jQuery("."+address_id[0]+"_address_name:eq("+address_id[1]+")").val(data.address_name);
-                        jQuery("."+address_id[0]+"_post:eq("+address_id[1]+")").val(data.zone+'_'+data.zonename+'_'+data.postal_code);
-
+                        jQuery("."+address_id[0]+"_post:eq("+address_id[1]+")").val(data.zone_number+'_'+data.zonename+'_'+data.postal_code);
                     }    
                 },"json");
         }

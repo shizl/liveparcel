@@ -231,9 +231,9 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 	$pickup_address['address']['zone_name'] = $data['pickup_zone'];
 	$pickup_address['address']['postal_code'] = $data['pickup_postal_code'];
 
-        $country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['pickup_country']))->fetchfield();
+        $pickup_country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['pickup_country']))->fetchfield();
 
-	$pickup_address['address']['country_code'] = $country_code;
+	$pickup_address['address']['country_code'] = $pickup_country_code;
 	$pickup_address['address']['phone'] = $data['pickup_phone'];
 	$pickup_address['address']['company'] = $data['pickup_company'];
 
@@ -253,8 +253,8 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 	$delivery_address['address']['city'] = $data['delivery_city'];
 	$delivery_address['address']['zone_name'] = $data['delivery_zone'];
 	$delivery_address['address']['postal_code'] = $data['delivery_postal_code'];
-        $country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['delivery_country']))->fetchfield();
-	$delivery_address['address']['country_code'] = $country_code;
+        $delivery_country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['delivery_country']))->fetchfield();
+	$delivery_address['address']['country_code'] = $delivery_country_code;
 	$delivery_address['address']['phone'] = $data['delivery_phone'];
 	$delivery_address['address']['company'] = $data['delivery_company'];
 
