@@ -83,7 +83,6 @@ function redirect_add_parcels_form(&$form, &$form_state){
 }
 function admin_add_parcels_form($form,$form_state){
  
-
 drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
 drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 
@@ -160,6 +159,7 @@ drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('
   $form['save'] = array(
     '#type' =>'submit',
     '#value' => t('Save'),
+    '#attributes' => array('class'=>array('save')),
    );
 
 
@@ -213,7 +213,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
       $packages[] = $package;
     }
 
-	$parcenum = 1;
+  $parcenum = 1;
 	foreach($packages as $data){
 
 	$pickup_address = array();
@@ -257,12 +257,11 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 	$delivery_address['address']['country_code'] = $delivery_country_code;
 	$delivery_address['address']['phone'] = $data['delivery_phone'];
 	$delivery_address['address']['company'] = $data['delivery_company'];
-
-
+        $parcenum = check_parcel_node_title($order_id,$parcenum);
 	   $newNode = (object) NULL;
 	   $newNode->type = 'live_parcel'; 
 	   $newNode->uid = $uid; 
-	   $newNode->title = 'Order#'.$order_id.'Parcel#'.$parcenum;
+	   $newNode->title ='Order#'.$order_id.'Parcel#'.$parcenum;
 	   $newNode->created = strtotime("now");
 	   $newNode->changed = strtotime("now");
 	   $newNode->status = 1; 
@@ -272,7 +271,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 	   $newNode->tnid = 0; 
 	   $newNode->language = 'und';
 	   $newNode->field_parcel_order_id[$newNode->language][0]['value'] = $order_id;
-           $pprice = str_replace(variable_get('uc_currency_sign','$'),'',$data['price']);
+          	 $pprice = str_replace(variable_get('uc_currency_sign','$'),'',$data['price']);
 	   $newNode->field_parcel_price[$newNode->language][0]['value'] = $pprice>0 ? round($pprice,2):0;
 	   $newNode->field_parcel_size[$newNode->language][0]['value'] = $data['length'].'x'.$data['width'].'x'.$data['height'].' cm';
 	   $newNode->field_parcel_package_name[$newNode->language][0]['value'] = $data['package_name'];
@@ -661,4 +660,11 @@ function lp_admin_order_get_uc_address_book($uid){
   return $address;
 }
 
-
+function check_parcel_node_title($order_id,$parcenum){
+        $count = db_query('select count(*) from {node} where title =:title',array(':title'=>'Order#'.$order_id.'Parcel#'.$parcenum))->fetchfield();
+        if( $count > 0){
+         $parcenum += 1; 
+	 $parcenum = check_parcel_node_title($order_id,$parcenum);
+        }
+         return $parcenum;
+}
