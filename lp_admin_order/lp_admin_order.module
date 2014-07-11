@@ -103,6 +103,7 @@ drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('
     '#title' => t('parcel#'.$i), 
     '#collapsible' => FALSE, 
     '#collapsed' => TRUE,
+    '#attributes' => array('class'=>array('parcels')),
   );
   $form['parcel_warapper']['parcels_'.$i]['basic_info_'.$i] = array(
     '#type' => 'fieldset', 
@@ -179,7 +180,8 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
       $package['length'] = $_POST['length_'.$i]; 
       $package['width'] = $_POST['width_'.$i]; 
       $package['height'] = $_POST['height_'.$i]; 
-      $package['pweight'] = $_POST['pweight_'.$i]; 
+      $package['pweight'] = $_POST['pweight_'.$i];
+      $package['authority'] = $_POST['authority_'.$i];
       $package['cash'] = $_POST['cash_'.$i];
       $package['customer_reference'] = $_POST['customer_reference_'.$i]; 
       $package['delivery_note'] = $_POST['delivery_note_'.$i];
@@ -276,7 +278,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 	   $newNode->field_parcel_size[$newNode->language][0]['value'] = $data['length'].'x'.$data['width'].'x'.$data['height'].' cm';
 	   $newNode->field_parcel_package_name[$newNode->language][0]['value'] = $data['package_name'];
 	   $newNode->field_parcel_weight[$newNode->language][0]['value'] = $data['pweight']>0 ? round($data['pweight'],1):0;
-	   $newNode->field_authority_to_leave[$newNode->language][0]['value'] = 0;
+	   $newNode->field_authority_to_leave[$newNode->language][0]['value'] = $data['authority'];
 	   $newNode->field_cash_to_collect[$newNode->language][0]['value'] = $data['cash'];
 	   $newNode->field_customer_reference[$newNode->language][0]['value'] = $data['customer_reference'];
 	   $newNode->field_delivery_note[$newNode->language][0]['value'] = $data['delivery_note'];
