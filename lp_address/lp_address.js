@@ -234,7 +234,7 @@ if(parcelnum!=null){
 
 jQuery('#parcel_warapper').append(ht);
 
-jQuery('#edit-pickup-time-date-'+maxnum+'-datepicker-popup-0').datepicker({minDate: 2});
+jQuery('#edit-pickup-time-date-'+maxnum+'-datepicker-popup-0').datepicker({minDate: 0});
 
 jQuery('.maxnum').val(maxnum);
 

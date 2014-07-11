@@ -142,6 +142,7 @@ drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('
     '#markup' => '<input type="button" class="form-submit duplicate" value="Duplicate" onclick="copy_package('.$i.')" />',
   );
  }
+
   $form['add_new'] = array(
   //  '#type' =>'submit',
    // '#value' => t('Add New'),
