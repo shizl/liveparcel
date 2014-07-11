@@ -181,7 +181,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
       $package['width'] = $_POST['width_'.$i]; 
       $package['height'] = $_POST['height_'.$i]; 
       $package['pweight'] = $_POST['pweight_'.$i];
-      $package['authority'] = $_POST['authority_'.$i];
+      $package['authority'] = isset($_POST['authority_'.$i])?$_POST['authority_'.$i]:0;
       $package['cash'] = $_POST['cash_'.$i];
       $package['customer_reference'] = $_POST['customer_reference_'.$i]; 
       $package['delivery_note'] = $_POST['delivery_note_'.$i];
