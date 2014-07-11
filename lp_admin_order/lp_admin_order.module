@@ -50,8 +50,11 @@ function lp_admin_order_form_uc_order_edit_form_alter(&$form, &$form_state, $ord
   $form_state['rebuild'] = TRUE;
   $order = $form_state['build_info']['args'][0];
 
-  $data = module_invoke_all('uc_add_to_cart_data', 41);
-  $product = uc_product_load_variant(41, $data);
+  $nid = db_query("select nid from {node} where type = 'live_parcel_product' and status=1 LIMIT 0 , 1")->fetchfield();
+
+  $data = module_invoke_all('uc_add_to_cart_data', $nid);
+
+  $product = uc_product_load_variant($nid, $data);
   $product->qty = 1;
 
   drupal_alter('uc_order_product', $product, $order);

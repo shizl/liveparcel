@@ -177,7 +177,7 @@ function copy_package(parcelnum){
  pickup_address = '';
      jQuery('fieldset #edit-pickup-'+parcelnum+'-select-address option').each(function(){
         address_id = jQuery(this).val().split('_');
-	pickup_address += '<option value="'+address_id[0]+'_'+parseInt(parseInt(address_id[1])+1)+'_'+address_id[2]+'" >'+jQuery(this).text()+'</option>';
+	pickup_address += '<option value="'+address_id[0]+'_'+parseInt(maxnum-1)+'_'+address_id[2]+'" >'+jQuery(this).text()+'</option>';
      });
  }else{
  pickup_address = '';
@@ -203,7 +203,7 @@ if(parcelnum!=null){
  delivery_address = '';
      jQuery('fieldset #edit-delivery-'+parcelnum+'-select-address option').each(function(){
         address_id = jQuery(this).val().split('_');
-	delivery_address += '<option value="'+address_id[0]+'_'+parseInt(parseInt(address_id[1])+1)+'_'+address_id[2]+'" >'+jQuery(this).text()+'</option>';
+	delivery_address += '<option value="'+address_id[0]+'_'+parseInt(maxnum-1)+'_'+address_id[2]+'" >'+jQuery(this).text()+'</option>';
      });
  }else{
  delivery_address = '';
