@@ -62,6 +62,7 @@ function lp_address_admin_setting_form($form,$form_state){
     '#description'=>'default 0',
   );
   $active = array('insert' => t('keep Old and Add New States'), 'delete' => t('Delete Old and  Add New States'));
+
   $form['lp_state']['active'] = array(
     '#type' => 'radios',
     '#title' => t('State update'),
