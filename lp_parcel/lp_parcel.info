@@ -1,5 +1,5 @@
-name =Parcel
-description =Parcel.
+name = Parcel
+description = REQUIRED. Creates parcels as LiveParcels content type after checkout.
 package = Live Parcels - core
 core = 7.x
 dependencies[] = liveparcels

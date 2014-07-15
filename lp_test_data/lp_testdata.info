@@ -1,5 +1,5 @@
-name = Test Data
-description = Test Data.
+name = Demo
+description = Optional. Installs demo data, incl postcode and prices.
 package = Live Parcels - core
 core = 7.x
 dependencies[] = liveparcels
@@ -7,5 +7,3 @@ dependencies[] = liveparcels
 version = "7.x-1.0"
 core = "7.x"
 project = "testdata"
-
-

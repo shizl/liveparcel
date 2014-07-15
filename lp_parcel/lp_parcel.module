@@ -59,7 +59,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             for($f=0;$f<count($parcels['parcels']);$f++){
                $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,$extra_info['pickupdata'][$f]['field_parcel_pickup_address']),
                'field_pick_up_time'=> array(
-                  '#title' => t('Pickup time'),
+                  '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
@@ -81,7 +81,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                 '#description' => t('Enter any reference number here to help you find this item.')
                 ),'field_cash_to_collect'=>array(
                 '#type' => 'textfield',
-                '#title' => t('Cash to collect'),
+                '#title' => t('Cash to collect ('.variable_get('uc_currency_sign','$').') '),
                 '#default_value' =>$extra_info['pickupdata'][$f]['field_cash_to_collect'],
                  '#size'=>'30',
                   '#maxlength'=>'30',
@@ -98,7 +98,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 
         }else{
                 $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,$extra_info['pickupdata'][0]['field_parcel_pickup_address']),'field_pick_up_time'=> array(
-                  '#title' => t('Pickup time'),
+                  '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
@@ -116,7 +116,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                '#attributes' => array('class'=>array('pick_up_time_ampm')),
                ),'field_cash_to_collect'=>array(
                 '#type' => 'hiddden',
-                '#title' => t('Cash to collect'),
+                '#title' => t('Cash to collect ('.variable_get('uc_currency_sign','$').') '),
                 '#default_value' =>'',
                 '#size'=>'30',
                 '#maxlength'=>'30',
@@ -225,7 +225,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                         form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][street1', t('Parcel#'.($key+1).': must enter pickup street.'));
                     }
                     if (!empty($pinfo['field_parcel_pickup_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_pickup_address_data']['address']['phone'])) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Parcel#'.($key+1).': must enter number.'));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Parcel#'.($key+1).': only numbers allowed for phone number field.'));
                     }
                     if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)) ) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '));
@@ -242,7 +242,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                         form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][street1', t('Parcel#'.($key+1).': must enter delivery street name.'));
                     }
                     if (!empty($pinfo['field_parcel_delivery_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_delivery_address_data']['address']['phone'])) {
-                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][phone', t('Parcel#'.($key+1).': must enter number.'));
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][phone', t('Parcel#'.($key+1).': only numbers allowed for phone number field.'));
                     }
                 }
                 return true;
@@ -446,14 +446,14 @@ function lp_parcel_uc_checkout_pane() {
    
       $panes['parcel_pickup'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_pickup',
-    'title' => t('Parcel pickup extra contents'),
+    'title' => t('Parcel pickup details'),
     'desc' => t("Display the contents of a customer's shopping cart."),
       'enabled' => FALSE,
       'weight' => 4,
       );
       $panes['parcel_delivery'] = array(
       'callback' => 'lp_parcel_uc_checkout_pane_parcel_delivery',
-    'title' => t('Parcel delivery extra contents'),
+    'title' => t('Parcel delivery details'),
     'desc' => t("Display the contents of a customer's shopping cart."),
       'enabled' => FALSE,
       'weight' => 5,
@@ -599,5 +599,3 @@ function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
   );  
   return   $form;   
 }
-
-

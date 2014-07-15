@@ -2,6 +2,7 @@
 function lp_discount_menu(){
   $items['admin/liveparcels/adminsetting/discounts'] = array(
       'title' => t('Discount settings'), 
+      'description' => 'Configure discount by role or user.',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('lp_discount_settings'),
       'access arguments' => array('administer actions'),

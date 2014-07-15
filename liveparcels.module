@@ -17,8 +17,8 @@ function liveparcels_menu() {
   $items = array();
 
   $items['admin/liveparcels'] = array(
-    'title' => 'Live Parcels',
-    'description' => 'Administer Live Parcels .',
+    'title' => 'LiveParcels',
+    'description' => 'Administer orders, parcels, pricing, postcode, discount, etc.',
     'page callback' => 'liveparcels_configpage',
     'access arguments' => array('administer actions'),
     'weight' => -13,
@@ -27,13 +27,16 @@ function liveparcels_menu() {
 
   $items['admin/liveparcels/adminsetting'] = array(
 
-    'title' => 'Admin Setting',
-    'description' => 'Adjust configuration settings for liveparcels.',
+    'title' => 'Settings',
+    'description' => 'Admin settings for liveparcels.',
     'page callback' => 'liveparcels_configuration_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 1,
+    'weight' => 0,
     'position' => 'right',
   );
+
+
+/*
   $items['admin/liveparcels/configuration'] = array(
 
     'title' => 'Configuration',
@@ -51,6 +54,60 @@ function liveparcels_menu() {
     'page arguments'=>array('liveparcels_custom_message_form'),
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
+  );
+  */
+      $items['admin/liveparcels/orders'] = array(
+    'title' => 'Orders',
+    'description' => 'View orders for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 2,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/parcels'] = array(
+    'title' => 'Parcels',
+    'description' => 'View parcels for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 4,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/parcels_map'] = array(
+    'title' => 'Parcels map',
+    'description' => 'View parcels map for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 6,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/drivers'] = array(
+    'title' => 'Drivers',
+    'description' => 'View drivers info for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 8,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/users'] = array(
+    'title' => 'Users',
+    'description' => 'View users info for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 10,
+    'position' => 'right',
+  );
+  
+    $items['admin/liveparcels/reports'] = array(
+    'title' => 'Reports',
+    'description' => 'View reports for liveparcels.',
+    'page callback' => 'liveparcels_menu_page',
+    'access arguments' => array('administer liveparcel'),
+    'weight' => 12,
+    'position' => 'right',
   );
   
   $items['admin/liveparcels/adminsetting/settings'] = array(
@@ -163,7 +220,7 @@ function liveparcels_menu() {
   );
   $items['user/%user/live_parcel_price'] = array(
     'title' => 'Price list',
-    'description' => ' package show.',
+    'description' => 'My price list including discount',
     'page callback' => array('liveparcels_live_parcel_price'),
     'access callback'=>user_access('view parcel price'),
     'file' => 'liveparcels.admin.inc',
@@ -171,8 +228,8 @@ function liveparcels_menu() {
   );
   if($user->uid > 0){
     $items['live_parcel_price'] = array(
-      'title' => 'User price list ',
-      'description' => 'User price list .',
+      'title' => 'My price list',
+      'description' => 'My price list including discount',
       'page callback' => array('liveparcels_live_parcel_price_set'),
       'access callback'=>user_access('View parcel price'),
       'menu_name'=>'user-menu',
@@ -476,4 +533,3 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
     field_create_instance($instance);
   }
 }
-

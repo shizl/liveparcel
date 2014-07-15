@@ -12,9 +12,9 @@ function lp_address_install() {
       db_insert('uc_countries')
         ->fields(array(
           'country_id' => 8888,
-          'country_name' => 'Live parcel',
+          'country_name' => 'Australia',
           'country_iso_code_2' => 'AU',
-          'country_iso_code_3' => 'LPL',
+          'country_iso_code_3' => 'AUS',
           'version' => 1,
         ))->execute();
       
@@ -45,6 +45,3 @@ function lp_address_install() {
       );
     }
 }
-
-
-

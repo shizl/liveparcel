@@ -89,7 +89,7 @@ if($parcels>0){
 		 <input class="deliver" type="radio" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
 		 Deliver one or more items
          <input class="pick-up" type="radio" name="items" '.($parcels['ptype']==1 ? 'checked':'').' value="1" >
-         Pick-up one or more items
+         Pickup one or more items
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postto' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
@@ -697,4 +697,3 @@ function liveparcels_getZoneprice() {
     
 		echo json_encode($returndata);		
 }
-

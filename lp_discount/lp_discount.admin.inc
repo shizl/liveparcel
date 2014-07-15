@@ -3,13 +3,13 @@ function lp_discount_settings($form,$form_state) {
   $form['removed'] = array(
       '#title' => t(''),
       '#type' => 'item',
-      '#description' =>t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
+      '#description' => t('You may configure discount by role or user. Enter 0 for no discount, 0.1 for 10% discount, 0.3 for 30% discount, 1 for free service, i.e. 100% discount, etc.'),
       );
 
   $form['roles'] = array(
       '#type'=>'fieldset',
-      '#title' =>'Roles Discount',
-      '#description' => t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend'),
+      '#title' =>'Discount by role',
+      '#description' => 'Discount entered here will be applied to all users who belong to that role.',
       '#collapsible' => TRUE,
       );
   foreach(user_roles() as $tid => $roles){
@@ -22,8 +22,8 @@ function lp_discount_settings($form,$form_state) {
 
   $form['user'] = array(
       '#type'=>'fieldset',
-      '#title' =>'User Discount',
-      '#description' => 'If delete user discount please input 0',
+      '#title' =>'Discount by user',
+      '#description' => 'User based discount supersedes role based discount even if the role based discount is larger. To delete user discount, input 0.',
       '#collapsible' => TRUE,
       );
 
@@ -48,7 +48,7 @@ function lp_discount_settings($form,$form_state) {
   }
   $form['user']['add'] = array(
       '#title' =>'Add User Discount',
-      '#description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit felis eros, sit amet dignissim velit sodales non. Nulla congue ipsum eget pellentesque eleifend',
+      '#description' => 'Type the user name you want to apply a discount, enter the discount rate and then click Add User.',
       '#type'=>'fieldset',
       );
   $form['user']['add']['add_more_user'] = array(
@@ -149,7 +149,7 @@ function lp_discount_settings_submit($form,&$form_state) {
       }
     }
   }
-  drupal_set_message(t('Save Ok'));
+  drupal_set_message(t('Settings saved'));
 }
 
 function lp_discount_add_more($form,$form_state){
@@ -207,4 +207,3 @@ function lp_discount_add_more($form,$form_state){
     return $form['user']['user_wrapper'];
   }
 }
-
