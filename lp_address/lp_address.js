@@ -34,6 +34,7 @@ jQuery('#admin-add-parcels-form .save').click(function(){
 
  maxnum = jQuery('#parcel_warapper').find('>fieldset:last').attr('id');
  maxnum = maxnum.substr(maxnum.length-1,1);
+time_setting = jQuery('.time_setting').val();
  for(i=1;i<=maxnum;i++){
 
  size_length = jQuery('#edit-basic-info-'+i+' .size .form-item-length-'+i+' input').val();
@@ -46,7 +47,7 @@ price = jQuery('#edit-parcel-price-'+i+' .form-item-price-'+i+' input').val();
   var mydate = new Date();
 
    month = (mydate.getMonth()+1)<10?'0'+(mydate.getMonth()+1):(mydate.getMonth()+1);
-   day =   mydate.getDate()<10?'0'+mydate.getDate():mydate.getDate();
+   day =   (mydate.getDate()+parseInt(time_setting))<10?'0'+(mydate.getDate()+parseInt(time_setting)):(mydate.getDate()+parseInt(time_setting));
    var fulldate = month +"/"+day+"/"+mydate.getFullYear();
     var arr1 = fulldate.split("/");
     var date1 = new Date(arr1[2], arr1[0], arr1[1]);
@@ -78,7 +79,7 @@ price = jQuery('#edit-parcel-price-'+i+' .form-item-price-'+i+' input').val();
       return false;
     }
     else if(date1>date2){
-      alert('#parcel'+i+': Enter the date can not be less than the current date');
+      alert('#parcel'+i+': Enter the date can not be less than two days after the current date');
       return false;
     }
     else if(jQuery('.form-item-pickup-last-name-'+i+' input').val()==""){
@@ -251,7 +252,8 @@ if(parcelnum!=null){
 
 jQuery('#parcel_warapper').append(ht);
 
-jQuery('#edit-pickup-time-date-'+maxnum+'-datepicker-popup-0').datepicker({minDate: 0});
+time_setting = jQuery('.time_setting').val();
+jQuery('#edit-pickup-time-date-'+maxnum+'-datepicker-popup-0').datepicker({minDate:time_setting});
 
 jQuery('.maxnum').val(maxnum);
 
