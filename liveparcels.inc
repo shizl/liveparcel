@@ -18,7 +18,9 @@ $parcel_info='';
 if($parcels>0){
         $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
      $post=$parcels['ptype']==2 ? 'postto':'postfrom';
+$p=0;
   foreach($parcels['parcels'] as $pid=>$parcel){
+$p++;
        $parcel_info.=' <div class="post-all">
           <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
@@ -351,7 +353,7 @@ if($parcels>0){
 	  
   });    
 	 
-     var num = 1;
+     var num = '.($p>1 ? $p:1).';
      $(".add_new input").click(function(){
 		num++;
 		var divText = $(".post-all:last");
