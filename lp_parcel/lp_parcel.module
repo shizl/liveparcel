@@ -214,35 +214,37 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             case 'process':
                 $parcel_pickup = $form_state['values']['panes']['parcel_pickup'];
                 $parcel_delivery = $form_state['values']['panes']['parcel_delivery'];
+
                 foreach($parcel_pickup as $key=>$pinfo){
+
                      if (empty($pinfo['field_parcel_pickup_address_data']['address']['first_name']) ) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][first_name', t('Parcel#'.($key+1).': must enter pickup first name.'));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][first_name', t('Pickup parcel#'.($key+1).': must enter pickup first name.'));
                     }
                     if (empty($pinfo['field_parcel_pickup_address_data']['address']['last_name']) ) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][last_name', t('Parcel#'.($key+1).': must enter pickup last name.'));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][last_name', t('Pickup parcel#'.($key+1).': must enter pickup last name.'));
                     }
                     if (empty($pinfo['field_parcel_pickup_address_data']['address']['street1']) ) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][street1', t('Parcel#'.($key+1).': must enter pickup street.'));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][street1', t('Pickup parcel#'.($key+1).': must enter pickup street.'));
                     }
                     if (!empty($pinfo['field_parcel_pickup_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_pickup_address_data']['address']['phone'])) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Parcel#'.($key+1).': only numbers allowed for phone number field.'));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', t('Pickup parcel#'.($key+1).': only numbers allowed for phone number field.'));
                     }
                     if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)) ) {
-                        form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Parcel#'.($key+1).': You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '));
+                        form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', t('Pickup parcel#'.($key+1).': You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '));
                     }   
                 }
                 foreach($parcel_delivery as $key=>$pinfo){
                      if (empty($pinfo['field_parcel_delivery_address_data']['address']['first_name']) ) {
-                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][first_name', t('Parcel#'.($key+1).': must enter delivery first name.'));
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][first_name', t('Delivery parcel#'.($key+1).': must enter delivery first name.'));
                     }
                     if (empty($pinfo['field_parcel_delivery_address_data']['address']['last_name']) ) {
-                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][last_name', t('Parcel#'.($key+1).': must enter delivery last name.'));
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][last_name', t('Delivery parcel#'.($key+1).': must enter delivery last name.'));
                     }
                     if (empty($pinfo['field_parcel_delivery_address_data']['address']['street1']) ) {
-                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][street1', t('Parcel#'.($key+1).': must enter delivery street name.'));
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][street1', t('Delivery parcel#'.($key+1).': must enter delivery street name.'));
                     }
                     if (!empty($pinfo['field_parcel_delivery_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_delivery_address_data']['address']['phone'])) {
-                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][phone', t('Parcel#'.($key+1).': only numbers allowed for phone number field.'));
+                        form_set_error('panes][parcel_delivery]['.$key.'][field_parcel_delivery_address_data][address][phone', t('Delivery parcel#'.($key+1).': only numbers allowed for phone number field.'));
                     }
                 }
                 return true;
@@ -592,10 +594,10 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
     }
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
- $form['actions']['cancel']=array(
-    '#type' => 'button',
-    '#value' => t('Cancel'),
-    '#attributes'=>array("onclick"=>"location.href='/cart'")
-  );  
-  return   $form;   
+ $form['actions']['cancel']['#submit'][] = 'jump_cart'; 
 }
+
+function jump_cart(&$form,&$form_state){
+  $form_state['redirect'] = 'cart';
+}
+
