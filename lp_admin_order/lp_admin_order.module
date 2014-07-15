@@ -160,7 +160,11 @@ drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('
     '#attributes' => array('class'=>array('maxnum')),
    );
 
-
+  $form['time_setting'] = array(
+    '#type' =>'hidden',
+    '#value'=>variable_get('liveparcels_pickup_time',0),
+    '#attributes' => array('class'=>array('time_setting')),
+   );
   $form['save'] = array(
     '#type' =>'submit',
     '#value' => t('Save'),
