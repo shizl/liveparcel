@@ -356,6 +356,15 @@ $p++;
      var num = '.($p>1 ? $p:1).';
      $(".add_new input").click(function(){
 		num++;
+          $(".post-all .parcel strong").each(function(){
+		ptitle = $(this).html();
+                pnum = ptitle.substring(7);
+                 if(pnum==num){
+			num++;
+                 }
+
+	  });
+
 		var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
 		divText.after(newDiv);
@@ -365,9 +374,21 @@ $p++;
 		$(".post-all:last .parcel input").show();
 		$(".post-all:last .post-mess table input").val("");
 		
+
+
+
      });
 	 $(".duplicate input").click(function(){
 		num++;
+
+          $(".post-all .parcel strong").each(function(){
+		ptitle = $(this).html();
+                pnum = ptitle.substring(7);
+                 if(pnum==num){
+			num++;
+                 }
+
+	  });
 		var divText = $(this).parent().parent().parent();
         var newDiv = divText.clone(true);
 		$(".post-all:last").after(newDiv);
