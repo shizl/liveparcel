@@ -1,0 +1,21 @@
+<?php
+
+function skipped_menu(){
+
+  $item['user/%user/skipped'] = array(
+    'title' => 'Skipped',
+    'page callback' =>'get_user_skipped',
+    'page arguments' => array(1),
+    'access callback'=>user_access('view parcel price'),
+    'type' => MENU_LOCAL_TASK,
+    'file' =>'skipped.page.inc',
+  );
+
+ return $item;
+} 
+
+
+
+
+
+

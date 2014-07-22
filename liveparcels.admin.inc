@@ -471,6 +471,8 @@ function liveparcels_configpage() {
 
   module_load_include('inc', 'system', 'system.admin');
   // Check for status report errors.
+
+
   if (system_status(TRUE) && user_access('administer site configuration')) {
     drupal_set_message(t('One or more problems were detected with your Drupal installation. Check the <a href="@status">status report</a> for more information.', array('@status' => url('admin/reports/status'))), 'error');
   }
@@ -510,7 +512,9 @@ function liveparcels_configpage() {
     '#blocks' => $blocks,
     '#attributes' => array('class' => array('live-parcels-status')),
   );
+ 
   return $build;
+
 }
 
 function liveparcels_live_parcel_price() {
