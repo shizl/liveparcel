@@ -118,13 +118,15 @@ drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('
     '#type' => 'fieldset', 
     '#title' => t('Pickup Location'), 
     '#collapsible' => FALSE, 
-    '#collapsed' => TRUE,  
+    '#collapsed' => TRUE, 
+    '#attributes' => array('class'=>array('pickup_location')), 
   );
   $form['parcel_warapper']['parcels_'.$i]['delivery_location_'.$i] = array(
     '#type' => 'fieldset', 
     '#title' => t('Delivery Location'), 
     '#collapsible' => FALSE, 
     '#collapsed' => TRUE,  
+    '#attributes' => array('class'=>array('delivery_location')), 
   );
   $form['parcel_warapper']['parcels_'.$i]['parcel_price_'.$i] = array(
     '#type' => 'fieldset', 
@@ -333,7 +335,7 @@ $form['size_'.$i] = array(
     '#suffix' => '</div>', 
   );
   $form['size_'.$i]['length_'.$i] =array(
-    '#title' =>t('Parcel Size (cm)'),
+    '#title' =>t('Parcel Size (cm)').' <span class="form-required" title="This field is required.">*</span>',
     '#type'=>'textfield',
     '#size'=>5,
     '#maxlength'=>5,
@@ -357,7 +359,7 @@ $form['size_'.$i] = array(
     '#maxlength'=>5,
   );
   $form['pweight_'.$i] =array(
-    '#title' =>t('Parcel weight (kg)'),
+    '#title' =>t('Parcel weight (kg)').' <span class="form-required" title="This field is required.">*</span>',
     '#type'=>'textfield',
     '#size'=>5,
     '#maxlength'=>5,
@@ -366,24 +368,26 @@ $form['size_'.$i] = array(
     '#title' =>t('Authority to leave'),
     '#type'=>'checkbox',
   );
-  $form['cash_'.$i] =array(
-    '#title' =>t('Cash to collect($)'),
-    '#type'=>'textfield',
-    '#size'=>32,
-  );
   $form['customer_reference_'.$i] = array(
     '#title' =>t('Customer reference'),
     '#type'=>'textfield',
     '#size'=>32,
   );
-  $form['delivery_note_'.$i] = array(
-    '#title' =>t('Delivery Note'),
-    '#type'=>'textarea',
+  $form['cash_'.$i] =array(
+    '#title' =>t('Cash to collect($)'),
+    '#type'=>'textfield',
+    '#size'=>32,
   );
   $form['pickup_note_'.$i] = array(
     '#title' =>t('Pickup Note'),
     '#type'=>'textarea',
   );
+
+  $form['delivery_note_'.$i] = array(
+    '#title' =>t('Delivery Note'),
+    '#type'=>'textarea',
+  );
+
   $form['pickup_time_date_'.$i] = array(
     '#type' => 'date_popup', 
     '#title' =>t('Pick up time date'),
@@ -396,7 +400,6 @@ $form['size_'.$i] = array(
 
 $form['pick_up_time_ampm_'.$i] = array(
     '#type' => 'select',
-    '#title' => t('Pick up time ampm'),
     '#options' => array('AM' => t('AM'),'PM' => t('PM')),
     '#default_value' => 'AM',
     '#attributes' => array('class'=>array('pick_up_time_ampm')),
@@ -481,7 +484,7 @@ function parcels_pickup_location_form($user,$i){
   ),
 'pickup_postal_code_'.$i=>array(
     '#type' => 'textfield',
-    '#title' => t('Postal code'),
+    '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array('pickup_postal_code')),
@@ -595,7 +598,7 @@ function parcels_delivery_location_form($user,$i){
   ),
 'delivery_postal_code_'.$i=>array(
     '#type' => 'textfield',
-    '#title' => t('Postal code'),
+    '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array('delivery_postal_code')),

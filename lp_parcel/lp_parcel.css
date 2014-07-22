@@ -45,6 +45,8 @@ line-height:30px;
 width:580px;
 text-align:center;
 display: inline-block;
+margin:0px;
+padding:0px;
 }
 #admin-add-parcels-form .fieldset-wrapper .size{
 overflow:hidden;
@@ -102,3 +104,36 @@ margin-left:15px !important;
 #admin-add-parcels-form .date-padding{
 width:300px;
 }
+
+#admin-add-parcels-form .pick_up_time_ampm {
+ margin-left: 120px !important;
+    margin-top: -40px;
+    position: absolute;
+}
+
+.parcels .pickup_location {
+float:left;
+width:40%;
+
+}
+.parcels .delivery_location {
+float:right;
+width:40%;
+}
+
+.parcels .pickup_location .form-item,
+.parcels .delivery_location .form-item{
+
+width:480px !important;
+
+}
+.parcels .pickup_location .form-item label,
+.parcels .delivery_location .form-item label{
+width:150px !important;
+}
+.parcels .pickup_location .fieldset-wrapper div:nth-child(9),
+.parcels .delivery_location .fieldset-wrapper div:nth-child(9)
+{
+display:none !important;
+}
+
