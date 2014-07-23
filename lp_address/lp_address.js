@@ -99,11 +99,11 @@ price = jQuery('#edit-parcel-price-'+i+' .form-item-price-'+i+' input').val();
       return false;
     }
     else if(jQuery('.form-item-pickup-street1-'+i+' input').val()==""){
-      alert('#parcel'+i+': pickup street1 can not be empty');
+      alert('#parcel'+i+': pickup street can not be empty');
       return false;
     }
     else if(jQuery('.form-item-delivery-street1-'+i+' input').val()==""){
-      alert('#parcel'+i+': delivery street1 can not be empty');
+      alert('#parcel'+i+': delivery street can not be empty');
       return false;
     }
     else if(jQuery('.form-item-pickup-postal-code-'+i+' input').val()==""){
