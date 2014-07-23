@@ -373,7 +373,7 @@ $form['size_'.$i] = array(
     '#size'=>32,
   );
   $form['cash_'.$i] =array(
-    '#title' =>t('Cash to collect($)'),
+    '#title' =>t('Cash to collect($)').' <span class="form-required" title="This field is required.">*</span>',
     '#type'=>'textfield',
     '#size'=>32,
   );
@@ -637,7 +637,7 @@ function parcels_price_form($i){
 
   $form['price_'.$i] = array(
     '#type' =>'textfield',
-    '#title' =>'Parcel Price($)',
+    '#title' =>'Parcel Price($)'.' <span class="form-required" title="This field is required.">*</span>',
     '#size' =>32,
   );
  $form['package_name_'.$i] = array(

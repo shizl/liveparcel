@@ -42,7 +42,7 @@ width:300px !important;
 
 #admin-add-parcels-form .fieldset-wrapper .form-item{
 line-height:30px;
-width:580px;
+width:780px;
 text-align:center;
 display: inline-block;
 margin:0px;
@@ -106,7 +106,7 @@ width:300px;
 }
 
 #admin-add-parcels-form .pick_up_time_ampm {
- margin-left: 120px !important;
+ margin-left: 20px !important;
     margin-top: -40px;
     position: absolute;
 }
