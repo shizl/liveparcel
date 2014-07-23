@@ -9,8 +9,7 @@ function lp_admin_order_menu(){
     'access arguments' => array('administer liveparcel'),
     'weight' => 1,
   );
-   $items['admin/order/add_parcels'] = array(
-      'title' => 'Add parcels',
+   $items['admin/liveparcels/order/add_parcels'] = array(
       'page callback' => 'drupal_get_form',
       'page arguments'=>array('admin_add_parcels_form'), 
       'access arguments' => array('administer liveparcel'),
@@ -81,7 +80,7 @@ function lp_admin_order_form_uc_order_edit_form_alter(&$form, &$form_state, $ord
 function redirect_add_parcels_form(&$form, &$form_state){
   $order = $form_state['build_info']['args'][0];
   if(isset($_GET['args'])){
-   $form_state['redirect'] = array('admin/order/add_parcels',array('query'=>array('order_id'=>$order->order_id,'uid'=>$order->uid)));
+   $form_state['redirect'] = array('admin/liveparcels/order/add_parcels',array('query'=>array('order_id'=>$order->order_id,'uid'=>$order->uid)));
   }
 }
 function admin_add_parcels_form($form,$form_state){

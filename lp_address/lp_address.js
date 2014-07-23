@@ -102,6 +102,14 @@ price = jQuery('#edit-parcel-price-'+i+' .form-item-price-'+i+' input').val();
       alert('#parcel'+i+': delivery street1 can not be empty');
       return false;
     }
+    else if(jQuery('.form-item-pickup-postal-code-'+i+' input').val()==""){
+      alert('#parcel'+i+': pickup postal code can not be empty');
+      return false;
+    }
+    else if(jQuery('.form-item-delivery-postal-code-'+i+' input').val()==""){
+      alert('#parcel'+i+': delivery postal code can not be empty');
+      return false;
+    }
     else if(isNaN(price)||parseFloat(price)<=0||price.length==0){
       alert('#parcel'+i+': price value must be Greater than 0');
       return false;
