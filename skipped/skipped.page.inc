@@ -80,61 +80,29 @@ function get_user_status_skipped_node($form,$form_state){
 function get_user_status_skipped_node_submit($form,&$form_state){
 
 global $user;
- 
+
+
 if($user->uid == arg(1)){
 
   if (isset($_POST['checkbox'])){
-
     foreach($_POST['checkbox'] as $key=>$value){
-
 	$total = $form['live_parcel_node_list']['#rows'][$key]['price'];
 
-	$nid = db_query("select nid from {node} where type = 'live_parcel_product' and status=1 LIMIT 0 , 1")->fetchfield();
-	$error_msg = FALSE;
-
-	$node = node_load($nid);
-	$product = uc_product_load($node);
-	if (!$product)
-	  // $error_msg = 'There was an error finding the free trial product. Please contact an administrator.';
-	$product->nid = $node->nid; //we need to do this in order for the file downloads to work
-	$product->qty = 1;
-	$product->title = $node->title;
-	 
-	// Create the order and gather user information
-	$order = uc_order_new($user->uid, 'completed');
-	$order_id = $order->order_id;
-
-	if (!$user->uid){
-	  $names = split(' ', $user->name);
-	  $last_name = array_pop($names);
-	  $first_names = join(' ', $names);
-	  $email = $user->mail;
-	} else {
-	 // $aid = _uc_addresses_get_default_address_id($user->uid);
-	 // $address = _uc_addresses_db_get_address($user->uid, $aid);
-	 // $first_names = $address->first_name;
-	//  $last_name = $address->last_name;
-	//  $email = $user->mail;
-	}
-
-	// Populate the order
-	$order->products[] = $product;
-	$order->payment_method = 'free_order';
-	if (!isset($order->primary_email))
-	  $order->primary_email = $email;
-
-	//$order->billing_first_name = $first_names;
-	//$order->billing_last_name = $last_name;
-
-	$order->order_total = $total;
-
-	//if (!$user->uid)
-	 // $order->data['new_user']['pass'] = $form_state['values']['password'];
-	 
-	// Complete the sale
-	uc_order_save($order);
-	uc_cart_complete_sale($order, TRUE);
+        $neworder = uc_order_new($user->uid);
+        
+	$neworder->order_total = $total;
+	uc_order_save($neworder);
+	uc_cart_complete_sale($neworder, TRUE);
+        $node = node_load($value);
+        $node->title = 'Order#'.$neworder->order_id.'Parcel#1';
+        $node->field_parcel_order_id['und'][0]['value'] = $neworder->order_id;
+        $node->field_status_skipped['und'][0]['value'] = 'Passing';
+  
+        node_save($node);
     }
+  }else{
+
+    drupal_set_message('Please select a row.','error');
   }
 
 }
