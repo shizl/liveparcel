@@ -14,11 +14,12 @@ $parcels=liveparcels_getparcelsdata();
 $parcel_info='';
  $postfrom='';
  $post='postfrom';
+$p=0;
  $jsondata=liveparcels_getZonelistData();
 if($parcels>0){
         $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
      $post=$parcels['ptype']==2 ? 'postto':'postfrom';
-$p=0;
+
   foreach($parcels['parcels'] as $pid=>$parcel){
 $p++;
        $parcel_info.=' <div class="post-all">
