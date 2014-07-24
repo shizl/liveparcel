@@ -99,6 +99,7 @@ if($user->uid == arg(1)){
         $node->field_status_skipped['und'][0]['value'] = 'Passing';
   
         node_save($node);
+        drupal_set_message('Order#'.$neworder->order_id.'Parcel#1 have been created.');   
     }
   }else{
 

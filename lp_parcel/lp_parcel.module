@@ -473,6 +473,8 @@ function lp_parcel_uc_checkout_pane() {
 function lp_parcel_uc_checkout_complete($order, $account) {
     
       $parcels=liveparcels_getparcelsdata();
+          
+      if($parcels!=0){
             if(module_exists('lp_discount')){
             $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
             $order_total=$parcels['totals']-$parcels['discount'];
@@ -584,7 +586,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
     }
       
  $cart_id=uc_cart_get_id();
- db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute(); 
+ db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
+
+    } 
 }
 function lp_parcel_get_parcel_data($order_id){
     $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
