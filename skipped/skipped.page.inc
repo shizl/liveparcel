@@ -20,7 +20,7 @@ function get_user_skipped($user){
 function get_admin_status_skipped_node(){
 
 $options = array();
-$status = 'Skipped';
+$status = 'Undefined';
 $result = db_query('select entity_id from {field_data_field_status_skipped} where field_status_skipped_value = :value' ,array(':value'=>$status));
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
@@ -96,7 +96,7 @@ if($user->uid == arg(1)){
         $node = node_load($value);
         $node->title = 'Order#'.$neworder->order_id.'Parcel#1';
         $node->field_parcel_order_id['und'][0]['value'] = $neworder->order_id;
-        $node->field_status_skipped['und'][0]['value'] = 'Passing';
+        $node->field_status_skipped['und'][0]['value'] = 'Confirmed';
   
         node_save($node);
         drupal_set_message('Order#'.$neworder->order_id.'Parcel#1 have been created.');   

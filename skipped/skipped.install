@@ -34,6 +34,6 @@ function skipped_uninstall() {
 }
 function skipped_install() {
 
-  liveparcels_create_field('Status skipped','field_status_skipped',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('Skipped'=>'Skipped','Pending'=>'Pending','Passing'=>'Passing'),'allowed_values_function' => '')));
+  liveparcels_create_field('Status skipped','field_status_skipped',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('Undefined'=>'Undefined','Pending'=>'Pending','Confirmed'=>'Confirmed'),'allowed_values_function' => '')));
 
 }

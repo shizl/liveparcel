@@ -578,9 +578,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $node->field_customer_reference[$node->language][0]['value'] =$field_customer_reference;
         $node->field_delivery_note[$node->language][0]['value'] =$field_delivery_note;
         if($order->order_total==0 || $order->order_total ==null){
-        $node->field_status_skipped[$node->language][0]['value'] = 'Skipped';
+        $node->field_status_skipped[$node->language][0]['value'] = 'Undefined';
         }else{
-        $node->field_status_skipped[$node->language][0]['value'] = 'Passing';
+        $node->field_status_skipped[$node->language][0]['value'] = 'Confirmed';
         }
           node_save($node);
     }
