@@ -105,6 +105,20 @@ margin-left:15px !important;
 width:300px;
 }
 
+
+#admin-add-parcels-form .note{
+float:right;
+width:550px;
+margin-top:-200px;
+}
+
+#admin-add-parcels-form .note .form-type-textarea{
+width:500px;
+}
+
+#admin-add-parcels-form .note .form-type-textarea label{
+width:150px;
+}
 #admin-add-parcels-form .pick_up_time_ampm {
  margin-left: 20px !important;
     margin-top: -40px;

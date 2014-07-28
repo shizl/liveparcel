@@ -271,7 +271,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
         $parcenum = check_parcel_node_title($order_id,$parcenum);
 	   $newNode = (object) NULL;
 	   $newNode->type = 'live_parcel'; 
-	   $newNode->uid = $uid; 
+	   $newNode->uid = $uid;
 	   $newNode->title ='Order#'.$order_id.'Parcel#'.$parcenum;
 	   $newNode->created = strtotime("now");
 	   $newNode->changed = strtotime("now");
@@ -377,15 +377,6 @@ $form['size_'.$i] = array(
     '#type'=>'textfield',
     '#size'=>32,
   );
-  $form['pickup_note_'.$i] = array(
-    '#title' =>t('Pickup Note'),
-    '#type'=>'textarea',
-  );
-
-  $form['delivery_note_'.$i] = array(
-    '#title' =>t('Delivery Note'),
-    '#type'=>'textarea',
-  );
 
   $form['pickup_time_date_'.$i] = array(
     '#type' => 'date_popup', 
@@ -403,6 +394,23 @@ $form['pick_up_time_ampm_'.$i] = array(
     '#default_value' => 'AM',
     '#attributes' => array('class'=>array('pick_up_time_ampm')),
 );
+
+$form['note_'.$i] = array(
+    '#prefix' => '<div class="note">',
+    '#suffix' => '</div>', 
+  );
+
+  $form['note_'.$i]['pickup_note_'.$i] = array(
+    '#title' =>t('Pickup Note'),
+    '#type'=>'textarea',
+  );
+
+  $form['note_'.$i]['delivery_note_'.$i] = array(
+    '#title' =>t('Delivery Note'),
+    '#type'=>'textarea',
+  );
+
+
   return $form;
 }
 
