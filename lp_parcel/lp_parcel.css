@@ -68,7 +68,10 @@ margin-left:15px;
 }
 
 #admin-add-parcels-form .fieldset-wrapper .form-type-checkbox {
-margin-left:200px;
+margin-left: -510px;
+    margin-top: 5px;
+    position: absolute;
+    width: 200px;
 }
 #admin-add-parcels-form .fieldset-wrapper .form-type-checkbox label{
 width:auto !important;
@@ -115,7 +118,9 @@ margin-top:-200px;
 #admin-add-parcels-form .note .form-type-textarea{
 width:500px;
 }
-
+#admin-add-parcels-form .note .form-type-textarea textarea{
+max-height:80px;
+}
 #admin-add-parcels-form .note .form-type-textarea label{
 width:150px;
 }
