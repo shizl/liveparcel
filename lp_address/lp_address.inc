@@ -20,16 +20,16 @@ function lp_address_admin_setting_form($form,$form_state){
   if(!is_array($countryinfo)){
     db_insert('uc_countries')
       ->fields(array(
-        'country_id' => 840,
-        'country_name' => 'United States',
-        'country_iso_code_2' => 'US',
-        'country_iso_code_3' => 'USA',
+        'country_id' => 8888,
+        'country_name' => 'Live parcel',
+        'country_iso_code_2' => 'LP',
+        'country_iso_code_3' => 'LPL',
         'version' => 1,
       ))
       ->execute();
-    $countryinfo= array( 'country_name' =>'United States',
-      'country_iso_code_2' =>'US',
-      'country_iso_code_3' => 'USA'); 
+    $countryinfo= array( 'country_name' =>'Live parcel',
+      'country_iso_code_2' =>'LP',
+      'country_iso_code_3' => 'LPL'); 
   }
   $form['lp_country']['country_name'] = array(
     '#type' => 'textfield',
@@ -89,11 +89,11 @@ function lp_address_country_setting_form_submit($form,$form_state){
     'country_name' =>$form_state['values']['country_name'] ,
     'country_iso_code_2' =>$form_state['values']['country_iso_code_2'],
     'country_iso_code_3' => $form_state['values']['country_iso_code_3'],
-  ))->condition('country_id', 840, '=')->execute();
+  ))->condition('country_id', 8888, '=')->execute();
 
 }
 function lp_address_update_zone_form_submit($form,$form_state){
-  $oldstate=db_query("SELECT `zone_code` FROM `uc_zones` WHERE `zone_country_id`='840'");
+  $oldstate=db_query("SELECT `zone_code` FROM `uc_zones` WHERE `zone_country_id`='8888'");
   $uc_state=array();
   foreach($oldstate as $zone){
     $uc_state[]=$zone->zone_code;
@@ -111,7 +111,7 @@ function lp_address_update_zone_form_submit($form,$form_state){
   }
   $zones=array();
   foreach($insertstate as $state){
-    $zones[]=array(840, $state, $state);
+    $zones[]=array(8888, $state, $state);
   }
   $query = db_insert('uc_zones')->fields(array('zone_country_id', 'zone_code', 'zone_name'));
   foreach ($zones as $zone) {
