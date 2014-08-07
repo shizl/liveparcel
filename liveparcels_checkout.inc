@@ -4,6 +4,7 @@
  * Store front page live parcels checkout.
  */
 function liveparcels_addToCart(){
+   
         drupal_session_start(); 
     $parcels=trim($_REQUEST['parcelsPost']) !="" ?  trim($_REQUEST['parcelsPost']) :"";
     $action=trim($_REQUEST['action']) !="" ?  trim($_REQUEST['action']) :"";

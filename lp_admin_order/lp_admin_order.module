@@ -1,9 +1,9 @@
 <?php
 
 function lp_admin_order_menu(){
-   $items['admin/liveparcels/admin_order'] = array(
-    'title' => 'Create Order',
-    'description' => 'Admin create order',
+   $items['admin/liveparcels/orders/admin_order'] = array(
+    'title' => 'Create admin order',
+    'description' => 'Create admin order for liveparcels.',
     'page callback' => 'redirect_store_create_order',
     'page arguments'=> array(1),
     'access arguments' => array('administer liveparcel'),
@@ -43,8 +43,38 @@ function lp_admin_order_form_uc_order_edit_form_alter(&$form, &$form_state, $ord
 
   if(isset($_GET['args'])){
   $form['#submit'][] = 'redirect_add_parcels_form'; 
+/*
+  $form_state['products_action'] = 'products_select';
+  $form_state['refresh_products'] = TRUE;
+  $form_state['rebuild'] = TRUE;
+  $order = $form_state['build_info']['args'][0];
+
+  $nid = db_query("select nid from {node} where type = 'live_parcel_product' and status=1 LIMIT 0 , 1")->fetchfield();
+
+  $data = module_invoke_all('uc_add_to_cart_data', $nid);
+
+  $product = uc_product_load_variant($nid, $data);
+  $product->qty = 1;
+
+  drupal_alter('uc_order_product', $product, $order);
+
+  if($order->product_count==0){
+    uc_order_product_save($order->order_id, $product);
+  
+  $order->products[] = $product;
+
+  uc_order_log_changes($order->order_id, array('add' => t('Added (@qty) @title to order.', array('@qty' => $product->qty, '@title' => $product->title))));
+
+  // Decrement stock.
+  if (module_exists('uc_stock')) {
+    uc_stock_adjust_product_stock($product, 0, $order);
   }
 
+  // Add this product to the form values for accurate tax calculations.
+  $form_state['values']['products'][] = (array) $product;
+  }
+*/
+ }
 }
 
 function redirect_add_parcels_form(&$form, &$form_state){

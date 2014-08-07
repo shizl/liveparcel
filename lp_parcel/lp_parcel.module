@@ -588,6 +588,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
  $cart_id=uc_cart_get_id();
  db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
 
+  if(isset($_GET['arg'])){
+     db_delete('node')->condition('nid',$_GET['arg'],'=')->execute();
+   }
     } 
 }
 function lp_parcel_get_parcel_data($order_id){
@@ -610,9 +613,17 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
  $form['actions']['cancel']['#submit'][] = 'jump_cart'; 
+/*
+if(isset($_GET['arg'])){
+ $form['actions']['continue']['#submit'][] = 'jump_review'; 
+
+ }
+*/
 }
 
 function jump_cart(&$form,&$form_state){
   $form_state['redirect'] = 'cart';
 }
+
+
 

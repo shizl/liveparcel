@@ -325,8 +325,6 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
   if($parcels){
     switch ($op) {
     case 'view':
-
-
       $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
       if($check_order>0){
         db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
