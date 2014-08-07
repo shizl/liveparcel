@@ -1,0 +1,39 @@
+<?php 
+
+
+/**
+ * Implements hook_requirements().
+ */
+function lp_undefined_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $severities = array(
+      'ok' => REQUIREMENT_OK,
+      'warning' => REQUIREMENT_WARNING,
+      'error' => REQUIREMENT_ERROR,
+    );
+    module_load_include('inc', 'lp_parcel');
+    $results = module_invoke_all('liveparcels_status');
+    foreach ($results as $status) {
+      $requirements[] = array(
+        'severity' => isset($severities[$status['status']]) ? $severities[$status['status']] : REQUIREMENT_INFO,
+        'title' => $status['title'],
+        'value' => $status['desc'],
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+function lp_undefined_uninstall() {
+
+  field_delete_field('field_status_skipped'); 
+  field_purge_batch(100);  
+}
+function lp_undefined_install() {
+
+  liveparcels_create_field('Fee Status','field_status_skipped',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('Undefined'=>'Undefined','Pending'=>'Pending','Confirmed'=>'Confirmed'),'allowed_values_function' => '')));
+
+}

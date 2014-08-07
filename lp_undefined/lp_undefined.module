@@ -1,0 +1,21 @@
+<?php
+
+function lp_undefined_menu(){
+
+  $item['user/%user/undefined'] = array(
+    'title' => 'Undefined',
+    'page callback' =>'get_user_skipped',
+    'page arguments' => array(1),
+    'access callback'=>user_access('view parcel price'),
+    'type' => MENU_LOCAL_TASK,
+    'file' =>'lp_undefined.page.inc',
+  );
+
+ return $item;
+} 
+
+
+
+
+
+
