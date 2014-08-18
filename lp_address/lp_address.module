@@ -19,6 +19,15 @@ function lp_address_menu() {
     'access callback' => true,
     'menu_name'=>'liveparcels',
   );
+  $items['liveparcels/lp_address_getzone/ajax'] = array(
+    'title' => 'lp_address_getzone ',
+    'description' => 'lp_address_getzone',
+    'page callback' => 'lp_address_getzone_render',
+    'access callback' => true,
+    'menu_name'=>'liveparcels',
+  );
+
+
   return $items;
 }
 
@@ -268,3 +277,15 @@ function lp_address_update_render(){
   echo json_encode($address);
   exit;
 }
+
+function lp_address_getzone_render(){
+
+  $zonename = $_REQUEST['zone'];
+  $zone = array();
+  $zone['zone_number'] = db_query('SELECT zone_number FROM {liveparcels_zone_post} WHERE locality =:locality LIMIT 0 , 1',array(':locality'=>$zonename))->fetchfield();
+
+echo json_encode($zone);
+exit;
+
+}
+

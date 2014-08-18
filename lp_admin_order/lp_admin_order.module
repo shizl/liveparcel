@@ -300,6 +300,7 @@ function admin_add_parcels_form_submit(&$form, &$form_state){
 
 	   node_object_prepare($newNode);
 	   $node = node_submit($newNode);
+           $node->uid = $uid;    
 	   node_save($node);
 
   drupal_set_message(t('Order #@order_id #Parcel@number have been created.',array('@order_id'=>$order_id,'@number'=>$parcenum)));
@@ -373,7 +374,7 @@ $form['size_'.$i] = array(
     '#size'=>32,
   );
   $form['cash_'.$i] =array(
-    '#title' =>t('Cash to collect($)').' <span class="form-required" title="This field is required.">*</span>',
+    '#title' =>t('Cash to collect($)'),
     '#type'=>'textfield',
     '#size'=>32,
   );
@@ -494,7 +495,7 @@ function parcels_pickup_location_form($user,$i){
     '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
     '#maxlength' => 100,
     '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_postal_code')),
+    '#attributes' => array('class'=>array('pickup_postal_code'),'onblur'=>'putpickuppost('.$i.',"pickup")'),
   ),
 'pickup_phone_'.$i=>array(
     '#type' => 'textfield',
@@ -608,7 +609,7 @@ function parcels_delivery_location_form($user,$i){
     '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
     '#maxlength' => 100,
     '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_postal_code')),
+    '#attributes' => array('class'=>array('delivery_postal_code'),'onblur'=>'putdeliverypost('.$i.',"delivery")'),
   ),
 'delivery_phone_'.$i=>array(
     '#type' => 'textfield',
