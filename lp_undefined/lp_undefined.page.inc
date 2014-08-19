@@ -176,6 +176,7 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 
 function user_add_to_cart($parcelsdata,$action,$nid){
  
+    drupal_session_start(); 
     $parcels= $parcelsdata !=null ? $parcelsdata :"";
     $action=trim($action) !="" ?  trim($action) :"";
     if($action != "addtocart" || $parcels==""){
@@ -191,7 +192,12 @@ function user_add_to_cart($parcelsdata,$action,$nid){
     db_insert('liveparcels_cart')->fields(array(
   'cart_id' => $cart_id,
   'parcel_info' =>serialize($parcelsdata)))->execute();
-  header("location:/cart/checkout?arg=".$nid);exit;  
+
+  $_SESSION['lp_node'] = $nid;
+  $node = node_load($nid);
+  $_SESSION['lp_order'] = $node->field_parcel_order_id['und'][0]['value'];
+
+  header("location:/cart/checkout");exit;  
 
 }
 

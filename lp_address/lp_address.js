@@ -75,7 +75,7 @@ price = jQuery('#edit-parcel-price-'+i+' .form-item-price-'+i+' input').val();
       return false;
     }
     else if(date1>date2){
-      alert('#parcel'+i+': You must select a pickup time from today onwards.');
+      jQuery('.admin_order_error').html('#parcel'+i+': You must select a pickup time from today onwards.');
       return false;
     }
     else if(jQuery('.form-item-pickup-first-name-'+i+' input').val()==""){

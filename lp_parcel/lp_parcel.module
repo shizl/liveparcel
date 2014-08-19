@@ -42,13 +42,16 @@ function lp_parcel_order_view($node){
  create liveparcels extra pane 
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
+
+  isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
+
     global $user;
         $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
       switch ($op) {
         case 'view':        
-            $parceldata=lp_parcel_get_parcel_data($order->order_id);
+            $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     
     date_default_timezone_set($user->timezone<>"" ? $user->timezone:variable_get('date_default_timezone'));
@@ -263,6 +266,8 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
  create liveparcels extra pane 
  * */
 function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &$form_state = NULL){
+
+  isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
         $parcels=liveparcels_getparcelsdata();
      if($parcels){
       switch ($op) {
@@ -271,7 +276,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         if(module_exists('lp_address')){  
           drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
           }
-    $parceldata=lp_parcel_get_parcel_data($order->order_id);
+    $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     if(is_array($extra_info) && count($extra_info)>0){
         $delivery_extra=array();
@@ -474,7 +479,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
     
       $parcels=liveparcels_getparcelsdata();
           
-      if($parcels!=0){
+      if(!isset($_SESSION['lp_node'])){
             if(module_exists('lp_discount')){
             $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
             $order_total=$parcels['totals']-$parcels['discount'];
@@ -491,13 +496,13 @@ function lp_parcel_uc_checkout_complete($order, $account) {
     
     foreach($parcel_info['parcels'] as $key=>$parcel){
         
-        $newnode = new stdClass();
+       $newnode = new stdClass();
        $newnode->uid=$order->uid;
        $newnode->language='und';
        $newnode->title='Order#'.$order_id.$parcel['parcelnum'];
        $newnode->type='live_parcel';
        $newnode->status=1;
-        $newnode->comment=2;
+       $newnode->comment=2;
        node_save($newnode);
        
         $node = node_load($newnode->nid);
@@ -588,10 +593,15 @@ function lp_parcel_uc_checkout_complete($order, $account) {
  $cart_id=uc_cart_get_id();
  db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
 
-  if(isset($_GET['arg'])){
-     db_delete('node')->condition('nid',$_GET['arg'],'=')->execute();
-   }
-    } 
+    }else{
+       $lp_nid  = $_SESSION['lp_node'];
+       $lp_node = node_load($lp_nid);
+       $lp_node->title = 'Order#'.$order->order_id.'Parcel#1';
+       $lp_node->field_status_skipped['und'][0]['value'] = 'Confirmed';
+       node_save($lp_node); 
+       unset($_SESSION['lp_node']);
+       unset($_SESSION['lp_order']);
+    }  
 }
 function lp_parcel_get_parcel_data($order_id){
     $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
