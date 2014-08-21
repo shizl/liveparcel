@@ -1,5 +1,5 @@
 name = Undefined
-description = Overweight parcels undefined.
+description = To handle undefined price parcel for re-order.
 package = Live Parcels - core
 dependencies[] = liveparcels
 version = "7.x-1.0"
