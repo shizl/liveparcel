@@ -583,9 +583,9 @@ function lp_parcel_uc_checkout_complete($order, $account) {
         $node->field_customer_reference[$node->language][0]['value'] =$field_customer_reference;
         $node->field_delivery_note[$node->language][0]['value'] =$field_delivery_note;
         if($order->order_total==0 || $order->order_total ==null){
-        $node->field_status_skipped[$node->language][0]['value'] = 'Undefined';
+        $node->field_fee_status[$node->language][0]['value'] = 'Undefined';
         }else{
-        $node->field_status_skipped[$node->language][0]['value'] = 'Confirmed';
+        $node->field_fee_status[$node->language][0]['value'] = 'Confirmed';
         }
           node_save($node);
     }
@@ -597,7 +597,7 @@ function lp_parcel_uc_checkout_complete($order, $account) {
        $lp_nid  = $_SESSION['lp_node'];
        $lp_node = node_load($lp_nid);
        $lp_node->title = 'Order#'.$order->order_id.'Parcel#1';
-       $lp_node->field_status_skipped['und'][0]['value'] = 'Confirmed';
+       $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';
        node_save($lp_node); 
        unset($_SESSION['lp_node']);
        unset($_SESSION['lp_order']);

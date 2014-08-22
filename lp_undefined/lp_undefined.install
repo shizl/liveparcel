@@ -29,11 +29,11 @@ function lp_undefined_requirements($phase) {
 
 function lp_undefined_uninstall() {
 
-  field_delete_field('field_status_skipped'); 
+  field_delete_field('field_fee_status'); 
   field_purge_batch(100);  
 }
 function lp_undefined_install() {
 
-  liveparcels_create_field('Fee Status','field_status_skipped',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('Undefined'=>'Undefined','Pending'=>'Pending','Confirmed'=>'Confirmed'),'allowed_values_function' => '')));
+  liveparcels_create_field('Fee Status','field_fee_status',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('Undefined'=>'Undefined','Pending'=>'Pending','Confirmed'=>'Confirmed'),'allowed_values_function' => '')));
 
 }

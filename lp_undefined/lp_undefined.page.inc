@@ -21,7 +21,7 @@ function get_admin_status_skipped_node(){
 
 $options = array();
 $status = 'Undefined';
-$result = db_query('select entity_id from {field_data_field_status_skipped} where field_status_skipped_value = :value' ,array(':value'=>$status));
+$result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value' ,array(':value'=>$status));
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
        $option['title'] = '<a href="/node/'.$entity->entity_id.'/edit">'.$node->title.'</a>';
@@ -46,7 +46,7 @@ function get_user_status_skipped_node($form,$form_state){
 
   $options = array();
   $status = 'Pending';
-  $result = db_query('select entity_id from {field_data_field_status_skipped} where field_status_skipped_value = :value' ,array(':value'=>$status));
+  $result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value' ,array(':value'=>$status));
 
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
@@ -156,7 +156,7 @@ $address1 = db_query('select city,province,postal_code from location where lid =
         $node = node_load($value);
         $node->title = 'Order#'.$neworder->order_id.'Parcel#1';
         $node->field_parcel_order_id['und'][0]['value'] = $neworder->order_id;
-        $node->field_status_skipped['und'][0]['value'] = 'Confirmed';
+        $node->field_fee_status['und'][0]['value'] = 'Confirmed';
   
         node_save($node);
         drupal_set_message('Order#'.$neworder->order_id.'Parcel#1 have been created.');   
