@@ -531,3 +531,10 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
     field_create_instance($instance);
   }
 }
+
+function liveparcels_countries_alter(&$countries) {
+
+  // Elbonia is now independent, so add it to the country list.
+  $countries['LP'] = 'Live parcel';
+}
+
