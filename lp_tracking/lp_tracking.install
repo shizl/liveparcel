@@ -10,6 +10,25 @@ function lp_tracking_uninstall() {
     }
   }
 
+
+  $field_name = 'field_starred';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+  //delete field_comment_body
+  $field_name = 'comment_body';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+
   //delete field_driver_assigned
   $field_name = 'field_driver_assigned';
   if (field_info_field($field_name)) {
@@ -131,6 +150,42 @@ function lp_tracking_install() {
     );
     field_create_instance($instance);
   }
+
+  //add field_starred
+
+  $field_name = 'field_starred';
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => 'list_boolean',
+      'settings' => array(
+	'allowed_values' =>array('1'=>'Starred'),
+	'allowed_values_function' => '',
+      ),
+    );
+
+    field_create_field($field);
+    $instance = array(
+      'field_name' => $field_name, 
+      'entity_type' => 'comment', 
+      'label' => 'Starred', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => FALSE,
+      'description' => "Select this field to get admin's attention",
+      'widget' => array(
+        'type' => 'options_onoff',
+        'settings'=>array('display_label'=>true),
+      ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+        ),
+      ),
+    );
+    field_create_instance($instance);
+  }
+
+
 
   //add field_gps
   $field_name = 'field_gps';
