@@ -534,7 +534,49 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
 
 function liveparcels_countries_alter(&$countries) {
 
-  // Elbonia is now independent, so add it to the country list.
+//moveFile(drupal_get_path('module','liveparcels')."/lp_country/location.lp.inc",drupal_get_path('module','location')."/supported/location.lp.inc",true);
+
+  // Live parcel is now independent, so add it to the country list.
   $countries['LP'] = 'Live parcel';
 }
 
+
+/*
+function moveFile($fileUrl, $aimUrl, $overWrite = false) {
+        if (!file_exists($fileUrl)) {
+            return false;
+        }
+        if (file_exists($aimUrl) && $overWrite = false) {
+            return false;
+        } elseif (file_exists($aimUrl) && $overWrite = true) {
+            unlinkFile($aimUrl);
+        }
+        $aimDir = dirname($aimUrl);
+           createDir($aimDir);
+      //  rename($fileUrl, $aimUrl);
+        return true;
+}
+
+function unlinkFile($aimUrl) {
+        if (file_exists($aimUrl)) {
+            unlink($aimUrl);
+            return true;
+        } else {
+            return false;
+        }
+}
+
+ function createDir($aimUrl) {
+        $aimUrl = str_replace('', '/', $aimUrl);
+        $aimDir = '';
+        $arr = explode('/', $aimUrl);
+        $result = true;
+        foreach ($arr as $str) {
+            $aimDir .= $str . '/';
+            if (!file_exists($aimDir)) {
+                $result = mkdir($aimDir);
+            }
+        }
+        return $result;
+}
+*/

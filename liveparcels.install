@@ -265,6 +265,7 @@ function liveparcels_uninstall() {
  * Implements hook_install().
  */
 function liveparcels_install() {
+
   variable_set('liveparcels_factor',0.0002);
   variable_set('liveparcels_postcount','');
   variable_set('liveparcels_info_message','To obtain a free, instant quote on your shipment, please select the service you requires, enter the pickup/destination postcode/suburb as well as the parcel&#39s details. You may enter the details of multiple parcels to send to or pick up from different places on this form. If you would like to proceed with the booking, press the Checkout button.');
