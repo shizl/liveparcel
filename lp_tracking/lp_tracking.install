@@ -178,7 +178,7 @@ function lp_tracking_install() {
       ), 
       'display' => array(
         'default' => array(
-          'label' => 'inline',
+          'label' => 'hidden',
         ),
       ),
     );
@@ -207,7 +207,7 @@ function lp_tracking_install() {
       ), 
       'display' => array(
         'default' => array(
-          'label' => 'inline',
+          'label' => 'hidden',
           'type' => 'location_map',
         ),
       ),
@@ -238,7 +238,7 @@ function lp_tracking_install() {
       ),
       'display' => array(
         'default' => array(
-          'label' => 'inline',
+          'label' => 'hidden',
           'type' => 'colorbox',
         ),
       ),
