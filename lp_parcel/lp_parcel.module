@@ -43,6 +43,7 @@ function lp_parcel_order_view($node){
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
 
+  $orderid = 0;
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
 
     global $user;
@@ -267,6 +268,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
  * */
 function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &$form_state = NULL){
 
+  $orderid = 0;
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
         $parcels=liveparcels_getparcelsdata();
      if($parcels){
