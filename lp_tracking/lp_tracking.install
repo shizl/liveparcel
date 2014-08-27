@@ -74,13 +74,13 @@ function lp_tracking_install() {
       array(
         'skip comment approval' => TRUE,
         'submit latitude/longitude' => TRUE,
+        'post comments' =>TRUE,
+        'view all orders'=>TRUE
       )
     );
 
   }
-
-
-
+ 
   //add field_status
   $field_name = 'field_status';
   if (!field_info_field($field_name)) {
