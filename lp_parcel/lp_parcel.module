@@ -42,11 +42,11 @@ function lp_parcel_order_view($node){
  create liveparcels extra pane 
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
-
   $orderid = 0;
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
 
-    global $user;
+  $uid = db_query('select uid from {users} where mail =:mail',array(':mail'=>$order->primary_email))->fetchfield();
+  $user = user_load($uid);
         $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
@@ -61,7 +61,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
         $pickup_extra=array();
           if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
-               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,$extra_info['pickupdata'][$f]['field_parcel_pickup_address']),
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,$extra_info['pickupdata'][$f]['field_parcel_pickup_address'],$user),
                'field_pick_up_time'=> array(
                   '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
@@ -101,7 +101,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             }
 
         }else{
-                $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,$extra_info['pickupdata'][0]['field_parcel_pickup_address']),'field_pick_up_time'=> array(
+                $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,$extra_info['pickupdata'][0]['field_parcel_pickup_address'],$user),'field_pick_up_time'=> array(
                   '#title' => t('Schedule pickup date/shift'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -138,7 +138,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
        $pickup_extra=array();
         if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
-               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f),
+               $pickup_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',$f,array(),$user),
                'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
@@ -178,7 +178,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             }
 
         }else{
-         $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0),'field_pick_up_time'=> array(
+         $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,array(),$user),'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
@@ -268,6 +268,8 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
  * */
 function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &$form_state = NULL){
 
+  $uid = db_query('select uid from {users} where mail =:mail',array(':mail'=>$order->primary_email))->fetchfield();
+  $user = user_load($uid);
   $orderid = 0;
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
         $parcels=liveparcels_getparcelsdata();
@@ -283,7 +285,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
     if(is_array($extra_info) && count($extra_info)>0){
         $delivery_extra=array();
         if($parcels['ptype']=="1"){
-             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0,$extra_info['deliverydata'][0]['field_parcel_delivery_address']),'field_authority_to_leave'=>array(
+             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0,$extra_info['deliverydata'][0]['field_parcel_delivery_address'],$user),'field_authority_to_leave'=>array(
               '#title' => t('Authority to leave'),
                 '#type' =>'checkbox', 
                 '#default_value'=>$extra_info['deliverydata'][0]['field_authority_to_leave'],
@@ -297,7 +299,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
                 ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
-                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f,$extra_info['deliverydata'][$f]['field_parcel_delivery_address']),
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f,$extra_info['deliverydata'][$f]['field_parcel_delivery_address'],$user),
                    'field_authority_to_leave'=>array(
                     '#title' => t('Authority to leave'),
                     '#type' =>'checkbox', 
@@ -320,7 +322,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
     }else{
         $delivery_extra=array();
         if($parcels['ptype']=="1"){
-             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0),'field_authority_to_leave'=>array(
+             $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0,array(),$user),'field_authority_to_leave'=>array(
               '#title' => t('Authority to leave'),
                 '#type' =>'checkbox', 
                 '#attributes' => array('class'=>array('authority_to_leave')),
@@ -333,7 +335,7 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
                 ));
         }else{
             for($f=0;$f<count($parcels['parcels']);$f++){
-                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f),
+                   $delivery_extra[$f]=array('parcel_title'=>array('#markup'=>'<h2>'.$parcels['parcels'][$f]['parcelnum'].'</h2>'),'field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',$f,array(),$user),
                    'field_authority_to_leave'=>array(
                     '#title' => t('Authority to leave'),
                     '#type' =>'checkbox', 
@@ -389,9 +391,9 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
  * get_parcel_address($parcel_info,'pickup')
  * parcels info,parcels type
  * */
-function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0',$default_info=array()){
+function lp_parcel_get_parcel_address($parcel_info,$parcel_type='pickup',$key='0',$default_info=array(),$user){
         if(module_exists('lp_address')){
-            return  lp_address_address_view($parcel_info,$parcel_type,$key,$default_info);
+            return  lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$user);
         }else{
         return array();    
         }
@@ -478,9 +480,9 @@ function lp_parcel_uc_checkout_pane() {
   return $panes;    
 }
 function lp_parcel_uc_checkout_complete($order, $account) {
-    
+
       $parcels=liveparcels_getparcelsdata();
-          
+
       if(!isset($_SESSION['lp_node'])){
             if(module_exists('lp_discount')){
             $parcels['discount']=lp_discount_get_pricing($parcels['totals']);

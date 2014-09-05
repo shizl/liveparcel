@@ -1,0 +1,217 @@
+<?php
+
+
+function lp_admin_order2_menu(){
+
+  $items['liveparcels/reload_checkout_render/ajax'] = array(
+    'page callback' => 'reload_checkout_render',
+    'access callback' => true,
+    'menu_name'=>'liveparcels',
+  );
+  return $items;
+}
+function lp_admin_order2_uc_checkout_pane() {
+   
+      $panes['admin_order_settings'] = array(
+        'callback' => 'lp_admin_order2_uc_checkout_pane_admin_order_settings',
+        'title' => t('Admin Order Settings'),
+        'desc' => t("setup order"),
+        'enabled' => FALSE,
+        'weight' => -100,
+      );
+       
+  return $panes;    
+}
+
+function lp_admin_order2_uc_checkout_pane_admin_order_settings($op, $order, $form = NULL, &$form_state = NULL){
+
+  $parcels=liveparcels_getparcelsdata();
+   drupal_add_js(drupal_get_path('module','lp_admin_order2').'/lp_admin_order2.js');
+  if($parcels){
+      switch ($op) {
+        case 'view': 
+
+      $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
+      if($check_order>0){
+        db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
+      }else{
+        db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
+      }
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      if($lid_tax){
+        uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
+      }else{
+        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+      }
+      if(module_exists('lp_discount')){
+        $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        if($discount){
+          uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
+        }else{
+          uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
+        }
+      }
+
+
+        $contents['parcel_price_title'] = array(
+          '#markup' => '<h2>'.t('Edit Parcel Price').'</h2><div class="description">'.t('You can change the price of each parcel .Note that the total price will be auto calculated.').'</div>',
+       );
+
+      $contents['cart_review_table'] = array(
+        '#theme' =>'lp_admin_order2_table', 
+        '#items' =>$parcels,
+      );
+      $contents['edit_parcel_user_title'] = array(
+         '#markup' => '<h2>'.t('Edit User').'</h2><div class="description">'.t('You can change the user for this whis order is being made for .New user will be created automatically based on the email address').'</div>',
+       );
+
+      $contents['edit_parcel_user'] = array(
+       '#type' => 'textfield',
+       '#size'=>40,  
+      );	
+
+      $contents['edit_parcel_discount_title'] = array(
+         '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it for to something else. This field accept only final rate, note % or decimal.').'</div>',
+       );
+
+      $contents['edit_parcel_discount'] = array(
+       '#type' => 'textfield',
+       '#size'=>40,  
+      );
+      $contents['orderid'] = array(
+       '#type' => 'hidden',
+       '#value'=>$order->order_id, 
+       '#attributes' => array('class'=>array('admin_order_id')),
+      );
+      $contents['reload'] = array(
+	'#markup' =>'<input type="button" id="checkout_reload" class="form-submit" name="reload" value="Save and Reload" />',
+     );
+
+      return array('contents' => $contents, 'next-button' => FALSE);
+/*
+    case 'review':
+      $review[] = theme('liveparcels_review_table', array('items' => $parcels, 'show_subtotal' => FALSE));
+      return $review;
+*/
+     }
+  }
+}
+
+function lp_admin_order2_theme(){
+ return array(
+    'lp_admin_order2_table' => array(
+      'variables' => array('items' => array(), 'show_subtotal' => TRUE), 
+      'file' => 'lp_admin_order2_cueckout_pane.inc',
+    ), 
+ );
+
+}
+
+function reload_checkout_render(){
+  $prices = !empty($_REQUEST['parr'])?$_REQUEST['parr']:array();
+  $mail =  !empty($_REQUEST['user_mail'])?$_REQUEST['user_mail']:'';
+  $discount =  !empty($_REQUEST['discount'])?floatval($_REQUEST['discount']):0.00;
+  $orderid = !empty($_REQUEST['order_id'])?$_REQUEST['order_id']:0;
+  $order = uc_order_load($orderid); 
+ 
+ $totalprice = 0;
+ foreach($prices as $key =>$price){
+  $totalprice += $price;
+ }
+
+ /*
+   db_query('update {uc_order_line_items} set amount =:amount where order_id =:order_id and type = :type',array(
+	':amount'=>$totalprice,
+	':order_id'=>$order->order_id,
+ 	':type'=>'parcel',
+	));
+
+   db_query('update {uc_order_line_items} set amount =:amount where order_id =:order_id and type = :type',array(
+	':amount'=>$discount,
+	':order_id'=>$order->order_id,
+ 	':type'=>'discount',
+	));
+*/
+   checkout_register_user($mail);
+   $order->primary_email = $mail;
+   // $order->line_items[0]['amount'] = $totalprice;
+   //$order->line_items[1]['amount'] = $discount;
+    _updateparcelsdata($prices,$discount,$totalprice,$order);
+   uc_order_save($order);
+}
+
+function checkout_register_user($mail){
+
+	$firstname = $mail ;
+       $check_email = db_query('select count(*) from {users} where mail = :mail', array(
+            ':mail' => $mail
+        ))->fetchfield();
+       $check_name = db_query('select count(*) from {users} where name = :name', array(
+            ':name' => $firstname
+      ))->fetchfield();
+	if($check_email==0){
+		if($check_name==0){
+                $account = array(
+                    'name' => $firstname,
+                    'pass' => $pass,
+                    'mail' => $mail,
+                    'status' => 1,
+                    'init' => $mail,
+                    'roles' => array(
+                        '2' => true
+                    ),
+                );
+                user_save(null, $account);
+		}else{
+		$firstname = $firstname.'1';
+		checkout_register_user($mail);
+		}
+	}
+
+}
+
+function _updateparcelsdata($prices,$discount,$totalprice,$order){
+
+$pdata = liveparcels_getparcelsdata();
+
+$pdata['discount'] = $discount;
+$pdata['totals'] = $totalprice;
+
+foreach($prices as $key=>$price){
+   $pdata['parcels'][$key]['price'] = variable_get('uc_currency_sign','$').$price;
+}
+$cart_id=uc_cart_get_id();
+
+ db_update('liveparcels_cart')->fields(array(
+  'cart_id' => $cart_id,
+  'parcel_info' =>serialize($pdata)))->execute();
+
+
+  $parcels=liveparcels_getparcelsdata();
+
+      $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
+      if($check_order>0){
+       db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
+      }else{
+        db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
+      }
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      if($lid_tax){
+        uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
+      }else{
+        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+      }
+      if(module_exists('lp_discount')){
+        $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        if($discount){
+          uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
+        }else{
+          uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
+        }
+      }
+
+
+}
+
+
+
