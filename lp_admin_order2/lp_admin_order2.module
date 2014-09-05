@@ -12,11 +12,12 @@ function lp_admin_order2_menu(){
 }
 function lp_admin_order2_uc_checkout_pane() {
    
+ global $user;
       $panes['admin_order_settings'] = array(
         'callback' => 'lp_admin_order2_uc_checkout_pane_admin_order_settings',
         'title' => t('Admin Order Settings'),
         'desc' => t("setup order"),
-        'enabled' => FALSE,
+        'enabled' =>$user->uid==1?TRUE:FALSE,
         'weight' => -100,
       );
        

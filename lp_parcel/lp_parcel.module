@@ -621,9 +621,12 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
           $panes['parcel_delivery']['enabled'] = true;
     }else{
         $panes['parcel_pickup']['enabled'] = false;
-          $panes['parcel_delivery']['enabled'] = false;
+        $panes['parcel_delivery']['enabled'] = false;
        
     }
+
+
+
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
  $form['actions']['cancel']['#submit'][] = 'jump_cart'; 
