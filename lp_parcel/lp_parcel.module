@@ -479,7 +479,7 @@ function lp_parcel_uc_checkout_pane() {
        
   return $panes;    
 }
-function lp_parcel_uc_checkout_complete($order, $account) {
+function lp_parcel_uc_checkout_complete($order, $account){
 
       $parcels=liveparcels_getparcelsdata();
 
