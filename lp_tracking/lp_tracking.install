@@ -68,6 +68,7 @@ function lp_tracking_install() {
   if(!user_role_load_by_name($roleName)){
     $role = new stdClass();
     $role->name = $roleName;
+    $role->weight = 10;
     user_role_save($role);
     $roles = user_role_load_by_name($roleName);
     user_role_change_permissions($roles->rid, 
@@ -80,7 +81,11 @@ function lp_tracking_install() {
     );
 
   }
- 
+  if($role=user_role_load_by_name('administrator')){
+  		$role->weight = 11;
+      user_role_save($role);
+    }
+
   //add field_status
   $field_name = 'field_status';
   if (!field_info_field($field_name)) {
@@ -159,7 +164,10 @@ function lp_tracking_install() {
       'field_name' => $field_name, 
       'type' => 'list_boolean',
       'settings' => array(
-	'allowed_values' =>array('1'=>'Starred'),
+	'allowed_values' =>array(
+	'0'=>'',
+	'1'=>'Starred'
+	),
 	'allowed_values_function' => '',
       ),
     );
@@ -184,8 +192,6 @@ function lp_tracking_install() {
     );
     field_create_instance($instance);
   }
-
-
 
   //add field_gps
   $field_name = 'field_gps';
@@ -229,10 +235,13 @@ function lp_tracking_install() {
       'label' => 'Image', 
       'bundle' => 'comment_node_live_parcel', 
       'required' => FALSE,
+			'settings' => array(
+			'file_directory' =>'liveparcels',
+				),
       'description' => 'For signature on delivery or photo taken for parcel left without signature (authority to leave).',
       'widget' => array(
         'type' => 'image_image',
-        'settings' => array(
+        'settings' => array(				
           'preview_image_style' => 'medium',
         ),
       ),
@@ -240,6 +249,10 @@ function lp_tracking_install() {
         'default' => array(
           'label' => 'hidden',
           'type' => 'colorbox',
+	  'settings'=>array(
+	  'colorbox_node_style'=>'medium',
+	  'colorbox_image_style'=>'medium',
+	),
         ),
       ),
     );
