@@ -1,691 +1,1070 @@
 <?php
 
-function lp_admin_order_menu(){
-   $items['admin/liveparcels/orders/admin_order'] = array(
-    'title' => 'Create admin order',
-    'description' => 'Create admin order for liveparcels.',
-    'page callback' => 'redirect_store_create_order',
-    'page arguments'=> array(1),
-    'access arguments' => array('administer liveparcel'),
-    'weight' => 1,
-  );
-   $items['admin/liveparcels/order/add_parcels'] = array(
-      'page callback' => 'drupal_get_form',
-      'page arguments'=>array('admin_add_parcels_form'), 
-      'access arguments' => array('administer liveparcel'),
-      'type'=>MENU_NORMAL_ITEM,
- 
-   );
+/**
+ * @file
+ * The masquerade module allows administrators to masquerade as other user.
+ */
 
- return $items;
-}		
-function redirect_store_create_order($args){
-
- drupal_goto('admin/store/orders/create',array('query' => array('args' => $args )));
-
-}
-
-function lp_admin_order_form_uc_order_create_form_alter(&$form,&$form_state){
-
-  $form['actions']['submit']['#submit'][] = 'redirect_create_submit';
-
-}
-
-function redirect_create_submit(&$form,&$form_state){
-
-   $path = $form_state['redirect'];
-     if(isset($_GET['args'])){
-        $form_state['redirect'] = array($path,array('query' => array('args'=>$_GET['args'])));
-      }
-}
-
-function lp_admin_order_form_uc_order_edit_form_alter(&$form, &$form_state, $order){
-
-  if(isset($_GET['args'])){
-  $form['#submit'][] = 'redirect_add_parcels_form'; 
-/*
-  $form_state['products_action'] = 'products_select';
-  $form_state['refresh_products'] = TRUE;
-  $form_state['rebuild'] = TRUE;
-  $order = $form_state['build_info']['args'][0];
-
-  $nid = db_query("select nid from {node} where type = 'live_parcel_product' and status=1 LIMIT 0 , 1")->fetchfield();
-
-  $data = module_invoke_all('uc_add_to_cart_data', $nid);
-
-  $product = uc_product_load_variant($nid, $data);
-  $product->qty = 1;
-
-  drupal_alter('uc_order_product', $product, $order);
-
-  if($order->product_count==0){
-    uc_order_product_save($order->order_id, $product);
-  
-  $order->products[] = $product;
-
-  uc_order_log_changes($order->order_id, array('add' => t('Added (@qty) @title to order.', array('@qty' => $product->qty, '@title' => $product->title))));
-
-  // Decrement stock.
-  if (module_exists('uc_stock')) {
-    uc_stock_adjust_product_stock($product, 0, $order);
-  }
-
-  // Add this product to the form values for accurate tax calculations.
-  $form_state['values']['products'][] = (array) $product;
-  }
-*/
- }
-}
-
-function redirect_add_parcels_form(&$form, &$form_state){
-  $order = $form_state['build_info']['args'][0];
-  if(isset($_GET['args'])){
-   $form_state['redirect'] = array('admin/liveparcels/order/add_parcels',array('query'=>array('order_id'=>$order->order_id,'uid'=>$order->uid)));
+/**
+ * Implements hook_help().
+ */
+function lp_admin_order_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#masquerade':
+      return t('<p>The masquerade module adds a link on a user\'s profile page that allows permitted users to masquerade as that user. Upon masquerading, a link to "switch back" to the original user will appear in the menu. While masquerading, the option to masquerade as another user will not appear. All masquerading transactions are logged, and $user->masquerading will be set; this could be displayed via theme.</p><p>In the masquerade settings a list of roles are presented; any checked role is considered an "administrator" and requires the second level "masquerade as admin" permission to masquerade as. User #1 is automatically considered an administrator, regardless of roles.</p>');
+    case 'admin/settings/masquerade':
+      return t('Only the users with <strong>masquerade as admin</strong> permission, will be able to masquerade as the users who belong to the roles selected below. User #1 is automatically considered an administrator, regardless of roles.');
   }
 }
-function admin_add_parcels_form($form,$form_state){
- 
-drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
-drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 
-
- $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
-
- $user = user_load($_GET['uid']);
-
-  $form['parcel_warapper'] = array(
-    '#prefix' => '<div id="parcel_warapper">',
-    '#suffix' => '</div>',
+/**
+ * Implements hook_permission().
+ *
+ * @return array
+ */
+function lp_admin_order_permission() {
+  return array(
+    'masquerade as user' => array(
+      'title' => t('Masquerade as user'),
+      'description' => t('Masquerade as another user.'),
+    ),
+    'masquerade as any user' => array(
+      'title' => t('Masquerade as any user'),
+      'description' => t('Masquerade as any user.'),
+      'restrict access' => TRUE,
+    ),
+    'masquerade as admin' => array(
+      'title' => t('Masquerade as admin'),
+      'description' => t('Masquerade as the site admin (UID 1).'),
+      'restrict access' => TRUE,
+    ),
+    'administer masquerade' => array(
+      'title' => t('Administer Masquerade'),
+      'description' => t('Perform administration tasks and configure the Masquerade module.'),
+      'restrict access' => TRUE,
+    ),
   );
-  //$num = isset($_SESSION['package_num'])?$_SESSION['package_num']:1;
- $num = 1;
-  for($i=1;$i<=$num;$i++){ 
-  $form['parcel_warapper']['parcels_'.$i] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('parcel#'.$i), 
-    '#collapsible' => FALSE, 
-    '#collapsed' => TRUE,
-    '#attributes' => array('class'=>array('parcels')),
-  );
-  $form['parcel_warapper']['parcels_'.$i]['basic_info_'.$i] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Basic Info'), 
-    '#collapsible' => FALSE, 
-    '#collapsed' => TRUE,  
-  );
-  $form['parcel_warapper']['parcels_'.$i]['pickup_location_'.$i] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Pickup Location'), 
-    '#collapsible' => FALSE, 
-    '#collapsed' => TRUE, 
-    '#attributes' => array('class'=>array('pickup_location')), 
-  );
-  $form['parcel_warapper']['parcels_'.$i]['delivery_location_'.$i] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Delivery Location'), 
-    '#collapsible' => FALSE, 
-    '#collapsed' => TRUE,  
-    '#attributes' => array('class'=>array('delivery_location')), 
-  );
-  $form['parcel_warapper']['parcels_'.$i]['parcel_price_'.$i] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Parcel Price'), 
-    '#collapsible' => FALSE, 
-    '#collapsed' => TRUE,  
-  );
-
-  $form['parcel_warapper']['parcels_'.$i]['basic_info_'.$i]['content_'.$i] = parcels_basic_info_form($i);
-  $form['parcel_warapper']['parcels_'.$i]['pickup_location_'.$i]['content_'.$i] = parcels_pickup_location_form($user,$i);
-  $form['parcel_warapper']['parcels_'.$i]['delivery_location_'.$i]['content_'.$i] = parcels_delivery_location_form($user,$i);
-  $form['parcel_warapper']['parcels_'.$i]['parcel_price_'.$i]['content_'.$i] = parcels_price_form($i);
-
-  $form['parcel_warapper']['parcels_'.$i]['actions_'.$i] = array(
-    '#markup' => '<input type="button" class="form-submit duplicate" value="Duplicate" onclick="copy_package('.$i.')" />',
-  );
- }
-
-  $form['add_new'] = array(
-  //  '#type' =>'submit',
-   // '#value' => t('Add New'),
-   // '#ajax' => array(
-   //   'callback' => 'parcel_warapper_render',
-   //   'wrapper' => 'parcel_warapper',
-  //    'method' => 'replace',
-  //    'effect' => 'fade',
-  //  ),    
-   '#markup' => '<input type="button" class="form-submit add_new" value="Add new" onclick="copy_package()"/>',
-   );
-  $form['package_num'] = array(
-    '#type' =>'hidden',
-    '#value'=>$num,
-    '#attributes' => array('class'=>array('maxnum')),
-   );
-
-  $form['time_setting'] = array(
-    '#type' =>'hidden',
-    '#value'=>variable_get('liveparcels_pickup_time',0),
-    '#attributes' => array('class'=>array('time_setting')),
-   );
-  $form['save'] = array(
-    '#type' =>'submit',
-    '#value' => t('Save'),
-    '#attributes' => array('class'=>array('save')),
-   );
-
-
-  return $form;
 }
 
+/**
+ * Implements hook_init().
+ */
+function lp_admin_order_init() {
+  global $user;
 
-function admin_add_parcels_form_submit(&$form, &$form_state){
+  // Try to load masqing uid from masquerade table.
+  $uid = db_query("SELECT uid_from FROM {masquerade} WHERE sid = :sid AND uid_as = :uid_as", array(
+    ':sid' => session_id(),
+    ':uid_as' => $user->uid,
+  ))->fetchField();
 
- $uid = isset($_GET['uid'])?$_GET['uid']:0;
-
- $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
-  if(isset($_POST)){
-    $num = $_POST['package_num'];
-    $packages = array();
-    for($i=1;$i<=$num;$i++){
-      $package['length'] = $_POST['length_'.$i]; 
-      $package['width'] = $_POST['width_'.$i]; 
-      $package['height'] = $_POST['height_'.$i]; 
-      $package['pweight'] = $_POST['pweight_'.$i];
-      $package['authority'] = isset($_POST['authority_'.$i])?$_POST['authority_'.$i]:0;
-      $package['cash'] = $_POST['cash_'.$i];
-      $package['customer_reference'] = $_POST['customer_reference_'.$i]; 
-      $package['delivery_note'] = $_POST['delivery_note_'.$i];
-      $package['pickup_note'] = $_POST['pickup_note_'.$i];
-      $package['pickup_time_date'] = $_POST['pickup_time_date_'.$i]['date']; 
-      $package['pick_up_time_ampm'] = $_POST['pick_up_time_ampm_'.$i]; 
-      $package['pickup_first_name'] = $_POST['pickup_first_name_'.$i]; 
-      $package['pickup_last_name'] = $_POST['pickup_last_name_'.$i]; 
-      $package['pickup_company'] = $_POST['pickup_company_'.$i];
-      $package['pickup_street1'] = $_POST['pickup_street1_'.$i];
-      $package['pickup_street2'] = $_POST['pickup_street2_'.$i];
-      $package['pickup_city'] = $_POST['pickup_city_'.$i];
-      $package['pickup_zone'] = $_POST['pickup_zone_'.$i];
-      $package['pickup_country'] = $_POST['pickup_country_'.$i];
-      $package['pickup_postal_code'] = $_POST['pickup_postal_code_'.$i];
-      $package['pickup_phone'] = $_POST['pickup_phone_'.$i];
-      $package['delivery_first_name'] = $_POST['delivery_first_name_'.$i];
-      $package['delivery_last_name'] = $_POST['delivery_last_name_'.$i];
-      $package['delivery_company'] = $_POST['delivery_company_'.$i];
-      $package['delivery_street1'] = $_POST['delivery_street1_'.$i];
-      $package['delivery_street2'] = $_POST['delivery_street2_'.$i];
-      $package['delivery_city'] = $_POST['delivery_city_'.$i];
-      $package['delivery_zone'] = $_POST['delivery_zone_'.$i];
-      $package['delivery_country'] = $_POST['delivery_country_'.$i];
-      $package['delivery_postal_code'] = $_POST['delivery_postal_code_'.$i];
-      $package['delivery_phone'] = $_POST['delivery_phone_'.$i];
-      $package['price'] = $_POST['price_'.$i];
-      $package['package_name'] = $_POST['package_name_'.$i];
-      $package['pickup_select_address']= $_POST['pickup'][$i]['select_address'];
-      $package['delivery_select_address']= $_POST['delivery'][$i]['select_address'];
-      $packages[] = $package;
+  // We are using identical operator (===) instead of equal (==) because if
+  // $uid === 0 we want to store the session variable. If there's no record in
+  // masquerade table we clear the session variable.
+  if ($uid === FALSE) {
+    if (isset($_SESSION)) {
+      unset($_SESSION['masquerading']);
     }
-
-  $parcenum = 1;
-	foreach($packages as $data){
-
-	$pickup_address = array();
-          if($data['pickup_select_address']!='0'){
-		 $arr =  explode('_',$data['pickup_select_address']);
-        	$pickup_address['select_address'] = $arr[2];
-          }else{
-        	$pickup_address['select_address'] = $data['pickup_select_address'];
-          }
-	$pickup_address['address']['first_name'] = $data['pickup_first_name'];
-	$pickup_address['address']['last_name'] = $data['pickup_last_name'];
-	$pickup_address['address']['street1'] = $data['pickup_street1'];
-	$pickup_address['address']['street2'] = $data['pickup_street2'];
-	$pickup_address['address']['city'] = $data['pickup_city'];
-	$pickup_address['address']['zone_name'] = $data['pickup_zone'];
-	$pickup_address['address']['postal_code'] = $data['pickup_postal_code'];
-
-        $pickup_country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['pickup_country']))->fetchfield();
-
-	$pickup_address['address']['country_code'] = $pickup_country_code;
-	$pickup_address['address']['phone'] = $data['pickup_phone'];
-	$pickup_address['address']['company'] = $data['pickup_company'];
-
-
-	$delivery_address = array();
-          if($data['delivery_select_address']!='0'){
-		$arr =  explode('_',$data['delivery_select_address']);
-        	$delivery_address['select_address'] = $arr[2];
-          }else{
-        	$delivery_address['select_address'] = $data['delivery_select_address'];
-          }
-
-	$delivery_address['address']['first_name'] = $data['delivery_first_name'];
-	$delivery_address['address']['last_name'] = $data['delivery_last_name'];
-	$delivery_address['address']['street1'] = $data['delivery_street1'];
-	$delivery_address['address']['street2'] = $data['delivery_street2'];
-	$delivery_address['address']['city'] = $data['delivery_city'];
-	$delivery_address['address']['zone_name'] = $data['delivery_zone'];
-	$delivery_address['address']['postal_code'] = $data['delivery_postal_code'];
-        $delivery_country_code = db_query('SELECT country_iso_code_2 FROM  {uc_countries} WHERE country_name = :name',array(':name'=>$data['delivery_country']))->fetchfield();
-	$delivery_address['address']['country_code'] = $delivery_country_code;
-	$delivery_address['address']['phone'] = $data['delivery_phone'];
-	$delivery_address['address']['company'] = $data['delivery_company'];
-        $parcenum = check_parcel_node_title($order_id,$parcenum);
-	   $newNode = (object) NULL;
-	   $newNode->type = 'live_parcel'; 
-	   $newNode->uid = $uid;
-	   $newNode->title ='Order#'.$order_id.'Parcel#'.$parcenum;
-	   $newNode->created = strtotime("now");
-	   $newNode->changed = strtotime("now");
-	   $newNode->status = 1; 
-	   $newNode->comment = 2; 
-	   $newNode->promote = 0; 
-	   $newNode->sticky = 0; 
-	   $newNode->tnid = 0; 
-	   $newNode->language = 'und';
-	   $newNode->field_parcel_order_id[$newNode->language][0]['value'] = $order_id;
-          	 $pprice = str_replace(variable_get('uc_currency_sign','$'),'',$data['price']);
-	   $newNode->field_parcel_price[$newNode->language][0]['value'] = $pprice>0 ? round($pprice,2):0;
-	   $newNode->field_parcel_size[$newNode->language][0]['value'] = $data['length'].'x'.$data['width'].'x'.$data['height'].' cm';
-	   $newNode->field_parcel_package_name[$newNode->language][0]['value'] = $data['package_name'];
-	   $newNode->field_parcel_weight[$newNode->language][0]['value'] = $data['pweight']>0 ? round($data['pweight'],1):0;
-	   $newNode->field_authority_to_leave[$newNode->language][0]['value'] = $data['authority'];
-	   $newNode->field_cash_to_collect[$newNode->language][0]['value'] = $data['cash'];
-	   $newNode->field_customer_reference[$newNode->language][0]['value'] = $data['customer_reference'];
-	   $newNode->field_delivery_note[$newNode->language][0]['value'] = $data['delivery_note'];
-	   $newNode->field_pickup_note[$newNode->language][0]['value'] = $data['pickup_note'];
-	   $newNode->field_pick_up_time[$newNode->language][0]['value'] = date('Y-m-d m:i:s',strtotime($data['pickup_time_date']));
-	   $newNode->field_pick_up_time_ampm[$newNode->language][0]['value'] = $data['pick_up_time_ampm'];
-
-           $newNode->field_pickup_location[$newNode->language][0]['lid'] = lp_address_location_update($pickup_address);
-           $newNode->field_delivery_location[$newNode->language][0]['lid'] = lp_address_location_update($delivery_address);
-
-	   node_object_prepare($newNode);
-	   $node = node_submit($newNode);
-           $node->uid = $uid;    
-	   node_save($node);
-
-  drupal_set_message(t('Order #@order_id #Parcel@number have been created.',array('@order_id'=>$order_id,'@number'=>$parcenum)));
-        //  $pickup_address_id =  lp_address_address_update($pickup_address,$uid);
-        //$delivery_address_id = lp_address_address_update($delivery_address,$uid);
-	$parcenum++;
-	}
-
-
+  }
+  else {
+    $_SESSION['masquerading'] = $uid;
   }
 }
 
+/**
+ * Implements hook_cron().
+ *
+ * Cleanup masquerade records where people didn't use the switch back link
+ * that would have cleanly removed the user switch record.
+ */
+function lp_admin_order_cron() {
+  // see http://drupal.org/node/268487 before modifying this query
+  $subquery = db_select('sessions', 's');
+  $subquery->addField('s', 'sid');
 
-/*
-function parcel_warapper_render(&$form,&$form_state){
-
- if(!isset($_SESSION['package_num'])){
-     $_SESSION['package_num'] = 1;
- }
- $_SESSION['package_num'] += 1;
- 
-  return $form['parcel_warapper'];
-}
-*/
-
-
-
-function parcels_basic_info_form($i){
-
-$form['size_'.$i] = array(
-    '#prefix' => '<div class="size">',
-    '#suffix' => '</div>', 
-  );
-  $form['size_'.$i]['length_'.$i] =array(
-    '#title' =>t('Parcel Size (cm)').' <span class="form-required" title="This field is required.">*</span>',
-    '#type'=>'textfield',
-    '#size'=>5,
-    '#maxlength'=>5,
-  ); 
-  $form['size_'.$i]['width_'.$i] =array(
-    '#title' =>t('X'),
-    '#type'=>'textfield',
-    '#size'=>5,
-    '#maxlength'=>5,
-  ); 
-  $form['size_'.$i]['height_'.$i] =array(
-    '#title' =>t('X'),
-    '#type'=>'textfield',
-    '#size'=>5,
-    '#maxlength'=>5,
-  );
-  $form['dweight_'.$i] =array(
-    '#title' =>t('Dimensional weight (kg)'),
-    '#type'=>'hidden',
-    '#size'=>5,
-    '#maxlength'=>5,
-  );
-  $form['pweight_'.$i] =array(
-    '#title' =>t('Parcel weight (kg)').' <span class="form-required" title="This field is required.">*</span>',
-    '#type'=>'textfield',
-    '#size'=>5,
-    '#maxlength'=>5,
-  );
-  $form['authority_'.$i] =array(
-    '#title' =>t('Authority to leave'),
-    '#type'=>'checkbox',
-  );
-  $form['customer_reference_'.$i] = array(
-    '#title' =>t('Customer reference'),
-    '#type'=>'textfield',
-    '#size'=>32,
-  );
-  $form['cash_'.$i] =array(
-    '#title' =>t('Cash to collect($)'),
-    '#type'=>'textfield',
-    '#size'=>32,
-  );
-
-  $form['pickup_time_date_'.$i] = array(
-    '#type' => 'date_popup', 
-    '#title' =>t('Pick up time date'),
-    '#date_format' => 'm/d/Y', 
-    '#date_year_range' => '0:+2', 
-    '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
-    '#required' => TRUE,
-    '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)),
-  );
-
-$form['pick_up_time_ampm_'.$i] = array(
-    '#type' => 'select',
-    '#options' => array('AM' => t('AM'),'PM' => t('PM')),
-    '#default_value' => 'AM',
-    '#attributes' => array('class'=>array('pick_up_time_ampm')),
-);
-
-$form['note_'.$i] = array(
-    '#prefix' => '<div class="note">',
-    '#suffix' => '</div>', 
-  );
-
-  $form['note_'.$i]['pickup_note_'.$i] = array(
-    '#title' =>t('Pickup Note'),
-    '#type'=>'textarea',
-  );
-
-  $form['note_'.$i]['delivery_note_'.$i] = array(
-    '#title' =>t('Delivery Note'),
-    '#type'=>'textarea',
-  );
-
-
-  return $form;
+  $query = db_delete('masquerade');
+  $query->condition('sid', $subquery, 'NOT IN');
+  $query->execute();
 }
 
-function parcels_pickup_location_form($user,$i){
+/**
+ * Implements hook_menu().
+ */
+function lp_admin_order_menu() {
+  $items = array();
 
-  $options = array();
-  array_push($options,'Select one...');
-  if ($user->uid && $addresses = lp_admin_order_get_uc_address_book($user->uid)) {
-    foreach($addresses as $adr){
-      $options['pickup_'.($i-1).'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
-    }
-    $contents["pickup[".$i."][select_address]"] = array(
-      '#type' => 'select', 
-      '#title' => t('Select addresses'), 
-      '#attributes' => array('class'=>array('admin_parcel_select_address'),'onchange'=>'admin_parcel_select_address('.$i.',"pickup")'),
-      '#options' => $options, 
+  $default_test_user = _masquerade_user_load(variable_get('masquerade_test_user', ''));
+  if ($default_test_user && ($default_test_user->uid || $default_test_user->name == variable_get('anonymous', t('Anonymous')))) {
+    $items['masquerade/switch/' . $default_test_user->uid] = array(
+      'title' => 'Masquerade as @testuser',
+      'title arguments' => array('@testuser' => $default_test_user->name),
+      'page callback' => 'masquerade_switch_user_page',
+      'page arguments' => array(2),
+      'access callback' => 'masquerade_menu_access',
+      'access arguments' => array('switch'),
+      'type' => MENU_NORMAL_ITEM,
     );
   }
 
-
- $contents['pickup_address_'.$i] = array('pickup_first_name_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
-    '#attributes' => array('class'=>array('pickup_first_name')),
-    '#size'=>32,
-    '#maxlength' => 100,
-  ),
-'pickup_last_name_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
-    '#attributes' => array('class'=>array('pickup_last_name')),
-    '#size'=>32,
-    '#maxlength' => 100,
-
-  ),
-'pickup_company_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Company'),
-    '#attributes' => array('class'=>array('pickup_company')),
-    '#size'=>32,
-    '#maxlength' => 100,
-  ),
-'pickup_street1_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_street1')),
-  ),
-'pickup_street2_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' =>t('Street address2'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_street2')),
-  ),
-'pickup_city_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('City'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_city')),
-  ), 
-'pickup_zone_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('State/Province'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_zone')),
-  ),
-
-'pickup_country_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Country'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_country')),
-  ),
-'pickup_postal_code_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('pickup_postal_code'),'onblur'=>'putpickuppost('.$i.',"pickup")'),
-  ),
-'pickup_phone_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Phone number'),
-    '#attributes' => array('class'=>array('pickup_phone')),
-    '#size'=>'32',
-
-  ),
-'pickup_post_'.$i=>array(
-    '#type' =>'hidden',
-    '#attributes' => array('class'=>array('pickup_post')),
- ),
-
-
-'address_name'=>array(
-    '#type' => 'hidden',
-    '#value' =>'',
-    '#maxlength' => 4,
-  ),
-'default_shipping'=>array(
-    '#type' => 'hidden',
-    '#value' =>'0',
-    '#maxlength' => 4,
-  ),
-'default_billing'=>array(
-    '#type' => 'hidden',
-    '#value' =>'0',
-    '#maxlength' => 4,
-  )  
-);
-return $contents;
-}
-
-function parcels_delivery_location_form($user,$i){
-
-  $options = array();
-  array_push($options,'Select one...');
-  if ($user->uid && $addresses = lp_admin_order_get_uc_address_book($user->uid)) {
-    foreach($addresses as $adr){
-      $options['delivery_'.($i-1).'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
-    }
-    $contents["delivery[".$i."][select_address]"] = array(
-      '#type' => 'select', 
-      '#title' => t('Select addresses'), 
-      '#attributes' => array('class'=>array('admin_parcel_select_address'),'onchange'=>'admin_parcel_select_address('.$i.',"delivery")'),
-      '#options' => $options, 
-    );
-  }
-
-
- $contents['delivery_address_'.$i] = array('delivery_first_name_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('First name').' <span class="form-required" title="This field is required.">*</span>',
-    '#attributes' => array('class'=>array('delivery_first_name')),
-    '#size'=>32,
-    '#maxlength' => 100,
-  ),
-'delivery_last_name_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Last name').' <span class="form-required" title="This field is required.">*</span>',
-    '#attributes' => array('class'=>array('delivery_last_name')),
-    '#size'=>32,
-    '#maxlength' => 100,
-
-  ),
-'delivery_company_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Company'),
-    '#attributes' => array('class'=>array('delivery_company')),
-    '#size'=>32,
-    '#maxlength' => 100,
-  ),
-'delivery_street1_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_street1')),
-  ),
-'delivery_street2_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' =>t('Street address2'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_street2')),
-  ),
-'delivery_city_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('City'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_city')),
-  ), 
-'delivery_zone_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('State/Province'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_zone')),
-  ),
-
-'delivery_country_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Country'),
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_country')),
-  ),
-'delivery_postal_code_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Postal code').' <span class="form-required" title="This field is required.">*</span>',
-    '#maxlength' => 100,
-    '#size'=>32,
-    '#attributes' => array('class'=>array('delivery_postal_code'),'onblur'=>'putdeliverypost('.$i.',"delivery")'),
-  ),
-'delivery_phone_'.$i=>array(
-    '#type' => 'textfield',
-    '#title' => t('Phone number'),
-    '#attributes' => array('class'=>array('delivery_phone')),
-    '#size'=>'32',
-
-  ),
-'delivery_post_'.$i =>array(
-    '#type' =>'hidden',
-    '#attributes' => array('class'=>array('delivery_post')),
- ),
-
-'address_name'=>array(
-    '#type' => 'hidden',
-    '#value' =>'',
-    '#maxlength' => 4,
-  ),
-'default_shipping'=>array(
-    '#type' => 'hidden',
-    '#value' =>'0',
-    '#maxlength' => 4,
-  ),
-'default_billing'=>array(
-    '#type' => 'hidden',
-    '#value' =>'0',
-    '#maxlength' => 4,
-  )  
-);
-return $contents;
-}
-
-function parcels_price_form($i){
-
-  $form['price_'.$i] = array(
-    '#type' =>'textfield',
-    '#title' =>'Parcel Price($)'.' <span class="form-required" title="This field is required.">*</span>',
-    '#size' =>32,
+  $items['masquerade/switch/%'] = array(
+    'title' => 'Masquerading',
+    'page callback' => 'masquerade_switch_user_page',
+    'page arguments' => array(2),
+    'access callback' => 'masquerade_menu_access',
+    'access arguments' => array('switch', 2),
+    'type' => MENU_NORMAL_ITEM,
   );
- $form['package_name_'.$i] = array(
-    '#type' =>'hidden',
-    '#value'=>'',
-    '#attributes' => array('class'=>array('package_name')),
-   );
- $form['check_price_'.$i] = array(
+  $items['masquerade/unswitch'] = array(
+    'title' => 'Switch back',
+    'page callback' => 'masquerade_switch_back_page',
+    'access callback' => 'masquerade_menu_access',
+    'access arguments' => array('unswitch'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['masquerade/autocomplete'] = array(
+    'title' => '',
+    'page callback' => 'masquerade_autocomplete',
+    'access callback' => 'masquerade_menu_access',
+    'access arguments' => array('autocomplete'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['masquerade/autocomplete-users'] = array(
+    'title' => '',
+    'page callback' => 'masquerade_autocomplete_multiple',
+    'access callback' => 'masquerade_menu_access',
+    'access arguments' => array('autocomplete'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['masquerade/autocomplete-user'] = array(
+    'title' => 'Masquerade autocomplete',
+    'page callback' => 'masquerade_autocomplete_multiple',
+    'page arguments' => array(2, FALSE),
+    'access arguments' => array('access user profiles'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/people/masquerade'] = array(
+    'title' => 'Masquerade',
+    'description' => 'Masquerade module allows administrators to masquerade as other users.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masquerade_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer masquerade'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['liveparcels/reload_checkout_render/ajax'] = array(
+    'page callback' => 'reload_checkout_render',
+    'access callback' => true,
+    'menu_name'=>'liveparcels',
+  );
 
-    '#markup'=>'<div class="actions"><input type="button" class="form-submit check_price" value="check reference price" onclick="check_price('.$i.')" /></div>',
- );
-$form['parcels_factor'] = array(
-    '#type' => 'hidden',
-    '#value' =>variable_get('liveparcels_factor',0.0002),
-    '#attributes' => array('class'=>array('liveparcels_factor')),
- );
-
- $form['display_price_'.$i] = array(
-   '#markup' =>'<div class="display_pricre"></div>',
- );
-
-
-
-return $form;
+  return $items;
 }
 
-
-function lp_admin_order_get_uc_address_book($uid){
-
-  $address = db_query("SELECT * FROM {uc_addresses} WHERE uid = ".$uid); 
-
-  return $address;
+/**
+ * Implements hook_menu_alter().
+ *
+ * We need to add a token to the Masquerade paths to protect against CSRF
+ * attacks. Since menu items in Drupal do not support dynamic elements these
+ * tokens need to be added during rendering via masquerade_translated_menu_link_alter().
+ * Set the 'alter'-option to TRUE to make sure
+ * the links get passed through masquerade_translated_menu_link_alter.
+ */
+function lp_admin_order_menu_alter(&$items) {
+  $default_test_user = _masquerade_user_load(variable_get('masquerade_test_user', ''));
+  if (isset($default_test_user->uid)) {
+    $items['masquerade/switch/' . $default_test_user->uid]['options']['alter'] = TRUE;
+  }
+  $items['masquerade/switch/%']['options']['alter'] = TRUE;
+  $items['masquerade/unswitch']['options']['alter'] = TRUE;
 }
 
-function check_parcel_node_title($order_id,$parcenum){
-        $count = db_query('select count(*) from {node} where title =:title',array(':title'=>'Order#'.$order_id.'Parcel#'.$parcenum))->fetchfield();
-        if( $count > 0){
-         $parcenum += 1; 
-	 $parcenum = check_parcel_node_title($order_id,$parcenum);
+/**
+ * Implements hook_translated_menu_link_alter().
+ *
+ * Dynamically add the CSRF protection token to the Masquerade menu items.
+ */
+function lp_admin_order_translated_menu_link_alter(&$item, $map) {
+  if (isset($item['page_callback'])) {
+    if ($item['page_callback'] == 'masquerade_switch_user_page' && isset($map[2])) {
+      $item['localized_options']['query']['token'] = drupal_get_token('masquerade/switch/' . $map[2]);
+    }
+    elseif ($item['page_callback'] == 'masquerade_switch_back_page') {
+      $item['localized_options']['query']['token'] = drupal_get_token('masquerade/unswitch');
+    }
+  }
+}
+
+/**
+ * Implements hook_user_operations().
+ */
+function lp_admin_order_user_operations() {
+  return array(
+    'masquerade' => array(
+      'label' => t('Masquerade as user'),
+      'callback' => 'masquerade_user_operations_masquerade',
+    ),
+  );
+}
+
+/**
+ * Callback for user operation.
+ */
+function masquerade_user_operations_masquerade(array $accounts) {
+  // Only process the first account since switching to multiple makes no sense.
+  if (($uid = current($accounts)) && masquerade_menu_access('switch', $uid)) {
+    masquerade_switch_user($uid);
+  }
+}
+
+/**
+ * Determine if the current user has permission to switch users.
+ *
+ * @param string $type
+ *   Either 'switch', 'unswitch', 'user', or 'autocomplete'.
+ *
+ * @param object $uid
+ *   An optional parameter indicating a specific uid to switch to.
+ *   Otherwise, return if the user can switch to any user account.
+ *
+ * @return
+ *   TRUE, if the user can perform the requested action, FALSE otherwise.
+ */
+
+function masquerade_menu_access($type, $uid = NULL) {
+  switch ($type) {
+    case 'unswitch':
+      return isset($_SESSION['masquerading']) || arg(2) == 'menu-customize' || arg(2) == 'menu';
+    case 'autocomplete':
+      return isset($_SESSION['masquerading']) || (user_access('masquerade as user') || user_access('masquerade as admin'));
+      break;
+    case 'user':
+      global $user;
+      return db_query("SELECT 1 FROM {masquerade_users} WHERE uid_from = :uid_from", array(':uid_from' => $user->uid))->fetchField();
+      break;
+    case 'switch':
+      $switch_to_account = FALSE;
+      global $user;
+      if ($uid) {
+        if (!is_numeric($uid)) {
+          return FALSE;
         }
-         return $parcenum;
+        if ($account = user_load($uid)) {
+          $switch_to_account = db_query("SELECT 1 FROM {masquerade_users} WHERE uid_from = :uid_from AND uid_to = :uid_to", array(
+            ':uid_from' => $user->uid,
+            ':uid_to' => $account->uid
+          ))->fetchField();
+        }
+      }
+      return !isset($_SESSION['masquerading']) && (user_access('masquerade as user') || user_access('masquerade as admin') || $switch_to_account);
+      break;
+  }
 }
+
+/**
+ * Admin settings form.
+ */
+function masquerade_admin_settings() {
+  // create a list of roles; all selected roles are considered administrative.
+  $roles = user_roles();
+  $form['masquerade_admin_roles'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Roles that are considered "administrators" for masquerading'),
+    '#options' => $roles,
+    '#default_value' => variable_get('masquerade_admin_roles', array()),
+  );
+
+  $test_name = _masquerade_user_load(variable_get('masquerade_test_user', ''));
+
+  $form['masquerade_test_user'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Menu <em>Quick Switch</em> user'),
+    '#autocomplete_path' => 'masquerade/autocomplete',
+    '#default_value' => isset($test_name->name) ? check_plain($test_name->name) : '',
+    '#description' => t('Enter the username of an account you wish to switch easily between via a menu item.'),
+    '#maxlength' => NULL,
+  );
+
+  $quick_switch = user_load_multiple(variable_get('masquerade_quick_switches', array()));
+  $quick_switch_users = array();
+  foreach ($quick_switch as $uid => $account) {
+    if ($uid == 0) {
+      $account->name = variable_get('anonymous', t('Anonymous'));
+    }
+    $quick_switch_users[] = $account->name;
+  }
+  $form['masquerade_quick_switches'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Masquerade Block <em>Quick Switch</em> users'),
+    '#autocomplete_path' => 'masquerade/autocomplete-users',
+    '#default_value' => drupal_implode_tags($quick_switch_users),
+    '#description' => t('Enter the usernames, separated by commas, of accounts to show as quick switch links in the Masquerade block.'),
+    '#maxlength' => NULL,
+  );
+
+  $form = system_settings_form($form);
+  $form['#validate'][] = 'masquerade_admin_settings_validate';
+  $form['#submit'][] = 'masquerade_admin_settings_submit';
+
+  return $form;
+}
+
+function masquerade_admin_settings_validate($form, &$form_state) {
+  if (!empty($form_state['values']['masquerade_test_user'])) {
+    $test_user = _masquerade_user_load($form_state['values']['masquerade_test_user']);
+    if (!$test_user) {
+      form_set_error('masquerade_test_user', t('%user does not exist. Please enter a valid username.', array('%user' => $form_state['values']['masquerade_test_user'])));
+    }
+  }
+  // Needs to rebuild menu in masquerade_admin_settings_submit().
+  $form_state['masquerade_rebuild_menu'] = (variable_get('masquerade_test_user', '') != $form_state['values']['masquerade_test_user']);
+
+  // A comma-separated list of users.
+  $masquerade_switches = drupal_explode_tags($form_state['values']['masquerade_quick_switches']);
+  // Change user names to user ID's for system_settings_form_submit() to save.
+  $masquerade_uids = array();
+  foreach ($masquerade_switches as $switch_user) {
+    $test_user = _masquerade_user_load($switch_user);
+    if (!$test_user) {
+      form_set_error('masquerade_quick_switches', t('%user does not exist. Please enter a valid username.', array('%user' => $switch_user)));
+    }
+    else {
+      $masquerade_uids[] = $test_user->uid;
+    }
+  }
+  $form_state['values']['masquerade_quick_switches'] = $masquerade_uids;
+}
+
+function masquerade_admin_settings_submit($form, &$form_state) {
+  // Rebuild the menu system so the menu "Quick Switch" user is updated.
+  if ($form_state['masquerade_rebuild_menu']) {
+    menu_rebuild();
+  }
+}
+
+/**
+ * Wrapper around user_load() to allow the loading of anonymous users.
+ *
+ * @param $username
+ *   The username of the user you wish to load (i.e. $user->name). To load the
+ *   anonymous user, pass the value of the 'anonymous' variable.
+ *
+ * @return
+ *   A fully-loaded $user object upon successful user load or FALSE if user
+ *   cannot be loaded.
+ */
+function _masquerade_user_load($username) {
+  $account = FALSE;
+  if (!empty($username)) {
+    $anon = variable_get('anonymous', t('Anonymous'));
+    $account = user_load_by_name(($username == $anon ? '' : $username));
+    if (isset($account->uid) && empty($account->uid)) {
+      // Anonymous user should have a name.
+      $account->name = $anon;
+    }
+  }
+  return $account;
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function lp_admin_order_user_logout($account) {
+  if (!empty($account->masquerading)) {
+    global $user;
+    cache_clear_all($user->uid, 'cache_menu', TRUE);
+    $real_user = user_load($user->masquerading);
+    watchdog('masquerade', "User %user no longer masquerading as %masq_as.", array('%user' => $real_user->name, '%masq_as' => $user->name), WATCHDOG_INFO);
+
+    $query = db_delete('masquerade');
+    $query->condition('sid', session_id());
+    $query->condition('uid_as', $account->uid);
+    $query->execute();
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function lp_admin_order_field_extra_fields() {
+  $return['user']['user']  = array(
+    'form' => array(
+      'masquerade' => array(
+        'label' => t('Masquerade'),
+        'description' => t('User masquerade settings.'),
+        'weight' => 50,
+      ),
+    ),
+    'display' => array(
+      'masquerade' => array(
+        'label' => t('Masquerade'),
+        'description' => t('Masquerade as user link.'),
+        'weight' => 50,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_user_view().
+ */
+function lp_admin_order_user_view($account, $view_mode, $langcode) {
+  // check if user qualifies as admin
+  $roles = array_keys(array_filter(variable_get('masquerade_admin_roles', array())));
+  $perm = $account->uid == 1 || array_intersect(array_keys((array)$account->roles), $roles) ?
+    'masquerade as admin' :
+    'masquerade as user';
+
+  global $user;
+
+  // Query allowed uids so the "masquerade as <user>" link can be shown or
+  // hidden.
+  $allowed_uids = db_query("SELECT uid_to FROM {masquerade_users} WHERE uid_from = :uid_from", array(':uid_from' => $user->uid))
+    ->fetchCol();
+  $can_masquerade_as_user = in_array($account->uid, $allowed_uids) || user_access('masquerade as any user');
+
+  if (user_access($perm) && empty($account->masquerading) && $user->uid != $account->uid && $can_masquerade_as_user) {
+    $account->content['masquerade'] = array(
+      '#markup' => l(t('Masquerade as !user', array('!user' => $account->name)),
+        'masquerade/switch/' . $account->uid,
+        array('query' => array(
+          'token' => drupal_get_token('masquerade/switch/' . $account->uid)),
+          'destination' => $_GET['q'],
+          'attributes' => array('class' => array('masquerade-switch')),
+        )),
+      '#weight' => 10,
+    );
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lp_admin_order_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#user_category'] != 'account') {
+    // Do not show this form for different categories.
+    return;
+  }
+  $form['masquerade'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Masquerade settings'),
+    '#access' => user_access('administer masquerade'),
+  );
+  $edit_user = $form['#user'];
+  $uids = db_query("SELECT uid_to FROM {masquerade_users} WHERE uid_from = :uid_from", array(':uid_from' => $edit_user->uid))
+    ->fetchCol();
+  $users = user_load_multiple($uids);
+  $masquerade_users = array();
+  foreach ($users as $uid => $account) {
+    if ($uid == 0) {
+      $masquerade_users[] = variable_get('anonymous', t('Anonymous'));
+    }
+    else {
+      $masquerade_users[] = $account->name;
+    }
+  }
+  $form['masquerade']['masquerade_users'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Enter the users this user is able to masquerade as'),
+    '#description' => t('Enter a comma separated list of user names that this user can masquerade as.'),
+    '#autocomplete_path' => 'masquerade/autocomplete-user',
+    '#default_value' => drupal_implode_tags($masquerade_users),
+    '#maxlength' => NULL,
+  );
+  $form['#validate'][] = 'masquerade_user_validate';
+  $form['#submit'][] = 'masquerade_user_submit';
+}
+
+/**
+ * Validates user account form.
+ */
+function masquerade_user_validate(&$form, $form_state) {
+  if (isset($form_state['values']['masquerade_users'])) {
+    $users = drupal_explode_tags($form_state['values']['masquerade_users']);
+    foreach ($users as $username) {
+      if (!_masquerade_user_load($username)) {
+        form_set_error('masquerade_users', t('%user is not a valid user name.', array('%user' => $username)));
+      }
+    }
+  }
+}
+
+/**
+ * Submit handler for masquerade users form element.
+ */
+function masquerade_user_submit(&$form, $form_state) {
+  global $_masquerade_old_session_id;
+  $_masquerade_old_session_id = session_id();
+}
+
+/**
+ * Implements hook_user_update().
+ */
+function lp_admin_order_user_update(&$edit, $account, $category) {
+  global $_masquerade_old_session_id;
+  if ($category == 'account' && isset($edit['masquerade_users'])) {
+    $query = db_delete('masquerade_users');
+    $query->condition('uid_from', $account->uid);
+    $query->execute();
+    // Save users from settings form.
+    $users = drupal_explode_tags($edit['masquerade_users']);
+    $query = db_insert('masquerade_users')->fields(array('uid_from', 'uid_to'));
+    foreach ($users as $username) {
+      if ($to_user = _masquerade_user_load($username)) {
+        $query->values(array(
+          'uid_from' => $account->uid,
+          'uid_to' => $to_user->uid,
+        ));
+      }
+    }
+    $query->execute();
+    $edit['masquerade_users'] = NULL;
+
+    // Update user session...
+    // @TODO check other way of session API.
+    if (!empty($_masquerade_old_session_id)) {
+      $query = db_update('masquerade');
+      $query->fields(array(
+        'sid' => session_id(),
+      ));
+      $query->condition('sid', $_masquerade_old_session_id);
+      $query->execute();
+    }
+  }
+}
+
+/**
+ * Implements hook_user_delete().
+ */
+function lp_admin_order_user_delete($account) {
+  // Cleanup tables.
+  $query = db_delete('masquerade_users');
+  $conditions = db_or();
+  $conditions->condition('uid_from', $account->uid);
+  $conditions->condition('uid_to', $account->uid);
+  $query->condition($conditions);
+  $query->execute();
+  // Cleanup variables.
+  $switches = variable_get('masquerade_quick_switches', array());
+  $switches_new = array_diff($switches, array($account->uid));
+  if ($switches != $switches_new) {
+    variable_set('masquerade_quick_switches', $switches_new);
+    // @TODO Implement block cache cleaning.
+    menu_rebuild();
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function lp_admin_order_block_info() {
+  $blocks = array();
+  $blocks['masquerade'] = array(
+    'info' => t('Admin order'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function lp_admin_order_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'masquerade':
+      if (isset($_SESSION['masquerading']) || (user_access('masquerade as user') || user_access('masquerade as admin'))) {
+        $block['subject'] = t('Admin order');
+        $block['content'] = drupal_get_form('masquerade_block_1');
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Masquerade block form.
+ */
+function masquerade_block_1() {
+  global $user;
+  $quick_switch_links = array();
+  $markup_value = '';
+  if (isset($_SESSION['masquerading'])) {
+    $quick_switch_links[] = l(t('Switch back'), 'masquerade/unswitch', array('query' => array('token' => drupal_get_token('masquerade/unswitch'))));
+    if ($user->uid > 0) {
+      $markup_value = t('You are masquerading as <a href="@user-url">%masq_as</a>.', array('@user-url' => url('user/' . $user->uid), '%masq_as' => $user->name));
+    }
+    else {
+      $markup_value = t('You are masquerading as %anonymous.', array('%anonymous' => variable_get('anonymous', t('Anonymous'))));
+    }
+  }
+  else {
+    $quick_switches = variable_get('masquerade_quick_switches', array());
+
+    // Add in user-specific switches, and prevent duplicates.
+    $user_switches = db_query("SELECT uid_to FROM {masquerade_users} WHERE uid_from = :uid_from", array(':uid_from' => $user->uid))->fetchCol();
+    $masquerade_switches = array_unique(array_merge($quick_switches, $user_switches));
+
+    foreach ($masquerade_switches as $switch_user) {
+      if (!isset($_SESSION['user']->uid) || $switch_user != $_SESSION['user']->uid) {
+        $account = user_load($switch_user);
+        if (isset($account->uid)) {
+          $switch_link = 'masquerade/switch/' . $account->uid;
+          if ($account->uid) {
+            $quick_switch_links[] = l($account->name, $switch_link, array('query' => array('token' => drupal_get_token($switch_link))));
+          }
+          if ($switch_user == 0) {
+            $account->name = variable_get('anonymous', t('Anonymous'));
+            $quick_switch_links[] = l($account->name, $switch_link, array('query' => array('token' => drupal_get_token($switch_link))));
+          }
+        }
+      }
+    }
+
+    if (masquerade_menu_access('autocomplete')) {
+      $markup_value .= t('Enter the username to masquerade as.');
+      $form['masquerade_user_field'] = array(
+        '#prefix' => '<div class="container-inline">',
+        '#type' => 'textfield',
+        '#size' => '18',
+        '#default_value' => '',
+        '#autocomplete_path' => 'masquerade/autocomplete',
+        '#required' => TRUE,
+      );
+      $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Go'),
+        '#suffix' => '</div>',
+      );
+    }
+
+  }
+  if ($quick_switch_links) {
+    $markup_value .= '<div id="quick_switch_links">' . t('Quick switches:') . theme('item_list', array('items' => $quick_switch_links)) . '</div>';
+  }
+  $form['masquerade_desc'] = array(
+    '#prefix' => '<div class="form-item"><div class="description">',
+    '#markup' => $markup_value,
+    '#suffix' => '</div></div>',
+  );
+  return $form;
+}
+
+/**
+ * Masquerade block form validation.
+ */
+function masquerade_block_1_validate($form, &$form_state) {
+  global $user;
+  //unset($form);
+  $name = $form_state['values']['masquerade_user_field'];
+  $allowed = FALSE;
+  $to_uid = db_select('users', 'u')
+    ->fields('u', array('uid'))
+    ->condition('u.name', $name, '=')
+    ->execute()
+    ->fetchField();
+  if ($to_uid !== FALSE) {
+    $allowed = user_access('masquerade as any user') ||
+               db_select('masquerade_users', 'm')
+                  ->fields('m', array('uid_to'))
+                  ->condition('m.uid_to', $to_uid, '=')
+                  ->condition('m.uid_from', $user->uid, '=')
+                  ->execute()
+                  ->fetchField();
+  }
+  if (isset($_SESSION['masquerading'])) {
+    form_set_error('masquerade_user_field', t('You are already masquerading. Please <a href="@unswitch">switch back</a> to your account to masquerade as another user.', array('@unswitch' => url('masquerade/unswitch', array('query' => array('token' => drupal_get_token('masquerade/unswitch')))))));
+  }
+  if ($allowed === FALSE) {
+    form_set_error('masquerade_user_field', t('You are not allowed to masquerade as the selected user.'));
+  }
+
+  if ($name != variable_get('anonymous', t('Anonymous')) && module_exists('alt_login')) {
+    $alt_login = db_query("SELECT u.name FROM {users} u INNER JOIN {alt_login} al ON u.uid = al.uid WHERE al.alt_login = :alt_login", array(
+      ':alt_login' => $name
+    ))->fetchObject();
+    if (isset($alt_login->name)) {
+      $name = $alt_login->name;
+    }
+  }
+  $masq_user = _masquerade_user_load($name);
+  if (!$masq_user) {
+    form_set_error('masquerade_user_field', t('User %masq_as does not exist. Please enter a valid username.', array('%masq_as' => $form_state['values']['masquerade_user_field'])));
+  }
+  elseif ($masq_user->uid == $user->uid) {
+    form_set_error('masquerade_user_field', t('You cannot masquerade as yourself. Please choose a different user to masquerade as.'));
+  }
+  elseif (variable_get('maintenance_mode', 0) && !user_access('access site in maintenance mode', $masq_user)) {
+    form_set_error('masquerade_user_field', t('It is not possible to masquerade in off-line mode as !user does not have the %config-perm permission. Please <a href="@site-maintenance">set the site status</a> to "online" to masquerade as !user.', array('!user' => theme('username', array('account' => $masq_user)), '%config-perm' => 'use the site in maintenance mode', '@site-maintenance' => url('admin/settings/site-maintenance'))));
+  }
+  else {
+    $form_state['values']['masquerade_user_field'] = $name;
+  }
+}
+
+/**
+ * Masquerade block form submission.
+ */
+function masquerade_block_1_submit($form, &$form_state) {
+  //unset($form);
+  $masq_user = _masquerade_user_load($form_state['values']['masquerade_user_field']);
+  if (!masquerade_switch_user($masq_user->uid)) {
+    drupal_access_denied();
+  }
+  else {
+    drupal_goto($_SERVER['HTTP_REFERER']);
+  }
+}
+
+/**
+ * Returns JS array for Masquerade autocomplete fields.
+ */
+function masquerade_autocomplete($string) {
+  $matches = array();
+  // Anonymous user goes first to be visible for user.
+  $anonymous = variable_get('anonymous', t('Anonymous'));
+  if (stripos($anonymous, $string) === 0) {
+    $matches[$anonymous] = $anonymous;
+  }
+  // Other suggestions.
+  $result = db_query_range("SELECT name FROM {users} WHERE LOWER(name) LIKE LOWER(:string)", 0, 10, array(
+    ':string' => $string . '%',
+  ));
+  foreach ($result as $user) {
+    $matches[$user->name] = check_plain($user->name);
+  }
+  if (module_exists('devel')) {
+    $GLOBALS['devel_shutdown'] = FALSE;
+  }
+  drupal_json_output($matches);
+}
+
+/**
+ * Returns JS array for Masquerade autocomplete fields.
+ *
+ * Supports multiple entries separated by a comma.
+ *
+ * @param $string
+ *   The string of autocmplete value submitted by the user.
+ * @param $add_anonymous
+ *   Flag to include Anonymous user into result.
+ */
+function masquerade_autocomplete_multiple($string, $add_anonymous = TRUE) {
+  $matches = array();
+  // The user enters a comma-separated list of users. We only autocomplete the last user.
+  $users_typed = drupal_explode_tags($string);
+  // Fetch last string.
+  $last_string = drupal_strtolower(array_pop($users_typed));
+  if ($last_string) {
+    $prefix = count($users_typed) ? implode(', ', $users_typed) . ', ' : '';
+    if ($add_anonymous) {
+      // Anonymous user goes first to be visible for user.
+      $anonymous = variable_get('anonymous', t('Anonymous'));
+      if (stripos($anonymous, $last_string) === 0) {
+        $matches[$prefix . $anonymous] = $anonymous;
+      }
+    }
+    // Other suggestions.
+    $result = db_query_range("SELECT name FROM {users} WHERE LOWER(name) LIKE :string", 0, 10, array(
+      ':string' => $last_string . '%',
+    ));
+    foreach ($result as $user) {
+      $matches[$prefix . $user->name] = check_plain($user->name);
+    }
+
+    // Remove existing tags.
+    $matches = array_diff($matches, $users_typed);
+
+    // @todo Check compatibility for D7.
+    if (module_exists('alt_login')) {
+      $result = db_query_range("SELECT u.alt_login AS alt_login FROM {alt_login} u WHERE LOWER(u.alt_login) LIKE LOWER(:string)", 0, 10, array(
+        ':string' => $last_string . '%',
+      ));
+      foreach ($result as $user) {
+        $matches[$user->alt_login] = check_plain($user->alt_login);
+      }
+    }
+  }
+  if (module_exists('devel')) {
+    $GLOBALS['devel_shutdown'] = FALSE;
+  }
+  drupal_json_output($matches);
+}
+
+/**
+ * Page callback to switch users.
+ */
+function masquerade_switch_user_page($uid) {
+  if (isset($_GET['token']) && drupal_valid_token($_GET['token'], 'masquerade/switch/' . $uid) && masquerade_switch_user($uid)) {
+    drupal_goto($_SERVER['HTTP_REFERER']);
+  }
+  else {
+    drupal_access_denied();
+  }
+}
+
+/**
+ * Allows a user with the right permissions to become the selected user.
+ *
+ * @param $uid
+ *   The user ID to switch to.
+ *
+ * @return
+ *   TRUE if the user was sucessfully switched, or FALSE if there was an error.
+ */
+function masquerade_switch_user($uid) {
+  global $user;
+  if (!is_numeric($uid)) {
+    drupal_set_message(t('A user id was not correctly passed to the switching function.'));
+    watchdog('masquerade', 'The user id provided to switch users was not numeric.', NULL, WATCHDOG_ERROR);
+    return drupal_goto($_SERVER['HTTP_REFERER']);
+  }
+
+  $new_user = user_load($uid);
+
+  $roles = array_keys(array_filter(variable_get('masquerade_admin_roles', array())));
+  $perm = $uid == 1 || array_intersect(array_keys($new_user->roles), $roles) ?
+    'masquerade as admin' :
+    'masquerade as user';
+
+  // Check to see if we need admin permission.
+  $results = db_query_range('SELECT 1 FROM {masquerade_users} WHERE uid_from = :uid_from AND uid_to = :uid_to', 0, 1, array(
+    ':uid_from' => $user->uid,
+    ':uid_to' => $new_user->uid,
+  ));
+  if (!user_access($perm) && !isset($_SESSION['masquerading']) && !$results->fetchField()) {
+    watchdog('masquerade', 'This user requires administrative permissions to switch to the user %user.', array('%user' => $new_user->name), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if ($user->uid == $uid || isset($user->masquerading)) {
+    watchdog('masquerade', 'This user is already %user.', array('%user' => $new_user->name), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if (variable_get('maintenance_mode', 0) && !user_access('access site in maintenance mode', $new_user)) {
+    drupal_set_message(t('It is not possible to masquerade in off-line mode as %user does not have the %config-perm permission. Please <a href="@site-maintenance">set the site status</a> to "online" to masquerade as %user.', array('%user' => $new_user->name, '%config-perm' => 'use the site in maintenance mode', '@site-maintenance' => url('admin/settings/site-maintenance'))));
+    return FALSE;
+  }
+
+  // Call logout hooks when switching from original user.
+  module_invoke_all('user_logout', $user);
+  drupal_session_regenerate();
+
+  $query = db_insert('masquerade');
+  $query->fields(array(
+    'uid_from' => $user->uid,
+    'uid_as' => $new_user->uid,
+    'sid' => session_id(),
+  ));
+  $query->execute();
+  // switch user
+
+  watchdog('masquerade', 'User %user now masquerading as %masq_as.', array('%user' => $user->name, '%masq_as' => $new_user->name ? $new_user->name : variable_get('anonymous', t('Anonymous'))), WATCHDOG_INFO);
+  drupal_set_message(t('You are now masquerading as !masq_as.', array('!masq_as' => theme('username', array('account' => $new_user)))));
+  $user->masquerading = $new_user->uid;
+  $user = $new_user;
+
+  // Call all login hooks when switching to masquerading user.
+  $edit = array(); // Passed by reference.
+  user_module_invoke('login', $edit, $user);
+
+  return TRUE;
+}
+
+/**
+ * Allows a user who is currently masquerading to become a new user.
+ */
+function masquerade_switch_back_page() {
+  if (isset($_GET['token']) && drupal_valid_token($_GET['token'], 'masquerade/unswitch')) {
+    global $user;
+    $olduser = $user;
+    masquerade_switch_back();
+    drupal_set_message(t('You are no longer masquerading as !masq_as and are now logged in as !user.', array('!user' => theme('username', array('account' => $user)), '!masq_as' => theme('username', array('account' => $olduser)))));
+    drupal_goto($_SERVER['HTTP_REFERER']);
+  }
+  else {
+    drupal_access_denied();
+  }
+}
+
+/**
+ * Function for a masquerading user to switch back to the previous user.
+ */
+function masquerade_switch_back() {
+  // switch user
+  global $user;
+  cache_clear_all($user->uid, 'cache_menu', TRUE);
+  $uid = db_query("SELECT m.uid_from FROM {masquerade} m WHERE m.sid = :sid AND m.uid_as = :uid_as ", array(
+    ':sid' => session_id(),
+    ':uid_as' => $user->uid,
+  ))->fetchField();
+  // erase record
+  db_delete('masquerade')
+    ->condition('sid', session_id())
+    ->condition('uid_as', $user->uid)
+    ->execute();
+
+  $oldname = ($user->uid == 0 ? variable_get('anonymous', t('Anonymous')) : $user->name);
+
+  // Call logout hooks when switching from masquerading user.
+  module_invoke_all('user_logout', $user);
+  drupal_session_regenerate();
+
+  $user = user_load($uid);
+
+  // Call all login hooks when switching back to original user.
+  $edit = array(); // Passed by reference.
+  user_module_invoke('login', $edit, $user);
+
+  watchdog('masquerade', 'User %user no longer masquerading as %masq_as.', array('%user' => $user->name, '%masq_as' => $oldname), WATCHDOG_INFO);
+}
+
+/***  admin order ***/
+
+
+function lp_admin_order_uc_checkout_pane() {
+   
+      $panes['admin_order_settings'] = array(
+        'callback' => 'lp_admin_order_uc_checkout_pane_admin_order_settings',
+        'title' => t('Admin Order Settings'),
+        'desc' => t("setup order"),
+        'enabled' =>FALSE,
+        'weight' => -100,
+      );       
+  return $panes;    
+}
+
+function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form = NULL, &$form_state = NULL){
+
+  $parcels=liveparcels_getparcelsdata();
+   drupal_add_js(drupal_get_path('module','lp_admin_order').'/lp_admin_order.js');
+  if($parcels){
+      switch ($op) {
+        case 'view': 
+
+      $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
+      if($check_order>0){
+        db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
+      }else{
+        db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
+      }
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      if($lid_tax){
+        uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
+      }else{
+        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+      }
+      if(module_exists('lp_discount')){
+        $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        if($discount){
+          uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
+        }else{
+          uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
+        }
+      }
+
+
+        $contents['parcel_price_title'] = array(
+          '#markup' => '<h2>'.t('Edit Parcel Price').'</h2><div class="description">'.t('You can change the price of each parcel .Note that the total price will be auto calculated.').'</div>',
+       );
+
+      $contents['cart_review_table'] = array(
+        '#theme' =>'lp_admin_order_table', 
+        '#items' =>$parcels,
+      );	
+
+      $contents['edit_parcel_discount_title'] = array(
+         '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it for to something else. This field accept only final rate, note % or decimal.').'</div>',
+       );
+
+      $contents['edit_parcel_discount'] = array(
+       '#type' => 'textfield',
+       '#size'=>40,  
+      );
+      $contents['orderid'] = array(
+       '#type' => 'hidden',
+       '#value'=>$order->order_id, 
+       '#attributes' => array('class'=>array('admin_order_id')),
+      );
+      $contents['reload'] = array(
+	'#markup' =>'<input type="button" id="checkout_reload" class="form-submit" name="reload" value="Save and Reload" />',
+     );
+
+      return array('contents' => $contents, 'next-button' => FALSE);
+
+     }
+  }
+}
+
+function lp_admin_order_theme(){
+ return array(
+    'lp_admin_order_table' => array(
+      'variables' => array('items' => array(), 'show_subtotal' => TRUE), 
+      'file' => 'lp_admin_order_cueckout_pane.inc',
+    ), 
+ );
+
+}
+
+function reload_checkout_render(){
+  $prices = !empty($_REQUEST['parr'])?$_REQUEST['parr']:array();
+  $discount =  !empty($_REQUEST['discount'])?floatval($_REQUEST['discount']):0.00;
+  $orderid = !empty($_REQUEST['order_id'])?$_REQUEST['order_id']:0;
+  $order = uc_order_load($orderid); 
+ 
+ $totalprice = 0;
+ foreach($prices as $key =>$price){
+  $totalprice += $price;
+ }
+    _updateparcelsdata($prices,$discount,$totalprice,$order);
+   uc_order_save($order);
+
+}
+
+
+function _updateparcelsdata($prices,$discount,$totalprice,$order){
+
+$pdata = liveparcels_getparcelsdata();
+
+$pdata['discount'] = $discount;
+$pdata['totals'] = $totalprice;
+
+foreach($prices as $key=>$price){
+   $pdata['parcels'][$key]['price'] = variable_get('uc_currency_sign','$').$price;
+}
+$cart_id=uc_cart_get_id();
+
+ db_update('liveparcels_cart')->fields(array(
+  'cart_id' => $cart_id,
+  'parcel_info' =>serialize($pdata)))->execute();
+
+
+  $parcels=liveparcels_getparcelsdata();
+
+      $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
+      if($check_order>0){
+       db_update('liveparcels_order')->fields(array('parcel_info' => serialize($parcels)))->condition('order_id',$order->order_id , '=')->execute();
+      }else{
+        db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
+      }
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      if($lid_tax){
+        uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
+      }else{
+        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+      }
+      if(module_exists('lp_discount')){
+        $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
+        if($discount){
+          uc_order_update_line_item($discount,'Parcel discount', -$parcels['discount']);
+        }else{
+          uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
+        }
+      }
+
+
+}
+
+

@@ -1,10 +1,14 @@
-name = Admin Order
-description = Admin create a order .
+name = Admin order
+description = "This module allows permitted users to lp_admin_order as other users."
+core = 7.x
 package = Live Parcels - core
-dependencies[] = uc_store
-dependencies[] = uc_addresses
 dependencies[] = liveparcels
-version = "7.x-1.0"
+files[] = lp_admin_order.test
+configure = admin/config/people/masquerade
+
+; Information added by Drupal.org packaging script on 2014-03-09
+version = "7.x-1.0-rc7"
 core = "7.x"
-project = "liveparcels"
-datestamp = "1387304010"
+project = "Admin order"
+datestamp = "1394333639"
+
