@@ -931,7 +931,7 @@ function lp_admin_order_uc_checkout_pane() {
         'title' => t('Admin Order Settings'),
         'desc' => t("setup order"),
         'enabled' =>FALSE,
-        'weight' => -5,
+        'weight' => 2,
       );       
   return $panes;    
 }
