@@ -617,7 +617,8 @@ function lp_parcel_get_parcel_data($order_id){
 function lp_parcel_uc_checkout_pane_alter(&$panes) {
      $parcels=liveparcels_getparcelsdata();
 
- $check_user = db_query('SELECT count(*) FROM {masquerade}')->fetchfield();
+ global $user; 
+ $check_user = db_query('SELECT count(*) FROM {masquerade} where uid_as = :uid',array(':uid'=>$user->uid))->fetchfield();
 
      if($check_user>0){
 	 $panes['admin_order_settings']['enabled'] = true;

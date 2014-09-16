@@ -142,9 +142,9 @@ function lp_admin_order_menu() {
     'access arguments' => array('access user profiles'),
     'type' => MENU_CALLBACK,
   );
-  $items['admin/config/people/masquerade'] = array(
-    'title' => 'Masquerade',
-    'description' => 'Masquerade module allows administrators to masquerade as other users.',
+  $items['admin/liveparcels/adminsetting/admin-order'] = array(
+    'title' => 'Admin Order',
+    'description' => 'Admin order module allows administrators to create other for other users.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masquerade_admin_settings'),
     'access callback' => 'user_access',
@@ -268,7 +268,7 @@ function masquerade_admin_settings() {
   $roles = user_roles();
   $form['masquerade_admin_roles'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Roles that are considered "administrators" for masquerading'),
+    '#title' => t('Roles that are considered "administrators" for creating admin order'),
     '#options' => $roles,
     '#default_value' => variable_get('masquerade_admin_roles', array()),
   );
@@ -297,7 +297,7 @@ function masquerade_admin_settings() {
     '#title' => t('Masquerade Block <em>Quick Switch</em> users'),
     '#autocomplete_path' => 'masquerade/autocomplete-users',
     '#default_value' => drupal_implode_tags($quick_switch_users),
-    '#description' => t('Enter the usernames, separated by commas, of accounts to show as quick switch links in the Masquerade block.'),
+    '#description' => t('Enter the usernames, separated by commas, of accounts to show as quick switch links in the Admin order  block.'),
     '#maxlength' => NULL,
   );
 
@@ -426,7 +426,7 @@ function lp_admin_order_user_view($account, $view_mode, $langcode) {
 
   if (user_access($perm) && empty($account->masquerading) && $user->uid != $account->uid && $can_masquerade_as_user) {
     $account->content['masquerade'] = array(
-      '#markup' => l(t('Masquerade as !user', array('!user' => $account->name)),
+      '#markup' => l(t('Create order for !user', array('!user' => $account->name)),
         'masquerade/switch/' . $account->uid,
         array('query' => array(
           'token' => drupal_get_token('masquerade/switch/' . $account->uid)),
@@ -593,10 +593,10 @@ function masquerade_block_1() {
   if (isset($_SESSION['masquerading'])) {
     $quick_switch_links[] = l(t('Switch back'), 'masquerade/unswitch', array('query' => array('token' => drupal_get_token('masquerade/unswitch'))));
     if ($user->uid > 0) {
-      $markup_value = t('You are masquerading as <a href="@user-url">%masq_as</a>.', array('@user-url' => url('user/' . $user->uid), '%masq_as' => $user->name));
+      $markup_value = t('You are creating order for <a href="@user-url">%masq_as</a>.', array('@user-url' => url('user/' . $user->uid), '%masq_as' => $user->name));
     }
     else {
-      $markup_value = t('You are masquerading as %anonymous.', array('%anonymous' => variable_get('anonymous', t('Anonymous'))));
+      $markup_value = t('You are creating order for %anonymous.', array('%anonymous' => variable_get('anonymous', t('Anonymous'))));
     }
   }
   else {
@@ -623,7 +623,7 @@ function masquerade_block_1() {
     }
 
     if (masquerade_menu_access('autocomplete')) {
-      $markup_value .= t('Enter the username to masquerade as.');
+      $markup_value .= t('Enter the username to create other for.');
       $form['masquerade_user_field'] = array(
         '#prefix' => '<div class="container-inline">',
         '#type' => 'textfield',
@@ -881,7 +881,7 @@ function masquerade_switch_back_page() {
     global $user;
     $olduser = $user;
     masquerade_switch_back();
-    drupal_set_message(t('You are no longer masquerading as !masq_as and are now logged in as !user.', array('!user' => theme('username', array('account' => $user)), '!masq_as' => theme('username', array('account' => $olduser)))));
+    drupal_set_message(t('You are no longer as !masq_as and are now logged in as !user.', array('!user' => theme('username', array('account' => $user)), '!masq_as' => theme('username', array('account' => $olduser)))));
     drupal_goto($_SERVER['HTTP_REFERER']);
   }
   else {
@@ -976,7 +976,7 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
       );	
 
       $contents['edit_parcel_discount_title'] = array(
-         '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it for to something else. This field accept only final rate, note % or decimal.').'</div>',
+         '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it to something else. This field accept only final rate,NOT % or decimal.').'</div>',
        );
 
       $contents['edit_parcel_discount'] = array(
