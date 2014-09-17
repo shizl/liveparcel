@@ -4,7 +4,7 @@ core = 7.x
 package = Live Parcels - core
 dependencies[] = liveparcels
 files[] = lp_admin_order.test
-configure = admin/config/people/masquerade
+configure = admin/liveparcels/adminsetting/admin-order
 
 ; Information added by Drupal.org packaging script on 2014-03-09
 version = "7.x-1.0-rc7"
