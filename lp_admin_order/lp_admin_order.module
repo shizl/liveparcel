@@ -881,7 +881,7 @@ function masquerade_switch_back_page() {
     global $user;
     $olduser = $user;
     masquerade_switch_back();
-    drupal_set_message(t('You are no longer as !masq_as and are now logged in as !user.', array('!user' => theme('username', array('account' => $user)), '!masq_as' => theme('username', array('account' => $olduser)))));
+    drupal_set_message(t('You are no longer login as !masq_as and are now logged in as !user.', array('!user' => theme('username', array('account' => $user)), '!masq_as' => theme('username', array('account' => $olduser)))));
     drupal_goto($_SERVER['HTTP_REFERER']);
   }
   else {
