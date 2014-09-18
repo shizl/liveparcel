@@ -479,7 +479,7 @@ function lp_parcel_uc_checkout_pane() {
        
   return $panes;    
 }
-function lp_parcel_uc_checkout_complete($order, $account) {
+function lp_parcel_uc_checkout_complete($order, $account){
 
       $parcels=liveparcels_getparcelsdata();
 
@@ -616,6 +616,16 @@ function lp_parcel_get_parcel_data($order_id){
 /*if product_id is liveparcel,checkout cart pane hiddren*/
 function lp_parcel_uc_checkout_pane_alter(&$panes) {
      $parcels=liveparcels_getparcelsdata();
+
+ global $user; 
+ $check_user = db_query('SELECT count(*) FROM {masquerade} where uid_as = :uid',array(':uid'=>$user->uid))->fetchfield();
+
+     if($check_user>0){
+	 $panes['admin_order_settings']['enabled'] = true;
+     }else{
+	 $panes['admin_order_settings']['enabled'] = false;
+     }
+
      if($parcels){
           $panes['parcel_pickup']['enabled'] = true;
           $panes['parcel_delivery']['enabled'] = true;

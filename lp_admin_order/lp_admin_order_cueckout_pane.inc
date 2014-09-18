@@ -1,6 +1,6 @@
 <?php
 
-function theme_lp_admin_order2_table($variables){
+function theme_lp_admin_order_table($variables){
      $parcels = $variables['items'];
   // Set up table header.
   $header = array(
