@@ -81,7 +81,14 @@ function lp_tracking_install() {
     );
 
   }
-
+	if($role=user_role_load_by_name('authenticated user')){
+  		 user_role_change_permissions($role->rid, 
+      array(
+        'skip comment approval' => False,
+        'post comments' =>False
+      )
+    );
+    }
   if($role=user_role_load_by_name('administrator')){
   		$role->weight = 11;
       user_role_save($role);

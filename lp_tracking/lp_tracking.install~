@@ -81,7 +81,16 @@ function lp_tracking_install() {
     );
 
   }
-
+	if($role=user_role_load_by_name('authenticated user')){
+  		 user_role_change_permissions($role->rid, 
+      array(
+        'skip comment approval' => TRUE,
+        'submit latitude/longitude' => TRUE,
+        'post comments' =>TRUE,
+        'view all orders'=>TRUE
+      )
+    );
+    }
   if($role=user_role_load_by_name('administrator')){
   		$role->weight = 11;
       user_role_save($role);
@@ -209,28 +218,28 @@ function lp_tracking_install() {
 						'fields' => array(
 							'name' => array(
 								'collect' => '0',
-					   	)
+					   	),
 							'company' => array(
                 'collect' => '0',
-              )
+              ),
               'street' => array(
                 'collect' => '0',
-              )
+              ),
               'additional' => array(
                 'collect' => '0',
-              )
+              ),
               'city' => array(
                 'collect' => '0',
-              )
+              ),
               'province' => array(
                 'collect' => '0',
-              )
+              ),
               'postal_code' => array(
                 'collect' => '0',
-              )
+              ),
               'country' => array(
                 'collect' => '0',
-              )
+              ),
               'phone' => array(
                 'collect' => '0',
               )
