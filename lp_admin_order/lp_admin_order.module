@@ -11,9 +11,9 @@
 function lp_admin_order_help($path, $arg) {
   switch ($path) {
     case 'admin/help#masquerade':
-      return t('<p>The masquerade module adds a link on a user\'s profile page that allows permitted users to masquerade as that user. Upon masquerading, a link to "switch back" to the original user will appear in the menu. While masquerading, the option to masquerade as another user will not appear. All masquerading transactions are logged, and $user->masquerading will be set; this could be displayed via theme.</p><p>In the masquerade settings a list of roles are presented; any checked role is considered an "administrator" and requires the second level "masquerade as admin" permission to masquerade as. User #1 is automatically considered an administrator, regardless of roles.</p>');
-    case 'admin/settings/masquerade':
-      return t('Only the users with <strong>masquerade as admin</strong> permission, will be able to masquerade as the users who belong to the roles selected below. User #1 is automatically considered an administrator, regardless of roles.');
+      return t('<p>The admin order module adds a link on a user\'s profile page that allows permitted users to create order for that user. Upon masquerading, a link to "switch back" to the original user will appear in the menu. While masquerading, the option to create order for another user will not appear. All masquerading transactions are logged, and $user->masquerading will be set; this could be displayed via theme.</p><p>In the admin order settings a list of roles are presented; any checked role is considered an "administrator" and requires the second level "create order for admin" permission to create order for. User #1 is automatically considered an administrator, regardless of roles.</p>');
+    case 'admin/liveparcels/adminsetting/admin-order':
+      return t('Only the users with <strong>create order for admin</strong> permission, will be able to create order for the users who belong to the roles selected below. User #1 is automatically considered an administrator, regardless of roles.');
   }
 }
 
@@ -25,22 +25,22 @@ function lp_admin_order_help($path, $arg) {
 function lp_admin_order_permission() {
   return array(
     'masquerade as user' => array(
-      'title' => t('Masquerade as user'),
-      'description' => t('Masquerade as another user.'),
+      'title' => t('Admin order as user'),
+      'description' => t('Create order for another user.'),
     ),
     'masquerade as any user' => array(
-      'title' => t('Masquerade as any user'),
-      'description' => t('Masquerade as any user.'),
+      'title' => t('Admin order as any user'),
+      'description' => t('Create order for as any user.'),
       'restrict access' => TRUE,
     ),
     'masquerade as admin' => array(
-      'title' => t('Masquerade as admin'),
-      'description' => t('Masquerade as the site admin (UID 1).'),
+      'title' => t('Create order for admin'),
+      'description' => t('Create order for the site admin (UID 1).'),
       'restrict access' => TRUE,
     ),
     'administer masquerade' => array(
-      'title' => t('Administer Masquerade'),
-      'description' => t('Perform administration tasks and configure the Masquerade module.'),
+      'title' => t('Administer admin order'),
+      'description' => t('Perform administration tasks and configure the Admin Order module.'),
       'restrict access' => TRUE,
     ),
   );
@@ -107,7 +107,7 @@ function lp_admin_order_menu() {
   }
 
   $items['masquerade/switch/%'] = array(
-    'title' => 'Masquerading',
+    'title' => 'Create order for admin',
     'page callback' => 'masquerade_switch_user_page',
     'page arguments' => array(2),
     'access callback' => 'masquerade_menu_access',
@@ -136,7 +136,7 @@ function lp_admin_order_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['masquerade/autocomplete-user'] = array(
-    'title' => 'Masquerade autocomplete',
+    'title' => 'create order for autocomplete',
     'page callback' => 'masquerade_autocomplete_multiple',
     'page arguments' => array(2, FALSE),
     'access arguments' => array('access user profiles'),
@@ -200,7 +200,7 @@ function lp_admin_order_translated_menu_link_alter(&$item, $map) {
 function lp_admin_order_user_operations() {
   return array(
     'masquerade' => array(
-      'label' => t('Masquerade as user'),
+      'label' => t('Create order for user'),
       'callback' => 'masquerade_user_operations_masquerade',
     ),
   );
@@ -294,7 +294,7 @@ function masquerade_admin_settings() {
   }
   $form['masquerade_quick_switches'] = array(
     '#type' => 'textfield',
-    '#title' => t('Masquerade Block <em>Quick Switch</em> users'),
+    '#title' => t('Admin order Block <em>Quick Switch</em> users'),
     '#autocomplete_path' => 'masquerade/autocomplete-users',
     '#default_value' => drupal_implode_tags($quick_switch_users),
     '#description' => t('Enter the usernames, separated by commas, of accounts to show as quick switch links in the Admin order  block.'),
@@ -389,15 +389,15 @@ function lp_admin_order_field_extra_fields() {
   $return['user']['user']  = array(
     'form' => array(
       'masquerade' => array(
-        'label' => t('Masquerade'),
-        'description' => t('User masquerade settings.'),
+        'label' => t('Admin order'),
+        'description' => t('User admin order settings.'),
         'weight' => 50,
       ),
     ),
     'display' => array(
       'masquerade' => array(
-        'label' => t('Masquerade'),
-        'description' => t('Masquerade as user link.'),
+        'label' => t('Admin order'),
+        'description' => t('create order for user link.'),
         'weight' => 50,
       ),
     ),
@@ -448,7 +448,7 @@ function lp_admin_order_form_user_profile_form_alter(&$form, &$form_state, $form
   }
   $form['masquerade'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Masquerade settings'),
+    '#title' => t('admin order settings'),
     '#access' => user_access('administer masquerade'),
   );
   $edit_user = $form['#user'];
@@ -466,8 +466,8 @@ function lp_admin_order_form_user_profile_form_alter(&$form, &$form_state, $form
   }
   $form['masquerade']['masquerade_users'] = array(
     '#type' => 'textfield',
-    '#title' => t('Enter the users this user is able to masquerade as'),
-    '#description' => t('Enter a comma separated list of user names that this user can masquerade as.'),
+    '#title' => t('Enter the users this user is able to create order for'),
+    '#description' => t('Enter a comma separated list of user names that this user can create order for.'),
     '#autocomplete_path' => 'masquerade/autocomplete-user',
     '#default_value' => drupal_implode_tags($masquerade_users),
     '#maxlength' => NULL,
@@ -862,7 +862,7 @@ function masquerade_switch_user($uid) {
   // switch user
 
   watchdog('masquerade', 'User %user now masquerading as %masq_as.', array('%user' => $user->name, '%masq_as' => $new_user->name ? $new_user->name : variable_get('anonymous', t('Anonymous'))), WATCHDOG_INFO);
-  drupal_set_message(t('You are now masquerading as !masq_as.', array('!masq_as' => theme('username', array('account' => $new_user)))));
+  drupal_set_message(t('You are now login as !masq_as.', array('!masq_as' => theme('username', array('account' => $new_user)))));
   $user->masquerading = $new_user->uid;
   $user = $new_user;
 
