@@ -209,28 +209,28 @@ function lp_tracking_install() {
 						'fields' => array(
 							'name' => array(
 								'collect' => '0',
-					   	),
+					   	)
 							'company' => array(
                 'collect' => '0',
-              ),
+              )
               'street' => array(
                 'collect' => '0',
-              ),
+              )
               'additional' => array(
                 'collect' => '0',
-              ),
+              )
               'city' => array(
                 'collect' => '0',
-              ),
+              )
               'province' => array(
                 'collect' => '0',
-              ),
+              )
               'postal_code' => array(
                 'collect' => '0',
-              ),
+              )
               'country' => array(
                 'collect' => '0',
-              ),
+              )
               'phone' => array(
                 'collect' => '0',
               )
