@@ -68,7 +68,7 @@ function lp_tracking_install() {
   if(!user_role_load_by_name($roleName)){
     $role = new stdClass();
     $role->name = $roleName;
-    $role->weight = 10;
+		$role->weight = 10;
     user_role_save($role);
     $roles = user_role_load_by_name($roleName);
     user_role_change_permissions($roles->rid, 
@@ -84,8 +84,10 @@ function lp_tracking_install() {
 	if($role=user_role_load_by_name('authenticated user')){
   		 user_role_change_permissions($role->rid, 
       array(
-        'skip comment approval' => False,
-        'post comments' =>False
+        'skip comment approval' => TRUE,
+        'submit latitude/longitude' => TRUE,
+        'post comments' =>TRUE,
+        'view all orders'=>TRUE
       )
     );
     }
@@ -94,6 +96,7 @@ function lp_tracking_install() {
       user_role_save($role);
     }
 
+ 
   //add field_status
   $field_name = 'field_status';
   if (!field_info_field($field_name)) {
@@ -201,6 +204,8 @@ function lp_tracking_install() {
     field_create_instance($instance);
   }
 
+
+
   //add field_gps
   $field_name = 'field_gps';
   if (!field_info_field($field_name)) {
@@ -285,6 +290,7 @@ function lp_tracking_install() {
       'widget' => array(
         'type' => 'image_image',
         'settings' => array(				
+					
           'preview_image_style' => 'medium',
         ),
       ),
@@ -292,9 +298,9 @@ function lp_tracking_install() {
         'default' => array(
           'label' => 'hidden',
           'type' => 'colorbox',
-          'settings'=>array(
-	  'colorbox_node_style'=>'medium',
-	),
+					'settings'=>array(
+					'colorbox_node_style'=>'medium',
+			),
         ),
       ),
     );
@@ -302,3 +308,4 @@ function lp_tracking_install() {
   }
 
 }
+
