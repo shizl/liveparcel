@@ -178,12 +178,15 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             }
 
         }else{
+
+         
+
          $pickup_extra[0]=array('field_parcel_pickup_address_data'=>lp_parcel_get_parcel_address($parcels,'pickup',0,array(),$user),'field_pick_up_time'=> array(
                   '#title' => t('Pickup time'),
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
+                  '#datepicker_options' => array('minDate' => isset($_SESSION['admin_order'])||$user->uid ==1?'0D':variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
                   '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -605,7 +608,8 @@ function lp_parcel_uc_checkout_complete($order, $account){
        node_save($lp_node); 
        unset($_SESSION['lp_node']);
        unset($_SESSION['lp_order']);
-    }  
+    } 
+    unset($_SESSION['admin_order']); 
 }
 function lp_parcel_get_parcel_data($order_id){
     $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
@@ -620,7 +624,9 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
  global $user; 
  $check_user = db_query('SELECT count(*) FROM {masquerade} where uid_as = :uid',array(':uid'=>$user->uid))->fetchfield();
 
-     if($check_user>0){
+
+
+     if($check_user>0 && isset($_SESSION['admin_order'])){
 	 $panes['admin_order_settings']['enabled'] = true;
      }else{
 	 $panes['admin_order_settings']['enabled'] = false;
