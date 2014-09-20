@@ -587,6 +587,10 @@ function lp_admin_order_block_view($delta = '') {
  * Masquerade block form.
  */
 function masquerade_block_1() {
+
+ 
+$_SESSION['admin_order'] = 'admin';
+
   global $user;
   $quick_switch_links = array();
   $markup_value = '';
