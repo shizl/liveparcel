@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implementation of hook_views_api().
+ */
+function lp_settings_views_api() {
+  return array(
+    'api' => '3.0',
+  );
+}
+
+/**
+ * Implements hook_views_default_views().
+ */
+function lp_settings_views_default_views() {
+ $views = array();
+  $files = file_scan_directory(drupal_get_path('module', 'lp_settings'). '/views', '/.*\.view$/');
+  foreach ($files as $filepath => $file) {
+    require $filepath;
+    if (isset($view)) {
+      $views[$view->name] = $view;
+    }
+  }
+  return $views;
+}
+
+
+/**
+ * Implements hook_default_rules_configuration().
+ */
+function lp_settings_default_rules_configuration() {
+
+  $items = array();
+  $files = file_scan_directory(drupal_get_path('module', 'lp_settings'). '/rules', '/.*\.rule$/');
+  $i = 1;
+    foreach ($files as $filepath => $file) {
+
+    require $filepath;
+
+      $items['rules_component_some_task_'.$i] = entity_import('rules_config',$str);
+      $i++;
+  }
+  return $items;
+
+}
+
+

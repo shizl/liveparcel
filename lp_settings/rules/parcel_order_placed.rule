@@ -1,0 +1,25 @@
+<?php
+
+$str = '{ "rules_set_parcel_status_to_pending_after_order_is_placed" : {
+    "LABEL" : "Post comment after order is placed",
+    "PLUGIN" : "reaction rule",
+    "WEIGHT" : "-10",
+    "OWNER" : "rules",
+    "TAGS" : [ "LiveParcels" ],
+    "REQUIRES" : [ "rules" ],
+    "ON" : { "node_insert--live_parcel" : { "bundle" : "live_parcel" } },
+    "DO" : [
+      { "entity_create" : {
+          "USING" : {
+            "type" : "comment",
+            "param_subject" : "Pending",
+            "param_node" : [ "node" ],
+            "param_author" : "1",
+            "param_comment_body" : { "value" : { "value" : "...", "format" : "filtered_html" } }
+          },
+          "PROVIDE" : { "entity_created" : { "entity_created" : "Created entity" } }
+        }
+      }
+    ]
+  }
+}';

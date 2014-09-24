@@ -1,0 +1,18 @@
+<?php
+ $str = '{ "set_parcel_pending" : {
+    "LABEL" : "Set parcel status to pending after pending comment posted",
+    "PLUGIN" : "reaction rule",
+    "WEIGHT" : "-8",
+    "OWNER" : "rules",
+    "TAGS" : [ "LiveParcels" ],
+    "REQUIRES" : [ "rules", "comment" ],
+    "ON" : { "comment_insert--comment_node_live_parcel" : { "bundle" : "comment_node_live_parcel" } },
+    "IF" : [
+      { "data_is" : { "data" : [ "comment:subject" ], "value" : "Pending" } },
+      { "AND" : [ { "data_is" : { "data" : [ "comment:author:uid" ], "value" : "1" } } ] }
+    ],
+    "DO" : [
+      { "data_set" : { "data" : [ "comment:field-status" ], "value" : "pending" } }
+    ]
+  }
+}';
