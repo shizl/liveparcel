@@ -53,7 +53,7 @@ function get_user_status_skipped_node($form,$form_state){
      $option = array();
 
 
-         $option['selectall'] = '<input type="checkbox" name ="checkbox[]" value ="'.$entity->entity_id.'"  />';
+         $option['selectall'] = '<input type="radio" name ="radio" value ="'.$entity->entity_id.'"  />';
          $option['title'] = $node->title;
          $option['price'] = $node->field_parcel_price['und'][0]['value'];
          $option['orderid'] = $node->field_parcel_order_id['und'][0]['value'];
@@ -84,8 +84,9 @@ global $user;
 
 if($user->uid == arg(1)){
 
-  if (isset($_POST['checkbox'])){
-    foreach($_POST['checkbox'] as $key=>$value){
+  if (isset($_POST['radio'])){
+
+ $value = $_POST['radio'];
 	//$total = $form['live_parcel_node_list']['#rows'][$key]['price'];
 
 //{"parcels":{"0":{"parcelnum":"Parcel#1","dimfirst":"22","dimsecond":"33","dimthree":"33","max":"33","dimenstext":"4.7916",
@@ -145,24 +146,6 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 
 
   user_add_to_cart($nodedata,$action,$node->nid);
-  //$data = liveparcels_getparcelsdata();
-/*
-        $neworder = uc_order_new($user->uid);
-        
-	$neworder->order_total = $total;
-	uc_order_save($neworder);
-	uc_cart_complete_sale($neworder, TRUE);
-
-        $node = node_load($value);
-        $node->title = 'Order#'.$neworder->order_id.'Parcel#1';
-        $node->field_parcel_order_id['und'][0]['value'] = $neworder->order_id;
-        $node->field_fee_status['und'][0]['value'] = 'Confirmed';
-  
-        node_save($node);
-        drupal_set_message('Order#'.$neworder->order_id.'Parcel#1 have been created.');   
-*/
-    }
-
 
   }else{
 

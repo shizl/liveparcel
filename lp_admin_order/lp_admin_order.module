@@ -983,9 +983,11 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
          '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it to something else. This field accept only final rate,NOT % or decimal.').'</div>',
        );
 
+
       $contents['edit_parcel_discount'] = array(
        '#type' => 'textfield',
-       '#size'=>40,  
+       '#size'=>40,
+       '#default_value'=>$parcels['discount'],  
       );
       $contents['orderid'] = array(
        '#type' => 'hidden',

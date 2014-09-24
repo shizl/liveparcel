@@ -44,9 +44,11 @@ function lp_parcel_order_view($node){
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
   $orderid = 0;
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
-
   $uid = db_query('select uid from {users} where mail =:mail',array(':mail'=>$order->primary_email))->fetchfield();
   $user = user_load($uid);
+ if(isset($_SESSION['admin_order'])||$user->uid ==1){
+   variable_set('liveparcels_pickup_time',0);
+  }
         $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
@@ -186,7 +188,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#datepicker_options' => array('minDate' => isset($_SESSION['admin_order'])||$user->uid ==1?'0D':variable_get('liveparcels_pickup_time',0)."D"),
+                  '#datepicker_options' => array('minDate' =>variable_get('liveparcels_pickup_time',0)."D"),
                   '#required' => TRUE,
                   '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -486,7 +488,6 @@ function lp_parcel_uc_checkout_complete($order, $account){
 
       $parcels=liveparcels_getparcelsdata();
 
-      if(!isset($_SESSION['lp_node'])){
             if(module_exists('lp_discount')){
             $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
             $order_total=$parcels['totals']-$parcels['discount'];
@@ -495,6 +496,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
         }
      db_update('uc_orders')->fields(array('order_total' => $order_total))->condition('order_id',$order->order_id , '=')->execute();
     db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
+  if(!isset($_SESSION['lp_node'])){
     $order_id=$order->order_id;
     $parceldata=lp_parcel_get_parcel_data($order_id);
     $parcel_info=$parceldata['parcel_info'];
@@ -601,9 +603,12 @@ function lp_parcel_uc_checkout_complete($order, $account){
  db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
 
     }else{
+ $cart_id=uc_cart_get_id();
+ db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
        $lp_nid  = $_SESSION['lp_node'];
        $lp_node = node_load($lp_nid);
        $lp_node->title = 'Order#'.$order->order_id.'Parcel#1';
+       $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
        $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';
        node_save($lp_node); 
        unset($_SESSION['lp_node']);
