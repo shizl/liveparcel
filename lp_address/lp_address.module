@@ -260,7 +260,10 @@ function lp_address_get_parcel_address_filter($post_id){
   $result= db_query("SELECT * FROM `{liveparcels_zone_post}` WHERE `pcode`='$post_id'")->fetchAssoc();
   return $result;
 }
-function lp_address_get_country_info($country_id='8888'){
+function lp_address_get_country_info(){
+
+  $country_id = variable_get('liveparcels_country_id');
+
   $countryinfo=db_query("SELECT `country_id`,`country_name`,`country_iso_code_2`,`country_iso_code_3` FROM `uc_countries` WHERE `country_id`='$country_id'")->fetchAssoc();
   return   $countryinfo;
 }

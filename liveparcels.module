@@ -532,15 +532,6 @@ function liveparcels_create_field($field_description,$field_name,$field_set){
   }
 }
 
-function liveparcels_countries_alter(&$countries) {
-
-copy(drupal_get_path('module','liveparcels')."/lp_country/location.lp.inc",drupal_get_path('module','location')."/supported/location.lp.inc");
-
-  // Live parcel is now independent, so add it to the country list.
-  $countries['LP'] = 'Live parcel';
-}
-
-
 /*
 function moveFile($fileUrl, $aimUrl, $overWrite = false) {
         if (!file_exists($fileUrl)) {

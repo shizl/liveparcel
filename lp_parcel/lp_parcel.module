@@ -46,9 +46,16 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
   isset($_SESSION['lp_order']) ? $orderid = $_SESSION['lp_order']:$order->order_id;
   $uid = db_query('select uid from {users} where mail =:mail',array(':mail'=>$order->primary_email))->fetchfield();
   $user = user_load($uid);
- if(isset($_SESSION['admin_order'])||$user->uid ==1){
-   variable_set('liveparcels_pickup_time',0);
-  }
+	 if(isset($_SESSION['admin_order'])||$user->uid ==1){
+	   $minDate = '0D';
+	   $default_minDate = date("Y-m-d",time(date("Y-m-d"))+3600*24*0);
+           $check_mindate = strtotime(date("Y-m-d"))+3600*24*0;
+
+	  }else{
+	   $minDate = variable_get('liveparcels_pickup_time',0)."D";
+	   $default_minDate = date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0));
+           $check_mindate = strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0);
+          }
         $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
@@ -69,7 +76,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
+                  '#datepicker_options' => array('minDate' => $minDate),
                   '#required' => TRUE,
                   '#default_value' => $extra_info['pickupdata'][$f]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -108,7 +115,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                   '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
+                   '#datepicker_options' => array('minDate' => $minDate),
                   '#required' => TRUE,
                   '#default_value' => $extra_info['pickupdata'][0]['field_pick_up_time'], // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
@@ -146,9 +153,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                   '#datepicker_options' => array('minDate' => variable_get('liveparcels_pickup_time',0)."D"),
+                   '#datepicker_options' => array('minDate' => $minDate),
                   '#required' => TRUE,
-                  '#default_value' =>date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
+                  '#default_value' =>$default_minDate, // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
                '#type' => 'select',
                '#title' => '',
@@ -188,9 +195,9 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                   '#type' => 'date_popup', 
                   '#date_format' => 'm/d/Y', 
                   '#date_year_range' => '0:+2', 
-                  '#datepicker_options' => array('minDate' =>variable_get('liveparcels_pickup_time',0)."D"),
+                  '#datepicker_options' => array('minDate' =>$minDate),
                   '#required' => TRUE,
-                  '#default_value' => date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)), // Default value must be in 'Y-m-d' format.
+                  '#default_value' => $default_minDate, // Default value must be in 'Y-m-d' format.
                 ),'field_pick_up_time_ampm'=>array(
                '#type' => 'select',
                '#title' => '',
@@ -241,7 +248,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                     if (!empty($pinfo['field_parcel_pickup_address_data']['address']['phone']) && !is_numeric($pinfo['field_parcel_pickup_address_data']['address']['phone'])) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_parcel_pickup_address_data][address][phone', $p_count ==1? t('Pickup: only numbers allowed for phone number field.'):t('Pickup parcel#'.($key+1).': only numbers allowed for phone number field.'));
                     }
-                    if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) < strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0)) ) {
+                    if (empty($pinfo['field_pick_up_time']) ||(!empty($pinfo['field_pick_up_time']) && strtotime($pinfo['field_pick_up_time']) <$check_mindate )) {
                         form_set_error('panes][parcel_pickup]['.$key.'][field_pick_up_time', $p_count ==1?t('Pickup: You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '):t('Pickup parcel#'.($key+1).': You must select a pickup time '.variable_get('liveparcels_pickup_time',0).' days from now. '));
                     }   
                 }

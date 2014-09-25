@@ -16,21 +16,9 @@ function lp_address_admin_setting_form($form,$form_state){
     '#title' => t('State field in Address book'),
     '#collapsible' => TRUE,
   );
+
   $countryinfo=lp_address_get_country_info();
-  if(!is_array($countryinfo)){
-    db_insert('uc_countries')
-      ->fields(array(
-        'country_id' => 8888,
-        'country_name' => 'Live parcel',
-        'country_iso_code_2' => 'LP',
-        'country_iso_code_3' => 'LPL',
-        'version' => 1,
-      ))
-      ->execute();
-    $countryinfo= array( 'country_name' =>'Live parcel',
-      'country_iso_code_2' =>'LP',
-      'country_iso_code_3' => 'LPL'); 
-  }
+
   $form['lp_country']['country_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Country name'),
@@ -54,6 +42,15 @@ function lp_address_admin_setting_form($form,$form_state){
     '#size'=>4,
     '#description'=>'<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">ISO 3166-1 alpha-3</a>',
   );
+
+  $form['lp_country']['country_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Country ID'),
+    '#default_value' =>$countryinfo['country_id'],
+    '#maxlength'=>3,
+    '#size'=>4,
+  );
+
    $form['lp_pickup_time']['limit_time'] = array(
     '#type' => 'textfield',
     '#title' => t('Minimum pickup date'),
@@ -85,15 +82,34 @@ function lp_address_admin_setting_form($form,$form_state){
 }
 function lp_address_country_setting_form_submit($form,$form_state){
   variable_set('liveparcels_pickup_time',$form_state['values']['limit_time']);
-  db_update("uc_countries")->fields(array(
-    'country_name' =>$form_state['values']['country_name'] ,
-    'country_iso_code_2' =>$form_state['values']['country_iso_code_2'],
-    'country_iso_code_3' => $form_state['values']['country_iso_code_3'],
-  ))->condition('country_id', 8888, '=')->execute();
+
+  variable_set('liveparcels_country_id',$form_state['values']['country_id']);
+
+  $countryinfo=lp_address_get_country_info($form_state['values']['country_id']);
+  if(!is_array($countryinfo)){
+    db_insert('uc_countries')
+      ->fields(array(
+        'country_id' => $form_state['values']['country_id'],
+        'country_name' => $form_state['values']['country_name'],
+        'country_iso_code_2' => $form_state['values']['country_iso_code_2'],
+        'country_iso_code_3' => $form_state['values']['country_iso_code_3'],
+        'version' => 2,
+      ))->execute();
+
+    db_delete('uc_countries')->condition('country_id',$form_state['values']['country_id'], '!=')->execute();
+
+  }else{
+	  db_update("uc_countries")->fields(array(
+	    'country_name' =>$form_state['values']['country_name'] ,
+	    'country_iso_code_2' =>$form_state['values']['country_iso_code_2'],
+	    'country_iso_code_3' => $form_state['values']['country_iso_code_3'],
+	  ))->condition('country_id',$form_state['values']['country_id'], '=')->execute();
+    db_delete('uc_countries')->condition('country_id',$form_state['values']['country_id'], '!=')->execute();
+  } 
 
 }
 function lp_address_update_zone_form_submit($form,$form_state){
-  $oldstate=db_query("SELECT `zone_code` FROM `uc_zones` WHERE `zone_country_id`='8888'");
+  $oldstate=db_query("SELECT `zone_code` FROM `uc_zones` WHERE `zone_country_id`=".variable_get('liveparcels_country_id'));
   $uc_state=array();
   foreach($oldstate as $zone){
     $uc_state[]=$zone->zone_code;
@@ -111,7 +127,7 @@ function lp_address_update_zone_form_submit($form,$form_state){
   }
   $zones=array();
   foreach($insertstate as $state){
-    $zones[]=array(8888, $state, $state);
+    $zones[]=array(variable_get('liveparcels_country_id'), $state, $state);
   }
   $query = db_insert('uc_zones')->fields(array('zone_country_id', 'zone_code', 'zone_name'));
   foreach ($zones as $zone) {
