@@ -1,0 +1,17 @@
+<?php
+
+function lp_qrcode_node_view($node, $view_mode) {
+
+    if ($node->type=="live_parcel"){
+	include "phpqrcode/qrlib.php";
+        QRcode::png($node->title, 'sites/default/files/'.$node->nid.$node->field_parcel_order_id['und'][0]['value'].'.png', "L", 4, 4);
+        $code = '<img src="/sites/default/files/'.$node->nid.$node->field_parcel_order_id['und'][0]['value'].'.png"/>';
+
+        $node->content['qrcode'] = array(
+    	'#markup' => $code,
+    	'#weight' => -100,
+ 	 );
+           
+         return $node;
+    }   
+}
