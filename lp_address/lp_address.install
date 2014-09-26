@@ -14,15 +14,15 @@ db_delete('uc_countries')
 
   // Make the entry in the country table.
   // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
-  $country_id = db_query("SELECT `country_id` FROM `uc_countries` where `country_id`='8888'")->fetchField();
-  if($country_id != '8888' ){
+  $country_id = db_query("SELECT `country_id` FROM `uc_countries` where `country_id`='36'")->fetchField();
+  if($country_id != '36' ){
       db_insert('uc_countries')
         ->fields(array(
-          'country_id' => 8888,
-          'country_name' => 'Live parcel',
-          'country_iso_code_2' => 'LP',
-          'country_iso_code_3' => 'LPL',
-          'version' => 1,
+          'country_id' => 36,
+          'country_name' => 'Australia',
+          'country_iso_code_2' => 'AU',
+          'country_iso_code_3' => 'AUS',
+          'version' => 2,
         ))->execute();
       
 
@@ -33,7 +33,7 @@ db_delete('uc_countries')
       $zonedata=db_query("SELECT `state` FROM `{liveparcels_zone_post}` GROUP BY `state`");
       $zones=array();
        foreach($zonedata as $zone){
-             $zones[]=array(8888, $zone->state, $zone->state);
+             $zones[]=array(36, $zone->state, $zone->state);
         }
       $query = db_insert('uc_zones')->fields(array('zone_country_id', 'zone_code', 'zone_name'));
       foreach ($zones as $zone) {
@@ -43,7 +43,7 @@ db_delete('uc_countries')
 
       // Set address format
       uc_set_address_format(
-        8888,
+        36,
         "!company\r\n".
         "!last_name !first_name\r\n".
         "!street1\r\n".
