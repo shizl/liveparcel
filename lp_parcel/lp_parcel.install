@@ -136,8 +136,8 @@ function lp_parcel_install() {
           ),
           'country' => Array
           (
-            'collect' => 1,
-            'default' => '',
+            'collect' => 4,
+            'default' => 'au',
             'weight' => 14,
           ),
           
@@ -169,7 +169,7 @@ function lp_parcel_install() {
           'city' => 0,
           'province' => 0,
           'postal_code' => 0,
-          'country' => 0,
+          'country' => 1,
           'locpick' => 0,
           'province_name' => 0,
           'country_name'=> 0,
@@ -233,8 +233,8 @@ function lp_parcel_install() {
 
           'country' => Array
           (
-            'collect' => 1,
-            'default' => '',
+            'collect' => 4,
+            'default' => 'au',
             'weight' => 14,
           ),
 
@@ -266,7 +266,7 @@ function lp_parcel_install() {
           'city' => 0,
           'province' => 0,
           'postal_code' => 0,
-          'country' => 0,
+          'country' => 1,
           'locpick' => 0,
           'province_name' => 0,
           'country_name'=> 0,

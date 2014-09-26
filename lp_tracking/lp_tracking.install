@@ -208,39 +208,61 @@ function lp_tracking_install() {
       'field_name' => $field_name, 
       'type' => 'location',
       'settings'=> array(
-				'location_settings' => array(
-					'form' => array(
-						'fields' => array(
-							'name' => array(
-								'collect' => '0',
-					   	),
-							'company' => array(
+	'location_settings' => array(
+	  'form' => array(
+	    'fields' => array(
+	        'name' => array(
+		'collect' => '0',
+		),
+	        'company' => array(
                 'collect' => '0',
-              ),
-              'street' => array(
+                ),
+                'street' => array(
                 'collect' => '0',
-              ),
-              'additional' => array(
+                ),
+                'additional' => array(
                 'collect' => '0',
-              ),
-              'city' => array(
+                ),
+                'city' => array(
                 'collect' => '0',
-              ),
-              'province' => array(
+                ),
+                'province' => array(
                 'collect' => '0',
-              ),
-              'postal_code' => array(
+                ),
+               'postal_code' => array(
                 'collect' => '0',
-              ),
-              'country' => array(
-                'collect' => '0',
+               ),
+               'country' => array(
+               'collect' => 4,
+  	       'default'=>'au',	
               ),
               'phone' => array(
-                'collect' => '0',
+               'collect' => '0',
               )
-					)				
-				)			
-			)
+	   ) 				
+	),
+       'display' => Array
+       (
+        'hide' => Array
+        (
+          'name' => 0,
+          'street' => 0,
+          'additional' => 0,
+          'city' => 0,
+          'province' => 0,
+          'postal_code' => 0,
+          'country' => 1,
+          'locpick' => 0,
+          'province_name' => 0,
+          'country_name'=> 0,
+          'map_link' => 0,
+          'coords' => 0,
+          'phone' => 0,
+          'company' => 0,
+        )
+      )
+			
+     )
     )
    );
     field_create_field($field);
