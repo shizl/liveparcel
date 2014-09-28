@@ -156,3 +156,55 @@ width:150px !important;
 display:none !important;
 }
 
+
+
+.comment{
+display:block !important;
+border-bottom:1px solid #ccc;
+
+}
+.parcel_detail{
+overflow:hidden;
+}
+
+
+.comment .attribution {
+display:block !important;
+
+}
+.comment .comment-text{
+display:block !important;
+border:none !important;
+padding:0 !important;
+}
+.comment .comment-arrow {
+background:#fff !important;
+width:0px !important;
+margin:0px !important;
+height:0px !important;
+}
+.prcode{
+float:left;
+width:200px;
+}
+.parcel_detail .field{
+width:400px;
+float:left;
+}
+.pickup_info{
+float:left;
+}
+.delivery_info{
+float:right;
+}
+
+.field-name-field-lp-tracking{
+clear:both;
+overflow: hidden;
+}
+.field-name-field-lp-tracking .field-label{
+float:left;
+}
+.field-name-field-lp-tracking .field-items{
+float:left;
+}
