@@ -1,0 +1,252 @@
+<?php
+$view = new view();
+$view->name = 'parcels_order_admin';
+$view->description = 'A block used to show the list of parcels within that order for admin';
+$view->tag = 'LiveParcels';
+$view->base_table = 'node';
+$view->human_name = 'Parcels order admin';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+  4 => '4',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'input_required';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'title' => 'title',
+  'field_customer_reference' => 'field_customer_reference',
+  'field_parcel_size' => 'field_parcel_size',
+  'field_parcel_weight' => 'field_parcel_weight',
+  'field_parcel_price' => 'field_parcel_price',
+  'nid' => 'nid',
+  'nothing' => 'nothing',
+  'field_status' => 'field_status',
+);
+$handler->display->display_options['style_options']['default'] = 'title';
+$handler->display->display_options['style_options']['info'] = array(
+  'title' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_customer_reference' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_size' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_weight' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_price' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'nid' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'nothing' => array(
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_status' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Relationship: Comment: Last Comment */
+$handler->display->display_options['relationships']['cid']['id'] = 'cid';
+$handler->display->display_options['relationships']['cid']['table'] = 'node_comment_statistics';
+$handler->display->display_options['relationships']['cid']['field'] = 'cid';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = 'Parcel';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: Content: Customer reference */
+$handler->display->display_options['fields']['field_customer_reference']['id'] = 'field_customer_reference';
+$handler->display->display_options['fields']['field_customer_reference']['table'] = 'field_data_field_customer_reference';
+$handler->display->display_options['fields']['field_customer_reference']['field'] = 'field_customer_reference';
+/* Field: Content: Parcel dimension */
+$handler->display->display_options['fields']['field_parcel_size']['id'] = 'field_parcel_size';
+$handler->display->display_options['fields']['field_parcel_size']['table'] = 'field_data_field_parcel_size';
+$handler->display->display_options['fields']['field_parcel_size']['field'] = 'field_parcel_size';
+/* Field: Content: Parcel weight */
+$handler->display->display_options['fields']['field_parcel_weight']['id'] = 'field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['table'] = 'field_data_field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['field'] = 'field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['label'] = 'Parcel weight (kg)';
+/* Field: Content: Shipping fee charged */
+$handler->display->display_options['fields']['field_parcel_price']['id'] = 'field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['table'] = 'field_data_field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['field'] = 'field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Content: Nid */
+$handler->display->display_options['fields']['nid']['id'] = 'nid';
+$handler->display->display_options['fields']['nid']['table'] = 'node';
+$handler->display->display_options['fields']['nid']['field'] = 'nid';
+$handler->display->display_options['fields']['nid']['label'] = '';
+$handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+$handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+/* Field: Global: Custom text */
+$handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['table'] = 'views';
+$handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['label'] = 'Delivery label';
+$handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="../../../print/[nid]">Print</a>';
+/* Field: Comment: Status */
+$handler->display->display_options['fields']['field_status']['id'] = 'field_status';
+$handler->display->display_options['fields']['field_status']['table'] = 'field_data_field_status';
+$handler->display->display_options['fields']['field_status']['field'] = 'field_status';
+$handler->display->display_options['fields']['field_status']['relationship'] = 'cid';
+/* Contextual filter: Content: Order ID (field_parcel_order_id) */
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['id'] = 'field_parcel_order_id_value';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['table'] = 'field_data_field_parcel_order_id';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['field'] = 'field_parcel_order_id_value';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['default_action'] = 'default';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['default_argument_type'] = 'raw';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['default_argument_options']['index'] = '3';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['default_argument_skip_url'] = TRUE;
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['field_parcel_order_id_value']['limit'] = '0';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'live_parcel' => 'live_parcel',
+);
+$handler->display->display_options['filters']['type']['group'] = 1;
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block');
+$handler->display->display_options['block_description'] = 'Parcel Order Admin';
+
+/* Display: Rules */
+$handler = $view->new_display('views_rules', 'Rules', 'views_rules_1');
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['rules_parameter'] = array(
+  'field_parcel_order_id_value' => array(
+    'enabled' => 1,
+    'type' => 'integer',
+    'label' => 'Content: Order ID (field_parcel_order_id)',
+    'name' => 'field_parcel_order_id_value',
+  ),
+);
+$handler->display->display_options['rules_variables'] = array(
+  'title' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Parcel',
+    'name' => 'title',
+  ),
+  'field_customer_reference' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Customer reference',
+    'name' => 'field_customer_reference',
+  ),
+  'field_parcel_size' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Parcel dimension',
+    'name' => 'field_parcel_size',
+  ),
+  'field_parcel_weight' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Parcel weight (kg)',
+    'name' => 'field_parcel_weight',
+  ),
+  'field_parcel_price' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Shipping fee charged',
+    'name' => 'field_parcel_price',
+  ),
+  'nid' => array(
+    'enabled' => 1,
+    'rendered' => 0,
+    'type' => 'node',
+    'label' => 'Content: Nid',
+    'name' => 'nid',
+  ),
+  'nothing' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'Delivery label',
+    'name' => 'nothing',
+  ),
+  'field_status' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => '(Last Comment) Status',
+    'name' => 'field_status',
+  ),
+  'add_comment' => array(
+    'enabled' => 0,
+    'rendered' => 0,
+    'type' => '',
+    'label' => 'add_comment',
+    'name' => 'add_comment',
+  ),
+);

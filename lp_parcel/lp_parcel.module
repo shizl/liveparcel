@@ -656,23 +656,21 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
  $form['actions']['cancel']['#submit'][] = 'jump_cart';
-/*
+
  $form['actions']['backup']=array(
    '#type'=>'submit',
    '#value'=>t('backup'),
    '#submit'=>array('backup_address'),
  );
- */
+ 
 }
 
 function jump_cart(&$form,&$form_state){
   $form_state['redirect'] = 'cart';
 }
-/*
+
 function backup_address(&$form,&$form_state){
 
-  print_r($order);exit;
-   
+
 }
-*/
 
