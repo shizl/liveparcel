@@ -5,6 +5,8 @@ core = 7.x
 dependencies[] = uc_store
 dependencies[] = uc_product
 dependencies[] = uc_cart
+dependencies[] = uc_payment
+
 configure = admin/liveparcels
 stylesheets[all][] = liveparcels.css
 

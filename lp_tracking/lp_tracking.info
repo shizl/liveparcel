@@ -8,7 +8,7 @@ dependencies[] = field
 
 dependencies[] = references
 dependencies[] = user_reference
-
+dependencies[] = views_rules
 dependencies[] = location_entity
 dependencies[] = gmap_location
 
