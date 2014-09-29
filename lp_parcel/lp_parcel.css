@@ -198,13 +198,8 @@ float:left;
 float:right;
 }
 
-.field-name-field-lp-tracking{
-clear:both;
-overflow: hidden;
+.field-name-field-delivery-location .adr{
+font-size:15px;
+font-weight:bold;
 }
-.field-name-field-lp-tracking .field-label{
-float:left;
-}
-.field-name-field-lp-tracking .field-items{
-float:left;
-}
+

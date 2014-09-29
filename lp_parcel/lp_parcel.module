@@ -11,6 +11,10 @@
 /**
  * Implements hook_menu().
  */
+
+
+define('PHPQRCODE_MIN_PLUGIN_VERSION', '1.1.4');
+
 function lp_parcel_menu(){
     $items=array();
     $items['node/%node/order_view'] = array(
@@ -682,9 +686,16 @@ function backup_address(&$form,&$form_state){
 
 function lp_parcel_node_view($node, $view_mode) {
 
+global $user;
+
+  $arr = array(); 
+  $roles = db_query('select rid from {users_roles} where uid = '.$user->uid);
+  foreach($roles as $role){
+  $arr[] = $role->rid;		
+  }
     if ($node->type=="live_parcel"){
 
-	include "phpqrcode/qrlib.php";
+	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
         global $base_url;
         $data = '{"nid":'.$node->nid.',"title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'"}';
@@ -699,10 +710,15 @@ function lp_parcel_node_view($node, $view_mode) {
 
 	$node->content['parcel_detail']['sub_title'] = array(
 	  '#markup'=>'<h3>'.t('Parcel Details').'</h3>',
+    	  '#weight'=>-1,
 	); 
+
+	if($node->content['field_fee_status'][0]['#markup']=="Confirmed"&&(in_array(3,$arr)||in_array(17,$arr))){
 	$node->content['parcel_detail']['qrcode'] = array(
     	  '#markup' => '<div class="prcode">'.$code.'</div>',
+    	  '#weight'=>0,
  	);
+	}
 	$node->content['parcel_detail']['parcel_order_id'] = $node->content['field_parcel_order_id'];
 	$node->content['parcel_detail']['parcel_price'] = $node->content['field_parcel_price'];
 	$node->content['parcel_detail']['parcel_size'] = $node->content['field_parcel_size'];
@@ -711,7 +727,7 @@ function lp_parcel_node_view($node, $view_mode) {
 	$node->content['parcel_detail']['authority_to_leave'] = $node->content['field_authority_to_leave'];
 	$node->content['parcel_detail']['cash_to_collect'] = $node->content['field_cash_to_collect'];
 	$node->content['parcel_detail']['customer_reference'] = $node->content['field_customer_reference'];
-	$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
+	//$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
 
         hide($node->content['field_parcel_order_id']);
         hide($node->content['field_parcel_price']);
@@ -753,12 +769,33 @@ function lp_parcel_node_view($node, $view_mode) {
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
  	);
-        $node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];
+        $node->content['parcel_updates']['parcel_comment'] = !empty($node->content['comments'])?$node->content['comments']:array();
 	$node->content['comments'] =  array();
         
          return $node;
     }   
 }
+/*
+function lp_parcel_libraries_info() {
+  $libraries['phpqrcode'] = array(
+    'name' => 'phpqrcode plugin',
+    'vendor url' => 'http://www.qrgenerate.com',
+    'download url' => 'https://github.com/t0k4rt/phpqrcode/archive/master.zip',	
+    'version arguments' => array(
+      'file' => 'VERSION.txt', 
+      'pattern' => '@version\s+([0-9a-zA-Z\.-]+)@', 
+      'lines' => 5, 
+      'cols' => 20,
+    ),
+    'files' => array(
+      // For PHP libraries, specify include files here, still relative to the
+      // library path. 
+      'php' => array(
+        'qrlib.php',
+      ),
+    ),
+  );
 
-
-
+  return $libraries;
+}
+*/

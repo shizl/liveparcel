@@ -2,6 +2,7 @@ name = Parcel
 description = REQUIRED. Creates parcels as LiveParcels content type after checkout.
 package = Live Parcels - core
 core = 7.x
+dependencies[] = libraries
 dependencies[] = liveparcels
 dependencies[] = date_popup
 dependencies[] = date
@@ -9,7 +10,6 @@ dependencies[] = list
 dependencies[] = location
 dependencies[] = location_phone
 dependencies[] = location_company
-
 dependencies[] = location_cck
 dependencies[] = number
 ; Information added by Drupal.org packaging script on 2014-03-15

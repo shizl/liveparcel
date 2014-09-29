@@ -26,10 +26,14 @@ function lp_parcel_requirements($phase) {
         'value' => $status['desc'],
       );
     }
+
   }
 
   return $requirements;
 }
+
+
+
 /**
  * Implements hook_uninstall().
  */
@@ -86,7 +90,7 @@ function lp_parcel_install() {
   liveparcels_create_field('Pickup date','field_pick_up_time',array('type'=>'datetime','widget'=>"date_popup","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('granularity'=>array('year'=>'year','month'=>'month','day'=>'day','hour'=>0,'minute'=>0,'second'=>0))));
   liveparcels_create_field('Pickup shift','field_pick_up_time_ampm',array('type'=>'list_text','widget'=>"options_select","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('AM'=>'AM','PM'=>'PM'),'allowed_values_function' => '')));
 
-  liveparcels_create_field('Pickup address','field_pickup_location',array('type'=>'location','widget'=>"location","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('location_settings'=> Array
+  liveparcels_create_field('Pickup address','field_pickup_location',array('type'=>'location','widget'=>"location","display"=>array("default"=>array("label"=>"above")),"setting"=>array('location_settings'=> Array
     (
       'form' => Array
       (
@@ -182,7 +186,7 @@ function lp_parcel_install() {
     )
   )));
 
-  liveparcels_create_field('Delivery address','field_delivery_location',array('type'=>'location','widget'=>"location","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('location_settings'=> Array
+  liveparcels_create_field('Delivery address','field_delivery_location',array('type'=>'location','widget'=>"location","display"=>array("default"=>array("label"=>"above")),"setting"=>array('location_settings'=> Array
     (
       'form' => Array
       (
