@@ -619,7 +619,9 @@ function lp_parcel_uc_checkout_complete($order, $account){
        unset($_SESSION['lp_node']);
        unset($_SESSION['lp_order']);
     } 
-    unset($_SESSION['admin_order']); 
+    unset($_SESSION['admin_order']);
+    unset($_SESSION['pickup_data']);
+    unset($_SESSION['delivery_data']); 
 }
 function lp_parcel_get_parcel_data($order_id){
     $pdata=db_query("SELECT `parcel_info`,`extra_info` FROM `liveparcels_order` WHERE `order_id`='$order_id'")->fetchAssoc();
@@ -656,24 +658,26 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
  $form['actions']['cancel']['#submit'][] = 'jump_cart';
-/*
+
  $form['actions']['backup']=array(
    '#type'=>'submit',
    '#value'=>t('backup'),
    '#submit'=>array('backup_address'),
  );
- */
+
 }
 
 function jump_cart(&$form,&$form_state){
   $form_state['redirect'] = 'cart';
 }
-/*
+
 function backup_address(&$form,&$form_state){
 
-
+     $pickup_data = $form_state['values']['panes']['parcel_pickup'];
+     $delivery_data = $form_state['values']['panes']['parcel_delivery'];
+     $_SESSION['pickup_data'] = serialize($pickup_data);
+     $_SESSION['delivery_data'] = serialize($delivery_data);
 }
-*/
 
 
 function lp_parcel_node_view($node, $view_mode) {
