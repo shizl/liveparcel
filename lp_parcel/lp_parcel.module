@@ -698,9 +698,35 @@ global $user;
 	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
         global $base_url;
-        $data = '{"nid":'.$node->nid.',"title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'"}';
-        QRcode::png($data, 'sites/default/files/'.$node->nid.$node->field_parcel_order_id['und'][0]['value'].'.png', "L", 4, 4);
-        $code = '<img src="/sites/default/files/'.$node->nid.$node->field_parcel_order_id['und'][0]['value'].'.png"/>';
+
+        $account = user_load($node->uid);
+	$role_array = '';
+	foreach($account->roles as $key=>$role){
+		$role_array .=  '"'.$key.'"'.':'. '"'. $role.'",';
+	}
+	$orderid = empty($node->field_parcel_order_id['und'][0]['value'])?'':$node->field_parcel_order_id['und'][0]['value'];
+	$price = empty($node->field_parcel_price['und'][0]['value'])?'':$node->field_parcel_price['und'][0]['value'];
+	$dimension = empty($node->field_parcel_size['und'][0]['value'])?'':$node->field_parcel_size['und'][0]['value'];
+	$package = empty($node->field_parcel_package_name['und'][0]['value'])?'':$node->field_parcel_package_name['und'][0]['value'];
+	$weight = empty($node->field_parcel_weight['und'][0]['value'])?'':$node->field_parcel_weight['und'][0]['value'];
+	$leave = empty($node->field_authority_to_leave['und'][0]['value'])?'':$node->field_authority_to_leave['und'][0]['value'];
+	$collect = empty($node->field_cash_to_collect['und'][0]['value'])?'':$node->field_cash_to_collect['und'][0]['value'];
+	$ref = empty($node->field_customer_reference['und'][0]['value'])?'':$node->field_customer_reference['und'][0]['value'];
+	$d_note = empty($node->field_delivery_note['und'][0]['value'])?'':$node->field_delivery_note['und'][0]['value'];
+	$p_note = empty($node->field_pickup_note['und'][0]['value'])?'':$node->field_pickup_note['und'][0]['value'];
+	$p_date = empty($node->field_pick_up_time['und'][0]['value'])?'':$node->field_pick_up_time['und'][0]['value'];
+	$shift = empty($node->field_pick_up_time_ampm['und'][0]['value'])?'':$node->field_pick_up_time_ampm['und'][0]['value'];
+
+	$p_address = empty($node->field_pickup_location['und'][0])?array():$node->field_pickup_location['und'][0];
+	$d_address = empty($node->field_delivery_location['und'][0])?array():$node->field_delivery_location['und'][0];
+
+
+
+
+        $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country'].'"}],"role":[{'.$role_array.'}]}';
+
+        QRcode::png($data, 'sites/default/files/'.$node->nid.$orderid.'.png', "L", 2, 2);
+        $code = '<img src="/sites/default/files/'.$node->nid.$orderid.'.png"/>';
 
         $node->content['parcel_detail'] = array(
 	  '#prefix' => '<div class="parcel_detail">',
@@ -719,14 +745,14 @@ global $user;
     	  '#weight'=>0,
  	);
 	}
-	$node->content['parcel_detail']['parcel_order_id'] = $node->content['field_parcel_order_id'];
-	$node->content['parcel_detail']['parcel_price'] = $node->content['field_parcel_price'];
-	$node->content['parcel_detail']['parcel_size'] = $node->content['field_parcel_size'];
-	$node->content['parcel_detail']['parcel_package_name'] = $node->content['field_parcel_package_name'];
-	$node->content['parcel_detail']['parcel_weight'] = $node->content['field_parcel_weight'];
-	$node->content['parcel_detail']['authority_to_leave'] = $node->content['field_authority_to_leave'];
-	$node->content['parcel_detail']['cash_to_collect'] = $node->content['field_cash_to_collect'];
-	$node->content['parcel_detail']['customer_reference'] = $node->content['field_customer_reference'];
+	$node->content['parcel_detail']['parcel_order_id'] = empty($node->content['field_parcel_order_id'])?'':$node->content['field_parcel_order_id'];
+	$node->content['parcel_detail']['parcel_price'] = empty($node->content['field_parcel_price'])?'':$node->content['field_parcel_price'];
+	$node->content['parcel_detail']['parcel_size'] = empty($node->content['field_parcel_size'])?'':$node->content['field_parcel_size'];
+	$node->content['parcel_detail']['parcel_package_name'] = empty($node->content['field_parcel_package_name'])?'':$node->content['field_parcel_package_name'];
+	$node->content['parcel_detail']['parcel_weight'] = empty($node->content['field_parcel_weight'])?'':$node->content['field_parcel_weight'];
+	$node->content['parcel_detail']['authority_to_leave'] = empty($node->content['field_authority_to_leave'])?'':$node->content['field_authority_to_leave'];
+	$node->content['parcel_detail']['cash_to_collect'] = empty($node->content['field_cash_to_collect'])?'':$node->content['field_cash_to_collect'];
+	$node->content['parcel_detail']['customer_reference'] = empty($node->content['field_customer_reference'])?'':$node->content['field_customer_reference'];
 	//$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
 
         hide($node->content['field_parcel_order_id']);
@@ -748,13 +774,13 @@ global $user;
  	);
 	$node->content['address']['pickup'] = array('#prefix'=>'<div class="pickup_info">','#suffix'=>'</div>'); 
 	$node->content['address']['delivery'] = array('#prefix'=>'<div class="delivery_info">','#suffix'=>'</div>');      
-        $node->content['address']['pickup']['pickup_note'] = $node->content['field_pickup_note'];
-        $node->content['address']['pickup']['pickup_date'] = $node->content['field_pick_up_time'];
-        $node->content['address']['pickup']['pickup_time_ampm'] = $node->content['field_pick_up_time_ampm'];
-        $node->content['address']['pickup']['pickup_location'] = $node->content['field_pickup_location'];
+        $node->content['address']['pickup']['pickup_note'] = empty($node->content['field_pickup_note'])?'':$node->content['field_pickup_note'];
+        $node->content['address']['pickup']['pickup_date'] = empty($node->content['field_pick_up_time'])?'':$node->content['field_pick_up_time'];
+        $node->content['address']['pickup']['pickup_time_ampm'] = empty($node->content['field_pick_up_time_ampm'])?'':$node->content['field_pick_up_time_ampm'];
+        $node->content['address']['pickup']['pickup_location'] = empty($node->content['field_pickup_location'])?'':$node->content['field_pickup_location'];
 
-        $node->content['address']['delivery']['delivery_note'] = $node->content['field_delivery_note'];
-        $node->content['address']['delivery']['delivery_location'] = $node->content['field_delivery_location'];
+        $node->content['address']['delivery']['delivery_note'] = empty($node->content['field_delivery_note'])?'':$node->content['field_delivery_note'];
+        $node->content['address']['delivery']['delivery_location'] = empty($node->content['field_delivery_location'])?'':$node->content['field_delivery_location'];
         hide($node->content['field_pickup_note']);
         hide($node->content['field_pick_up_time']);
         hide($node->content['field_pick_up_time_ampm']);
