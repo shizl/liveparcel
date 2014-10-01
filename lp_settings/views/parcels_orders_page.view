@@ -12,6 +12,7 @@ $view->disabled = FALSE; /* Edit this to true to make a default view disabled in
 /* Display: Defaults */
 $handler = $view->new_display('default', 'Defaults', 'default');
 $handler->display->display_options['title'] = 'Orders';
+$handler->display->display_options['use_more'] = TRUE;
 $handler->display->display_options['use_more_always'] = FALSE;
 $handler->display->display_options['access']['type'] = 'perm';
 $handler->display->display_options['access']['perm'] = 'view all orders';
@@ -318,6 +319,23 @@ $handler->display->display_options['filters']['order_status']['expose']['operato
 $handler->display->display_options['filters']['order_status']['expose']['label'] = 'View by status';
 $handler->display->display_options['filters']['order_status']['expose']['operator'] = 'order_status_op';
 $handler->display->display_options['filters']['order_status']['expose']['identifier'] = 'order_status';
+/* Filter criterion: Order: Order total */
+$handler->display->display_options['filters']['order_total']['id'] = 'order_total';
+$handler->display->display_options['filters']['order_total']['table'] = 'uc_orders';
+$handler->display->display_options['filters']['order_total']['field'] = 'order_total';
+$handler->display->display_options['filters']['order_total']['operator'] = '>';
+$handler->display->display_options['filters']['order_total']['value']['value'] = '0';
+$handler->display->display_options['filters']['order_total']['group'] = 1;
+$handler->display->display_options['filters']['order_total']['expose']['operator_id'] = 'order_total_op';
+$handler->display->display_options['filters']['order_total']['expose']['label'] = 'Order total';
+$handler->display->display_options['filters']['order_total']['expose']['operator'] = 'order_total_op';
+$handler->display->display_options['filters']['order_total']['expose']['identifier'] = 'order_total';
+$handler->display->display_options['filters']['order_total']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  4 => 0,
+  3 => 0,
+);
 
 /* Display: Admin page */
 $handler = $view->new_display('page', 'Admin page', 'admin_page');
