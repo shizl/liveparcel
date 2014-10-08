@@ -662,23 +662,24 @@ function lp_parcel_uc_checkout_pane_alter(&$panes) {
 }
 function  lp_parcel_form_uc_cart_checkout_form_alter(&$form,&$form_state){
  $form['actions']['cancel']['#submit'][] = 'jump_cart';
-
- $form['actions']['backup']=array(
-   '#type'=>'submit',
-   '#value'=>t('backup'),
-   '#submit'=>array('backup_address'),
- );
-
 }
+
+
+function lp_parcel_form_uc_cart_checkout_review_form_alter(&$form,&$form_state){
+
+ $form['actions']['back']['#submit'][] = 'backup_address';
+}
+
 
 function jump_cart(&$form,&$form_state){
   $form_state['redirect'] = 'cart';
 }
 
 function backup_address(&$form,&$form_state){
+ $data = lp_parcel_get_parcel_data($form_state['uc_order']->order_id);
 
-     $pickup_data = $form_state['values']['panes']['parcel_pickup'];
-     $delivery_data = $form_state['values']['panes']['parcel_delivery'];
+     $pickup_data = $data['extra_info']['pickupdata'];
+     $delivery_data = $data['extra_info']['deliverydata'];
      $_SESSION['pickup_data'] = serialize($pickup_data);
      $_SESSION['delivery_data'] = serialize($delivery_data);
 }
@@ -697,6 +698,7 @@ global $user;
 
 	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
+	drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
         global $base_url;
 
         $account = user_load($node->uid);
@@ -725,7 +727,7 @@ global $user;
 
         $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country'].'"}],"role":[{'.$role_array.'}]}';
 
-        QRcode::png($data, 'sites/default/files/'.$node->nid.$orderid.'.png', "L", 2, 2);
+        QRcode::png($data, 'sites/default/files/'.$node->nid.$orderid.'.png', "M", 3, 3);
         $code = '<img src="/sites/default/files/'.$node->nid.$orderid.'.png"/>';
 
         $node->content['parcel_detail'] = array(
@@ -795,33 +797,15 @@ global $user;
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
  	);
-        $node->content['parcel_updates']['parcel_comment'] = !empty($node->content['comments'])?$node->content['comments']:array();
-	$node->content['comments'] =  array();
+
+       if(!empty($node->content['comments'])){
+	$node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];
+	}else{
+         $node->content['parcel_updates']['parcel_comment']['#markup']= 'No Update available yet';
+	}
+	$node->content['comments'] = array();
         
          return $node;
     }   
 }
-/*
-function lp_parcel_libraries_info() {
-  $libraries['phpqrcode'] = array(
-    'name' => 'phpqrcode plugin',
-    'vendor url' => 'http://www.qrgenerate.com',
-    'download url' => 'https://github.com/t0k4rt/phpqrcode/archive/master.zip',	
-    'version arguments' => array(
-      'file' => 'VERSION.txt', 
-      'pattern' => '@version\s+([0-9a-zA-Z\.-]+)@', 
-      'lines' => 5, 
-      'cols' => 20,
-    ),
-    'files' => array(
-      // For PHP libraries, specify include files here, still relative to the
-      // library path. 
-      'php' => array(
-        'qrlib.php',
-      ),
-    ),
-  );
 
-  return $libraries;
-}
-*/

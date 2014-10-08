@@ -163,6 +163,14 @@ display:block !important;
 border-bottom:1px solid #ccc;
 
 }
+
+#comments h2.title{
+display:none;
+}
+
+#comments h2.comment-form{
+display:block;
+}
 .parcel_detail{
 overflow:hidden;
 }
@@ -185,10 +193,10 @@ height:0px !important;
 }
 .prcode{
 float:left;
-width:200px;
+width:350px;
 }
 .parcel_detail .field{
-width:400px;
+width:300px;
 float:left;
 }
 .pickup_info{
@@ -198,8 +206,8 @@ float:left;
 float:right;
 }
 
-.field-name-field-delivery-location .adr{
-font-size:15px;
+.field-name-field-delivery-location{
+font-size:16px;
 font-weight:bold;
 }
 

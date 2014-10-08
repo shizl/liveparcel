@@ -46,12 +46,12 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
    if($parcel_type=="pickup"){
 	if(isset($_SESSION['pickup_data'])){
 		$pickup_data = unserialize($_SESSION['pickup_data']);
-		$default_info = $pickup_data[$key]['field_parcel_pickup_address_data'];
+		$default_info = $pickup_data[$key]['field_parcel_pickup_address'];
 	}	
    }else{
 	if(isset($_SESSION['delivery_data'])){
 		$delivery_data = unserialize($_SESSION['delivery_data']);
-		$default_info = $delivery_data[$key]['field_parcel_delivery_address_data'];
+		$default_info = $delivery_data[$key]['field_parcel_delivery_address'];
 	}
 
    } 
