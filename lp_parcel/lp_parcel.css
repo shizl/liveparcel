@@ -191,6 +191,34 @@ width:0px !important;
 margin:0px !important;
 height:0px !important;
 }
+
+.comment .submitted{
+clear:both;
+overflow:hidden;
+}
+.comment .submitted .commenter-name,
+.comment .submitted .comment-time{
+float:left;
+line-height:1.5em;
+font-size: 1.071em !important;
+margin-right:5px;
+}
+.comment .submitted .comment-time{
+font-size:1em !important;
+}
+.comment .comment-text .new{
+display:none;
+}
+.comment .comment-text h3{
+margin:0px;
+}
+.comment .comment-text .content{
+margin-top:0px;
+}
+.comment .submitted .comment-permalink{
+display:none;
+}
+
 .prcode{
 float:left;
 width:350px;
@@ -207,7 +235,7 @@ float:right;
 }
 
 .field-name-field-delivery-location{
-font-size:16px;
+font-size:20px;
 font-weight:bold;
 }
 

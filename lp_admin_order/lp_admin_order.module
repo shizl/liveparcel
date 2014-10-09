@@ -588,9 +588,9 @@ function lp_admin_order_block_view($delta = '') {
  */
 function masquerade_block_1() {
 
- 
-$_SESSION['admin_order'] = 'admin';
-
+    if(!isset($_SESSION['admin_order'])){
+	$_SESSION['admin_order'] = 'admin';
+     }
   global $user;
   $quick_switch_links = array();
   $markup_value = '';
@@ -711,6 +711,7 @@ function masquerade_block_1_validate($form, &$form_state) {
  * Masquerade block form submission.
  */
 function masquerade_block_1_submit($form, &$form_state) {
+
   //unset($form);
   $masq_user = _masquerade_user_load($form_state['values']['masquerade_user_field']);
   if (!masquerade_switch_user($masq_user->uid)) {
@@ -801,7 +802,12 @@ function masquerade_autocomplete_multiple($string, $add_anonymous = TRUE) {
  */
 function masquerade_switch_user_page($uid) {
   if (isset($_GET['token']) && drupal_valid_token($_GET['token'], 'masquerade/switch/' . $uid) && masquerade_switch_user($uid)) {
+
+    if(!isset($_SESSION['admin_order'])){
+	$_SESSION['admin_order'] = 'admin';
+     }
     drupal_goto($_SERVER['HTTP_REFERER']);
+
   }
   else {
     drupal_access_denied();
