@@ -27,6 +27,20 @@ function lp_parcel_menu(){
     'access callback' => 'node_access',
     'access arguments' => array('view', 1),
   );
+    $items['node/%node/print_pdf'] = array(
+    'title' => 'Print PDF',
+    'menu_name'=>'liveparcels_print_pdf',
+    'description' => 'Print content.',
+    'page callback' => array('lp_parcel_print_pdf'),
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+    'weight'=>5,
+    'file'=>'pdf.page.inc', 
+  );
+
+
   return $items;
 }
 
@@ -41,6 +55,8 @@ function lp_parcel_order_view($node){
        header("Location: ".$_SERVER["HTTP_HOST"]."/node/".$node->nid);  
     }
 }
+
+
 /**
  * Implements hook_uc_checkout_pane().
  create liveparcels extra pane 
@@ -725,7 +741,7 @@ global $user;
 
 
 
-        $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country'].'"}],"role":[{'.$role_array.'}]}';
+        $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country_name'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country_name'].'"}],"role":[{'.$role_array.'}]}';
 
         QRcode::png($data, 'sites/default/files/'.$node->nid.$orderid.'.png', "M", 3, 3);
         $code = '<img src="/sites/default/files/'.$node->nid.$orderid.'.png"/>';
