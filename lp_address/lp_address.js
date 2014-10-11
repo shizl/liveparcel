@@ -49,6 +49,3 @@ jQuery(this).children('.comment-time').html('<span>Date: </span>'+datehtml);
 
 
 
-
-
-
