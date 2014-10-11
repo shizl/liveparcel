@@ -34,10 +34,10 @@ jQuery('#comments h2.comment-form').text('Add New Update');
 
  jQuery('.comment .submitted').each(function(){
 
-author = jQuery(this).children('.commenter-name').find('span').html();
+author = jQuery(this).children('.commenter-name').html();
 jQuery(this).children('.commenter-name').html('<span>Author: </span>'+author);
 
-datehtml = jQuery(this).children('.comment-time').find('span').html();
+datehtml = jQuery(this).children('.comment-time').html();
 
 jQuery(this).children('.comment-time').html('<span>Date: </span>'+datehtml);
 
