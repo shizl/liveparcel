@@ -31,11 +31,19 @@ jQuery(".parcel_select_address").change(function(){
 
  
 jQuery('#comments h2.comment-form').text('Add New Update');
-author = jQuery('#comments .submitted .commenter-name span').html();
-datehtml = jQuery('#comments .submitted .comment-time span').html();
 
-jQuery('#comments .submitted .commenter-name').html('<span>Author: </span>'+author);
-jQuery('#comments .submitted .comment-time').html('<span>Date: </span>'+datehtml);
+ jQuery('.comment .submitted').each(function(){
+
+author = jQuery(this).children('.commenter-name').find('span').html();
+jQuery(this).children('.commenter-name').html('<span>Author: </span>'+author);
+
+datehtml = jQuery(this).children('.comment-time').find('span').html();
+
+jQuery(this).children('.comment-time').html('<span>Date: </span>'+datehtml);
+
+ });
+
+
 });
 
 
