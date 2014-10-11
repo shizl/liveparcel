@@ -194,7 +194,7 @@ function lp_tracking_install() {
       ), 
       'display' => array(
         'default' => array(
-          'label' => 'hidden',
+          'label' => 'inline',
         ),
       ),
     );

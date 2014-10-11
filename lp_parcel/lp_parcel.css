@@ -196,15 +196,10 @@ height:0px !important;
 clear:both;
 overflow:hidden;
 }
-.comment .submitted .commenter-name,
-.comment .submitted .comment-time{
-float:left;
-line-height:1.5em;
-font-size: 1.071em !important;
-margin-right:5px;
-}
+
 .comment .submitted .comment-time{
 font-size:1em !important;
+color:#3B3B3B !important;
 }
 .comment .comment-text .new{
 display:none;

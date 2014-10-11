@@ -15,7 +15,7 @@ db_delete('uc_countries')
   // Make the entry in the country table.
   // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
   $country_id = db_query("SELECT `country_id` FROM `uc_countries` where `country_id`='36'")->fetchField();
-  if($country_id != '36' ){
+  if($country_id==null){
       db_insert('uc_countries')
         ->fields(array(
           'country_id' => 36,

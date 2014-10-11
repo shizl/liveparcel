@@ -754,13 +754,13 @@ global $user;
 
 	$node->content['parcel_detail']['sub_title'] = array(
 	  '#markup'=>'<h3>'.t('Parcel Details').'</h3>',
-    	  '#weight'=>-1,
+    	  '#weight'=>-10,
 	); 
 
 	if($node->content['field_fee_status'][0]['#markup']=="Confirmed"&&(in_array(3,$arr)||in_array(17,$arr))){
 	$node->content['parcel_detail']['qrcode'] = array(
     	  '#markup' => '<div class="prcode">'.$code.'</div>',
-    	  '#weight'=>0,
+    	  '#weight'=>-9,
  	);
 	}
 	$node->content['parcel_detail']['parcel_order_id'] = empty($node->content['field_parcel_order_id'])?'':$node->content['field_parcel_order_id'];
@@ -813,6 +813,7 @@ global $user;
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
  	);
+
 
        if(!empty($node->content['comments'])){
 	$node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];
