@@ -1,0 +1,10 @@
+name = Userpoints Award
+description = Interfaces userpoints with ubercart, so users can get points for purchases.
+dependencies[] = userpoints
+dependencies[] = uc_order
+dependencies[] = uc_cart
+dependencies[] = uc_payment
+package = Userpoints
+core = 7.x
+php = 5.x 
+

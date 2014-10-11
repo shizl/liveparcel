@@ -1,0 +1,10 @@
+name = Userpoints Product
+description = Provides necessary modifications to let a user earn points when a product is purchased - AKA: Buying points
+package = Userpoints
+dependencies[] = userpoints
+dependencies[] = uc_order
+dependencies[] = uc_cart
+dependencies[] = uc_payment
+core = 7.x
+php = 5.x
+
