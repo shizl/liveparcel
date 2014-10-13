@@ -715,7 +715,11 @@ global $user;
 
 	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
+	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel_print.css',array('media'=>'print'));
 	drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
+
+
+
         global $base_url;
 
         $account = user_load($node->uid);
@@ -814,7 +818,7 @@ global $user;
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
  	);
-
+      $node->content['links'] = '';
 
        if(!empty($node->content['comments'])){
 	$node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];

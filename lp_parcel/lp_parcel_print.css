@@ -1,0 +1,12 @@
+h2.comment-form{
+display:none !important;
+}
+#btnPrint{
+display:none ;
+}
+#header{
+display:none;
+}
+#breadcrumb{
+display:none;
+}
