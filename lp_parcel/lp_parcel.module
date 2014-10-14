@@ -776,7 +776,7 @@ global $user;
 	$node->content['parcel_detail']['authority_to_leave'] = empty($node->content['field_authority_to_leave'])?'':$node->content['field_authority_to_leave'];
 	$node->content['parcel_detail']['cash_to_collect'] = empty($node->content['field_cash_to_collect'])?'':$node->content['field_cash_to_collect'];
 	$node->content['parcel_detail']['customer_reference'] = empty($node->content['field_customer_reference'])?'':$node->content['field_customer_reference'];
-	//$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
+	$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
 
         hide($node->content['field_parcel_order_id']);
         hide($node->content['field_parcel_price']);

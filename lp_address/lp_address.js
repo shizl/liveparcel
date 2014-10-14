@@ -31,7 +31,8 @@ jQuery(".parcel_select_address").change(function(){
 
  
 jQuery('#comments h2.comment-form').text('Add New Update');
-
+subject = jQuery('#comments .comment-text h3').html();
+jQuery('#comments .comment-text h3').html('<span>Subject: </span>'+subject);
  jQuery('.comment .submitted').each(function(){
 
 author = jQuery(this).children('.commenter-name').html();
