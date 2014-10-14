@@ -19,16 +19,6 @@ function lp_tracking_uninstall() {
     }
   }
 
-  //delete field_comment_body
-  $field_name = 'comment_body';
-  if (field_info_field($field_name)) {
-    field_delete_field($field_name);
-    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
-      field_delete_instance($instance);
-    }
-  }
-
-
   //delete field_driver_assigned
   $field_name = 'field_driver_assigned';
   if (field_info_field($field_name)) {
@@ -63,6 +53,17 @@ function lp_tracking_uninstall() {
 }
 
 function lp_tracking_install() {
+
+  //delete field_comment_body
+  $field_name = 'comment_body';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
+
+
   //add driver role
   $roleName = 'driver';
   if(!user_role_load_by_name($roleName)){
