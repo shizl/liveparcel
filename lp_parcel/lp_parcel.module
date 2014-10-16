@@ -27,23 +27,10 @@ function lp_parcel_menu(){
     'access callback' => 'node_access',
     'access arguments' => array('view', 1),
   );
-/*
-    $items['node/%node/print_pdf'] = array(
-    'title' => 'Print PDF',
-    'menu_name'=>'liveparcels_print_pdf',
-    'description' => 'Print content.',
-    'page callback' => array('lp_parcel_print_pdf'),
-    'page arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-    'access callback' => 'node_access',
-    'access arguments' => array('view', 1),
-    'weight'=>5,
-    'file'=>'print.page.inc', 
-  );
-*/
 
   return $items;
 }
+
 
 function lp_parcel_order_view($node){
  
@@ -825,8 +812,7 @@ global $user;
 	}else{
          $node->content['parcel_updates']['parcel_comment']['#markup']= 'No Update available yet';
 	}
-	$node->content['comments'] = array();
-	$node->content['print']['#markup'] ='<input id="btnPrint" class="form-submit" type="button" value="Print" onclick="javascript:window.print();" />';       
+	$node->content['comments'] = array();     
          return $node;
     }   
 }

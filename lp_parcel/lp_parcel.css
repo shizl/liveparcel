@@ -218,15 +218,20 @@ display:none;
 float:left;
 width:350px;
 }
+.prcode img{
+max-width:350px;
+}
 .parcel_detail .field{
 width:300px;
 float:left;
 }
 .pickup_info{
 float:left;
+width:49%;
 }
 .delivery_info{
 float:right;
+width:49%;
 }
 
 .field-name-field-delivery-location{
