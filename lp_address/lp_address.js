@@ -32,9 +32,6 @@ jQuery(".parcel_select_address").change(function(){
  
 jQuery('#comments h2.comment-form').text('Add New Update');
 
-
-jQuery('.tabs ul li:last').after('<li><a href="#" onclick="javascript:window.print();">Print PDF</a></li>');
-
  jQuery('.comment .submitted').each(function(){
 
 subject = jQuery(this).parent().parent().find('.comment-text h3').html();

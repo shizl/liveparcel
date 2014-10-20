@@ -1,15 +1,15 @@
-h2.comment-form{
-display:none !important;
-}
-#btnPrint{
-display:none ;
-}
-#header{
+
+#header {
 display:none;
 }
-#breadcrumb{
+
+#breadcrumb {
 display:none;
 }
-#messages{
+.print-action{
 display:none;
 }
+#page-title{
+display:none;
+}
+

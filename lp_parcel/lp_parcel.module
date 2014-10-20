@@ -28,6 +28,19 @@ function lp_parcel_menu(){
     'access arguments' => array('view', 1),
   );
 
+    $items['node/%node/print_pdf'] = array(
+    'title' => 'Print PDF',
+    'menu_name'=>'liveparcels_print_pdf',
+    'description' => 'Print Pdf',
+    'page callback' => array('lp_parcel_print_pdf'),
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+    'file'=>'print.page.inc',
+    'weight'=>10,	
+  );
+
   return $items;
 }
 
@@ -702,10 +715,7 @@ global $user;
 
 	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
-	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel_print.css',array('media'=>'print'));
 	drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
-
-
 
         global $base_url;
 
