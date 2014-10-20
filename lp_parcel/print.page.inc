@@ -55,7 +55,7 @@ $output['print_left']['site_info']['site_name'] = array(
 $output['print_left']['delivery_info'] = array(
   '#markup' => '<div class="delivery_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-              <div class="company_name"><span>Company Name: </span>'.$d_address['company'].'</div>
+              <div class="company_name"><span>Company Name </span>'.$d_address['company'].'</div>
               <div class="fn"><span>Attention: </span>'.$d_address['name'].'</div>
               <div class="phone"><span>Phone: </span>'.$d_address['phone'].'</div>
               <div class="street-address">'.$d_address['street'].'</div>
@@ -68,7 +68,7 @@ $output['print_left']['delivery_info'] = array(
 $output['print_right']['pickup_info'] = array(
   '#markup' =>'<div class="pickup_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-              <div class="company_name"><span>Company Name: </span>'.$p_address['company'].'</div>
+              <div class="company_name"><span>Company Name </span>'.$p_address['company'].'</div>
               <div class="fn"><span>Attention: </span>'.$p_address['name'].'</div>
               <div class="phone"><span>Phone: </span>'.$p_address['phone'].'</div>
               <div class="street-address">'.$p_address['street'].'</div>

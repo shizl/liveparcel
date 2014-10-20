@@ -1,3 +1,6 @@
+html, body, #page{
+height:auto !important;
+}
 
 #header {
 display:none;
