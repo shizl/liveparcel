@@ -25,7 +25,7 @@ function lp_parcel_menu(){
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
     'access callback' => 'node_access',
-    'access arguments' => array('view', 1),
+    'access arguments' => array('update', 1),
   );
 
     $items['node/%node/print_pdf'] = array(
@@ -36,7 +36,7 @@ function lp_parcel_menu(){
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
     'access callback' => 'node_access',
-    'access arguments' => array('view', 1),
+    'access arguments' => array('update', 1),
     'file'=>'print.page.inc',
     'weight'=>10,	
   );
@@ -706,11 +706,15 @@ function lp_parcel_node_view($node, $view_mode) {
 
 global $user;
 
-  $arr = array(); 
+  $arr = array();
+  $arrname = array(); 
   $roles = db_query('select rid from {users_roles} where uid = '.$user->uid);
   foreach($roles as $role){
-  $arr[] = $role->rid;		
+  $arr[] = $role->rid;
+  $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
+  $arrname[] = $rname;		
   }
+
     if ($node->type=="live_parcel"){
 
 	include "sites/all/libraries/phpqrcode/qrlib.php";
@@ -759,7 +763,7 @@ global $user;
     	  '#weight'=>-10,
 	); 
 
-	if($node->content['field_fee_status'][0]['#markup']=="Confirmed"&&(in_array(3,$arr)||in_array(17,$arr))){
+	if($node->content['field_fee_status'][0]['#markup']=="Confirmed"&&(in_array(3,$arr)||in_array('driver',$arrname))){
 	$node->content['parcel_detail']['qrcode'] = array(
     	  '#markup' => '<div class="prcode">'.$code.'</div>',
     	  '#weight'=>-9,
@@ -785,6 +789,8 @@ global $user;
         hide($node->content['field_customer_reference']);
         hide($node->content['field_fee_status']);
 
+if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+
         $node->content['address'] = array(
     	  '#type' => 'fieldset',
 	  '#title'=> t('Address settings'),
@@ -798,9 +804,20 @@ global $user;
         $node->content['address']['pickup']['pickup_date'] = empty($node->content['field_pick_up_time'])?'':$node->content['field_pick_up_time'];
         $node->content['address']['pickup']['pickup_time_ampm'] = empty($node->content['field_pick_up_time_ampm'])?'':$node->content['field_pick_up_time_ampm'];
         $node->content['address']['pickup']['pickup_location'] = empty($node->content['field_pickup_location'])?'':$node->content['field_pickup_location'];
+	$node->content['address']['pickup']['company']=array(
+	  '#markup' => empty($node->content['field_pickup_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company"><span>Company: </span>'.$node->content['field_pickup_location'][0]['#location']['company'].'</div>',
+	  '#weight'=>99,
+	);
 
         $node->content['address']['delivery']['delivery_note'] = empty($node->content['field_delivery_note'])?'':$node->content['field_delivery_note'];
         $node->content['address']['delivery']['delivery_location'] = empty($node->content['field_delivery_location'])?'':$node->content['field_delivery_location'];
+	$node->content['address']['delivery']['company']=array(
+	  '#markup' => empty($node->content['field_delivery_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company"><span>Company: </span>'.$node->content['field_delivery_location'][0]['#location']['company'].'</div>',
+	  '#weight'=>99,
+	);
+
+
+}
         hide($node->content['field_pickup_note']);
         hide($node->content['field_pick_up_time']);
         hide($node->content['field_pick_up_time_ampm']);
