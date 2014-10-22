@@ -30,23 +30,6 @@ jQuery(".parcel_select_address").change(function(){
     });  
 
  
-jQuery('#comments h2.comment-form').text('Add New Update');
-
- jQuery('.comment .submitted').each(function(){
-
-subject = jQuery(this).parent().parent().find('.comment-text h3').html();
- jQuery(this).parent().parent().find('.comment-text h3').html('<span>Subject: </span>'+subject);
-
-author = jQuery(this).children('.commenter-name').html();
-jQuery(this).children('.commenter-name').html('<span>Author: </span>'+author);
-
-datehtml = jQuery(this).children('.comment-time').html();
-
-jQuery(this).children('.comment-time').html('<span>Date: </span>'+datehtml);
-
- });
-
-
 });
 
 

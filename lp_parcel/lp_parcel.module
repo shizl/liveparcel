@@ -715,7 +715,7 @@ global $user;
 
 	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
-	drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
+	//drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
 
         global $base_url;
 
@@ -817,6 +817,15 @@ global $user;
  	);
       $node->content['links'] = '';
 
+      $node->content['comments']['#theme'] = 'custom_comment_wrapper__node_live_parcel';
+
+      $cids = db_query('SELECT cid FROM {comment} WHERE nid=:nid ORDER BY created DESC',array(':nid'=>$node->nid));
+        if($cids!=null){
+	  foreach($cids as $cid){
+             $node->content['comments']['comments'][$cid->cid]['#theme'] = 'custom_comment__node_live_parcel';
+	  } 
+        }
+
        if(!empty($node->content['comments'])){
 	$node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];
 	}else{
@@ -826,4 +835,7 @@ global $user;
          return $node;
     }   
 }
+
+
+
 

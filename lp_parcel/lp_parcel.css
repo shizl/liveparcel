@@ -157,62 +157,10 @@ display:none !important;
 }
 
 
-
-.comment{
-display:block !important;
-border-bottom:1px solid #ccc;
-
-}
-
-#comments h2.title{
-display:none;
-}
-
-#comments h2.comment-form{
-display:block;
-}
 .parcel_detail{
 overflow:hidden;
 }
 
-
-.comment .attribution {
-display:block !important;
-
-}
-.comment .comment-text{
-display:block !important;
-border:none !important;
-padding:0 !important;
-}
-.comment .comment-arrow {
-background:#fff !important;
-width:0px !important;
-margin:0px !important;
-height:0px !important;
-}
-
-.comment .submitted{
-clear:both;
-overflow:hidden;
-}
-
-.comment .submitted .comment-time{
-font-size:1em !important;
-color:#3B3B3B !important;
-}
-.comment .comment-text .new{
-display:none;
-}
-.comment .comment-text h3{
-margin:0px;
-}
-.comment .comment-text .content{
-margin-top:0px;
-}
-.comment .submitted .comment-permalink{
-display:none;
-}
 
 .prcode{
 float:left;
@@ -314,3 +262,10 @@ margin-top:10px;
 .print-action{
 clear:both;
 }
+
+.gmap-map{
+width:150px !important;
+height:150px !important;
+
+}
+

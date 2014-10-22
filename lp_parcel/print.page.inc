@@ -97,7 +97,7 @@ $output['print_right']['qrcode'] = array(
 );
 
 $output['print_button'] = array(
-'#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="javascript:window.print();" /></div>',
+  '#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="javascript:window.print();" /></div>',
 );
 
  return $output;
