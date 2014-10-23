@@ -825,6 +825,8 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
         hide($node->content['field_delivery_note']);
         hide($node->content['field_delivery_location']);
 
+
+
         $node->content['parcel_updates'] = array(
     	  '#type' => 'fieldset',
 	  '#title'=> t('Parcel Updates'),
@@ -832,8 +834,9 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
  	);
-      $node->content['links'] = '';
 
+      $node->content['links'] = '';
+if(!empty($node->content['comments'])){
       $node->content['comments']['#theme'] = 'custom_comment_wrapper__node_live_parcel';
 
       $cids = db_query('SELECT cid FROM {comment} WHERE nid=:nid ORDER BY created DESC',array(':nid'=>$node->nid));
@@ -842,7 +845,7 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
              $node->content['comments']['comments'][$cid->cid]['#theme'] = 'custom_comment__node_live_parcel';
 	  } 
         }
-
+}
        if(!empty($node->content['comments'])){
 	$node->content['parcel_updates']['parcel_comment'] = $node->content['comments'];
 	}else{
