@@ -20,11 +20,10 @@ function get_user_skipped($user){
 function get_admin_status_skipped_node(){
 
 $options = array();
-$status = 'Undefined';
-$result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value' ,array(':value'=>$status));
+$result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value or field_fee_status_value= :value1' ,array(':value'=>'Undefined',':value1'=>'Pending'));
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
-       $option['title'] = '<a href="/node/'.$entity->entity_id.'/edit">'.$node->title.'</a>';
+       $option['title'] = '<a href="/node/'.$entity->entity_id.'">'.$node->title.'</a>';
        $option['price'] = $node->field_parcel_price['und'][0]['value'];
        $option['orderid'] = $node->field_parcel_order_id['und'][0]['value'];
        $option['size'] = $node->field_parcel_size['und'][0]['value'];
@@ -43,22 +42,27 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
 
 
 function get_user_status_skipped_node($form,$form_state){
-
+global  $user;
   $options = array();
-  $status = 'Pending';
-  $result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value' ,array(':value'=>$status));
+
+$result = db_query('select entity_id from {field_data_field_fee_status} where field_fee_status_value = :value or field_fee_status_value= :value1' ,array(':value'=>'Undefined',':value1'=>'Pending'));
 
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
      $option = array();
+   if($node->uid == $user->uid){	
 
-
+	if($node->field_fee_status['und'][0]['value']=="Pending"){
          $option['selectall'] = '<input type="radio" name ="radio" value ="'.$entity->entity_id.'"  />';
-         $option['title'] = $node->title;
+	}else{
+	 $option['undefind'] = 'Undefind';
+	}
+         $option['title'] = '<a href="/node/'.$entity->entity_id.'">'.$node->title.'</a>';
          $option['price'] = $node->field_parcel_price['und'][0]['value'];
          $option['orderid'] = $node->field_parcel_order_id['und'][0]['value'];
          $option['size'] = $node->field_parcel_size['und'][0]['value'];
          $options[] = $option; 
+     }
    }
 
   $header = array('select'=>t('Select'),'title'=>t('Title'),'price'=>t('Price'),t('#Order Id'),t('Parcel Size'));
