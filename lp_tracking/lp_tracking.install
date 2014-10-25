@@ -47,8 +47,8 @@ function lp_tracking_uninstall() {
   }
 
   //delete driver role
-  $roleName = 'driver';
-  user_role_delete($roleName);
+ // $roleName = 'driver';
+ // user_role_delete($roleName);
 
 }
 

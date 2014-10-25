@@ -24,8 +24,8 @@ function lp_parcel_menu(){
     'page callback' => array('lp_parcel_order_view'),
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'access callback' => 'node_access',
-    'access arguments' => array('update', 1),
+    'access callback' =>'lp_access',
+    'access arguments' =>array(1),
   );
 
     $items['node/%node/print_pdf'] = array(
@@ -35,8 +35,8 @@ function lp_parcel_menu(){
     'page callback' => array('lp_parcel_print_pdf'),
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'access callback' => 'node_access',
-    'access arguments' => array('update', 1),
+    'access callback' =>'lp_access',
+    'access arguments' =>array(1),
     'file'=>'print.page.inc',
     'weight'=>10,	
   );
@@ -44,6 +44,25 @@ function lp_parcel_menu(){
   return $items;
 }
 
+
+function lp_access($node){
+
+global $user;
+
+  $arr = array();
+  $arrname = array(); 
+  $roles = db_query('select rid from {users_roles} where uid = '.$user->uid);
+  foreach($roles as $role){
+  $arr[] = $role->rid;
+  $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
+  $arrname[] = $rname;		
+  }
+   if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+     return true;
+   }else{
+     return false;
+   } 
+}
 
 function lp_parcel_order_view($node){
  
