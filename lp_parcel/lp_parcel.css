@@ -164,10 +164,10 @@ overflow:hidden;
 
 .prcode{
 float:left;
-width:240px;
+width:220px;
 }
 .prcode img{
-max-width:220px;
+max-width:200px;
 }
 .parcel_detail .field{
 width:300px;
@@ -182,7 +182,7 @@ float:right;
 width:49%;
 }
 
-.delivery_info{
+.field-name-field-delivery-location .field-label ,.field-name-field-delivery-location .adr{
 font-size:20px;
 font-weight:bold;
 }
