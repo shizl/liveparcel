@@ -143,6 +143,7 @@ function lp_tracking_install() {
       'type' => 'user_reference',
       'settings' => array(
         'referenceable_roles' => array(user_role_load_by_name('driver')->rid,),
+	'referenceable_status'=>array(1),
       ),
     );
     field_create_field($field);
