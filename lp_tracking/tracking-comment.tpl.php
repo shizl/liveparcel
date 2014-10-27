@@ -47,7 +47,8 @@ if(in_array(3,$arr)||in_array('driver',$arrname)){
 
  ?>
 <?php  
-if($user->name == $author ||in_array(3,$arr)||in_array('driver',$arrname)){
+
+if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
  print '<td>'.$title.'</td>'; 
  }
 ?>
