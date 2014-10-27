@@ -37,26 +37,20 @@ global $user;
  ?>
 </td>
 
-<td>
+
 <?php 
   $starred = empty($content['field_starred'])?'':render($content['field_starred']);
 
 if(in_array(3,$arr)||in_array('driver',$arrname)){
-  print $starred;
- }else{
-  print 'You are not authorized to access this field.';
+  print '<td>'.$starred .'</td>';
  }
-
 
  ?>
-</td>
-<td><?php  
+<?php  
 if($user->name == $author ||in_array(3,$arr)||in_array('driver',$arrname)){
- print $title; 
- }else{
-  print 'You are not authorized to access this field.';
+ print '<td>'.$title.'</td>'; 
  }
-?></td>
+?>
 </tr>
 
 <?php if(!empty($content['field_photo'])): ?>

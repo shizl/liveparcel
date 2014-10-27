@@ -100,6 +100,5 @@ $output['print_button'] = array(
   '#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="javascript:window.print();" /></div>',
 );
 
- return $output;
-
+return $output;
 }
