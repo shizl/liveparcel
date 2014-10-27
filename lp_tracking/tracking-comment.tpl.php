@@ -1,11 +1,25 @@
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<?php
 
+global $user;
+
+  $arr = array();
+  $arrname = array(); 
+  $roles = db_query('select rid from {users_roles} where uid = '.$user->uid);
+  foreach($roles as $role){
+  $arr[] = $role->rid;
+  $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
+  $arrname[] = $rname;		
+  }
+
+?>
 <tr>
 <td><?php print $created; ?></td>
 <td><?php print $author; ?></td>
 <td>
 <?php 
    $driver = empty($content['field_driver_assigned'])?'':render($content['field_driver_assigned']);
+ 
    print $driver;	
 ?>
 </td>
@@ -26,10 +40,23 @@
 <td>
 <?php 
   $starred = empty($content['field_starred'])?'':render($content['field_starred']);
+
+if(in_array(3,$arr)||in_array('driver',$arrname)){
   print $starred;
+ }else{
+  print 'You are not authorized to access this field.';
+ }
+
+
  ?>
 </td>
-<td><?php print $title; ?></td>
+<td><?php  
+if($user->name == $author ||in_array(3,$arr)||in_array('driver',$arrname)){
+ print $title; 
+ }else{
+  print 'You are not authorized to access this field.';
+ }
+?></td>
 </tr>
 
 <?php if(!empty($content['field_photo'])): ?>
