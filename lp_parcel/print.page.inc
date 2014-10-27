@@ -60,7 +60,7 @@ $output['print_left']['delivery_info'] = array(
               <div class="phone"><span>Phone: </span>'.$d_address['phone'].'</div>
               <div class="street-address">'.$d_address['street'].'</div>
               <div class="locality">'.$d_address['city'].'</div>
-	      <span class="region">'.$d_address['province'].'</span>,<span class="postal-code">'.$d_address['postal_code'].'</span>
+	      <span class="region">'.$d_address['province'].'</span>, <span class="postal-code">'.$d_address['postal_code'].'</span>
  </div> 
   </div>
 </div></div></div>',
@@ -73,7 +73,7 @@ $output['print_right']['pickup_info'] = array(
               <div class="phone"><span>Phone: </span>'.$p_address['phone'].'</div>
               <div class="street-address">'.$p_address['street'].'</div>
               <div class="locality">'.$p_address['city'].'</div>
-	      <span class="region">'.$p_address['province'].'</span>,<span class="postal-code">'.$p_address['postal_code'].'</span>
+	      <span class="region">'.$p_address['province'].'</span>, <span class="postal-code">'.$p_address['postal_code'].'</span>
   </div>
       
   </div>

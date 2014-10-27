@@ -201,10 +201,11 @@ width:auto;
 margin-top:30px;
 }
 .print-left .delivery_info .adr{
-font-size:24px;
+font-size:16px;
 }
 .print-left .delivery_info .adr .company_name{
 font-weight:bold;
+font-size:24px;
 }
 
 .print-left .note{
