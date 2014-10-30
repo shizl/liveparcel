@@ -147,7 +147,7 @@ function lp_parcel_install() {
           
           'locpick' => Array
           (
-            'collect' => 0,
+            'collect' => 1,
             'weight' => 20,
           ),
           'phone' => Array
@@ -178,7 +178,7 @@ function lp_parcel_install() {
           'province_name' => 0,
           'country_name'=> 0,
           'map_link' => 0,
-          'coords' => 0,
+          'coords' => 1,
           'phone' => 0,
           'company' => 0,
         )
@@ -244,7 +244,7 @@ function lp_parcel_install() {
 
           'locpick' => Array
           (
-            'collect' => 0,
+            'collect' => 1,
             'weight' => 20,
           ),
           'phone' => Array
@@ -275,7 +275,7 @@ function lp_parcel_install() {
           'province_name' => 0,
           'country_name'=> 0,
           'map_link' => 0,
-          'coords' => 0,
+          'coords' => 1,
           'phone' => 0,
           'company' => 0,
         )

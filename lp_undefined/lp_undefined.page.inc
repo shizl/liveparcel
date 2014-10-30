@@ -8,11 +8,7 @@ function get_user_skipped($user){
 		foreach($roles as $role){
 		  $arr[] = $role->rid;		
 		}
-    if(in_array(3,$arr)){
-	return  get_admin_status_skipped_node();
-    }else{
 	   return drupal_get_form('get_user_status_skipped_node');
-   }
 }
 
 
@@ -55,7 +51,7 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
 	if($node->field_fee_status['und'][0]['value']=="Pending"){
          $option['selectall'] = '<input type="radio" name ="radio" value ="'.$entity->entity_id.'"  />';
 	}else{
-	 $option['undefind'] = 'Undefind';
+	 $option['undefined'] = 'Undefined';
 	}
          $option['title'] = '<a href="/node/'.$entity->entity_id.'">'.$node->title.'</a>';
          $option['price'] = $node->field_parcel_price['und'][0]['value'];

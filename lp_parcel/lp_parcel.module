@@ -29,7 +29,7 @@ function lp_parcel_menu(){
   );
 
     $items['node/%node/print_pdf'] = array(
-    'title' => 'Print PDF',
+    'title' => 'Print label',
     'menu_name'=>'liveparcels_print_pdf',
     'description' => 'Print Pdf',
     'page callback' => array('lp_parcel_print_pdf'),
@@ -57,7 +57,7 @@ global $user;
   $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
   $arrname[] = $rname;		
   }
-   if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+   if(($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname))&&$node->type=="live_parcel"){
      return true;
    }else{
      return false;
@@ -652,10 +652,12 @@ function lp_parcel_uc_checkout_complete($order, $account){
  db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
        $lp_nid  = $_SESSION['lp_node'];
        $lp_node = node_load($lp_nid);
+    if(!empty($lp_node)){
        $lp_node->title = 'Order#'.$order->order_id.'Parcel#1';
        $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
        $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';
        node_save($lp_node); 
+    }
        unset($_SESSION['lp_node']);
        unset($_SESSION['lp_order']);
     } 

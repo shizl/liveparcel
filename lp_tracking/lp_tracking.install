@@ -219,6 +219,8 @@ function lp_tracking_install() {
       'field_name' => $field_name, 
       'type' => 'location',
       'settings'=> array(
+      'gmap_macro'=>'[gmap width=150px |height=150px |zoom=13]', 
+
 	'location_settings' => array(
 	  'form' => array(
 	    'fields' => array(
