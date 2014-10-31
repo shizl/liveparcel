@@ -88,7 +88,7 @@ $output['print_left']['note'] = array(
 );
 if($leave==1){
 $output['print_left']['leave'] = array(
-  '#markup'=>'<div class="leave">Authority to leave</div>',
+  '#markup'=>'<div class="leave_wapper"><div class="leave">Authority to leave</div></div>',
 );
 }
 
