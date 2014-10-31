@@ -201,18 +201,20 @@ width:auto;
 margin-top:30px;
 }
 .print-left .delivery_info .adr{
-font-size:26px;
+font-size:24px;
 }
 .print-left .delivery_info .adr .company-name{
 font-weight:bold;
 font-size:26px;
 }
-
+.print-left .delivery_info .adr .fn{
+font-size:26px;
+}
 .print-left .note{
 border:1px solid #ccc;
 font-size:20px;
 padding:20px 10px;
-margin-top:20px;
+margin-top:30px;
 }
 .print-left .leave{
 font-size:20px;

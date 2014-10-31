@@ -826,8 +826,8 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
         $node->content['address']['pickup']['pickup_time_ampm'] = empty($node->content['field_pick_up_time_ampm'])?'':$node->content['field_pick_up_time_ampm'];
         $node->content['address']['pickup']['pickup_location'] = array('#markup'=> '<div class="field field-name-field-pickup-location field-type-location field-label-above"><div class="field-label">Pickup address:&nbsp;</div><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-         '.(empty($p_address['company'])?'':'<div class="company-name">'.$p_address['company'].'</div>').'
           <span class="fn">'.$p_address['name'].'</span>
+         '.(empty($p_address['company'])?'':'<div class="company-name">'.$p_address['company'].'</div>').'
               <div class="street-address">'.$p_address['street'].' </div>
               <span class="postal-code">'.$p_address['postal_code'].'</span>
               <span class="locality">'.$p_address['city'].'</span>, <span class="region">'.$p_address['province'].'</span>
@@ -841,10 +841,10 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 '#weight'=>100,
 );
         $node->content['address']['delivery']['delivery_note'] = empty($node->content['field_delivery_note'])?'':$node->content['field_delivery_note'];
-        $node->content['address']['delivery']['delivery_location'] = array('#markup'=>'<div class="field field-name-field-delivery-location field-type-location field-label-above"><div class="field-label">delivery address:&nbsp;</div><div class="field-items"><div class="field-item even"><div class="location vcard">
+        $node->content['address']['delivery']['delivery_location'] = array('#markup'=>'<div class="field field-name-field-delivery-location field-type-location field-label-above"><div class="field-label">Delivery address:&nbsp;</div><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-         '.(empty($d_address['company'])?'':'<div class="company-name">'.$d_address['company'].'</div>').'
           <span class="fn">'.$d_address['name'].'</span>
+         '.(empty($d_address['company'])?'':'<div class="company-name">'.$d_address['company'].'</div>').'
               <div class="street-address">'.$d_address['street'].' </div>
               <span class="postal-code">'.$d_address['postal_code'].'</span>
               <span class="locality">'.$d_address['city'].'</span>, <span class="region">'.$d_address['province'].'</span>
@@ -854,7 +854,9 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
       <div class="map-link">
       <div class="location map-link">See map: <a href="http://maps.google.com?q='.$d_address['street'].'%2C+'.$d_address['city'].'%2C+'.$d_address['province'].'%2C+'.$d_address['postal_code'].'%2C+'.$d_address['country'].'">Google Maps</a></div>    </div>
   </div>
-</div></div></div>');
+</div></div></div>',
+'#weight'=>100,
+);
 
 }
         hide($node->content['field_pickup_note']);

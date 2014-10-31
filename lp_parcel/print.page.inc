@@ -55,8 +55,8 @@ $output['print_left']['site_info']['site_name'] = array(
 $output['print_left']['delivery_info'] = array(
   '#markup' => '<div class="delivery_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-            '.(empty($d_address['company'])?'':'<div class="company-name">'.$d_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$d_address['name'].'</div>
+            '.(empty($d_address['company'])?'':'<div class="company-name">'.$d_address['company'].'</div>').'
               <div class="street-address">'.$d_address['street'].'</div>
               <div class="locality">'.$d_address['city'].'</div>
 	      <span class="region">'.$d_address['province'].'</span>, <span class="postal-code">'.$d_address['postal_code'].'</span>
@@ -68,8 +68,8 @@ $output['print_left']['delivery_info'] = array(
 $output['print_right']['pickup_info'] = array(
   '#markup' =>'<div class="pickup_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-            '.(empty($p_address['company'])?'':'<div class="company-name">'.$p_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$p_address['name'].'</div>
+            '.(empty($p_address['company'])?'':'<div class="company-name">'.$p_address['company'].'</div>').'
               <div class="street-address">'.$p_address['street'].'</div>
               <div class="locality">'.$p_address['city'].'</div>
 	      <span class="region">'.$p_address['province'].'</span>, <span class="postal-code">'.$p_address['postal_code'].'</span>
