@@ -826,14 +826,14 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
         $node->content['address']['pickup']['pickup_time_ampm'] = empty($node->content['field_pick_up_time_ampm'])?'':$node->content['field_pick_up_time_ampm'];
         $node->content['address']['pickup']['pickup_location'] = empty($node->content['field_pickup_location'])?'':$node->content['field_pickup_location'];
 	$node->content['address']['pickup']['company']=array(
-	  '#markup' => empty($node->content['field_pickup_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company"><span>Company: </span>'.$node->content['field_pickup_location'][0]['#location']['company'].'</div>',
+	  '#markup' => empty($node->content['field_pickup_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company">'.$node->content['field_pickup_location'][0]['#location']['company'].'</div>',
 	  '#weight'=>99,
 	);
 
         $node->content['address']['delivery']['delivery_note'] = empty($node->content['field_delivery_note'])?'':$node->content['field_delivery_note'];
         $node->content['address']['delivery']['delivery_location'] = empty($node->content['field_delivery_location'])?'':$node->content['field_delivery_location'];
 	$node->content['address']['delivery']['company']=array(
-	  '#markup' => empty($node->content['field_delivery_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company"><span>Company: </span>'.$node->content['field_delivery_location'][0]['#location']['company'].'</div>',
+	  '#markup' => empty($node->content['field_delivery_location'][0]['#location']['company'])?'':'<div class="field field-name-field-company">'.$node->content['field_delivery_location'][0]['#location']['company'].'</div>',
 	  '#weight'=>99,
 	);
 

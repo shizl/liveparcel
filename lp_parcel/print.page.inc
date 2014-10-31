@@ -55,12 +55,12 @@ $output['print_left']['site_info']['site_name'] = array(
 $output['print_left']['delivery_info'] = array(
   '#markup' => '<div class="delivery_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-              <div class="company_name"><span>Company Name </span>'.$d_address['company'].'</div>
+            '.(empty($d_address['company'])?'':'<div class="company_name"><span>Company name: </span>'.$d_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$d_address['name'].'</div>
-              <div class="phone"><span>Phone: </span>'.$d_address['phone'].'</div>
               <div class="street-address">'.$d_address['street'].'</div>
               <div class="locality">'.$d_address['city'].'</div>
 	      <span class="region">'.$d_address['province'].'</span>, <span class="postal-code">'.$d_address['postal_code'].'</span>
+            '.(empty($d_address['phone'])?'':'<div class="phone"><span>Phone: </span>'.$d_address['phone'].'</div>').'
  </div> 
   </div>
 </div></div></div>',
@@ -68,12 +68,12 @@ $output['print_left']['delivery_info'] = array(
 $output['print_right']['pickup_info'] = array(
   '#markup' =>'<div class="pickup_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-              <div class="company_name"><span>Company Name </span>'.$p_address['company'].'</div>
+            '.(empty($p_address['company'])?'':'<div class="company_name"><span>Company name: </span>'.$p_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$p_address['name'].'</div>
-              <div class="phone"><span>Phone: </span>'.$p_address['phone'].'</div>
               <div class="street-address">'.$p_address['street'].'</div>
               <div class="locality">'.$p_address['city'].'</div>
 	      <span class="region">'.$p_address['province'].'</span>, <span class="postal-code">'.$p_address['postal_code'].'</span>
+            '.(empty($p_address['phone'])?'':'<div class="phone"><span>Phone: </span>'.$p_address['phone'].'</div>').'
   </div>
       
   </div>
@@ -81,10 +81,10 @@ $output['print_right']['pickup_info'] = array(
 );
 
 $output['print_right']['detail_info'] = array(
-  '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight :'.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.$node->uid.'</div></div>',
+  '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight: '.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.user_load($node->uid)->name.'</div></div>',
 );
 $output['print_left']['note'] = array(
-  '#markup'=>'<div class="note"><strong>Notes:</strong>e.g.leave at front door if no one home.</div>',
+  '#markup'=>'<div class="note"><strong>Notes: </strong>e.g.leave at front door if no one home.</div>',
 );
 if($leave==1){
 $output['print_left']['leave'] = array(
