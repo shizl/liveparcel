@@ -55,7 +55,7 @@ $output['print_left']['site_info']['site_name'] = array(
 $output['print_left']['delivery_info'] = array(
   '#markup' => '<div class="delivery_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-            '.(empty($d_address['company'])?'':'<div class="company_name"><span>Company name: </span>'.$d_address['company'].'</div>').'
+            '.(empty($d_address['company'])?'':'<div class="company-name">'.$d_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$d_address['name'].'</div>
               <div class="street-address">'.$d_address['street'].'</div>
               <div class="locality">'.$d_address['city'].'</div>
@@ -68,7 +68,7 @@ $output['print_left']['delivery_info'] = array(
 $output['print_right']['pickup_info'] = array(
   '#markup' =>'<div class="pickup_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
   <div class="adr">
-            '.(empty($p_address['company'])?'':'<div class="company_name"><span>Company name: </span>'.$p_address['company'].'</div>').'
+            '.(empty($p_address['company'])?'':'<div class="company-name">'.$p_address['company'].'</div>').'
               <div class="fn"><span>Attention: </span>'.$p_address['name'].'</div>
               <div class="street-address">'.$p_address['street'].'</div>
               <div class="locality">'.$p_address['city'].'</div>
@@ -84,7 +84,7 @@ $output['print_right']['detail_info'] = array(
   '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight: '.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.user_load($node->uid)->name.'</div></div>',
 );
 $output['print_left']['note'] = array(
-  '#markup'=>'<div class="note"><strong>Notes: </strong>e.g.leave at front door if no one home.</div>',
+  '#markup'=>'<div class="note"><strong>Notes: </strong>'.(empty($node->field_pickup_note['und'][0]['value'])?'':$node->field_pickup_note['und'][0]['value']).'</div>',
 );
 if($leave==1){
 $output['print_left']['leave'] = array(

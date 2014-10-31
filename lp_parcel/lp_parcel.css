@@ -189,11 +189,11 @@ font-weight:bold;
 
 .print-left{
 float:left;
-width:59%;
+width:68%;
 }
 .print-right{
 float:right;
-width:39%;
+width:30%;
 }
 .print-left .delivery_info{
 float:none;
@@ -203,7 +203,7 @@ margin-top:30px;
 .print-left .delivery_info .adr{
 font-size:26px;
 }
-.print-left .delivery_info .adr .company_name{
+.print-left .delivery_info .adr .company-name{
 font-weight:bold;
 font-size:26px;
 }
@@ -212,16 +212,16 @@ font-size:26px;
 border:1px solid #ccc;
 font-size:20px;
 padding:20px 10px;
-margin-top:10px;
+margin-top:20px;
 }
 .print-left .leave{
 font-size:20px;
 font-weight:bold;
 border:1px solid #ccc;
 padding:10px;
-margin-top:15px;
+margin-top:30px;
 display: inline-table;
-margin-left:110px;
+margin-left:150px;
 }
 .print-left .site_info{
 clear: both;
@@ -244,8 +244,11 @@ width:auto;
 }
 .print-right .pickup_info .adr{
 font-size:16px;
+text-align:right;
 }
-
+.print-right .pickup_info .adr .company-name{
+font-weight:bold;
+}
 .print-right .detail_info{
 border:1px solid #ccc;
 padding:5px;
@@ -253,7 +256,7 @@ margin-top:10px;
 }
 
 .print-right .qrcode img{
-max-width:80%;
+max-width:100%;
 }
 .print-right .qrcode{
 margin-top:10px;
