@@ -1,0 +1,34 @@
+<?php
+$str = '{ "rules_component_some_task_2" : {
+    "LABEL" : "Set LiveParcels fee status to pending",
+    "PLUGIN" : "reaction rule",
+    "OWNER" : "rules",
+    "TAGS" : [ "LiveParcels" ],
+    "REQUIRES" : [ "rules" ],
+    "ON" : { "node_update--live_parcel" : { "bundle" : "live_parcel" } },
+    "IF" : [
+      { "data_is" : {
+          "data" : [ "node:field-parcel-price" ],
+          "op" : "\u003E",
+          "value" : "0.00"
+        }
+      },
+      { "AND" : [
+          { "data_is" : { "data" : [ "node:field-fee-status" ], "value" : "Undefined" } }
+        ]
+      }
+    ],
+    "DO" : [
+      { "data_set" : { "data" : [ "node:field-fee-status" ], "value" : "Pending" } },
+      { "mail" : {
+          "to" : [ "node:author:mail" ],
+          "subject" : "Liveparcels fee status to pending",
+          "message" : "Hello [node:author] !\r\n[node:title] fee status  has been updated .\r\n",
+          "language" : [ "" ]
+        }
+      }
+    ]
+  }
+}';
+
+
