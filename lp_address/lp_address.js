@@ -34,4 +34,17 @@ jQuery(".parcel_select_address").change(function(){
 
 
 
+function preview(){
+
+bdhtml=window.document.body.innerHTML;
+sprnstr="<!--startprint1-->";
+eprnstr="<!--endprint1-->";
+prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18); 
+
+prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+window.document.body.innerHTML=prnhtml;
+window.print();
+window.document.body.innerHTML=bdhtml;
+}
+
 

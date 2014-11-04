@@ -1,12 +1,17 @@
 <?php
 
 function lp_parcel_print_pdf($node){
-  drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel_print.css',array('media'=>'print'));
-  drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
-//javascript:window.print()
 
+  drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
+//javascript:window.print()
+  drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
+  drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel_print.css',array('media'=>'print'));
 $output = array();
 
+
+$output['start'] = array(
+  '#markup'=>'<!--startprint1-->',
+);
 $output['print_left'] = array(
   '#prefix' => '<div class="print-left">',
   '#suffix' => '</div>',
@@ -95,9 +100,12 @@ $output['print_left']['leave'] = array(
 $output['print_right']['qrcode'] = array(
   '#markup'=>'<div class="qrcode"><img src="/sites/default/files/'.$node->nid.$orderid.'.png" /></div>',
 );
+$output['end'] = array(
+  '#markup'=>'<!--endprint1-->',
+);
 
 $output['print_button'] = array(
-  '#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="javascript:window.print();" /></div>',
+  '#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="preview();" /></div>',
 );
 
 return $output;

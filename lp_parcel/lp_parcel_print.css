@@ -2,27 +2,5 @@ html, body, #page{
 height:auto !important;
 }
 
-#header {
-display:none !important;
-}
-#footer-wrapper{
-display:none;
-}
-#sidebar-first{
-display:none;
-}
-#breadcrumb {
-display:none !important;
-}
-.print-action{
-display:none;
-}
-#page-title{
-display:none !important;
-}
-.tabs{
-display:none;
-}
-#main{
-margin-top:0px;
-}
+
+
