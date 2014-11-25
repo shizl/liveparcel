@@ -2,5 +2,10 @@ html, body, #page{
 height:auto !important;
 }
 
-
+html body.admin-menu {
+margin-top: 0px !important;
+}
+body.admin-menu {
+margin-top:0px !important;
+}
 

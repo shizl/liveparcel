@@ -96,7 +96,7 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postto' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
-           <input class="post-suburb" type="text" id="0" value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
+           <input class="post-suburb" disabled="disabled" type="text" id="0" value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
            <input class="pnum-from" type="hidden"  value="'.$postfrom.'">
            <ul class="fpcode" id="pcode0"></ul>
       </div>
@@ -176,6 +176,17 @@ $p++;
  <script type="text/javascript">
   (function($){
   var zonedata='.( $jsondata<>'' ? $jsondata:'').';
+
+document.onreadystatechange = subSomething;
+
+function subSomething() { 
+if(document.readyState == "complete") {
+  $(".post-suburb").removeAttr("disabled");
+}else{
+  $(".post-suburb").attr("disabled","disabled");
+}
+
+}
    function isFloat(oNum){
 
 	  if(!oNum) return false;

@@ -89,7 +89,7 @@ $output['print_right']['detail_info'] = array(
   '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight: '.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.user_load($node->uid)->name.'</div></div>',
 );
 $output['print_left']['note'] = array(
-  '#markup'=>'<div class="note"><strong>Notes: </strong>'.(empty($node->field_pickup_note['und'][0]['value'])?'':$node->field_pickup_note['und'][0]['value']).'</div>',
+  '#markup'=>'<div class="note"><strong>Notes: </strong>'.(empty($node->field_delivery_note['und'][0]['value'])?'':$node->field_delivery_note['und'][0]['value']).'</div>',
 );
 if($leave==1){
 $output['print_left']['leave'] = array(
