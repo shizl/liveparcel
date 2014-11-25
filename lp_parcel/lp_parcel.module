@@ -28,9 +28,9 @@ function lp_parcel_menu(){
     'access arguments' =>array(1),
   );
 
-    $items['node/%node/print_pdf'] = array(
+    $items['node/%node/print'] = array(
     'title' => 'Print label',
-    'menu_name'=>'liveparcels_print_pdf',
+    'menu_name'=>'liveparcels_print',
     'description' => 'Print Pdf',
     'page callback' => array('lp_parcel_print_pdf'),
     'page arguments' => array(1),
