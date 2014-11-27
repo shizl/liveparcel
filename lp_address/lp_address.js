@@ -44,7 +44,9 @@ prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18);
 prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
 window.document.body.innerHTML=prnhtml;
 window.print();
-window.document.body.innerHTML=bdhtml;
+//window.document.body.innerHTML=bdhtml;
+window.location.href=window.location.href;
+return false; 
 }
 
 
