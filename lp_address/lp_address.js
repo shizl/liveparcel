@@ -44,9 +44,13 @@ prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18);
 prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
 window.document.body.innerHTML=prnhtml;
 window.print();
-//window.document.body.innerHTML=bdhtml;
-window.location.href=window.location.href;
-return false; 
+var explorer = window.navigator.userAgent ;
+if(explorer.indexOf("Chrome") >=0){
+  window.location.href=window.location.href;
+}else{
+  window.document.body.innerHTML=bdhtml;
+}
+
 }
 
 
