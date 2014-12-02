@@ -2,6 +2,10 @@
 /**
  * Implements hook_menu().
  */
+
+include_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'location') . '/geocoding/google.inc');
+
+
 function lp_address_menu() {
   $items = array();
   $items['admin/liveparcels/adminsetting/lp_address_country_setting'] = array(
@@ -236,6 +240,15 @@ function lp_address_address_update($address,$uid){
  * $address :address info
  * */
 function lp_address_location_update($address){
+ 
+$location = array();
+$location['street'] = $address['address']['street1'];
+$location['country'] = strtolower($address['address']['country_code']);
+$location['city'] = $address['address']['city'];
+$location['province'] = $address['address']['zone_name'];
+$location['postal_code'] = $address['address']['postal_code'];
+ $data = google_geocode_location($location);
+
 
   $lid = db_insert('location') 
     ->fields(array(
@@ -246,9 +259,9 @@ function lp_address_location_update($address){
       'province'=>$address['address']['zone_name'],
       'postal_code'=>$address['address']['postal_code'],
       'country' =>strtolower($address['address']['country_code']) ,
-      'latitude'=>'0.000000',
-      'longitude'=>'0.000000',
-      'source'=>'0',
+      'latitude'=>empty($data['lat'])?'0.000000':$data['lat'],
+      'longitude'=>empty($data['lon'])?'0.000000':$data['lon'],
+      'source'=>empty($data['lat'])?'0':'3',
       'is_primary'=>'0',
     ))->execute();
   $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone'],"company"=>$address['address']['company']);
