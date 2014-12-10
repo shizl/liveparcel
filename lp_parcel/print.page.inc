@@ -85,8 +85,9 @@ $output['print_right']['pickup_info'] = array(
 </div></div></div>',
 );
 
-$output['print_right']['detail_info'] = array(
-  '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight: '.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.user_load($node->uid)->name.'</div></div>',
+
+$output['print_right']['qrcode'] = array(
+  '#markup'=>'<div class="qrcode"><img src="/sites/default/files/'.$node->nid.$orderid.'.png" /></div>',
 );
 $output['print_left']['note'] = array(
   '#markup'=>'<div class="note"><strong>Notes: </strong>'.(empty($node->field_delivery_note['und'][0]['value'])?'':$node->field_delivery_note['und'][0]['value']).'</div>',
@@ -97,9 +98,10 @@ $output['print_left']['leave'] = array(
 );
 }
 
-$output['print_right']['qrcode'] = array(
-  '#markup'=>'<div class="qrcode"><img src="/sites/default/files/'.$node->nid.$orderid.'.png" /></div>',
+$output['print_right']['detail_info'] = array(
+  '#markup'=>'<div class="detail_info"><div>'.$node->title.'</div><div>Customer reference: '.$ref.'</div><div>Package type: '.$package.'</div><div>Parcel weight: '.$weight.'</div><div>Dimension: '.$dimension.'</div><div>Customer: '.user_load($node->uid)->name.'</div></div>',
 );
+
 $output['end'] = array(
   '#markup'=>'<!--endprint1-->',
 );
