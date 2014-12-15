@@ -110,5 +110,5 @@ $output['print_button'] = array(
   '#markup'=>'<div class="print-action"><input class="form-submit" type="button" value="Print" onclick="preview();" /></div>',
 );
 
-return $output;
+return $node->field_fee_status['und'][0]['value']=='Confirmed'?$output:'Permission denied error because fee status not equal to confirmed.';
 }
