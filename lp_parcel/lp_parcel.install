@@ -67,7 +67,7 @@ function lp_parcel_uninstall() {
   field_delete_field('field_delivery_street'); 
   field_delete_field('field_delivery_street2'); 
   field_purge_batch(100);  
-
+  db_delete('node')->condition('type', 'live_parcel')->execute();
 }
 /**
  * Implements hook_install().
