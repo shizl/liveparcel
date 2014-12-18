@@ -35,7 +35,7 @@ function lp_parcel_menu(){
     'page callback' => array('lp_parcel_print_pdf'),
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'access callback' =>'lp_access',
+    'access callback' =>'lp_access_print',
     'access arguments' =>array(1),
     'file'=>'print.page.inc',
     'weight'=>10,	
@@ -44,6 +44,27 @@ function lp_parcel_menu(){
   return $items;
 }
 
+
+function lp_access_print($node){
+
+global $user;
+
+  $arr = array();
+  $arrname = array(); 
+  $roles = db_query('select rid from {users_roles} where uid = '.$user->uid);
+  foreach($roles as $role){
+  $arr[] = $role->rid;
+  $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
+  $arrname[] = $rname;		
+  }
+   $fee_status =  $node->field_fee_status['und'][0]['value'];
+   if(($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname))&&$node->type=="live_parcel"&&$fee_status=="Confirmed"){
+     return true;
+   }else{
+     return false;
+   } 
+
+}
 
 function lp_access($node){
 
