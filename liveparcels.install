@@ -259,6 +259,8 @@ function liveparcels_uninstall() {
   db_delete('uc_product_classes')
     ->condition('pcid', 'live_parcel_product', '=')
     ->execute();
+
+ uc_cart_empty();
 }
 
 /**
