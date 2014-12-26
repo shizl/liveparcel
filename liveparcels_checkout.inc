@@ -23,6 +23,12 @@ function liveparcels_addToCart(){
     db_insert('liveparcels_cart')->fields(array(
   'cart_id' => $cart_id,
   'parcel_info' =>serialize($parcelsdata)))->execute();
+
+  if($parcelsdata['totals']==0) {
+	variable_set('uc_payment_method_free_order_checkout',1);
+   }else{
+	variable_set('uc_payment_method_free_order_checkout',0);
+   }
   header("location:/cart/checkout");exit;  
 }
 
