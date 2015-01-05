@@ -57,7 +57,7 @@ global $user;
   $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
   $arrname[] = $rname;		
   }
-   $fee_status =  $node->field_fee_status['und'][0]['value'];
+   $fee_status =  $node->type== 'live_parcel' ? $node->field_fee_status['und'][0]['value']:1;
    if(($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname))&&$node->type=="live_parcel"&&$fee_status=="Confirmed"){
      return true;
    }else{
