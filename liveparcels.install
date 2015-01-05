@@ -278,6 +278,8 @@ function liveparcels_install() {
   $nid=$nid > 0 ? $nid+1:1;
   variable_set('liveparcels_product_id',$nid);
   db_query("INSERT INTO `node` (`nid`, `vid`, `type`, `language`, `title`, `uid`, `status`, `created`, `changed`, `comment`, `promote`, `sticky`, `tnid`, `translate`) VALUES
-    ($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 0, 1, 0, 0, 0);INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
+    ($nid, $nid, 'live_parcel_product', 'und', 'liveparcels', 1, 1, ".REQUEST_TIME.", ".REQUEST_TIME.", 0, 1, 0, 0, 0); INSERT INTO `comment` (`cid`, `pid`, `nid`, `uid`, `subject`, `hostname`, `created`, `changed`, `status`, `thread`, `name`, `mail`, `homepage`, `language`) VALUES
+(".$nid.", 0, ".$nid.", 1, 'Pending', '192.168.1.102', ".REQUEST_TIME.", ".REQUEST_TIME.", 1, '01/', 'admin', '', '', 'und');INSERT INTO `node_comment_statistics` (`nid`, `cid`, `last_comment_timestamp`, `last_comment_name`, `last_comment_uid`, `comment_count`) VALUES
+(".$nid.", ".$nid.", ".REQUEST_TIME.", '', 1, 1); INSERT INTO `node_revision` (`nid`, `vid`, `uid`, `title`, `log`, `timestamp`, `status`, `comment`, `promote`, `sticky`) VALUES($nid, $nid, 1, 'liveparcels', '',".REQUEST_TIME.", 1, 2, 1, 0);INSERT INTO `uc_products` (`vid`, `nid`, `model`, `list_price`, `cost`, `sell_price`, `weight`, `weight_units`, `length`, `width`, `height`, `length_units`, `pkg_qty`, `default_qty`, `ordering`, `shippable`) VALUES
     (".$nid.", ".$nid.", 'parcels', 0.00000, 0.00000, 0.00000, 0, 'lb', 0, 0, 0, 'in', 1, 1, 0, 0);");
 }
