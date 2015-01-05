@@ -250,6 +250,12 @@ function liveparcels_uninstall() {
   db_delete('uc_products')
     ->condition('nid', variable_get('liveparcels_product_id'), '=')
     ->execute();
+  db_delete('comment')
+    ->condition('nid', variable_get('liveparcels_product_id'), '=')
+    ->execute();
+  db_delete('node_comment_statistics')
+    ->condition('nid', variable_get('liveparcels_product_id'), '=')
+    ->execute();
   db_delete('variable')
     ->condition('name', 'liveparcels%', 'LIKE')
     ->execute();
