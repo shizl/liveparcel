@@ -9,14 +9,6 @@
  * Menu callback which provides the store administration overview page.
  */
 function liveparcels_packageshow() {
-
-if(isset($_SESSION['lp_node'])){ 
-  unset($_SESSION['lp_node']);
-}
-
-if(isset($_SESSION['lp_order'])){
-  unset($_SESSION['lp_order']);
-}
 $parcels=liveparcels_getparcelsdata();
 $parcel_info='';
  $postfrom='';
@@ -695,6 +687,15 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 }  
 
 function liveparcels_getZoneprice() {
+
+if(isset($_SESSION['lp_node'])){ 
+  unset($_SESSION['lp_node']);
+}
+
+if(isset($_SESSION['lp_order'])){
+  unset($_SESSION['lp_order']);
+}
+
     $ajaxrequest = $_REQUEST['ajaxrequest'];
     $pricedata =json_decode($ajaxrequest,true);
 	$action = $_REQUEST['action'];

@@ -46,6 +46,8 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
   foreach($result as $entity){
      $node = node_load($entity->entity_id);
      $option = array();
+
+ if($node!=null){
    if($node->uid == $user->uid){	
 
 	if($node->field_fee_status['und'][0]['value']=="Pending"){
@@ -60,7 +62,7 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
          $options[] = $option; 
      }
    }
-
+ }
   $header = array('select'=>t('Select'),'title'=>t('Title'),'price'=>t('Price'),t('#Order Id'),t('Parcel Size'));
   $form['live_parcel_node_list'] = array(
     '#header'=>$header,
