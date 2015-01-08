@@ -9,7 +9,14 @@
  * Menu callback which provides the store administration overview page.
  */
 function liveparcels_packageshow() {
-    
+
+if(isset($_SESSION['lp_node'])){ 
+  unset($_SESSION['lp_node']);
+}
+
+if(isset($_SESSION['lp_order'])){
+  unset($_SESSION['lp_order']);
+}
 $parcels=liveparcels_getparcelsdata();
 $parcel_info='';
  $postfrom='';
