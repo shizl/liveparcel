@@ -6,11 +6,10 @@
 */
 function lp_address_install() {
 
-/*
+
 db_delete('uc_countries')
-  ->condition('country_id', '840')
+  ->condition('country_id', '36')
   ->execute();
- */
 
   // Make the entry in the country table.
   // VALUES = Country ID, Country Name, 2-digit Code, 3-digit Code, File Version
