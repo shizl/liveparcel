@@ -35,6 +35,14 @@ function liveparcels_menu() {
     'position' => 'right',
   );
 
+    $items['admin/liveparcels/users/userspoints'] = array(
+	'title' => 'User Points',
+	'description' => 'Administer userpoints used for pre-paid customers.',
+	'page callback' => 'liveparcels_configuration_userspoints',
+	'access arguments' => array('administer liveparcel'),
+	'weight' => 0,
+	'position' => 'right',
+	);
 
 /*
   $items['admin/liveparcels/configuration'] = array(
@@ -238,6 +246,12 @@ function liveparcels_menu() {
   }
   return $items;
 }
+/**
+ * Alias link in liveparcel menu
+ */
+	function liveparcels_configuration_userspoints(){
+	drupal_goto("admin/config/people/userpoints");
+	}
 /**
  * Displays liveparcel configuration page.
  */
