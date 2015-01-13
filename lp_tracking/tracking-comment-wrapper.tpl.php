@@ -20,7 +20,7 @@ global $user;
 <th>Date</th>
 <th>Author</th>
 <th>Driver</th>
-<th>GPS</th>
+<th>Location</th>
 <th>Status</th>
 <?php 
 if(in_array(3,$arr)||in_array('driver',$arrname)){
@@ -41,5 +41,4 @@ echo '<th>Comments</th>';
 <h2 class="title comment-form"><?php print t('Add new Update'); ?></h2>
 <?php print render($content['comment_form']); ?>
 <?php endif; ?>
-</div> 
-
+</div>
