@@ -1,5 +1,5 @@
 name = Undefined
-description = To handle undefined price parcel for re-order.
+description = "REQUIRED. Handles the workflow involved in re-ordering parcels initially ordered with undefined prices."
 package = Live Parcels - core
 dependencies[] = liveparcels
 version = "7.x-1.0"
