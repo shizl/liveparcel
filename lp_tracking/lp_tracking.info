@@ -1,5 +1,5 @@
 name = Tracking
-description = lp Tracking
+description = "REQUIRED. Creates fields required for parcels tracking."
 package = Live Parcels - core
 
 dependencies[] = lp_parcel
@@ -13,4 +13,5 @@ dependencies[] = location_entity
 dependencies[] = gmap_location
 
 dependencies[] = colorbox
+version = "7.x-1.0"
 core = 7.x
