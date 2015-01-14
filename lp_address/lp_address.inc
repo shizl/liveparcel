@@ -49,6 +49,7 @@ function lp_address_admin_setting_form($form,$form_state){
     '#default_value' =>$countryinfo['country_id'],
     '#maxlength'=>3,
     '#size'=>4,
+    '#description'=>'<a href="http://en.wikipedia.org/wiki/ISO_3166-1_numeric" target="_blank">ISO 3166-1 numeric</a>',
   );
 
    $form['lp_pickup_time']['limit_time'] = array(
@@ -56,10 +57,10 @@ function lp_address_admin_setting_form($form,$form_state){
     '#title' => t('Minimum pickup date'),
     '#default_value' => variable_get('liveparcels_pickup_time',0),
     '#size'=>20,
-    '#description'=>'The minimum pickup date user can set during checkout. 0 means any date from today. 1 means any date from tomorrow. 2 means any date from the day after and so on.',
+    '#description'=>'The minimum pickup date user can select during checkout. 0 means any date from today. 1 means any date from tomorrow. 2 means any date from the day after and so on.',
   );
 
-  $active = array('insert' => t('keep Old and Add New States'), 'delete' => t('Delete Old and  Add New States'));
+  $active = array('insert' => t('Keep old and add new States'), 'delete' => t('Delete old and add new States'));
 
   $form['lp_state']['active'] = array(
     '#type' => 'radios',
