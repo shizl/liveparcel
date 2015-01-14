@@ -938,7 +938,7 @@ function lp_admin_order_uc_checkout_pane() {
    
       $panes['admin_order_settings'] = array(
         'callback' => 'lp_admin_order_uc_checkout_pane_admin_order_settings',
-        'title' => t('Admin Order Settings'),
+        'title' => t('Admin order'),
         'desc' => t("setup order"),
         'enabled' =>FALSE,
         'weight' => 2,
@@ -977,7 +977,7 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
 
 
         $contents['parcel_price_title'] = array(
-          '#markup' => '<h2>'.t('Edit Parcel Price').'</h2><div class="description">'.t('You can change the price of each parcel .Note that the total price will be auto calculated.').'</div>',
+          '#markup' => '<h2>'.t('Edit parcel price').'</h2><div class="description">'.t('You may adjust the price for each parcel below instead of using the system calculated price.').'</div>',
        );
 
       $contents['cart_review_table'] = array(
@@ -986,7 +986,7 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
       );	
 
       $contents['edit_parcel_discount_title'] = array(
-         '#markup' => '<h2>'.t('Edit Discount').'</h2><div class="description">'.t('You can keep the current default discount rate, or change it to something else. This field accept only final rate,NOT % or decimal.').'</div>',
+         '#markup' => '<h2>'.t('Edit discount').'</h2><div class="description">'.t('You may adjust the discount for this order below instead of using the current discount configured for this user. Use the final calculated numeric discount value, not % or decimal.').'</div>',
        );
 
 
