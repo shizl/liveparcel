@@ -627,7 +627,7 @@ function masquerade_block_1() {
     }
 
     if (masquerade_menu_access('autocomplete')) {
-      $markup_value .= t('Enter the username to create other for.');
+      $markup_value .= t('Enter the username to create an order for.');
       $form['masquerade_user_field'] = array(
         '#prefix' => '<div class="container-inline">',
         '#type' => 'textfield',
