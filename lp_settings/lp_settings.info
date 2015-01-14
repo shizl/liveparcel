@@ -1,5 +1,5 @@
 name = Settings
-description = This module will read rules and views , import them in the system during installation.
+description = "REQUIRED. Imports pre-configured views and rules during installation."
 package = Live Parcels - core
 dependencies[] = views
 dependencies[] = views_ui
