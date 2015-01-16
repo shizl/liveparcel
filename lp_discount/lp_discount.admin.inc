@@ -59,7 +59,7 @@ function lp_discount_settings($form,$form_state) {
       );
   $form['user']['add']['add_more_rate'] = array(
       '#type' => 'textfield',
-      '#title' =>'Discount Rate',
+      '#title' =>'Discount rate',
       '#default_value' => '',
       );
   $form['user']['add']['add_more_submit'] = array(
@@ -199,11 +199,11 @@ function lp_discount_add_more($form,$form_state){
       $form['user']['user_wrapper']['user_rate['.$row->tid.']'] = array(
           '#type' => 'textfield',
           '#required' => TRUE,
-          '#title' =>(user_load($row->tid)->name).' Discount Setting',
+          '#title' =>(user_load($row->tid)->name).' discount rate',
           '#value' =>lp_discount_user_rate($row->tid),
           );
     }
-    drupal_set_message(t('Add User OR Update Ok'));
+    drupal_set_message(t('Discount added/updated'));
     return $form['user']['user_wrapper'];
   }
 }
