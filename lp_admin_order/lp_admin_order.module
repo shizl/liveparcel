@@ -277,10 +277,10 @@ function masquerade_admin_settings() {
 
   $form['masquerade_test_user'] = array(
     '#type' => 'textfield',
-    '#title' => t('Menu <em>Quick Switch</em> user'),
+    '#title' => t('Navigation menu user <em>Quick Switch</em>'),
     '#autocomplete_path' => 'masquerade/autocomplete',
     '#default_value' => isset($test_name->name) ? check_plain($test_name->name) : '',
-    '#description' => t('Enter the username of an account you wish to switch easily between via a menu item.'),
+    '#description' => t('Enter username of the account you want to switch easily to via a Navigation menu item.'),
     '#maxlength' => NULL,
   );
 
@@ -294,7 +294,7 @@ function masquerade_admin_settings() {
   }
   $form['masquerade_quick_switches'] = array(
     '#type' => 'textfield',
-    '#title' => t('Admin order Block <em>Quick Switch</em> users'),
+    '#title' => t('Admin order Block user <em>Quick Switch</em>'),
     '#autocomplete_path' => 'masquerade/autocomplete-users',
     '#default_value' => drupal_implode_tags($quick_switch_users),
     '#description' => t('Enter the usernames, separated by commas, of accounts to show as quick switch links in the Admin order  block.'),
