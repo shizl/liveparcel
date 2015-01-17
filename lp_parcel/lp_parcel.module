@@ -894,7 +894,7 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 
         $node->content['parcel_updates'] = array(
     	  '#type' => 'fieldset',
-	  '#title'=> t('Parcel Updates'),
+	  '#title'=> t('Parcel updates'),
     	  '#weight' => -97,
 	  '#collapsible' => TRUE,
   	  '#collapsed' => FALSE,
@@ -920,7 +920,3 @@ if(!empty($node->content['comments'])){
          return $node;
     }   
 }
-
-
-
-
