@@ -989,7 +989,7 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
           $username = $user->name;
 
       $contents['edit_parcel_discount_title'] = array(
-         '#markup' => '<h2>'.t('Edit discount').'</h2><div class="description">'.t('You may adjust the discount for this order below instead of using the current discount configured for <a href="/user">'.$username.'</a>.Use the final calculated numeric discount value, not % or decimal.').'</div>',
+         '#markup' => '<h2>'.t('Edit discount').'</h2><div class="description">'.t('You may adjust the discount for this order below instead of using the current discount configured for <a href="/user">'.$username.'</a>. Use the final calculated numeric discount value, not % or decimal.').'</div>',
        );
 
 
@@ -1004,7 +1004,7 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
        '#attributes' => array('class'=>array('admin_order_id')),
       );
       $contents['reload'] = array(
-	'#markup' =>t('If you make any adjustments, you must click Save and Reload to re-calculate the order total.').'<input type="button" id="checkout_reload" class="form-submit" name="reload" value="Save and Reload" />',
+	'#markup' =>t('<i>If you make any adjustments here, you must click Save and Reload to re-calculate the order total.</i>').'<input type="button" id="checkout_reload" class="form-submit" name="reload" value="Save and Reload" />',
      );
 
       return array('contents' => $contents, 'next-button' => FALSE);
