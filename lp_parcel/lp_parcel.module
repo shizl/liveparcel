@@ -11,7 +11,7 @@
 /**
  * Implements hook_menu().
  */
-
+include "sites/all/libraries/phpqrcode/qrlib.php";
 
 define('PHPQRCODE_MIN_PLUGIN_VERSION', '1.1.4');
 
@@ -751,6 +751,7 @@ function backup_address(&$form,&$form_state){
 }
 
 
+
 function lp_parcel_node_view($node, $view_mode) {
 
 global $user;
@@ -766,7 +767,6 @@ global $user;
 
     if ($node->type=="live_parcel"){
 
-	include "sites/all/libraries/phpqrcode/qrlib.php";
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
 	//drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
 
