@@ -492,8 +492,9 @@ function liveparcels_configpage() {
       // or entered by the user via menu module is saved as the title attribute.
       if (!empty($item['localized_options']['attributes']['title'])) {
         $item['description'] = $item['localized_options']['attributes']['title'];
+        unset($item['localized_options']['attributes']['title']);
       }
-      $item['position']="left"; 
+      //$item['position']="left"; 
       $block = $item;
       $block['content'] = theme('admin_block_content', array('content' => system_admin_menu_block($item)));
       if (!empty($block['content'])) {
@@ -506,14 +507,14 @@ function liveparcels_configpage() {
     }
   }
 
-  ksort($blocks);
-  $build['blocks'] = array(
-    '#theme' => 'admin_page',
-    '#blocks' => $blocks,
-    '#attributes' => array('class' => array('live-parcels-status')),
-  );
- 
-  return $build;
+
+  if ($blocks) {
+    ksort($blocks);
+    return theme('admin_page', array('blocks' => $blocks));
+  }else{
+    return t('You do not have any administrative items.');
+  }
+
 
 }
 

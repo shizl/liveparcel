@@ -1017,7 +1017,7 @@ function lp_admin_order_theme(){
  return array(
     'lp_admin_order_table' => array(
       'variables' => array('items' => array(), 'show_subtotal' => TRUE), 
-      'file' => 'lp_admin_order_cueckout_pane.inc',
+      'file' => 'lp_admin_order_checkout_pane.inc',
     ), 
  );
 

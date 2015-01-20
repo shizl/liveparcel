@@ -57,7 +57,11 @@ global $user;
   $rname = db_query('select name from {role} where rid='.$role->rid)->fetchfield();
   $arrname[] = $rname;		
   }
-   $fee_status =  $node->type== 'live_parcel' ? $node->field_fee_status['und'][0]['value']:1;
+   if(!empty($node->field_fee_status['und'][0]['value'])){
+     $fee_status =  $node->type== 'live_parcel' ? $node->field_fee_status['und'][0]['value']:'none';
+   }else{
+     $fee_status = 'none';
+   }
    if(($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname))&&$node->type=="live_parcel"&&$fee_status=="Confirmed"){
      return true;
    }else{
@@ -807,13 +811,14 @@ global $user;
 	  '#markup'=>'<h3>'.t('Parcel Details').'</h3>',
     	  '#weight'=>-10,
 	); 
-
+        if(!empty($node->content['field_fee_status'])){
 	if($node->content['field_fee_status'][0]['#markup']=="Confirmed"&&(in_array(3,$arr)||in_array('driver',$arrname))){
 	$node->content['parcel_detail']['qrcode'] = array(
     	  '#markup' => '<div class="prcode">'.$code.'</div>',
     	  '#weight'=>-9,
  	);
 	}
+        }
 	$node->content['parcel_detail']['parcel_order_id'] = empty($node->content['field_parcel_order_id'])?'':$node->content['field_parcel_order_id'];
 	$node->content['parcel_detail']['parcel_price'] = empty($node->content['field_parcel_price'])?'':$node->content['field_parcel_price'];
 	$node->content['parcel_detail']['parcel_size'] = empty($node->content['field_parcel_size'])?'':$node->content['field_parcel_size'];
@@ -822,7 +827,7 @@ global $user;
 	$node->content['parcel_detail']['authority_to_leave'] = empty($node->content['field_authority_to_leave'])?'':$node->content['field_authority_to_leave'];
 	$node->content['parcel_detail']['cash_to_collect'] = empty($node->content['field_cash_to_collect'])?'':$node->content['field_cash_to_collect'];
 	$node->content['parcel_detail']['customer_reference'] = empty($node->content['field_customer_reference'])?'':$node->content['field_customer_reference'];
-	$node->content['parcel_detail']['fee_status'] = $node->content['field_fee_status'];
+	$node->content['parcel_detail']['fee_status'] = empty($node->content['field_fee_status'])?'':$node->content['field_fee_status'];
 
         hide($node->content['field_parcel_order_id']);
         hide($node->content['field_parcel_price']);

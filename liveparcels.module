@@ -32,7 +32,7 @@ function liveparcels_menu() {
     'page callback' => 'liveparcels_configuration_page',
     'access arguments' => array('administer liveparcel'),
     'weight' => 0,
-    'position' => 'right',
+    'position' => 'left',
   );
 
     $items['admin/liveparcels/users/userspoints'] = array(
@@ -41,7 +41,6 @@ function liveparcels_menu() {
 	'page callback' => 'liveparcels_configuration_userspoints',
 	'access arguments' => array('administer liveparcel'),
 	'weight' => 0,
-	'position' => 'right',
 	);
 
 /*
