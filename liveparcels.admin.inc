@@ -73,9 +73,9 @@ function liveparcels_managepackage(){
       $items[$row->position] = array(
           'position' => $row->position,
           'package_name' => $row->package_name,
-          'weight' => $row->weight,
-          'plength' => $row->plength,
-          'pprice' => $row->pprice,
+          'weight' => sprintf('%0.2f',$row->weight),
+          'plength' => sprintf('%0.2f',$row->plength),
+          'pprice' => sprintf('%0.2f',$row->pprice),
           );
     }
 

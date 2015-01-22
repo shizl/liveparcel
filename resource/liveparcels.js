@@ -19,9 +19,9 @@ function savenote(nid,atype){
 
 		var plength=parseFloat(jQuery("#n"+nid+" .plength").val());
 		var pprice=parseFloat(jQuery("#n"+nid+" .pprice").val());
-		weight=weight.toFixed(3);
-		plength=plength.toFixed(3);
-		pprice=pprice.toFixed(3);
+		weight=weight.toFixed(2);
+		plength=plength.toFixed(2);
+		pprice=pprice.toFixed(2);
 	
 		if(position >0 && package_name !='' && weight>0  && plength >0 && pprice >0){
 		var aid=parseInt(jQuery('.packagedata .package-line:last').index())-1;
@@ -96,7 +96,7 @@ function savenote(nid,atype){
 		
 		jQuery.post('/admin/liveparcels/settings/managepackage/ajax',{position:newid,oldposition:oldposition,package_name:package_name,weight:weight,plength:plength,pprice:pprice,atype:atype},function(data){
 				if(data){
-              // alert(data);
+               //alert(data);
                document.location.reload();
 
             }

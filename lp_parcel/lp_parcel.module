@@ -579,7 +579,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
        $newnode = new stdClass();
        $newnode->uid=$order->uid;
        $newnode->language='und';
-       $newnode->title='Order#'.$order_id.$parcel['parcelnum'];
+       $newnode->title='Order'.$order_id.str_replace('#','',$parcel['parcelnum']);
        $newnode->type='live_parcel';
        $newnode->status=1;
        $newnode->comment=2;
@@ -679,7 +679,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
        $lp_nid  = $_SESSION['lp_node'];
        $lp_node = node_load($lp_nid);
     if(!empty($lp_node)){
-       $lp_node->title = 'Order#'.$order->order_id.'Parcel#1';
+       $lp_node->title = 'Order'.$order->order_id.'Parcel1';
        $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
        $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';
        node_save($lp_node); 
