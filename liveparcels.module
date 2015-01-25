@@ -31,8 +31,8 @@ function liveparcels_menu() {
     'description' => 'Admin settings for liveparcels.',
     'page callback' => 'liveparcels_configuration_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 0,
-    'position' => 'left',
+    'weight' => 6,
+    'position' => 'right',
   );
 
     $items['admin/liveparcels/users/userspoints'] = array(
@@ -69,7 +69,7 @@ function liveparcels_menu() {
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
     'weight' => 2,
-    'position' => 'right',
+    'position' => 'left',
   );
   
     $items['admin/liveparcels/parcels'] = array(
@@ -78,7 +78,7 @@ function liveparcels_menu() {
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
     'weight' => 4,
-    'position' => 'right',
+    'position' => 'left',
   );
   
     $items['admin/liveparcels/parcels_map'] = array(
@@ -87,7 +87,7 @@ function liveparcels_menu() {
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
     'weight' => 6,
-    'position' => 'right',
+    'position' => 'left',
   );
   
     $items['admin/liveparcels/drivers'] = array(
@@ -95,7 +95,7 @@ function liveparcels_menu() {
     'description' => 'View drivers info for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 8,
+    'weight' => 2,
     'position' => 'right',
   );
   
@@ -104,7 +104,7 @@ function liveparcels_menu() {
     'description' => 'View users info for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 10,
+    'weight' => 4,
     'position' => 'right',
   );
   
@@ -113,7 +113,7 @@ function liveparcels_menu() {
     'description' => 'View reports for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 12,
+    'weight' => 0,
     'position' => 'right',
   );
   
