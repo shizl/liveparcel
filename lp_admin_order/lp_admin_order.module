@@ -144,7 +144,7 @@ function lp_admin_order_menu() {
   );
   $items['admin/liveparcels/adminsetting/admin-order'] = array(
     'title' => 'Admin order',
-    'description' => 'Configure the roles that can place orders on behalf of users and create shortcut to create order on behalf of specific user.',
+    'description' => 'Create shortcut to create order on behalf of specific user and configure the roles that is considered as administrator for admin order.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masquerade_admin_settings'),
     'access callback' => 'user_access',
