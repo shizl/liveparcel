@@ -96,7 +96,7 @@ function lp_admin_order_menu() {
   $default_test_user = _masquerade_user_load(variable_get('masquerade_test_user', ''));
   if ($default_test_user && ($default_test_user->uid || $default_test_user->name == variable_get('anonymous', t('Anonymous')))) {
     $items['masquerade/switch/' . $default_test_user->uid] = array(
-      'title' => 'Masquerade as @testuser',
+      'title' => 'Create order for @testuser',
       'title arguments' => array('@testuser' => $default_test_user->name),
       'page callback' => 'masquerade_switch_user_page',
       'page arguments' => array(2),
