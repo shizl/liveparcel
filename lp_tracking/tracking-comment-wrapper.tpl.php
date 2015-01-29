@@ -13,14 +13,22 @@ global $user;
   }
 
 ?>
+
+<?php if($content['comments']): ?>
+
 <table>
 
 <thead>
 <tr>
 <th>Date</th>
 <th>Author</th>
-<th>Driver</th>
-<th>Location</th>
+
+<?php
+if(in_array(3,$arr)||in_array('driver',$arrname)){
+echo '<th>Driver</th><th>Location</th>';
+}
+?>
+
 <th>Status</th>
 <?php 
 if(in_array(3,$arr)||in_array('driver',$arrname)){
@@ -37,6 +45,8 @@ echo '<th>Comments</th>';
 
 <?php print render($content['comments']); ?>
 </table>
+<?php endif; ?>
+
 <?php if ($content['comment_form']): ?>
 <h2 class="title comment-form"><?php print t('Add new update'); ?></h2>
 <?php print render($content['comment_form']); ?>

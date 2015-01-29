@@ -16,19 +16,22 @@ global $user;
 <tr>
 <td><?php print $created; ?></td>
 <td><?php print $author; ?></td>
-<td>
+
 <?php 
    $driver = empty($content['field_driver_assigned'])?'':render($content['field_driver_assigned']);
- 
-   print $driver;	
+ if(in_array(3,$arr)||in_array('driver',$arrname)){
+   print '<td>'.$driver.'</td>';	
+ }
 ?>
-</td>
-<td style="width:150px;">
+
+
 <?php 
   $gps= empty($content['field_gps'])?'':render($content['field_gps']);
-  print $gps;
- ?>
-</td>
+if(in_array(3,$arr)||in_array('driver',$arrname)){
+  print '<td style="width:150px;">'.$gps .'</td>';
+}
+
+?>
 
 <td>
 <?php 

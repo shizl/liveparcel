@@ -1,6 +1,6 @@
 <?php
 
-$str = '{ "rules_set_parcel_status_to_pending_after_order_is_placed" : {
+$str = '{"post_comment_after_order_is_placed" : {
     "LABEL" : "Post comment after order is placed",
     "PLUGIN" : "reaction rule",
     "WEIGHT" : "-10",

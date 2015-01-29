@@ -32,13 +32,13 @@ function lp_settings_default_rules_configuration() {
 
   $items = array();
   $files = file_scan_directory(drupal_get_path('module', 'lp_settings'). '/rules', '/.*\.rule$/');
-  $i = 1;
+
     foreach ($files as $filepath => $file) {
 
     require $filepath;
 
-      $items['rules_component_some_task_'.$i] = entity_import('rules_config',$str);
-      $i++;
+      $items[$file->name] = entity_import('rules_config',$str);
+
   }
   return $items;
 

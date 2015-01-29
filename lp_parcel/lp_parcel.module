@@ -128,7 +128,13 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
             $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     
-    date_default_timezone_set($user->timezone<>"" ? $user->timezone:variable_get('date_default_timezone'));
+    if($user->uid !==0){
+      date_default_timezone_set($user->timezone<>"" ? $user->timezone:variable_get('date_default_timezone'));
+    }else{
+      date_default_timezone_set(variable_get('date_default_timezone'));
+    }
+
+
 
     if(is_array($extra_info) && count($extra_info)>0){
         $pickup_extra=array();
@@ -583,6 +589,14 @@ function lp_parcel_uc_checkout_complete($order, $account){
        $newnode->type='live_parcel';
        $newnode->status=1;
        $newnode->comment=2;
+
+      if($order->order_total==0 || $order->order_total ==null){
+        $newnode->field_fee_status[$newnode->language][0]['value'] = 'Undefined';
+      }else{
+        $newnode->field_fee_status[$newnode->language][0]['value'] = 'Confirmed';
+      }
+
+
        node_save($newnode);
        
         $node = node_load($newnode->nid);
@@ -662,11 +676,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
         $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave>0 ? $field_authority_to_leave:0;
         $node->field_customer_reference[$node->language][0]['value'] =$field_customer_reference;
         $node->field_delivery_note[$node->language][0]['value'] =$field_delivery_note;
-        if($order->order_total==0 || $order->order_total ==null){
-        $node->field_fee_status[$node->language][0]['value'] = 'Undefined';
-        }else{
-        $node->field_fee_status[$node->language][0]['value'] = 'Confirmed';
-        }
+  
           node_save($node);
     }
       
