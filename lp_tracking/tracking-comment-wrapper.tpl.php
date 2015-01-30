@@ -25,7 +25,13 @@ global $user;
 
 <?php
 if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
-echo '<th>Driver</th><th>Location</th>';
+echo '<th>Driver</th>';
+}
+?>
+
+<?php
+if($user->uid!=0 ||in_array(3,$arr)||in_array('driver',$arrname)){
+echo '<th>Location</th>';
 }
 ?>
 
