@@ -27,7 +27,7 @@ global $user;
 
 <?php 
   $gps= empty($content['field_gps'])?'':render($content['field_gps']);
-if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+if($user->uid!=0 ||in_array(3,$arr)||in_array('driver',$arrname)){
   print '<td style="width:150px;">'.$gps .'</td>';
 }
 
