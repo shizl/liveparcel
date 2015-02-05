@@ -19,7 +19,7 @@ global $user;
 
 <?php 
    $driver = empty($content['field_driver_assigned'])?'':render($content['field_driver_assigned']);
- if(in_array(3,$arr)||in_array('driver',$arrname)){
+ if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
    print '<td>'.$driver.'</td>';	
  }
 ?>
@@ -27,7 +27,7 @@ global $user;
 
 <?php 
   $gps= empty($content['field_gps'])?'':render($content['field_gps']);
-if(in_array(3,$arr)||in_array('driver',$arrname)){
+if($user->uid!=0 ||in_array(3,$arr)||in_array('driver',$arrname)){
   print '<td style="width:150px;">'.$gps .'</td>';
 }
 
@@ -100,4 +100,4 @@ print render($content);
 <?php print render($content['links']); ?>
 </div> 
 -->
-</div> 
+</div>
