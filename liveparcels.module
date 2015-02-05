@@ -42,6 +42,14 @@ function liveparcels_menu() {
 	'access arguments' => array('administer liveparcel'),
 	'weight' => 0,
 	);
+	
+	$items['admin/liveparcels/reports/tax'] = array(
+	'title' => 'Sales tax',
+	'description' => 'View/export report on sales tax.',
+	'page callback' => 'liveparcels_sales_tax',
+	'access arguments' => array('administer liveparcel'),
+	'weight' => 10,
+	);
 
 /*
   $items['admin/liveparcels/configuration'] = array(
@@ -104,8 +112,8 @@ function liveparcels_menu() {
     'description' => 'View users info for liveparcels.',
     'page callback' => 'liveparcels_menu_page',
     'access arguments' => array('administer liveparcel'),
-    'weight' => 4,
-    'position' => 'right',
+    'weight' => 8,
+    'position' => 'left',
   );
   
     $items['admin/liveparcels/reports'] = array(
@@ -250,6 +258,9 @@ function liveparcels_menu() {
  */
 	function liveparcels_configuration_userspoints(){
 	drupal_goto("admin/config/people/userpoints");
+	}
+	function liveparcels_sales_tax(){
+	drupal_goto("admin/store/reports/tax");
 	}
 /**
  * Displays liveparcel configuration page.
