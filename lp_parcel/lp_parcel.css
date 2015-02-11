@@ -15,6 +15,12 @@ float:left;
 margin-left:15px;
 float:left;
 }
+
+input.delivery_street2,input.pickup_street2{
+margin-left:165px !important;
+}
+
+
 .date-padding{
 margin-left:15px;
 float:left;
