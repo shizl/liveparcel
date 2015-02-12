@@ -126,17 +126,17 @@ $address1 = db_query('select city,province,postal_code from location where lid =
         $nodedata = array(
 	'parcels'=>array(
 	   '0'=>array(
-	        'parcelnum'=>substr($node->title,strlen($node->title)-8),
+	        'parcelnum'=>'Parcel#1',
 		'dimfirst'=>$sizearr[0],
 		'dimsecond'=>$sizearr[1],
 		'dimthree'=>$sizearr[2],
 		'max'=>$max,
 		'dimenstext'=>0,
 		'weighttext'=>$node->field_parcel_weight['und'][0]['value'],
-		'postfrom'=>$zone_number.'_'.$address['province'].'_'.$address['postal_code'],
-		'postto'=>$zone_number1.'_'.$address1['province'].'_'.$address1['postal_code'],
+		'postto'=>$zone_number.'_'.$address['province'].'_'.$address['postal_code'],
+		'postfrom'=>$zone_number1.'_'.$address1['province'].'_'.$address1['postal_code'],
 		'price'=> '$'.intval($node->field_parcel_price['und'][0]['value']),
-		'package_name'=>$node->field_parcel_package_name['und'][0]['value'],
+		'package_name'=>empty($node->field_parcel_package_name['und'][0]['value'])?'':$node->field_parcel_package_name['und'][0]['value'],
               )),	
 		'ptype'=>2,
 		'totals'=>intval($node->field_parcel_price['und'][0]['value']),
