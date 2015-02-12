@@ -4,7 +4,9 @@
  * Store front page live parcels checkout.
  */
 function liveparcels_addToCart(){
-   
+
+ //global $user;
+
         drupal_session_start(); 
     $parcels=trim($_REQUEST['parcelsPost']) !="" ?  trim($_REQUEST['parcelsPost']) :"";
     $action=trim($_REQUEST['action']) !="" ?  trim($_REQUEST['action']) :"";
@@ -29,7 +31,11 @@ function liveparcels_addToCart(){
    }else{
 	variable_set('uc_payment_method_free_order_checkout',0);
    }
-  header("location:/cart/checkout");exit;  
+ //if($user->uid!=0){
+  header("location:/cart/checkout");exit;
+// }else{
+ //  header('location:/user?destination=liveparcels/parcel_quote');
+// }
 }
 
 
