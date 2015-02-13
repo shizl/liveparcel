@@ -404,7 +404,7 @@ function liveparcels_user_load($users) {
 		  ))
 		  ->condition('cart_id',$_SESSION['uc_cart_id'], '=')
 		  ->execute();  
-    unset($_SESSION['uc_cart_id']);
+   // unset($_SESSION['uc_cart_id']);
       }
     }
   }

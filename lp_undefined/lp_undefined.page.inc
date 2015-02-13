@@ -181,7 +181,11 @@ function user_add_to_cart($parcelsdata,$action,$nid){
   $_SESSION['lp_node'] = $nid;
   $node = node_load($nid);
   $_SESSION['lp_order'] = $node->field_parcel_order_id['und'][0]['value'];
-
+  if($parcelsdata['totals']==0) {
+	variable_set('uc_payment_method_free_order_checkout',1);
+   }else{
+	variable_set('uc_payment_method_free_order_checkout',0);
+   }
   header("location:/cart/checkout");exit;  
 
 }
