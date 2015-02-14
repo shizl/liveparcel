@@ -126,7 +126,7 @@ $address1 = db_query('select city,province,postal_code from location where lid =
         $nodedata = array(
 	'parcels'=>array(
 	   '0'=>array(
-	        'parcelnum'=>'Parcel#1',
+	        'parcelnum'=>$node->title,
 		'dimfirst'=>$sizearr[0],
 		'dimsecond'=>$sizearr[1],
 		'dimthree'=>$sizearr[2],

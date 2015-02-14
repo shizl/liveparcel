@@ -361,6 +361,12 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         if(module_exists('lp_address')){  
           drupal_add_js(drupal_get_path('module', 'lp_address') . '/lp_address.js');
           }
+        if(isset($_SESSION['lp_node'])){
+
+          $parcels['parcels'][0]['parcelnum'] = 'Parcel#1';
+        } 
+        
+
     $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     if(is_array($extra_info) && count($extra_info)>0){
