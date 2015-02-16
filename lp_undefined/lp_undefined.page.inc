@@ -25,7 +25,7 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
        $option['size'] = $node->field_parcel_size['und'][0]['value'];
        $options[] = $option; 
   }
-  $header =   array('title'=>t('Title'),'price'=>t('Price'),t('#Order Id'),t('Parcel Size'));
+  $header =   array('title'=>t('Title'),'price'=>t('Price'),t('Order ID'),t('Parcel Size'));
    $build['live_parcel_node_list'] = array(
     '#header'=>$header,
     '#theme' =>'table',
@@ -63,7 +63,7 @@ $result = db_query('select entity_id from {field_data_field_fee_status} where fi
      }
    }
  }
-  $header = array('select'=>t('Select'),'title'=>t('Title'),'price'=>t('Price'),t('#Order Id'),t('Parcel Size'));
+  $header = array('select'=>t('Select'),'title'=>t('Title'),'price'=>t('Price'),t('Order ID'),t('Parcel Size'));
   $form['live_parcel_node_list'] = array(
     '#header'=>$header,
     '#theme' =>'table',
@@ -189,5 +189,3 @@ function user_add_to_cart($parcelsdata,$action,$nid){
   header("location:/cart/checkout");exit;  
 
 }
-
-
