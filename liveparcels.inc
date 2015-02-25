@@ -22,8 +22,8 @@ if($parcels>0){
         } 
 
 
-        $postfrom=$parcels['ptype']==1 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
-     $post=$parcels['ptype']==1 ? 'postto':'postfrom';
+        $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
+     $post=$parcels['ptype']==2 ? 'postto':'postfrom';
 
   foreach($parcels['parcels'] as $pid=>$parcel){
 $p++;
@@ -445,13 +445,13 @@ if(document.readyState == "complete") {
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
               var ptype=2;
               if($(".deliver").attr("checked")){
-                   var postfrom = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-                    var postto =$(".pnum-from").val();
-                    ptype=2;
-                }else{
+                   var postfrom =$(".pnum-from").val();
                     var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-                    var postfrom =$(".pnum-from").val();
-                    ptype=1;
+                     ptype=2;
+                }else{
+                    var postto =$(".pnum-from").val() ;
+                    var postfrom =$(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                   ptype=1;
                 }
 			  if(dimfirst > max){
 				  max = dimfirst; 

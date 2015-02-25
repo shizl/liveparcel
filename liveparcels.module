@@ -237,20 +237,20 @@ function liveparcels_menu() {
     'title' => 'Price list',
     'description' => 'My price list including discount',
     'page callback' => array('liveparcels_live_parcel_price'),
-    'access callback'=>user_access('view parcel price'),
+    'access callback' => 'user_is_logged_in',
     'file' => 'liveparcels.admin.inc',
     'type'=>MENU_LOCAL_TASK,
   );
-  if($user->uid > 0){
+ 
     $items['live_parcel_price'] = array(
       'title' => 'My price list',
       'description' => 'My price list including discount',
       'page callback' => array('liveparcels_live_parcel_price_set'),
-      'access callback'=>user_access('View parcel price'),
+       'access callback' => 'user_is_logged_in',
       'menu_name'=>'user-menu',
       'weight'=>0,
     );
-  }
+  
   return $items;
 }
 /**
@@ -294,9 +294,6 @@ function liveparcels_menu_page() {
  */
 function liveparcels_permission() {
   return array(
-    'View parcel price' => array(
-      'title' => t('View parcel price'),
-    ),
     'administer liveparcel' => array(
       'title' => t('Administer liveparcel'),
       'restrict access' => TRUE,
