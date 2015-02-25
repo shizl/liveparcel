@@ -56,7 +56,7 @@ $p++;
             </tr>
             <tr>
                <td class="destination">
-                  <span class="package-to">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</span>
+                  <span class="package-to">'.($post=='postfrom' ? 'Pickup postcode/suburb:':'Destination postcode/suburb:').'</span>
                </td>
                <td class="des-text">
                  <input class="postcode-suburb"  id="'.($pid+1).'" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
@@ -100,7 +100,7 @@ $p++;
          Pickup one or more items
       </div>
       <div class="page-content-address" >
-           <strong class="package-from">'.($post=='postto' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
+           <strong class="package-from">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
            <input class="post-suburb" disabled="disabled" type="text" id="0" value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
            <input class="pnum-from" type="hidden"  value="'.$postfrom.'">
            <ul class="fpcode" id="pcode0"></ul>
