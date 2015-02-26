@@ -12,7 +12,7 @@ function liveparcels_packageshow() {
 $parcels=liveparcels_getparcelsdata();
 $parcel_info='';
  $postfrom='';
- $post='postfrom';
+ $post='postto';
 $p=0;
  $jsondata=liveparcels_getZonelistData();
 if($parcels>0){

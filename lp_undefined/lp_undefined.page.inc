@@ -138,7 +138,7 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 		'price'=> '$'.intval($node->field_parcel_price['und'][0]['value']),
 		'package_name'=>empty($node->field_parcel_package_name['und'][0]['value'])?'':$node->field_parcel_package_name['und'][0]['value'],
               )),	
-		'ptype'=>2,
+		'ptype'=>1,
 		'totals'=>intval($node->field_parcel_price['und'][0]['value']),
 		'discount'=>0,	
 		);
