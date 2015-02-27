@@ -17,7 +17,7 @@ $p=0;
  $jsondata=liveparcels_getZonelistData();
 if($parcels>0){
 
-        if(isset($_SESSION['lp_node'])){
+        if(strpos($parcels['parcels'][0]['parcelnum'],'Parcel')>0){
           $parcels['parcels'][0]['parcelnum'] = 'Parcel#1';
         } 
 
