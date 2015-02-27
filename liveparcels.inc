@@ -134,7 +134,7 @@ $p++;
             </tr>
             <tr>
                <td class="destination">
-                  <span class="package-to">Pickup postcode/suburb:</span>
+                  <span class="package-to">'.($post=='postfrom' ? 'Pickup postcode/suburb:':'Destination postcode/suburb:').'</span>
                </td>
                <td class="des-text">
                  <input class="postcode-suburb"  id="1" type="text" >
