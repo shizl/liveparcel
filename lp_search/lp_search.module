@@ -1,0 +1,112 @@
+<?php 
+
+/**
+* Implements hook_block_info().
+*/
+function lp_search_block_info() {
+  $blocks['lp_parcel_search'] = array(
+    'info' => t('Find a parcel'),
+    'region'=>-1,
+  );
+
+  return $blocks;
+}
+
+function lp_search_menu(){
+
+   $items['lp_search/content/%'] = array(
+     'page callback' => 'lp_search_noresult',
+     'access callback' =>true,
+  );
+
+ return $items;
+}
+
+
+
+/**
+* Implements hook_block_view().
+*/
+function lp_search_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'lp_parcel_search':
+      $block['content'] = drupal_get_form('lp_search_form');
+      break;
+  }
+  return $block;
+}
+
+function lp_search_form($form, &$form_state){
+
+ $form['search'] = array(
+   '#type'=>'textfield',
+   '#title'=>t('Find a parcel'), 
+   '#size'=>15,
+   '#maxlength'=>128,
+   '#description'=>t('Enter parcel id or reference#'),  
+ );
+
+ $form['submit'] = array(
+   '#type'=>'submit',
+   '#value'=>t('Submit'),   
+ );
+
+ return $form;
+}
+
+function lp_search_form_submit(&$form, &$form_state){
+
+  $input_value = $form_state['values']['search'];
+  $entity_id = '';
+  $nid =  db_query('select nid from {node} where title = :title and type = :type',array(
+	':title'=>$input_value,
+	':type'=>'live_parcel'
+	))->fetchfield();
+   
+  $count = db_query('select count(*) from {field_data_field_customer_reference} where field_customer_reference_value = :value',array(
+	':value'=>$input_value
+	))->fetchfield();
+ 
+  if($count == 1){
+
+  $entity_id = db_query('select entity_id from {field_data_field_customer_reference} where field_customer_reference_value = :value',array(
+	':value'=>$input_value
+	))->fetchfield();
+   }
+
+        
+  if($nid !=null){
+     $form_state['redirect'] = 'node/'.$nid;
+  }
+  if($entity_id!=null){
+     $form_state['redirect'] = 'node/'.$entity_id;
+  }
+
+  if($nid ==null&&$entity_id==null&&$input_value!=null){
+     $form_state['redirect'] = 'lp_search/content/'.$input_value;
+  }
+
+
+}
+
+
+function lp_search_noresult(){
+
+  $count = db_query('select count(*) from {field_data_field_customer_reference} where field_customer_reference_value = :value',array(
+	':value'=>arg(2)
+	))->fetchfield();
+
+$output = '';
+  if($count>1){
+
+     $output = '<h2>Parcel Result</h2>
+  	 	<p>There are more than one item matching, Please check again.</p>';
+  }else{
+     $output = '<h2>Parcel Result</h2>
+		<p>No result found for '.arg(2).', Please check again.</p>';
+  }
+ return $output;
+
+}
+

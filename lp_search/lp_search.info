@@ -1,0 +1,8 @@
+name = Search
+description = "Custom parcels search."
+package = Live Parcels - core
+
+dependencies[] = lp_parcel
+
+version = "7.x-1.0"
+core = 7.x
