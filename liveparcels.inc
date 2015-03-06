@@ -470,7 +470,7 @@ if(document.readyState == "complete") {
                 getprice(f+1,tlen,postfrom,ajaxrequest);
                 
             }else{
-                $.get("/admin/liveparcels/getzoneprice/ajax", 
+                $.post("/admin/liveparcels/getzoneprice/ajax", 
                      {ajaxrequest:"["+ajaxrequest+"]",action:"updateprice"},function(zone){
                          
                        if(zone != ""){ 
