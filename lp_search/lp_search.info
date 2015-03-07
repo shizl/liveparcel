@@ -1,5 +1,5 @@
 name = Search
-description = "Custom parcels search."
+description = "Optional. Provides track parcel block."
 package = Live Parcels - core
 
 dependencies[] = lp_parcel
