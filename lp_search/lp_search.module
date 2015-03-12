@@ -84,28 +84,23 @@ function lp_search_form_submit(&$form, &$form_state){
   }
 
   if($nid ==null&&$entity_id==null&&$input_value!=null){
-     $form_state['redirect'] = 'lp_search/content/'.$input_value;
-  }
 
+    if($count>1){
+       $form_state['redirect'] = 'search/content/'.$input_value;
+    }else{
+      $form_state['redirect'] = 'lp_search/content/'.$input_value;	
+    }
+
+  }
 
 }
 
 
 function lp_search_noresult(){
 
-  $count = db_query('select count(*) from {field_data_field_customer_reference} where field_customer_reference_value = :value',array(
-	':value'=>arg(2)
-	))->fetchfield();
-
-$output = '';
-  if($count>1){
-
-     $output = '<h2>Parcel Result</h2>
-  	 	<p>There are more than one item matching, Please check again.</p>';
-  }else{
      $output = '<h2>Parcel Result</h2>
 		<p>No result found for '.arg(2).', Please check again.</p>';
-  }
+
  return $output;
 
 }
