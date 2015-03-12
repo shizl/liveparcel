@@ -5,7 +5,7 @@
 */
 function lp_search_block_info() {
   $blocks['lp_parcel_search'] = array(
-    'info' => t('Find a parcel'),
+    'info' => t('Track parcel'),
     'region'=>-1,
   );
 
@@ -41,10 +41,10 @@ function lp_search_form($form, &$form_state){
 
  $form['search'] = array(
    '#type'=>'textfield',
-   '#title'=>t('Find a parcel'), 
+   '#title'=>t('Track parcel'), 
    '#size'=>15,
    '#maxlength'=>128,
-   '#description'=>t('Enter parcel id or reference#'),  
+   '#description'=>t('Enter parcel ID or customer reference code'),  
  );
 
  $form['submit'] = array(
@@ -98,10 +98,19 @@ function lp_search_form_submit(&$form, &$form_state){
 
 function lp_search_noresult(){
 
-     $output = '<h2>Parcel Result</h2>
-		<p>No result found for '.arg(2).', Please check again.</p>';
+  $count = db_query('select count(*) from {field_data_field_customer_reference} where field_customer_reference_value = :value',array(
+	':value'=>arg(2)
+	))->fetchfield();
 
+$output = '';
+  if($count>1){
+
+     $output = '<h2>Parcel Result</h2>
+  	 	<p>There are more than one item matching the customer reference code you have entered. Please use this search engine to search again.</p>';
+  }else{
+     $output = '<h2>Parcel Result</h2>
+		<p>No result found for '.arg(2).', Please check the code you have entered.</p>';
+  }
  return $output;
 
 }
-
