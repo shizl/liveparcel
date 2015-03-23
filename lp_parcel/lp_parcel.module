@@ -596,7 +596,8 @@ function lp_parcel_uc_checkout_complete($order, $account){
        $newnode->status=1;
        $newnode->comment=2;
 
-      if($order->order_total==0 || $order->order_total ==null){
+
+      if(str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price'])==0){
         $newnode->field_fee_status[$newnode->language][0]['value'] = 'Undefined';
       }else{
         $newnode->field_fee_status[$newnode->language][0]['value'] = 'Confirmed';
