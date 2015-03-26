@@ -8,6 +8,8 @@ define('USERPOINTS_PAY_MODERATE', 'userpoints_pay_moderate');
 define('USERPOINTS_PAY_DISPLAY', 'userpoints_pay_display');
 define('USERPOINTS_PAY_CATEGORY', 'userpoints_pay_category');
 
+drupal_add_js(drupal_get_path('module','uc_userpoints_payment').'/uc_userpoints.js');
+
 /**
  * Implementation of hook_help().
  */
