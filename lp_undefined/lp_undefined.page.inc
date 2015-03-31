@@ -123,6 +123,13 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 
     $zone_number1 =  db_query('SELECT zone_number FROM  {liveparcels_zone_post} WHERE locality =:locality LIMIT 0 , 1',array(':locality'=>$address1['city']))->fetchfield();
 
+
+      if(!empty($node->field_parcel_package_name['und'][0]['value'])){
+	 	 $str = explode('_',$node->field_parcel_package_name['und'][0]['value']);
+	}
+
+
+
         $nodedata = array(
 	'parcels'=>array(
 	   '0'=>array(
@@ -136,16 +143,15 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 		'postfrom'=>$zone_number.'_'.$address['province'].'_'.$address['postal_code'],
 		'postto'=>$zone_number1.'_'.$address1['province'].'_'.$address1['postal_code'],
 		'price'=> '$'.intval($node->field_parcel_price['und'][0]['value']),
-		'package_name'=>empty($node->field_parcel_package_name['und'][0]['value'])?'':$node->field_parcel_package_name['und'][0]['value'],
+		'package_name'=>isset($str[0])?$str[0]:'',
               )),	
-		'ptype'=>2,
+		'ptype'=>isset($str[1])?$str[1]:2,
 		'totals'=>intval($node->field_parcel_price['und'][0]['value']),
 		'discount'=>0,	
 		);
 
 
   $action = 'addtocart';
-
 
   user_add_to_cart($nodedata,$action,$node->nid);
 

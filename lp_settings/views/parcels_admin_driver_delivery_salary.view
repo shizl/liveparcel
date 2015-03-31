@@ -1,0 +1,355 @@
+<?php
+$view = new view();
+$view->name = 'parcels_admin_driver_delivery_salary';
+$view->description = 'Admin view to see the salary to pay driver specified for delivery/delivery attempted';
+$view->tag = 'LiveParcels';
+$view->base_table = 'comment';
+$view->human_name = 'Parcels admin driver delivery salary';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Driver delivery salary report';
+$handler->display->display_options['use_more'] = TRUE;
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
+$handler->display->display_options['exposed_form']['options']['bef'] = array(
+  'general' => array(
+    'allow_secondary' => 0,
+    'secondary_label' => 'Advanced options',
+  ),
+  'created' => array(
+    'bef_format' => 'bef_datepicker',
+    'more_options' => array(
+      'is_secondary' => 0,
+      'any_label' => '',
+      'bef_filter_description' => '',
+      'tokens' => array(
+        'available' => array(
+          0 => 'global_types',
+        ),
+      ),
+      'rewrite' => array(
+        'filter_rewrite_values' => '',
+      ),
+    ),
+  ),
+  'name' => array(
+    'bef_format' => 'default',
+    'more_options' => array(
+      'is_secondary' => 0,
+      'any_label' => '',
+      'bef_filter_description' => '',
+      'tokens' => array(
+        'available' => array(
+          0 => 'global_types',
+        ),
+      ),
+      'rewrite' => array(
+        'filter_rewrite_values' => '',
+      ),
+    ),
+  ),
+  'field_status_value' => array(
+    'bef_format' => 'default',
+    'more_options' => array(
+      'bef_select_all_none' => 0,
+      'bef_collapsible' => 0,
+      'is_secondary' => 0,
+      'any_label' => '',
+      'bef_filter_description' => '',
+      'tokens' => array(
+        'available' => array(
+          0 => 'global_types',
+        ),
+      ),
+      'rewrite' => array(
+        'filter_rewrite_values' => '',
+      ),
+    ),
+  ),
+);
+$handler->display->display_options['exposed_form']['options']['input_required'] = 0;
+$handler->display->display_options['exposed_form']['options']['text_input_required_format'] = 'filtered_html';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '50';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['pager']['options']['quantity'] = '9';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['grouping'] = array(
+  0 => array(
+    'field' => 'nothing',
+    'rendered' => 1,
+    'rendered_strip' => 0,
+  ),
+);
+$handler->display->display_options['style_options']['columns'] = array(
+  'created' => 'created',
+  'title' => 'title',
+  'name_1' => 'name_1',
+  'field_parcel_size' => 'field_parcel_size',
+  'field_parcel_weight' => 'field_parcel_weight',
+  'field_parcel_price' => 'field_parcel_price',
+  'field_status' => 'field_status',
+  'name' => 'name',
+  'nothing' => 'nothing',
+  'expression' => 'expression',
+);
+$handler->display->display_options['style_options']['default'] = 'created';
+$handler->display->display_options['style_options']['info'] = array(
+  'created' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'title' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'name_1' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_size' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_weight' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_parcel_price' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_status' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'name' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'nothing' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'expression' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Header: Global: Text area */
+$handler->display->display_options['header']['area']['id'] = 'area';
+$handler->display->display_options['header']['area']['table'] = 'views';
+$handler->display->display_options['header']['area']['field'] = 'area';
+$handler->display->display_options['header']['area']['content'] = '<center>Delivery salary is calculated using this formula.
+Salary = (Shipping fee charged) / 7 * 2</center>';
+$handler->display->display_options['header']['area']['format'] = 'full_html';
+/* Relationship: Comment: Content */
+$handler->display->display_options['relationships']['nid']['id'] = 'nid';
+$handler->display->display_options['relationships']['nid']['table'] = 'comment';
+$handler->display->display_options['relationships']['nid']['field'] = 'nid';
+$handler->display->display_options['relationships']['nid']['required'] = TRUE;
+/* Relationship: Content: Author */
+$handler->display->display_options['relationships']['uid']['id'] = 'uid';
+$handler->display->display_options['relationships']['uid']['table'] = 'node';
+$handler->display->display_options['relationships']['uid']['field'] = 'uid';
+$handler->display->display_options['relationships']['uid']['relationship'] = 'nid';
+/* Field: Comment: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'comment';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Status date/time';
+$handler->display->display_options['fields']['created']['date_format'] = 'medium';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['relationship'] = 'nid';
+$handler->display->display_options['fields']['title']['label'] = 'Parcel';
+/* Field: User: Name */
+$handler->display->display_options['fields']['name_1']['id'] = 'name_1';
+$handler->display->display_options['fields']['name_1']['table'] = 'users';
+$handler->display->display_options['fields']['name_1']['field'] = 'name';
+$handler->display->display_options['fields']['name_1']['relationship'] = 'uid';
+$handler->display->display_options['fields']['name_1']['label'] = 'Customer';
+/* Field: Content: Package type */
+$handler->display->display_options['fields']['field_parcel_package_name']['id'] = 'field_parcel_package_name';
+$handler->display->display_options['fields']['field_parcel_package_name']['table'] = 'field_data_field_parcel_package_name';
+$handler->display->display_options['fields']['field_parcel_package_name']['field'] = 'field_parcel_package_name';
+$handler->display->display_options['fields']['field_parcel_package_name']['relationship'] = 'nid';
+/* Field: Content: Parcel weight */
+$handler->display->display_options['fields']['field_parcel_weight']['id'] = 'field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['table'] = 'field_data_field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['field'] = 'field_parcel_weight';
+$handler->display->display_options['fields']['field_parcel_weight']['relationship'] = 'nid';
+$handler->display->display_options['fields']['field_parcel_weight']['label'] = 'Parcel weight (kg)';
+/* Field: Content: Shipping fee */
+$handler->display->display_options['fields']['field_parcel_price']['id'] = 'field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['table'] = 'field_data_field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['field'] = 'field_parcel_price';
+$handler->display->display_options['fields']['field_parcel_price']['relationship'] = 'nid';
+$handler->display->display_options['fields']['field_parcel_price']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Comment: Status */
+$handler->display->display_options['fields']['field_status']['id'] = 'field_status';
+$handler->display->display_options['fields']['field_status']['table'] = 'field_data_field_status';
+$handler->display->display_options['fields']['field_status']['field'] = 'field_status';
+/* Field: Comment: Author */
+$handler->display->display_options['fields']['name']['id'] = 'name';
+$handler->display->display_options['fields']['name']['table'] = 'comment';
+$handler->display->display_options['fields']['name']['field'] = 'name';
+$handler->display->display_options['fields']['name']['label'] = 'Driver';
+/* Field: Global: Math expression */
+$handler->display->display_options['fields']['expression']['id'] = 'expression';
+$handler->display->display_options['fields']['expression']['table'] = 'views';
+$handler->display->display_options['fields']['expression']['field'] = 'expression';
+$handler->display->display_options['fields']['expression']['label'] = 'Salary';
+$handler->display->display_options['fields']['expression']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['expression']['precision'] = '2';
+$handler->display->display_options['fields']['expression']['expression'] = '[field_parcel_price] / 7 * 2';
+/* Field: Global: Math expression */
+$handler->display->display_options['fields']['expression_1']['id'] = 'expression_1';
+$handler->display->display_options['fields']['expression_1']['table'] = 'views';
+$handler->display->display_options['fields']['expression_1']['field'] = 'expression';
+$handler->display->display_options['fields']['expression_1']['label'] = 'Total';
+$handler->display->display_options['fields']['expression_1']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['expression_1']['precision'] = '2';
+$handler->display->display_options['fields']['expression_1']['expression'] = '[expression] + [expression_1]';
+/* Filter criterion: Comment: Approved */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'comment';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status_node']['id'] = 'status_node';
+$handler->display->display_options['filters']['status_node']['table'] = 'node';
+$handler->display->display_options['filters']['status_node']['field'] = 'status';
+$handler->display->display_options['filters']['status_node']['relationship'] = 'nid';
+$handler->display->display_options['filters']['status_node']['value'] = 1;
+$handler->display->display_options['filters']['status_node']['group'] = 1;
+$handler->display->display_options['filters']['status_node']['expose']['operator'] = FALSE;
+/* Filter criterion: Comment: Post date */
+$handler->display->display_options['filters']['created']['id'] = 'created';
+$handler->display->display_options['filters']['created']['table'] = 'comment';
+$handler->display->display_options['filters']['created']['field'] = 'created';
+$handler->display->display_options['filters']['created']['operator'] = 'between';
+$handler->display->display_options['filters']['created']['group'] = 1;
+$handler->display->display_options['filters']['created']['exposed'] = TRUE;
+$handler->display->display_options['filters']['created']['expose']['operator_id'] = 'created_op';
+$handler->display->display_options['filters']['created']['expose']['label'] = 'Status date between';
+$handler->display->display_options['filters']['created']['expose']['operator'] = 'created_op';
+$handler->display->display_options['filters']['created']['expose']['identifier'] = 'created';
+$handler->display->display_options['filters']['created']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  4 => 0,
+  3 => 0,
+);
+/* Filter criterion: Comment: Author */
+$handler->display->display_options['filters']['name']['id'] = 'name';
+$handler->display->display_options['filters']['name']['table'] = 'comment';
+$handler->display->display_options['filters']['name']['field'] = 'name';
+$handler->display->display_options['filters']['name']['group'] = 1;
+$handler->display->display_options['filters']['name']['exposed'] = TRUE;
+$handler->display->display_options['filters']['name']['expose']['operator_id'] = 'name_op';
+$handler->display->display_options['filters']['name']['expose']['label'] = 'Driver';
+$handler->display->display_options['filters']['name']['expose']['operator'] = 'name_op';
+$handler->display->display_options['filters']['name']['expose']['identifier'] = 'name';
+$handler->display->display_options['filters']['name']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  4 => 0,
+  3 => 0,
+);
+/* Filter criterion: Comment: Status (field_status) */
+$handler->display->display_options['filters']['field_status_value']['id'] = 'field_status_value';
+$handler->display->display_options['filters']['field_status_value']['table'] = 'field_data_field_status';
+$handler->display->display_options['filters']['field_status_value']['field'] = 'field_status_value';
+$handler->display->display_options['filters']['field_status_value']['value'] = array(
+  'delivered' => 'delivered',
+  'delivery attempted' => 'delivery attempted',
+);
+$handler->display->display_options['filters']['field_status_value']['group'] = 1;
+$handler->display->display_options['filters']['field_status_value']['expose']['operator_id'] = 'field_status_value_op';
+$handler->display->display_options['filters']['field_status_value']['expose']['label'] = 'Status';
+$handler->display->display_options['filters']['field_status_value']['expose']['operator'] = 'field_status_value_op';
+$handler->display->display_options['filters']['field_status_value']['expose']['identifier'] = 'field_status_value';
+$handler->display->display_options['filters']['field_status_value']['expose']['multiple'] = TRUE;
+$handler->display->display_options['filters']['field_status_value']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  4 => 0,
+  3 => 0,
+);
+$handler->display->display_options['filters']['field_status_value']['expose']['reduce'] = TRUE;
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['path'] = 'admin/liveparcels/drivers/driver_delivery_salary';
+$handler->display->display_options['menu']['type'] = 'normal';
+$handler->display->display_options['menu']['title'] = 'Driver delivery salary';
+$handler->display->display_options['menu']['description'] = 'View/export the salary to pay driver specified for delivery/delivery attempted';
+$handler->display->display_options['menu']['weight'] = '0';
+$handler->display->display_options['menu']['name'] = 'management';
+$handler->display->display_options['menu']['context'] = 0;
+$handler->display->display_options['menu']['context_only_inline'] = 0;
+
+/* Display: Data export */
+$handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+$handler->display->display_options['style_options']['provide_file'] = 1;
+$handler->display->display_options['style_options']['parent_sort'] = 0;
+$handler->display->display_options['style_options']['quote'] = 1;
+$handler->display->display_options['style_options']['trim'] = 0;
+$handler->display->display_options['style_options']['replace_newlines'] = 0;
+$handler->display->display_options['style_options']['header'] = 1;
+$handler->display->display_options['style_options']['keep_html'] = 0;
+$handler->display->display_options['path'] = 'admin/liveparcels/drivers/driver_delivery_salary.csv';
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+);
