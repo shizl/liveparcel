@@ -125,6 +125,15 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
       switch ($op) {
         case 'view':
      $orderid = isset($_SESSION['lp_order']) ? $_SESSION['lp_order']:$order->order_id;      
+      if(isset($_SESSION['lp_node'])){
+	$lp_node = node_load($_SESSION['lp_node']);
+
+	if(isset($lp_node->field_cash_to_collect['und'][0]['value'])){
+	  $cash_to_collect = $lp_node->field_cash_to_collect['und'][0]['value'];
+	}else{
+	  $cash_to_collect = '';
+	}
+      }
      $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     
@@ -137,6 +146,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 
 
     if(is_array($extra_info) && count($extra_info)>0){
+
         $pickup_extra=array();
           if($parcels['ptype']=="1"){
             for($f=0;$f<count($parcels['parcels']);$f++){
@@ -165,7 +175,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                 ),'field_cash_to_collect'=>array(
                 '#type' => 'textfield',
                 '#title' => t('Cash to collect ('.variable_get('uc_currency_sign','$').') '),
-                '#default_value' =>$extra_info['pickupdata'][$f]['field_cash_to_collect'],
+                '#default_value' => !isset($cash_to_collect)?$extra_info['pickupdata'][$f]['field_cash_to_collect']:$cash_to_collect,
                  '#size'=>'30',
                   '#maxlength'=>'30',
                   '#attributes' => array('class'=>array('pickup_cash_to_collect')),
