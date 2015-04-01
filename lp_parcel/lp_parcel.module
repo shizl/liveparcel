@@ -334,7 +334,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 
 		  if(!empty($pinfo['field_cash_to_collect']) && !is_numeric($pinfo['field_cash_to_collect'])){
 
-		    form_set_error('panes][parcel_pickup]['.$key.'][field_cash_to_collect',$p_count==1?t('Pickup:only numbers allowed for Cash to collect number field.'):t('Pickup parcel#'.($key+1).': only numbers allowed for Cash to collect number field.'));
+		    form_set_error('panes][parcel_pickup]['.$key.'][field_cash_to_collect',$p_count==1?t('Pickup: only numbers allowed for Cash to collect field.'):t('Pickup parcel#'.($key+1).': only numbers allowed for Cash to collect number field.'));
 		  }
 
 
