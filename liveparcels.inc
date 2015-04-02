@@ -94,9 +94,9 @@ $p++;
       <div class="page-content-select"><h4>Please select the service 
       you requires:</h4></div>
       <div class="page-content-choose">
-		 <input class="deliver" type="radio" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
+		 <input class="deliver" type="radio" disabled="disabled" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
 		 Deliver one or more items
-         <input class="pick-up" type="radio" name="items" '.($parcels['ptype']==1 ? 'checked':'').' value="1" >
+         <input class="pick-up" type="radio" disabled="disabled" name="items" '.($parcels['ptype']==1 ? 'checked':'').' value="1" >
          Pickup one or more items
       </div>
       <div class="page-content-address" >
@@ -187,8 +187,13 @@ document.onreadystatechange = subSomething;
 function subSomething() { 
 if(document.readyState == "complete") {
   $(".post-suburb").removeAttr("disabled");
+  $(".deliver").removeAttr("disabled");
+  $(".pick-up").removeAttr("disabled");
+
 }else{
   $(".post-suburb").attr("disabled","disabled");
+  $(".deliver").addr("disabled","disabled");
+  $(".pick-up").addr("disabled","disabled");
 }
 
 }

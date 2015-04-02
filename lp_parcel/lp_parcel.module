@@ -133,6 +133,22 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 	}else{
 	  $cash_to_collect = '';
 	}
+	if(isset($lp_node->field_pickup_note['und'][0]['value'])){
+	  $pickup_note = $lp_node->field_pickup_note['und'][0]['value'];
+	}else{
+	  $pickup_note = '';
+	}
+	if(isset($lp_node->field_customer_reference['und'][0]['value'])){
+	  $customer_ref = $lp_node->field_customer_reference['und'][0]['value'];
+	}else{
+	  $customer_ref = '';
+	}
+	if(isset($lp_node->field_pick_up_time_ampm['und'][0]['value'])){
+	  $pickup_time = $lp_node->field_pick_up_time_ampm['und'][0]['value'];
+	}else{
+	  $pickup_time = '';
+	}
+
       }
      $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
@@ -165,12 +181,12 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                '#options' => array(
                   'AM' => t('AM'),
                  'PM' => t('PM'),
-               ),'#default_value' => $extra_info['pickupdata'][$f]['field_pick_up_time_ampm'],
+               ),'#default_value' => !isset($pickup_time)?$extra_info['pickupdata'][$f]['field_pick_up_time_ampm']:$pickup_time,
                '#attributes' => array('class'=>array('pick_up_time_ampm')),
                ),'field_customer_reference'=>array(
                 '#type' => 'textfield',
                 '#title' => t('Customer reference'),
-                '#default_value' =>$extra_info['deliverydata'][$f]['field_customer_reference'],
+                '#default_value' =>!isset($customer_ref)?$extra_info['deliverydata'][$f]['field_customer_reference']:$customer_ref,
                 '#description' => t('Enter any reference number here to help you find this item.')
                 ),'field_cash_to_collect'=>array(
                 '#type' => 'textfield',
@@ -184,7 +200,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
                 '#title' => t('Pickup Note'),
                 '#type' => 'textarea',
                 '#description' => t('Enter any information here that would assist with the pick up process'),
-                '#default_value' =>$extra_info['pickupdata'][$f]['field_pickup_note'],
+                '#default_value' =>!isset($pickup_note)?$extra_info['pickupdata'][$f]['field_pickup_note']:$pickup_note,
                 '#attributes' => array('class'=>array('pickup_note')),
                 ));
             }
@@ -381,24 +397,43 @@ function lp_parcel_uc_checkout_pane_parcel_delivery($op, $order, $form = NULL, &
         if(isset($_SESSION['lp_node'])){
 
           $parcels['parcels'][0]['parcelnum'] = 'Parcel#1';
+
+	  $lp_node = node_load($_SESSION['lp_node']);	
+
+
+	if(isset($lp_node->field_authority_to_leave['und'][0]['value'])){
+	  $authority_to_leave = $lp_node->field_authority_to_leave['und'][0]['value'];
+	}else{
+	  $authority_to_leave= '';
+	}
+	
+	if(isset($lp_node->field_delivery_note['und'][0]['value'])){
+	  $delivery_note = $lp_node->field_delivery_note['und'][0]['value'];
+	}else{
+	  $delivery_note= '';
+	}
+ 
+	
         } 
         
 
     $parceldata=lp_parcel_get_parcel_data($orderid);
     $extra_info=$parceldata['extra_info'];
     if(is_array($extra_info) && count($extra_info)>0){
+
+       
         $delivery_extra=array();
         if($parcels['ptype']=="1"){
              $delivery_extra[0]=array('field_parcel_delivery_address_data'=>lp_parcel_get_parcel_address($parcels,'delivery',0,$extra_info['deliverydata'][0]['field_parcel_delivery_address'],$user),'field_authority_to_leave'=>array(
               '#title' => t('Authority to leave'),
                 '#type' =>'checkbox', 
-                '#default_value'=>$extra_info['deliverydata'][0]['field_authority_to_leave'],
+                '#default_value'=>!isset($authority_to_leave)?$extra_info['deliverydata'][0]['field_authority_to_leave']:$authority_to_leave,
                 '#attributes' => array('class'=>array('authority_to_leave')),
                   ),'field_delivery_note'=>array(
                 '#title' => t('Delivery Note'),
                 '#type' => 'textarea',
                 '#description' => t('Enter any information here that would assist with the delivery process'),
-                '#default_value' =>$extra_info['deliverydata'][0]['field_delivery_note'],
+                '#default_value' =>!isset($delivery_note)?$extra_info['deliverydata'][0]['field_delivery_note']:$delivery_note,
                 '#attributes' => array('class'=>array('delivery_note')),
                 ));
         }else{
