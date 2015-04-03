@@ -631,7 +631,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
         }
      db_update('uc_orders')->fields(array('order_total' => $order_total))->condition('order_id',$order->order_id , '=')->execute();
     db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
-  if(!isset($_SESSION['lp_node'])){
+
     $order_id=$order->order_id;
     $parceldata=lp_parcel_get_parcel_data($order_id);
     $parcel_info=$parceldata['parcel_info'];
@@ -639,7 +639,9 @@ function lp_parcel_uc_checkout_complete($order, $account){
 
     
     foreach($parcel_info['parcels'] as $key=>$parcel){
-        
+      
+     if(!isset($_SESSION['lp_node'])){
+
        $newnode = new stdClass();
        $newnode->uid=$order->uid;
        $newnode->language='und';
@@ -656,8 +658,21 @@ function lp_parcel_uc_checkout_complete($order, $account){
       }
 
        node_save($newnode);
-       
-        $node = node_load($newnode->nid);
+       $nid = $newnode->nid;
+     }else{
+
+       $lp_nid  = $_SESSION['lp_node'];
+       $lp_node = node_load($lp_nid);
+	    if(!empty($lp_node)){
+	       $lp_node->title = 'Order'.$order->order_id.'Parcel1';
+	       $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
+	       $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';   
+	       node_save($lp_node); 
+	    }
+	$nid = $lp_nid;
+     }		
+
+        $node = node_load($nid);
 
        $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
        $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'].'_'.$parcel_info['ptype'];
@@ -744,21 +759,8 @@ function lp_parcel_uc_checkout_complete($order, $account){
       
  $cart_id=uc_cart_get_id();
  db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
-
-    }else{
- $cart_id=uc_cart_get_id();
- db_delete("liveparcels_cart")->condition('cart_id',$cart_id, '=')->execute();
-       $lp_nid  = $_SESSION['lp_node'];
-       $lp_node = node_load($lp_nid);
-    if(!empty($lp_node)){
-       $lp_node->title = 'Order'.$order->order_id.'Parcel1';
-       $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
-       $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';
-       node_save($lp_node); 
-    }
-       unset($_SESSION['lp_node']);
-       unset($_SESSION['lp_order']);
-    } 
+    unset($_SESSION['lp_node']);
+    unset($_SESSION['lp_order']);
     unset($_SESSION['admin_order']);
     unset($_SESSION['pickup_data']);
     unset($_SESSION['delivery_data']); 
