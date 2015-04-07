@@ -622,8 +622,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
 
       $parcels=liveparcels_getparcelsdata();
      if(is_array($parcels) && count($parcels)>0){
-            if(module_exists('lp_discount')){
- 
+        if(module_exists('lp_discount')){
             $parcels['discount']=lp_discount_get_pricing($parcels['totals']);
             $order_total=$parcels['totals']-$parcels['discount'];
         }else{
@@ -637,7 +636,6 @@ function lp_parcel_uc_checkout_complete($order, $account){
     $parcel_info=$parceldata['parcel_info'];
     $extra_info=$parceldata['extra_info'];
 
-    
     foreach($parcel_info['parcels'] as $key=>$parcel){
       
      if(!isset($_SESSION['lp_node'])){
@@ -657,36 +655,52 @@ function lp_parcel_uc_checkout_complete($order, $account){
         $newnode->field_fee_status[$newnode->language][0]['value'] = 'Confirmed';
       }
 
-       node_save($newnode);
-       $nid = $newnode->nid;
      }else{
 
        $lp_nid  = $_SESSION['lp_node'];
-       $lp_node = node_load($lp_nid);
-	    if(!empty($lp_node)){
-	       $lp_node->title = 'Order'.$order->order_id.'Parcel1';
-	       $lp_node->field_parcel_order_id['und'][0]['value']= $order->order_id;
-	       $lp_node->field_fee_status['und'][0]['value'] = 'Confirmed';   
-	       node_save($lp_node); 
+       $newnode = node_load($lp_nid);
+	    if(!empty($newnode)){
+	        $newnode->title = 'Order'.$order->order_id.'Parcel1';
+	        $newnode->field_parcel_order_id['und'][0]['value']= $order->order_id;
+	        $newnode->field_fee_status['und'][0]['value'] = 'Confirmed'; 
+                $newnode->field_pickup_location['und'][0]['name'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['first_name'].' '.$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['last_name'];
+		$newnode->field_pickup_location['und'][0]['street'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['street1'];
+		$newnode->field_pickup_location['und'][0]['additional'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['street2'];
+		$newnode->field_pickup_location['und'][0]['city'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['city'];
+		$newnode->field_pickup_location['und'][0]['province'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['zone_name'];
+		$newnode->field_pickup_location['und'][0]['postal_code'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['postal_code'];
+		$newnode->field_pickup_location['und'][0]['country'] = strtolower($extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['country_code']);
+		$newnode->field_pickup_location['und'][0]['phone'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['phone'];
+		$newnode->field_pickup_location['und'][0]['company'] = $extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['company'];
+
+
+ 		$newnode->field_delivery_location['und'][0]['name'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['first_name'].' '.$extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['last_name'];
+		$newnode->field_delivery_location['und'][0]['street'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['street1'];
+		$newnode->field_delivery_location['und'][0]['additional'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['street2'];
+		$newnode->field_delivery_location['und'][0]['city'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['city'];
+		$newnode->field_delivery_location['und'][0]['province'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['zone_name'];
+		$newnode->field_delivery_location['und'][0]['postal_code'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['postal_code'];
+		$newnode->field_delivery_location['und'][0]['country'] = strtolower($extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['country_code']);
+		$newnode->field_delivery_location['und'][0]['phone'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['phone'];
+		$newnode->field_delivery_location['und'][0]['company'] = $extra_info['deliverydata'][$key]['field_parcel_delivery_address']['address']['company'];
+
 	    }
-	$nid = $lp_nid;
      }		
 
-        $node = node_load($nid);
-
-       $node->field_parcel_size[$node->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
-       $node->field_parcel_package_name[$node->language][0]['value'] =$parcel['package_name'].'_'.$parcel_info['ptype'];
-        $node->field_parcel_weight[$node->language][0]['value'] = $parcel['weighttext']>0 ? round($parcel['weighttext'],1):0;
+    
+       $newnode->field_parcel_size[$newnode->language][0]['value'] =$parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm';
+       $newnode->field_parcel_package_name[$newnode->language][0]['value'] =$parcel['package_name'].'_'.$parcel_info['ptype'];
+        $newnode->field_parcel_weight[$newnode->language][0]['value'] = $parcel['weighttext']>0 ? round($parcel['weighttext'],1):0;
         $pprice=str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
-        $node->field_parcel_price[$node->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
-        $node->field_parcel_order_id[$node->language][0]['value'] =$order_id;
+        $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
+        $newnode->field_parcel_order_id[$newnode->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){
                $pickup_address_id=lp_parcel_update_parcel_address($extra_info['pickupdata'][$key]['field_parcel_pickup_address'],$order->uid);
                $delivery_address_id=$key>0 ? $delivery_address_id : lp_parcel_update_parcel_address($extra_info['deliverydata'][0]['field_parcel_delivery_address'],$order->uid);
                
                $pickup_location_id=lp_parcel_update_parcel_location($extra_info['pickupdata'][$key]['field_parcel_pickup_address'],$order->uid);
-               
+
                $delivery_location_id=$key>0 ? $delivery_location_id : lp_parcel_update_parcel_location($extra_info['deliverydata'][0]['field_parcel_delivery_address'],$order->uid);
               
                 $field_pickup_first_name=$extra_info['pickupdata'][$key]['field_parcel_pickup_address']['address']['first_name'];
@@ -710,7 +724,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
                 $delivery_address_id=lp_parcel_update_parcel_address($extra_info['deliverydata'][$key]['field_parcel_delivery_address'],$order->uid);
 
                $pickup_location_id= $key>0 ? $pickup_location_id :lp_parcel_update_parcel_location($extra_info['pickupdata'][0]['field_parcel_pickup_address'],$order->uid);
-               
+
                $delivery_location_id= lp_parcel_update_parcel_location($extra_info['deliverydata'][$key]['field_parcel_delivery_address'],$order->uid);
               
               
@@ -730,31 +744,34 @@ function lp_parcel_uc_checkout_complete($order, $account){
                 $field_customer_reference=$extra_info['deliverydata'][$key]['field_customer_reference'];
                 $field_delivery_note=$extra_info['deliverydata'][$key]['field_delivery_note'];
 
+
           }
-        $node->field_pickup_location[$node->language][0]['lid'] =$pickup_location_id;
-        $node->field_delivery_location[$node->language][0]['lid'] =$delivery_location_id;
-        
-        $node->field_pickup_first_name[$node->language][0]['value'] =$field_pickup_first_name;
-        $node->field_pickup_last_name[$node->language][0]['value'] =$field_pickup_last_name;
+
+
+
+
+        $newnode->field_pickup_location[$newnode->language][0]['lid'] =$pickup_location_id;
+        $newnode->field_delivery_location[$newnode->language][0]['lid'] =$delivery_location_id;
+      //  $node->field_pickup_first_name[$node->language][0]['value'] =$field_pickup_first_name;
+      //  $node->field_pickup_last_name[$node->language][0]['value'] =$field_pickup_last_name;
 
         
-        $node->field_delivery_first_name[$node->language][0]['value'] =$field_delivery_first_name;
-        $node->field_delivery_last_name[$node->language][0]['value'] =$field_delivery_last_name;
+      //  $node->field_delivery_first_name[$node->language][0]['value'] =$field_delivery_first_name;
+      //  $node->field_delivery_last_name[$node->language][0]['value'] =$field_delivery_last_name;
 
         
-        $node->field_pick_up_time[$node->language][0]['value'] =$field_pick_up_time;
-        $node->field_pick_up_time_ampm[$node->language][0]['value'] =$field_pick_up_time_ampm;
-        $node->field_cash_to_collect[$node->language][0]['value'] =$field_cash_to_collect;
-        $node->field_pickup_note[$node->language][0]['value'] =$field_pickup_note;
+        $newnode->field_pick_up_time[$newnode->language][0]['value'] =$field_pick_up_time;
+        $newnode->field_pick_up_time_ampm[$newnode->language][0]['value'] =$field_pick_up_time_ampm;
+        $newnode->field_cash_to_collect[$newnode->language][0]['value'] =$field_cash_to_collect;
+        $newnode->field_pickup_note[$newnode->language][0]['value'] =$field_pickup_note;
         
-        $node->field_authority_to_leave[$node->language][0]['value'] =$field_authority_to_leave>0 ? $field_authority_to_leave:0;
-        $node->field_customer_reference[$node->language][0]['value'] =$field_customer_reference;
+        $newnode->field_authority_to_leave[$newnode->language][0]['value'] =$field_authority_to_leave>0 ? $field_authority_to_leave:0;
+        $newnode->field_customer_reference[$newnode->language][0]['value'] =$field_customer_reference;
 
-
-
-        $node->field_delivery_note[$node->language][0]['value'] =$field_delivery_note;
+        $newnode->field_delivery_note[$newnode->language][0]['value'] =$field_delivery_note;
   
-          node_save($node);
+
+          node_save($newnode);
     }
       
  $cart_id=uc_cart_get_id();

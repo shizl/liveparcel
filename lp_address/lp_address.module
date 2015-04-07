@@ -250,6 +250,7 @@ $location['postal_code'] = $address['address']['postal_code'];
  $data = google_geocode_location($location);
 
 
+
   $lid = db_insert('location') 
     ->fields(array(
       'name' => $address['address']['first_name'].' '.$address['address']['last_name'],
@@ -267,6 +268,7 @@ $location['postal_code'] = $address['address']['postal_code'];
   $location_extra=array("lid"=>$lid,"phone"=>$address['address']['phone'],"company"=>$address['address']['company']);
   location_company_locationapi($location_extra,'save');
   location_phone_locationapi($location_extra,'save');
+
   return $lid;
 
 }
