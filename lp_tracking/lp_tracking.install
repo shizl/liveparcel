@@ -159,7 +159,7 @@ function lp_tracking_install() {
     $instance = array(
       'field_name' => $field_name, 
       'entity_type' => 'comment', 
-      'label' => 'Driver Assigned', 
+      'label' => 'Driver assigned', 
       'bundle' => 'comment_node_live_parcel', 
       'required' => FALSE,
       'description' => 'Driver assigned to pick-up the parcel.',
