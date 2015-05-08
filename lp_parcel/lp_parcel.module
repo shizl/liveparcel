@@ -868,6 +868,8 @@ global $user;
 	foreach($account->roles as $key=>$role){
 		$role_array .=  '"'.$key.'"'.':'. '"'. $role.'",';
 	}
+	$role_array = substr($role_array,0,strlen($role_array)-1);
+	
 	$orderid = empty($node->field_parcel_order_id['und'][0]['value'])?'':$node->field_parcel_order_id['und'][0]['value'];
 	$price = empty($node->field_parcel_price['und'][0]['value'])?'':$node->field_parcel_price['und'][0]['value'];
 	$dimension = empty($node->field_parcel_size['und'][0]['value'])?'':$node->field_parcel_size['und'][0]['value'];
