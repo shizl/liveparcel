@@ -37,9 +37,9 @@ echo '<th>Location</th>';
 
 <th>Status</th>
 <?php 
-if(in_array(3,$arr)||in_array('driver',$arrname)){
-echo '<th>Starred</th>';
-}
+//if(in_array(3,$arr)||in_array('driver',$arrname)){
+//echo '<th>Starred</th>';
+//}
 ?>
 <?php
 if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
