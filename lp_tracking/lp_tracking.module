@@ -152,3 +152,15 @@ function lp_tracking_theme(){
   );
 }
 
+function lp_tracking_views_query_alter(&$view, &$query){
+
+  if ($view->name == 'parcels_order') {
+
+  //print_r( $query);exit;
+
+  }
+}
+
+
+
+

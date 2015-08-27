@@ -1,4 +1,12 @@
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+
+<style>
+
+ .subject a{
+ color:red !important;
+}
+
+</style>
 <?php
 
 global $user;
@@ -42,7 +50,10 @@ if($user->uid!=0 ||in_array(3,$arr)||in_array('driver',$arrname)){
 
 
 <?php 
-  $starred = empty($content['field_starred'])?'':render($content['field_starred']);
+
+  $starred_value = !empty($content['field_starred'])?$content['field_starred']['#object']->field_starred['und'][0]['value']:'';
+
+  $starred = empty($content['field_starred']) ?'':render($content['field_starred']);
 
 if(in_array(3,$arr)||in_array('driver',$arrname)){
   print '<td>'.$starred .'</td>';
@@ -52,7 +63,9 @@ if(in_array(3,$arr)||in_array('driver',$arrname)){
 <?php  
 
 if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
- print '<td>'.$title.'</td>'; 
+  
+ print $starred_value=='' || $starred_value=='0'?'<td>'.$title.'</td>':'<td class="subject">'.$title.'</td>';
+
  }
 ?>
 </tr>

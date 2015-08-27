@@ -859,7 +859,7 @@ global $user;
     if ($node->type=="live_parcel"){
 
 	drupal_add_css(drupal_get_path('module','lp_parcel').'/lp_parcel.css');
-	//drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
+//	drupal_add_js(drupal_get_path('module','lp_address').'/lp_address.js');
 
         global $base_url;
 

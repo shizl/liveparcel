@@ -1,0 +1,64 @@
+<?php
+
+function lp_feature_service_menu(){
+
+ $item['admin/liveparcels/adminsetting/feature_service'] = array(
+      'title' => t('Optional fees settings'), 
+      'description' => 'Configure optional fees.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('lp_feature_service_settings'),
+      'access arguments' => array('administer actions'),
+      'file' => 'lp_feature_service.admin.inc',
+
+ );
+
+  $item['admin/liveparcels/adminsetting/feature_service/ajax'] = array(
+      'page callback' => 'feature_service_delete',	
+      'access callback' => true,
+  );
+
+
+ return $item;
+
+}
+
+
+
+function feature_service_delete(){
+
+ if(!empty($_POST['id'])){
+    $id = $_POST['id'];
+   
+     $result = db_delete('live_parcel_feature_service')
+          ->condition('id',$id)
+          ->execute();
+ 
+    print_r($result);
+}
+
+}
+
+
+function get_service_type(){
+
+ $results = db_query('select * from {live_parcel_feature_service}');
+
+  $rows = array();
+ foreach($results as $result){
+  $row = array();
+  $row['id'] = $result->id;
+  $row['type'] = $result->type;
+  $row['value']= $result->value;
+  $rows[] = $row;
+ }
+
+ return $rows;
+
+}
+
+
+function get_service_value($id){
+  $result = db_query('select value from {live_parcel_feature_service} where id = :id',array(':id'=>$id))->fetchfield();
+  return $result;
+}
+

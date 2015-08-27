@@ -9,19 +9,7 @@
  * Menu callback which provides the store administration overview page.
  */
 function liveparcels_packageshow() {
-
-
 $parcels=liveparcels_getparcelsdata();
-
- $service_type = get_service_type();
-//update 2015-08-13
-$options = '';
- foreach($service_type as $service){
-   $options .= '<option value="'.$service['id'].'">'.$service['type'].' (+'.$service['value'].')</option>'; 
- }
-
-
-
 $parcel_info='';
  $postfrom='';
  $post='postto';
@@ -77,10 +65,6 @@ $p++;
                   </ul>
                 </td>
               </tr>
-	      <tr>
-		<td class="service-type">Service Type:</td>
-		<td><select class="optional-fees">'.$options.'</select></td>
-	      </tr>
             </table>
           </div>
         <div class="post-btn">
@@ -158,10 +142,6 @@ $p++;
                   <ul class="pcode" id="pcode1">
                   </ul>
                 </td>
-	      <tr>
-		<td class="service-type">Service Type:</td>
-		<td><select class="optional-fees">'.$options.'</select></td>
-	      </tr>
               </tr>
             </table>
           </div>
@@ -468,11 +448,6 @@ if(document.readyState == "complete") {
 			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
 			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-	             	
-			  var service_type = $(".post-all:eq("+(f-1)+")").find(".optional-fees").val();
-
-
-
               var ptype=2;
               if($(".deliver").attr("checked")){
                    var postfrom =$(".pnum-from").val();
@@ -494,7 +469,7 @@ if(document.readyState == "complete") {
 			  }
               weighttext=parseFloat(weighttext);
               
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -522,7 +497,6 @@ if(document.readyState == "complete") {
                             '.(module_exists('lp_discount') ? ' 
                             if(zone.discount>0 ){ $(".order-discount").html("Discount: '.variable_get('uc_currency_sign','$').'" + zone.discount);}else{$(".order-discount").html(""); }':'').'
                             var totals=zone.totals-zone.discount; 
-
                             $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
 					    }else{
                             $(".header-warning").show();
@@ -575,9 +549,6 @@ if(document.readyState == "complete") {
            }       
 	       $(".page-float input").attr("disabled",true);     
 	       $(".post-mess table input").css("background","#d2d2d2");
-	       $(".page-float select").attr("disabled",true);     
-
-
 	       $(".add_new").hide();
 	       $(this).attr("value","Modify");
 	    }else{
@@ -592,11 +563,9 @@ if(document.readyState == "complete") {
 		      $(".post-suburb").css("border","1px solid #ccc");
 		   }
 		   $(".page-float input").attr("disabled",false);
-		   $(".page-float select").attr("disabled",false);
-
+		   
 		   $(".dimens-text").attr("disabled",true);
 		   $(".post-mess table input").css("background","white");
-
 		   $(".dimens-input input").css("background","#d2d2d2");
 		   $(".order ul li").remove();
 		   $(".order ul").append("<li>Pending...</li>");
@@ -724,7 +693,7 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
                     }
               }
       }
-  
+     
 		return  array("pprice"=>$items['pprice'],"package_name"=>$items['package_name']);
 }  
 
@@ -745,12 +714,10 @@ if(isset($_SESSION['lp_order'])){
     $totals=0;
     $error=0;
     $parcels_price=array();
-    $service_price = array();
-
-
 	if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
+            
             if($pprice['pprice']>0){
                 $pfrom=explode('_',$pdata['postfrom']);
                  $pto=explode('_',$pdata['postto']);
@@ -768,15 +735,11 @@ if(isset($_SESSION['lp_order'])){
                   $pzone=0;  
             }
             $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').round($pzone,1),"package_name"=>$pprice['package_name']);
-	    // service price
-	    $type_value =  get_service_value($pdata['service_type']);
-    	    $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').round($pzone*$type_value,1),"package_name"=>$pprice['package_name']);
             $totals+=$pzone;
-    	    $totals += $pzone*$type_value;
             if($pzone=='0'){
             $error=1;    
             }
-            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').($pzone*$type_value)."</div></li>";
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
         }
 	}
      if(module_exists('lp_discount')){
@@ -784,8 +747,7 @@ if(isset($_SESSION['lp_order'])){
     }else{
         $discount=0;
     }
-
-    $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
+    $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
 		echo json_encode($returndata);		
 }

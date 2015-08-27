@@ -1,0 +1,19 @@
+.rows-wrapper .form-item{
+float:left;
+
+width:250px;
+}
+.rows-wrapper{
+clear:both;
+overflow:hidden;
+}
+.label{
+clear:both;
+overflow:hidden;
+height:40px;
+}
+.label label{
+float:left;
+width:250px;
+line-height:40px;
+}

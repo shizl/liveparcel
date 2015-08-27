@@ -74,7 +74,6 @@ border: 1px solid #ccc;
 margin-top: 15px;
 width: 450px;
 float: left;
-position: relative;
 }
 .post-mess {
 margin-top:2px;
@@ -114,10 +113,10 @@ width:238px;
 width:150px;
 }
 .post-btn {
-   bottom: 34px;
-    position: absolute;
-    right: 10px;
-    width: 100px;
+width:100px;
+float:right;
+margin-top: -52px;
+margin-right: 2px;
 }
 .post-btn .duplicate {
 margin-top:10px;

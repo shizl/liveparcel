@@ -29,7 +29,6 @@ jQuery(".parcel_select_address").change(function(){
         jQuery("."+parcel_id[0]+"_address_name:eq("+parcel_id[1]+")").val(jQuery("."+parcel_id[0]+"_address_name:eq("+parcel_id[2]+")").val());
     });  
 
- 
 });
 
 

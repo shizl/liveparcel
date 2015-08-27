@@ -1,0 +1,32 @@
+<?php 
+
+
+
+function lp_feature_service_schema() {
+  $schema['live_parcel_feature_service'] = array(
+      'description' => 'TODO: please describe this table!',
+      'fields' => array(
+        'id' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'serial',
+          'not null' => TRUE,
+          ),
+        'type' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          ),
+        'value' => array(
+          'description' => 'TODO: please describe this field!',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+          'default' => 0,
+          ),
+        ),
+        'primary key' => array('id'),
+        );
+  return $schema;
+
+}
