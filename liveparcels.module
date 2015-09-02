@@ -426,21 +426,52 @@ function liveparcels_getparcelsdata(){
 function theme_liveparcels_review_table($variables) {
   $parcels = $variables['items'];
   // Set up table header.
+
+
+ if(module_exists('lp_feature_service')&&get_service_type_count()>1&&!empty($parcels['parcels'][0]['service_type'])){
+  $header = array(
+    array('data' => t('Products'), 'class' => array('products')),
+    array('data' =>t('Dimension'), 'class' => array('price')),
+    array('data' =>t('Weight'), 'class' => array('price')),
+    array('data' =>t('Price'), 'class' => array('price')),
+    array('data' =>t('Service Fee'), 'class' => array('price')),
+  );
+ }else{
   $header = array(
     array('data' => t('Products'), 'class' => array('products')),
     array('data' =>t('Dimension'), 'class' => array('price')),
     array('data' =>t('Weight'), 'class' => array('price')),
     array('data' =>t('Price'), 'class' => array('price')),
   );
+ }
+
+
 
   // Set up table rows.
   foreach ($parcels['parcels'] as $parcel ) {
+
+     if(module_exists('lp_feature_service')&&get_service_type_count()>1&&!empty($parcel['service_type'])){
+
+      $val = get_service_value($parcel['service_type']);
+      $service_price = intval(str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']))*$val;
+    $rows[] = array(
+      array('data' => $parcel['parcelnum'], 'class' => array('products')),
+      array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
+      array('data' => $parcel['weighttext'].' kg','class' => array('price')),
+      array('data' =>  $parcel['price'],'class' => array('price')),
+      array('data' =>  variable_get('uc_currency_sign','$').$service_price,'class' => array('price')),
+    );
+
+      }else{
+
     $rows[] = array(
       array('data' => $parcel['parcelnum'], 'class' => array('products')),
       array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
       array('data' => $parcel['weighttext'].' kg','class' => array('price')),
       array('data' =>  $parcel['price'],'class' => array('price')),
     );
+
+     }
   }
 
   // Add the subtotal as the final row.
@@ -454,7 +485,7 @@ function theme_liveparcels_review_table($variables) {
           '#price' => $parcels['totals'],
         ),
         // Cell attributes
-        'colspan' => 4,
+        'colspan' => 5,
         'class' => array('subtotal'),
       ),
     ),

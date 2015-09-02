@@ -1,8 +1,10 @@
 .rows-wrapper .form-item{
 float:left;
+margin:0px 20px 0px 0px!important;
 
-width:250px;
 }
+
+
 .rows-wrapper{
 clear:both;
 overflow:hidden;
@@ -10,10 +12,21 @@ overflow:hidden;
 .label{
 clear:both;
 overflow:hidden;
-height:40px;
+height:30px;
 }
 .label label{
 float:left;
-width:250px;
-line-height:40px;
+line-height:30px;
+margin-right:20px;
+}
+
+.label label.val{
+width:93px;
+}
+
+.label label.desc{
+width:215px;
+}
+.del{
+line-height:37px;
 }

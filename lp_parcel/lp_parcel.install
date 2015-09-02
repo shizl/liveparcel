@@ -44,6 +44,7 @@ function lp_parcel_uninstall() {
   field_delete_field('field_parcel_pickup_address'); 
   field_delete_field('field_parcel_order_id'); 
   field_delete_field('field_parcel_price');    
+  field_delete_field('field_service_type');   
   field_delete_field('field_parcel_size');    
   field_delete_field('field_parcel_package_name');   
   field_delete_field('field_parcel_weight');  
@@ -78,7 +79,8 @@ function lp_parcel_install() {
   }
   liveparcels_create_field('Order ID','field_parcel_order_id',array('type'=>'number_integer','widget'=>"number","display"=>array("default"=>array("label"=>"inline")),"setting"=>array()));
   liveparcels_create_field('Shipping fee','field_parcel_price',array('type'=>'number_decimal','widget'=>"number","display"=>array("default"=>array("label"=>"inline",'settings'=>array('scale'=>2))),"setting"=>array('prefix'=>variable_get('uc_currency_sign','$'),'precision'=>10,'scale'=>2)));
-  liveparcels_create_field('Parcel dimension','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
+  liveparcels_create_field('Service type','field_service_type',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
+liveparcels_create_field('Parcel dimension','field_parcel_size',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
   liveparcels_create_field('Package type','field_parcel_package_name',array('type'=>'text','widget'=>"text_textfield","display"=>array("default"=>array("label"=>"inline")),"setting"=>array('max_length'=>100,'text_processing'=>0)));
   liveparcels_create_field('Parcel weight','field_parcel_weight',array('type'=>'number_decimal','widget'=>"number","display"=>array("default"=>array("label"=>"inline",'settings'=>array('scale'=>1))),"setting"=>array('suffix'=>' kg','precision'=>10,'scale'=>1)));
   liveparcels_create_field('Authority to leave','field_authority_to_leave',array('type'=>'list_boolean','widget'=>"options_onoff",'wsettings'=>array('display_label'=>1),"display"=>array("default"=>array("label"=>"inline")),"setting"=>array('allowed_values' =>array('0'=>'No','1'=>'Yes'),'allowed_values_function' => '')));

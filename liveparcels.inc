@@ -13,13 +13,15 @@ function liveparcels_packageshow() {
 
 $parcels=liveparcels_getparcelsdata();
 
+if(module_exists('lp_feature_service') && get_service_type_count()>1){
  $service_type = get_service_type();
 //update 2015-08-13
 $options = '';
  foreach($service_type as $service){
-   $options .= '<option value="'.$service['id'].'">'.$service['type'].' (+'.$service['value'].')</option>'; 
+   $options .= '<option value="'.$service['id'].'">'.$service['type'].' (+'.($service['value']*100).'%)</option>'; 
  }
 
+}
 
 
 $parcel_info='';
@@ -76,11 +78,11 @@ $p++;
                   <ul class="pcode" id="pcode1">
                   </ul>
                 </td>
-              </tr>
+              </tr>'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
 	      <tr>
 		<td class="service-type">Service Type:</td>
 		<td><select class="optional-fees">'.$options.'</select></td>
-	      </tr>
+	      </tr>':'').'
             </table>
           </div>
         <div class="post-btn">
@@ -158,11 +160,13 @@ $p++;
                   <ul class="pcode" id="pcode1">
                   </ul>
                 </td>
-	      <tr>
+             </tr> 
+		'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
+	      	<tr>
 		<td class="service-type">Service Type:</td>
 		<td><select class="optional-fees">'.$options.'</select></td>
-	      </tr>
-              </tr>
+	      	</tr>':'').'
+       
             </table>
           </div>
         <div class="post-btn">
@@ -769,17 +773,25 @@ if(isset($_SESSION['lp_order'])){
             }
             $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').round($pzone,1),"package_name"=>$pprice['package_name']);
 	    // service price
+	    $totals+=$pzone;
+	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
 	    $type_value =  get_service_value($pdata['service_type']);
     	    $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').round($pzone*$type_value,1),"package_name"=>$pprice['package_name']);
-            $totals+=$pzone;
     	    $totals += $pzone*$type_value;
+	    }
+
             if($pzone=='0'){
             $error=1;    
             }
+
+	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
             $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').($pzone*$type_value)."</div></li>";
+            }else{
+ $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
+	    }
         }
 	}
-     if(module_exists('lp_discount')){
+    if(module_exists('lp_discount')){
         $discount=lp_discount_get_pricing($totals);
     }else{
         $discount=0;

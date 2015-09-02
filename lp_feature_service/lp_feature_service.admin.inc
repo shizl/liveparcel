@@ -24,7 +24,7 @@ $form['#attached']['js'] = array(
       '#collapsible' => TRUE,
       );
  $form['current_fees']['label'] = array(
-   '#markup'=>'<div class="label"><label>description</label> <label>value</label><label>action</label></div>',
+   '#markup'=>'<div class="label"><label class="desc">description</label> <label class="val">value</label><label>action</label></div>',
   );
 
 

@@ -692,7 +692,18 @@ function lp_parcel_uc_checkout_complete($order, $account){
        $newnode->field_parcel_package_name[$newnode->language][0]['value'] =$parcel['package_name'].'_'.$parcel_info['ptype'];
         $newnode->field_parcel_weight[$newnode->language][0]['value'] = $parcel['weighttext']>0 ? round($parcel['weighttext'],1):0;
         $pprice=str_replace(variable_get('uc_currency_sign','$'),'',$parcel['price']);
-        $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
+
+	if(module_exists('lp_feature_service')&&get_service_type_count()>1&&!empty($parcel['service_type'])){
+	    $val = get_service_value($parcel['service_type']);
+	    $service_name = get_service_name($parcel['service_type']);
+      	    $service_price = intval($pprice*$val);
+            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice+$service_price,2):0;
+ 	    $newnode->field_service_type[$newnode->language][0]['value'] = $service_name;
+
+        }else{
+            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
+        }
+
         $newnode->field_parcel_order_id[$newnode->language][0]['value'] =$order_id;
 
           if($parcel_info['ptype']=='1' ){
@@ -914,6 +925,7 @@ global $user;
         }
 	$node->content['parcel_detail']['parcel_order_id'] = empty($node->content['field_parcel_order_id'])?'':$node->content['field_parcel_order_id'];
 	$node->content['parcel_detail']['parcel_price'] = empty($node->content['field_parcel_price'])?'':$node->content['field_parcel_price'];
+	$node->content['parcel_detail']['parcel_service_type'] = empty($node->content['field_service_type'])?'':$node->content['field_service_type'];
 	$node->content['parcel_detail']['parcel_size'] = empty($node->content['field_parcel_size'])?'':$node->content['field_parcel_size'];
 	$node->content['parcel_detail']['parcel_package_name'] = empty($node->content['field_parcel_package_name'])?'':$node->content['field_parcel_package_name'];
 	$node->content['parcel_detail']['parcel_weight'] = empty($node->content['field_parcel_weight'])?'':$node->content['field_parcel_weight'];
