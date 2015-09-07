@@ -109,6 +109,13 @@ $output['print_right']['qrcode'] = array(
 $output['print_left']['note'] = array(
   '#markup'=>'<div class="note"><strong>Notes: </strong>'.(empty($node->field_delivery_note['und'][0]['value'])?'':$node->field_delivery_note['und'][0]['value']).'</div>',
 );
+
+$output['print_left']['service_type'] = array(
+
+  '#markup'=>'<div style="text-align:center;font-size:24px;font-style: italic;">'.(empty($node->field_service_type['und'][0]['value'])?'':$node->field_service_type['und'][0]['value']).'</div>',
+);
+
+
 if($leave==1){
 $output['print_left']['leave'] = array(
   '#markup'=>'<div class="leave_wapper"><div class="leave">Authority to leave</div></div>',

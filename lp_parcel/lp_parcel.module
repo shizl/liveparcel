@@ -943,6 +943,7 @@ global $user;
         hide($node->content['field_cash_to_collect']);
         hide($node->content['field_customer_reference']);
         hide($node->content['field_fee_status']);
+        hide($node->content['field_service_type']);
 
 if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 
