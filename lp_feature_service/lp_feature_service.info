@@ -1,5 +1,5 @@
-name = Feature Service
-description = Optional free.
+name = Service type
+description = Optional. Allows admin to create different service types which demand additional fee.
 package = Live Parcels - core
 configure = admin/liveparcels/adminsetting/feature_service
 dependencies[] = liveparcels
