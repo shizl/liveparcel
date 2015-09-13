@@ -80,7 +80,7 @@ $p++;
                 </td>
               </tr>'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
 	      <tr>
-		<td class="service-type">Service Type:</td>
+		<td class="service-type">Service (+fee):</td>
 		<td><select class="optional-fees">'.$options.'</select></td>
 	      </tr>':'').'
             </table>
