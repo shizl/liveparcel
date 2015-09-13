@@ -12,19 +12,19 @@ $form['#attached']['js'] = array(
 );
 
  $form['optional_fees'] = array(
-   '#markup'=>t('<h2>Optional Fees</h2><div class="description">help text.</div>'),
+   '#markup'=>t('<h2>Service types</h2><div class="description">If you provide different type of services, enter the service name below, e.g. Normal, 3hr guaranteed, Overnight, Snail, etc. You may also charge a higher/lower rate for these services, calculated as a multiple of your standard pricing.</div>'),
  );
 
 
 
   $form['current_fees'] = array(
       '#type'=>'fieldset',
-      '#title' =>'Current fees',
-      '#description' => 'help text.',
+      '#title' =>'Services and fee',
+      '#description' => 'To charge a service at 50% higher than the standard rate, enter 0.5 in the value column. To charge a service at 20% lower than the standard rate, enter -0.2 in the value column.',
       '#collapsible' => TRUE,
       );
  $form['current_fees']['label'] = array(
-   '#markup'=>'<div class="label"><label class="desc">description</label> <label class="val">value</label><label>action</label></div>',
+   '#markup'=>'<div class="label"><label class="desc">Description</label> <label class="val">Value</label> <label>Action</label></div>',
   );
 
 
@@ -81,7 +81,7 @@ $form['current_fees']['current_fee']['rows'] = array(
 $form['actions'] = array('#type'=>'actions');
 $form['actions']['submit'] = array(
  '#type'=>'submit',
- '#value'=>t('Update'),
+ '#value'=>t('Add'),
 );
 
   return $form;
@@ -123,5 +123,3 @@ function lp_feature_service_settings_submit(&$form,&$form_state){
   
 
 }
-
-
