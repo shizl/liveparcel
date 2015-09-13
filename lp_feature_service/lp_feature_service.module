@@ -3,8 +3,8 @@
 function lp_feature_service_menu(){
 
  $item['admin/liveparcels/adminsetting/feature_service'] = array(
-      'title' => t('Optional fees settings'), 
-      'description' => 'Configure optional fees.',
+      'title' => t('Service types'), 
+      'description' => 'Configure service type name and associated fees.',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('lp_feature_service_settings'),
       'access arguments' => array('administer actions'),
@@ -75,4 +75,3 @@ function get_service_name($id){
   $result = db_query('select type from {live_parcel_feature_service} where id = :id',array(':id'=>$id))->fetchfield();
   return $result;
 }
-
