@@ -20,7 +20,7 @@ $form['#attached']['js'] = array(
   $form['current_fees'] = array(
       '#type'=>'fieldset',
       '#title' =>'Services and fee',
-      '#description' => 'To charge a service at 50% higher than the standard rate, enter 0.5 in the value column. To charge a service at 20% lower than the standard rate, enter -0.2 in the value column.',
+      '#description' => 'To charge a service at 50% higher than the standard rate, enter 0.5 in the value column. To charge a service at 20% lower than the standard rate, enter -0.2 in the value column. Enter 0 in the value column for the service charged at standard rate.',
       '#collapsible' => TRUE,
       );
  $form['current_fees']['label'] = array(
