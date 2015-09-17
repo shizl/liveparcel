@@ -771,12 +771,12 @@ if(isset($_SESSION['lp_order'])){
             }else{
                   $pzone=0;  
             }
-            $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').round($pzone,1),"package_name"=>$pprice['package_name']);
+            $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone,2)),"package_name"=>$pprice['package_name']);
 	    // service price
 	    $totals+=$pzone;
 	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
 	    $type_value =  get_service_value($pdata['service_type']);
-    	    $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').round($pzone*$type_value,1),"package_name"=>$pprice['package_name']);
+    	    $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2)),"package_name"=>$pprice['package_name']);
     	    $totals += $pzone*$type_value;
 	    }
 
@@ -785,7 +785,7 @@ if(isset($_SESSION['lp_order'])){
             }
 
 	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
-            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').($pzone*$type_value)."</div></li>";
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div></li>";
             }else{
  $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
 	    }
@@ -797,7 +797,7 @@ if(isset($_SESSION['lp_order'])){
         $discount=0;
     }
 
-    $returndata=array('error'=>$error,'discount'=>$discount,'totals'=>$totals,'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
+    $returndata=array('error'=>$error,'discount'=>sprintf('%.2f',$discount),'totals'=>sprintf('%.2f',$totals),'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
 		echo json_encode($returndata);		
 }

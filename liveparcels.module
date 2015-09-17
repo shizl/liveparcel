@@ -459,7 +459,7 @@ function theme_liveparcels_review_table($variables) {
       array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
       array('data' => $parcel['weighttext'].' kg','class' => array('price')),
       array('data' =>  $parcel['price'],'class' => array('price')),
-      array('data' =>  variable_get('uc_currency_sign','$').$service_price,'class' => array('price')),
+      array('data' =>  variable_get('uc_currency_sign','$').sprintf('%.2f',$service_price),'class' => array('price')),
     );
 
       }else{

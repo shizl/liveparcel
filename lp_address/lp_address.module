@@ -202,10 +202,16 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
  * */
 function lp_address_address_update($address,$uid){
 
-  if(!empty($address['select_address']) && $address['select_address']>0){
-    $address_id=$address['select_address'];
-    $addressbook =UcAddressesAddressBook::loadAddress($address_id);
-    $addressbook->setField('first_name', $address['address']['first_name']);
+
+
+
+  if($address['select_address']!='0'){
+    $arr = explode('_',$address['select_address']);
+    $address_id=$arr[2];
+
+    $addressbook = UcAddressesAddressBook::loadAddress($address_id);
+
+  $addressbook->setField('first_name', $address['address']['first_name']);
     $addressbook->setField('last_name', $address['address']['last_name']);
     $addressbook->setField('company', $address['address']['company']);
     $addressbook->setField('street1', $address['address']['street1']);
@@ -218,6 +224,7 @@ function lp_address_address_update($address,$uid){
     $addressbook->save();
   }else{
     $addressbook=UcAddressesAddressBook::get($uid)->addAddress();
+ 
     $addressbook->setField('first_name', $address['address']['first_name']);
     $addressbook->setField('last_name', $address['address']['last_name']);
     $addressbook->setField('company', $address['address']['company']);
@@ -231,7 +238,8 @@ function lp_address_address_update($address,$uid){
     $addressbook->setField('default_shipping', '0');
     $addressbook->setField('default_billing', '0');
     $addressbook->save();
-    $address_id=$addressbook->getField('aid');
+
+    $address_id = $addressbook->getField('aid');
   }
   return $address_id;
 }
@@ -247,7 +255,8 @@ $location['country'] = strtolower($address['address']['country_code']);
 $location['city'] = $address['address']['city'];
 $location['province'] = $address['address']['zone_name'];
 $location['postal_code'] = $address['address']['postal_code'];
- $data = google_geocode_location($location);
+//$data = google_geocode_location($location);
+
 
 
 

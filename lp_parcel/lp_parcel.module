@@ -696,12 +696,13 @@ function lp_parcel_uc_checkout_complete($order, $account){
 	if(module_exists('lp_feature_service')&&get_service_type_count()>1&&!empty($parcel['service_type'])){
 	    $val = get_service_value($parcel['service_type']);
 	    $service_name = get_service_name($parcel['service_type']);
-      	    $service_price = intval($pprice*$val);
-            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice+$service_price,2):0;
+      	    $service_price = $pprice*$val;
+
+            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? sprintf('%.2f',round($pprice+$service_price,2)):0;
  	    $newnode->field_service_type[$newnode->language][0]['value'] = $service_name;
 
         }else{
-            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? round($pprice,2):0;
+            $newnode->field_parcel_price[$newnode->language][0]['value'] =$pprice>0 ? sprintf('%.2f',round($pprice,2)):0;
         }
 
         $newnode->field_parcel_order_id[$newnode->language][0]['value'] =$order_id;

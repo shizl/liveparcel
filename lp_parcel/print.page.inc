@@ -56,6 +56,7 @@ $output['print_left']['site_info']['site_name'] = array(
 	$p_address = empty($node->field_pickup_location['und'][0])?array():$node->field_pickup_location['und'][0];
 	$d_address = empty($node->field_delivery_location['und'][0])?array():$node->field_delivery_location['und'][0];
 
+        $service_type = empty($node->field_service_type['und'][0]['value'])?'':$node->field_service_type['und'][0]['value'];
 
 $output['print_left']['delivery_info'] = array(
   '#markup' => '<div class="delivery_info"><div class="field-items"><div class="field-item even"><div class="location vcard">
