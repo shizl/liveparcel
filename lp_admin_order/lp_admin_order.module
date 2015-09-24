@@ -960,11 +960,11 @@ function lp_admin_order_uc_checkout_pane_admin_order_settings($op, $order, $form
       }else{
         db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
       }
-      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'subtotal'))->fetchField();
       if($lid_tax){
         uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
       }else{
-        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+        uc_order_line_item_add($order->order_id,'subtotal','Parcel price',$parcels['totals'],'1');
       }
       if(module_exists('lp_discount')){
         $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
@@ -1064,11 +1064,11 @@ $cart_id=uc_cart_get_id();
       }else{
         db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
       }
-      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'subtotal'))->fetchField();
       if($lid_tax){
         uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
       }else{
-        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+        uc_order_line_item_add($order->order_id,'subtotal','Parcel price',$parcels['totals'],'1');
       }
       if(module_exists('lp_discount')){
         $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();

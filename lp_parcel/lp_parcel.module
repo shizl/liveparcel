@@ -70,6 +70,13 @@ global $user;
 
 }
 
+
+ function lp_parcel_uc_order_product_alter(&$product, $order) {
+   $parcels=liveparcels_getparcelsdata();
+//db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
+   $product->price = $parcels['totals'];
+}
+
 function lp_access($node){
 
 global $user;
@@ -108,6 +115,7 @@ function lp_parcel_order_view($node){
  * */
 function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$form_state = NULL){
   $orderid = 0;
+
    global $user;
 	 if(isset($_SESSION['admin_order'])||$user->uid ==1){
 	   $minDate = '0D';
@@ -119,7 +127,7 @@ function lp_parcel_uc_checkout_pane_parcel_pickup($op, $order, $form = NULL, &$f
 	   $default_minDate = date("Y-m-d",time(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0));
            $check_mindate = strtotime(date("Y-m-d"))+3600*24*variable_get('liveparcels_pickup_time',0);
           }
-        $parcels=liveparcels_getparcelsdata();
+   	   $parcels=liveparcels_getparcelsdata();
    drupal_add_css(drupal_get_path('module', 'lp_parcel') . '/lp_parcel.css',array('group' => CSS_DEFAULT, 'every_page' => TRUE));
      if($parcels){
       switch ($op) {
@@ -629,7 +637,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
             $order_total=$parcels['totals'];
         }
      db_update('uc_orders')->fields(array('order_total' => $order_total))->condition('order_id',$order->order_id , '=')->execute();
-    db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
+    
 
     $order_id=$order->order_id;
     $parceldata=lp_parcel_get_parcel_data($order_id);

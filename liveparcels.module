@@ -343,7 +343,9 @@ function liveparcels_getZonelistData($key='',$action='json') {
 /* create liveparcels pane */
 function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_state = NULL){
   $parcels=liveparcels_getparcelsdata();
+
   if($parcels){
+
     switch ($op) {
     case 'view':
       $check_order=db_query("SELECT `order_id` FROM `liveparcels_order` WHERE `order_id`=".$order->order_id)->fetchField();
@@ -352,11 +354,11 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
       }else{
         db_insert('liveparcels_order')->fields(array('order_id'=>$order->order_id,'parcel_info' => serialize($parcels)))->execute();
       }
-      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'parcel'))->fetchField();
+      $lid_tax = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'subtotal'))->fetchField();
       if($lid_tax){
         uc_order_update_line_item($lid_tax,'Parcel price', $parcels['totals']);
       }else{
-        uc_order_line_item_add($order->order_id,'parcel','Parcel price',$parcels['totals'],'1');
+        uc_order_line_item_add($order->order_id,'subtotal','Parcel price',$parcels['totals'],'1');
       }
       if(module_exists('lp_discount')){
         $discount = db_query("SELECT line_item_id FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'discount'))->fetchField();
@@ -366,7 +368,7 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
           uc_order_line_item_add($order->order_id,'discount','Parcel discount',-$parcels['discount'],'9');
         }
       }
-
+	
 
       $contents['liveparcels_review_table'] = array(
         '#theme' => 'liveparcels_review_table',
@@ -499,6 +501,7 @@ function theme_liveparcels_review_table($variables) {
  */
 function liveparcels_uc_checkout_pane() {
   $parcels=liveparcels_getparcelsdata();
+
   $panes['parcels'] = array(
     'id' => 'parcels',
     'callback' => 'liveparcels_uc_checkout_pane_parcels',
@@ -523,8 +526,6 @@ function liveparcels_theme() {
  */
 function liveparcels_uc_line_item(){
   $items=array();
-  $parcels=liveparcels_getparcelsdata();
-
   $items['subtotal'] = array(
     'id'=>'subtotal',
     'title' => t('Parcels price'), 
@@ -535,7 +536,7 @@ function liveparcels_uc_line_item(){
     'calculated' => isset($parcels['totals']) && $parcels['totals']>0 ? false:true, 
     'callback' => 'liveparcels_subtotal');
   $items[] = array(
-    'id' => 'parcel', 
+    'id' => 'subtotal', 
     'title' => t('Parcels price'), 
     'weight' => 1, 
     'default' => FALSE, 
@@ -560,6 +561,7 @@ function liveparcels_uc_line_item(){
   return $items;
 } 
 function liveparcels_subtotal($order) {
+
   $lines[] = array(
     'id' => 'subtotal',
     'title' => t('Parcel price'),
