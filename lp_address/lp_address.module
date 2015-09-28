@@ -255,10 +255,7 @@ $location['country'] = strtolower($address['address']['country_code']);
 $location['city'] = $address['address']['city'];
 $location['province'] = $address['address']['zone_name'];
 $location['postal_code'] = $address['address']['postal_code'];
-//$data = google_geocode_location($location);
-
-
-
+$data = google_geocode_location($location);
 
   $lid = db_insert('location') 
     ->fields(array(
