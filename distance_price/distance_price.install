@@ -1,0 +1,48 @@
+<?php 
+
+/**
+ * Implements hook_install().
+ */
+
+function distance_price_install(){
+
+
+}
+
+
+/**
+ * Implements hook_schema().
+ */
+function distance_price_schema() {
+  $schema = array();
+  $schema['liveparcels_distance'] = array(
+    'description' => 'liveparcels distance package information.',
+    'fields' => array(
+      'position' => array(
+        'description' => ' position id',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'distance' => array(
+        'description' => 'max distance (km)',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+
+      'multiplier' => array(
+        'description' => ' setitng multiplier',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('position'),
+  );
+
+
+
+  return $schema;
+}
+

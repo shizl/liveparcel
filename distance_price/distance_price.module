@@ -1,0 +1,36 @@
+<?php  
+
+/**
+* Implements hook_menu().
+*/
+function distance_price_menu(){
+  $items['admin/liveparcels/distance_config_page'] = array(
+    'title' => 'Distance config page',
+    'description' => 'Administer distance setting pages.',
+    'page callback' => 'distance_pages',
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'distance_price.admin.inc',
+  );
+
+  $items['admin/liveparcels/distance_config_page/distance_price'] = array(
+    'title' => 'Distance price ',
+    'description' => 'Administer distance pages.',
+    'page callback' => 'distance_setting',
+    'access arguments' => array('administer actions'),
+    'weight' => -13,
+    'file' => 'distance_price.admin.inc',
+  );
+
+
+  $items['admin/liveparcels/settings/managepackage/distance_ajax'] = array(
+    'description' => 'manage package.',
+    'page callback' => 'distance_price_managepackage',
+    'access callback' => true,
+    'file' => 'distance_price.admin.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+
+ return $items;
+}
