@@ -10,7 +10,10 @@
  */
 function liveparcels_packageshow() {
 
+  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling';
+  $output = file_get_contents($url);
 
+ print_r($output);
 
 $parcels=liveparcels_getparcelsdata();
 
@@ -71,14 +74,13 @@ $p++;
             </tr>
             <tr>
                <td class="destination">
-                  <span class="package-to">'.($post=='postfrom' ? 'Pickup postcode/suburb:':'Destination postcode/suburb:').'</span>
+                  <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-                 <input class="postcode-suburb"  id="'.($pid+1).'" type="text"  value="'.liveparcels_getZonelistData($parcel[$post],'string').'">
-                 <input class="pnum-to" type="hidden"  value="'.$parcel[$post].'">
-                  <ul class="pcode" id="pcode1">
-                  </ul>
+
                 </td>
+
+
               </tr>'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
 	      <tr>
 		<td class="service-type">Service (+fee):</td>
@@ -119,10 +121,9 @@ $p++;
          Pickup one or more items
       </div>
       <div class="page-content-address" >
-           <strong class="package-from">'.($post=='postfrom' ? 'Destination postcode/suburb:':'Pickup postcode/suburb:').'</strong>
-           <input class="post-suburb" disabled="disabled" type="text" id="0" value="'.($postfrom!='' ? liveparcels_getZonelistData($postfrom,'string'):'').'">
-           <input class="pnum-from" type="hidden"  value="'.$postfrom.'">
-           <ul class="fpcode" id="pcode0"></ul>
+           <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
+            <input id="autocomplete" placeholder="Enter your address"
+             onFocus="geolocate()" type="text"></input>
       </div>
     '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
           <div class="parcel"><strong>Parcel#1</strong>
@@ -153,13 +154,12 @@ $p++;
             </tr>
             <tr>
                <td class="destination">
-                  <span class="package-to">'.($post=='postfrom' ? 'Pickup postcode/suburb:':'Destination postcode/suburb:').'</span>
+                  <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-                 <input class="postcode-suburb"  id="1" type="text" >
-                 <input class="pnum-to" type="hidden" >
-                  <ul class="pcode" id="pcode1">
-                  </ul>
+		<input id="destination" placeholder="Enter your address"
+             onFocus="geolocate()" type="text"></input>
+
                 </td>
              </tr> 
 		'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
@@ -203,7 +203,82 @@ $p++;
 	  '.variable_get('liveparcels_note_message').'
 	  </div>
   </div>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAemm83CciPsUdSgw6W5jtV-j5RHiNDnU4&signed_in=true&libraries=places&callback=initAutocomplete"
+        async defer></script>
+
  <script type="text/javascript">
+
+// This example displays an address form, using the autocomplete feature
+// of the Google Places API to help users fill in the information.
+
+var placeSearch, autocomplete,destination;
+var componentForm = {
+  street_number: "short_name",
+  route: "long_name",
+  locality: "long_name",
+  administrative_area_level_1: "short_name",
+  country: "long_name",
+  postal_code: "short_name"
+};
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+     (document.getElementById("autocomplete")),
+      {types: ["geocode"]});
+
+destination  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination")),
+      {types: ["geocode"]});
+
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener("place_changed", fillInAddress);
+  destination.addListener("place_changed", fillInAddress);
+}
+
+// [START region_fillform]
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+
+  for (var component in componentForm) {
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (componentForm[addressType]) {
+      var val = place.address_components[i][componentForm[addressType]];
+      document.getElementById(addressType).value = val;
+    }
+  }
+}
+// [END region_fillform]
+
+// [START region_geolocation]
+
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
+// [END region_geolocation]
+
+
   (function($){
   var zonedata='.( $jsondata<>'' ? $jsondata:'').';
 
@@ -446,12 +521,12 @@ if(document.readyState == "complete") {
    		
      });
      $(".deliver").click(function(){
-         $(".package-from").text("Pickup postcode/suburb:");
-         $(".package-to").text("Destination postcode/suburb:");
+         $(".package-from").text("Pickup:");
+         $(".package-to").text("Destination:");
         });
     $(".pick-up").click(function(){
-         $(".package-to").text("Pickup postcode/suburb:");
-         $(".package-from").text("Destination postcode/suburb:");
+         $(".package-to").text("Pickup:");
+         $(".package-from").text("Destination:");
         });
         
 	 $(".parcel input").click(function() {
@@ -480,12 +555,12 @@ if(document.readyState == "complete") {
 
               var ptype=2;
               if($(".deliver").attr("checked")){
-                   var postfrom =$(".pnum-from").val();
-                    var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                   var addressfrom =$("#autocomplete").val();
+                    var addressto = $(".post-all:eq("+(f-1)+")").find("#destination").val();
                      ptype=2;
                 }else{
-                    var postto =$(".pnum-from").val() ;
-                    var postfrom =$(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
+                    var addressto =$("#autocomplete").val() ;
+                    var addressfrom =$(".post-all:eq("+(f-1)+")").find("#destination").val();
                    ptype=1;
                 }
 			  if(dimfirst > max){
@@ -499,7 +574,7 @@ if(document.readyState == "complete") {
 			  }
               weighttext=parseFloat(weighttext);
               
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'"}\' ; 
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\' ; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -508,6 +583,7 @@ if(document.readyState == "complete") {
                 $.post("/admin/liveparcels/getzoneprice/ajax", 
                      {ajaxrequest:"["+ajaxrequest+"]",action:"updateprice"},function(zone){
                          
+
                        if(zone != ""){ 
                           $(".order ul").append(zone.parcels);
                           if( zone.error=="1"){
@@ -699,6 +775,7 @@ if(document.readyState == "complete") {
 
 	 drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/package_show.css', 
 	 array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+
 	 
      return $build;
 }
@@ -752,6 +829,11 @@ if(isset($_SESSION['lp_order'])){
     $parcels_price=array();
     $service_price = array();
 
+   // location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
+
+$data = get_google_distance();
+
+print_r($data);exit;
 
 	if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
@@ -800,5 +882,17 @@ if(isset($_SESSION['lp_order'])){
 
     $returndata=array('error'=>$error,'discount'=>sprintf('%.2f',$discount),'totals'=>sprintf('%.2f',$totals),'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
-		echo json_encode($returndata);		
+		//echo json_encode($returndata);		
 }
+
+function  get_google_distance(){
+
+  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling';
+  $output = file_get_contents($url);
+  return $output; 
+
+}
+
+
+
+

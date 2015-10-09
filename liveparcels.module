@@ -218,6 +218,35 @@ if(module_exists('distance_price')){
     'weight'=>2,
   );
 
+  $items['admin/liveparcels/getpackageprice/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getPackageprice',
+    'access callback' => true,
+    'file' => 'liveparcels2.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+  $items['admin/liveparcels/getzoneprice/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZoneprice',
+    'access callback' => true,
+    'file' => 'liveparcels2.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+  $items['admin/liveparcels/getzonelistdata/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZonelistData',
+    'access callback' => true,
+    'file' => 'liveparcels2.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+
+
 }else{
   $items['liveparcels/parcel_quote'] = array(
     'title' => 'Quote and book',
@@ -228,6 +257,35 @@ if(module_exists('distance_price')){
     'menu_name'=>'main-menu',
     'weight'=>2,
   );
+
+  $items['admin/liveparcels/getpackageprice/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getPackageprice',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+  $items['admin/liveparcels/getzoneprice/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZoneprice',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+  $items['admin/liveparcels/getzonelistdata/ajax'] = array(
+    'title' => ' package show  ',
+    'description' => ' package show.',
+    'page callback' => 'liveparcels_getZonelistData',
+    'access callback' => true,
+    'file' => 'liveparcels.inc',
+    'type'=>MENU_CALLBACK,
+  );
+
+
 
 }
 
@@ -249,30 +307,7 @@ if(module_exists('distance_price')){
     'menu_name'=>'liveparcels',
     'weight'=>2,
   );
-  $items['admin/liveparcels/getpackageprice/ajax'] = array(
-    'title' => ' package show  ',
-    'description' => ' package show.',
-    'page callback' => 'liveparcels_getPackageprice',
-    'access callback' => true,
-    'file' => 'liveparcels.inc',
-    'type'=>MENU_CALLBACK,
-  );
-  $items['admin/liveparcels/getzoneprice/ajax'] = array(
-    'title' => ' package show  ',
-    'description' => ' package show.',
-    'page callback' => 'liveparcels_getZoneprice',
-    'access callback' => true,
-    'file' => 'liveparcels.inc',
-    'type'=>MENU_CALLBACK,
-  );
-  $items['admin/liveparcels/getzonelistdata/ajax'] = array(
-    'title' => ' package show  ',
-    'description' => ' package show.',
-    'page callback' => 'liveparcels_getZonelistData',
-    'access callback' => true,
-    'file' => 'liveparcels.inc',
-    'type'=>MENU_CALLBACK,
-  );
+
   $items['user/%user/live_parcel_price'] = array(
     'title' => 'Price list',
     'description' => 'My price list including discount',

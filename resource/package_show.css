@@ -64,7 +64,7 @@ margin-top:15px;
 width:590px;
 }
 .page-content-address input {
-width:150px;
+width:250px;
 }
 .page-content-address strong {
 margin-right:10px;
@@ -215,7 +215,6 @@ background:#ccc;
 cursor:pointer;
 }
 .package-from {
-width: 168px;
 display: inline-block;
 }
 .add_new input {
