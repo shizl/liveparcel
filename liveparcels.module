@@ -125,6 +125,8 @@ function liveparcels_menu() {
     'position' => 'right',
   );
   
+/*
+
   $items['admin/liveparcels/adminsetting/settings'] = array(
     'title' => 'Pricing and postcode',
     'description' => 'Configure pricing and postcode. View price table.',
@@ -132,6 +134,26 @@ function liveparcels_menu() {
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
   );
+*/
+
+  $items['admin/liveparcels/adminsetting/package_size'] = array(
+    'title' => 'Package size',
+    'description' => 'Configure package price. View price table.',
+    'page callback' => 'liveparcels_admin_packagesize',
+    'access arguments' => array('administer liveparcel'),
+    'file' => 'liveparcels.admin.inc',
+  );
+
+
+  $items['admin/liveparcels/adminsetting/postcode'] = array(
+    'title' => 'Postcode',
+    'description' => 'Configure postcode . View price table.',
+    'page callback' => 'liveparcels_admin_postcode',
+    'access arguments' => array('administer liveparcel'),
+    'file' => 'liveparcels.admin.inc',
+  );
+
+
   $items['admin/liveparcels/adminsetting/message'] = array(
     'title' => 'Quote and book messages',
     'description' => 'Customize the messages to show at the quote and book page.',
@@ -183,6 +205,20 @@ function liveparcels_menu() {
     'type'=>MENU_CALLBACK,
     'file' => 'liveparcels.admin.inc',
   );
+
+if(module_exists('distance_price')){
+
+  $items['liveparcels/parcel_quote'] = array(
+    'title' => 'Quote and book',
+    'description' => 'Obtain quotation and book delivery/pickup',
+    'page callback' => 'liveparcels_packageshow',
+    'access callback' => true,
+    'file' => 'liveparcels2.inc',
+    'menu_name'=>'main-menu',
+    'weight'=>2,
+  );
+
+}else{
   $items['liveparcels/parcel_quote'] = array(
     'title' => 'Quote and book',
     'description' => 'Obtain quotation and book delivery/pickup',
@@ -192,6 +228,10 @@ function liveparcels_menu() {
     'menu_name'=>'main-menu',
     'weight'=>2,
   );
+
+}
+
+
   $items['parcel_quote'] = array(
     'title' => 'Quote and book ',
     'description' => 'Obtain quotation and book delivery/pickup.',
