@@ -10,11 +10,6 @@
  */
 function liveparcels_packageshow() {
 
-  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling';
-  $output = file_get_contents($url);
-
- print_r($output);
-
 $parcels=liveparcels_getparcelsdata();
 
 if(module_exists('lp_feature_service') && get_service_type_count()>1){
@@ -831,20 +826,30 @@ if(isset($_SESSION['lp_order'])){
 
    // location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
 
-$data = get_google_distance();
 
-print_r($data);exit;
+
+
 
 	if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
+
+          $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
+
+	    $distance = $data->rows['0']['elements']['0']['distance']['value'];
+
             if($pprice['pprice']>0){
-                $pfrom=explode('_',$pdata['postfrom']);
-                 $pto=explode('_',$pdata['postto']);
-                $pzon = db_query("SELECT `multiplier` FROM `{liveparcels_zone_price}` 
-		WHERE `zone_from_number`='". $pfrom[0] ."' AND   
-		`zone_to_number`='".$pto[0]."'")->fetchField();	
-        
+		$result = db_query('select * from {liveparcels_distance} order by distance asc');
+		$pzon = 0;
+		 foreach($result as $rst){
+
+			$set_distance = $rst->distance;
+
+			if(intval($distance/1000)>$set_distance){
+				$pzon = $rst->multiplier;
+			}
+		 }
+
                 if($pzon>0){
                     $pzone=$pzon*$pprice['pprice']; 
                 }else{
@@ -882,14 +887,16 @@ print_r($data);exit;
 
     $returndata=array('error'=>$error,'discount'=>sprintf('%.2f',$discount),'totals'=>sprintf('%.2f',$totals),'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
-		//echo json_encode($returndata);		
+		echo json_encode($returndata);		
 }
 
-function  get_google_distance(){
+function  get_google_distance($from,$to){
 
-  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling';
+  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.$from.'&destinations='.$to.'&mode=bicycling&language=en';
+
   $output = file_get_contents($url);
-  return $output; 
+
+  return json_decode($output);
 
 }
 

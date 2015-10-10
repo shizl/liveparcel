@@ -4,6 +4,8 @@
 * Implements hook_menu().
 */
 function distance_price_menu(){
+
+/*
   $items['admin/liveparcels/distance_config_page'] = array(
     'title' => 'Distance config page',
     'description' => 'Administer distance setting pages.',
@@ -12,8 +14,8 @@ function distance_price_menu(){
     'weight' => -13,
     'file' => 'distance_price.admin.inc',
   );
-
-  $items['admin/liveparcels/distance_config_page/distance_price'] = array(
+*/
+  $items['admin/liveparcels/adminsetting/distance_price'] = array(
     'title' => 'Distance price ',
     'description' => 'Administer distance pages.',
     'page callback' => 'distance_setting',

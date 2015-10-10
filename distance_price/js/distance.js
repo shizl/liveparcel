@@ -20,7 +20,7 @@ function savenote(nid,atype){
 
 		if(position >0 && distance >0 && multiplier >0){
 		var aid=parseInt(jQuery('.packagedata .package-line:last').index())-1;
-//alert(position);alert(aid);
+
 		if( aid > 2){
 			if(position>parseInt(jQuery(".package-line:eq(0) .position").val())){
                 if(position>parseInt(jQuery(".package-line:eq("+(aid-1)+") .position").val())){
@@ -55,12 +55,12 @@ function savenote(nid,atype){
 		}else if(aid>1){
 
 			if(position >= parseInt(jQuery(".package-line:eq(1) .position").val()) ){
-                 if(distance <=parseInt(jQuery(".package-line:eq(1) .distance").val()) ||  multiplier <= parseInt(jQuery(".package-line:eq(1)  .multiplier").val())  && position != oldposition  ){
+                 if(distance <=parseInt(jQuery(".package-line:eq(0) .distance").val()) ||  multiplier <= parseInt(jQuery(".package-line:eq(0)  .multiplier").val())  && position != oldposition  ){
 					alert('Please input values larger than the last row or in between the row you are trying to add to.');
 					return false;
 				}
                 var newid= parseInt(jQuery(".package-line:eq(1) .position").val())+1;
-               }else if(position > parseInt(jQuery(".package-line:eq(0) .position").val()) ){
+               }else if(position >= parseInt(jQuery(".package-line:eq(0) .position").val()) ){
                    
                     if(((distance>=parseInt(jQuery(".package-line:eq(1) .distance").val())  || multiplier >=parseInt(jQuery(".package-line:eq(1) .multiplier").val())) || (distance<=parseInt(jQuery(".package-line:eq(0) .distance").val())  || multiplier <=parseInt(jQuery(".package-line:eq(0) .multiplier").val()))) && position != oldposition  ){
                              alert('Please input values larger than the last row or in between the row you are trying to add to.');						return false;
@@ -121,6 +121,18 @@ $(document).ready(function(){
 	});
 	
 	
+
+$('#edit-distance-type input').click(function(){
+
+    if($(this).val()=='0'){
+	$('#google-wrapper').hide();
+    }else{
+	$('#google-wrapper').show();
+    }
+
+});
+
+
 });
 	
 })(jQuery);

@@ -62,30 +62,42 @@ $form['description'] = array(
 $form['distance_type'] = array(
   '#type'=>'radios',
   '#options' => array('Straight Distance','Google Route'),
-  '#default_value'=>variable_get('distance_type'), 
+  '#default_value'=>variable_get('distance_type'),
 );
-$form['restriction_title'] = array(
+
+$form['google_regison'] = array(
+
+  '#prefix' => '<div id="google-wrapper" style="'.(variable_get('distance_type')=="0"?"display:none":"display:block").'">',
+  '#suffix' => '</div>', 
+
+);
+
+$form['google_regison']['restriction_title'] = array(
   '#markup'=>'<p>Restriction otpion</p>',
 );
-$form['distance_restriction'] = array(
+$form['google_regison']['distance_restriction'] = array(
   '#type'=>'checkboxes',
   '#options' => array('1'=>'tolls','2'=>'highways','3'=>'ferries','4'=>'indoor'),
   '#default_value'=>variable_get('distance_restriction'),
 );
 
-$form['unit_title'] = array(
+$form['google_regison']['unit_title'] = array(
   '#markup'=>'<p>Unit option</p>',
 );
 
-$form['distance_unit'] = array(
-  '#type'=>'checkboxes',
-  '#options' => array('1'=>'Metric (default) returns distances in kilometers and meters.','2'=>'Imperial returns distances in miles and feet.'),
+$form['google_regison']['distance_unit'] = array(
+  '#type'=>'radios',
+  '#options' => array('Metric (default) returns distances in kilometers and meters.','Imperial returns distances in miles and feet.'),
   '#default_value'=>variable_get('distance_unit'), 
 );
+
 
  return system_settings_form($form);
 
 }
+
+
+
 
 /**
 * distance price table
