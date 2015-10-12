@@ -72,6 +72,12 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
+		<input id="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="route1">
+<input type="hidden"  id="locality1">
+<input  type="hidden" id="administrative_area_level_11">
+<input type="hidden"  id="postal_code1">
+<input type="hidden"  id="country1">
 
                 </td>
 
@@ -119,6 +125,15 @@ $p++;
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
             <input id="autocomplete" placeholder="Enter your address"
              onFocus="geolocate()" type="text"></input>
+
+<input type="hidden"  id="route">
+<input type="hidden"  id="locality">
+<input  type="hidden" id="administrative_area_level_1">
+<input type="hidden"  id="postal_code">
+<input type="hidden"  id="country">
+
+
+
       </div>
     '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
           <div class="parcel"><strong>Parcel#1</strong>
@@ -152,8 +167,14 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" placeholder="Enter your address"
-             onFocus="geolocate()" type="text"></input>
+		<input id ="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="route1">
+<input type="hidden"  id="locality1">
+<input  type="hidden" id="administrative_area_level_11">
+<input type="hidden"  id="postal_code1">
+<input type="hidden"  id="country1">
+
+
 
                 </td>
              </tr> 
@@ -208,13 +229,24 @@ $p++;
 
 var placeSearch, autocomplete,destination;
 var componentForm = {
-  street_number: "short_name",
+
   route: "long_name",
   locality: "long_name",
   administrative_area_level_1: "short_name",
   country: "long_name",
   postal_code: "short_name"
 };
+
+var componentForm1 = {
+
+  route1: "long_name",
+  locality1: "long_name",
+  administrative_area_level_11: "short_name",
+  country1: "long_name",
+  postal_code1: "short_name"
+};
+
+
 
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
@@ -223,19 +255,19 @@ function initAutocomplete() {
      (document.getElementById("autocomplete")),
       {types: ["geocode"]});
 
-destination  = new google.maps.places.Autocomplete(
+  destination  = new google.maps.places.Autocomplete(
      (document.getElementById("destination")),
       {types: ["geocode"]});
-
 
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
   autocomplete.addListener("place_changed", fillInAddress);
-  destination.addListener("place_changed", fillInAddress);
+  destination.addListener("place_changed", fillInAddress1);
 }
 
 // [START region_fillform]
 function fillInAddress() {
+
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
 
@@ -251,7 +283,31 @@ function fillInAddress() {
       document.getElementById(addressType).value = val;
     }
   }
+
 }
+
+function fillInAddress1() {
+
+  var place = destination.getPlace();
+
+  for (var component in componentForm1) {
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+
+    if (componentForm1[addressType+"1"]) {
+      var val = place.address_components[i][componentForm1[addressType+"1"]];
+      document.getElementById(addressType+"1").value = val;
+    }
+
+  }
+
+}
+
+
 // [END region_fillform]
 
 // [START region_geolocation]
@@ -268,8 +324,10 @@ function geolocate() {
         radius: position.coords.accuracy
       });
       autocomplete.setBounds(circle.getBounds());
+      destination.setBounds(circle.getBounds());
     });
   }
+
 }
 // [END region_geolocation]
 
@@ -487,7 +545,7 @@ if(document.readyState == "complete") {
 		divText.after(newDiv);
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
          $(".post-all:last .pcode").attr("id","pcode"+num);
-          $(".post-all:last .postcode-suburb").attr("id",num);
+          $(".post-all:last .addressto").attr("id","destination"+ num);
 		$(".post-all:last .parcel input").show();
 		$(".post-all:last .post-mess table input").val("");
 		
@@ -511,7 +569,7 @@ if(document.readyState == "complete") {
 		$(".post-all:last").after(newDiv);
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
         $(".post-all:last .pcode").attr("id","pcode"+num);
-         $(".post-all:last .postcode-suburb").attr("id",+num);
+         $(".post-all:last .addressto").attr("id","duplicate"+num);
 		$(".post-all:last .parcel input").show();
    		
      });
@@ -579,7 +637,7 @@ if(document.readyState == "complete") {
                      {ajaxrequest:"["+ajaxrequest+"]",action:"updateprice"},function(zone){
                          
 
-                       if(zone != ""){ 
+                       if(zone != ""){
                           $(".order ul").append(zone.parcels);
                           if( zone.error=="1"){
                               $(".header-warning").show();
