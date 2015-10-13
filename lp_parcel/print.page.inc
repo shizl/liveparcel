@@ -86,6 +86,10 @@ $output['print_right']['pickup_info'] = array(
 </div></div></div>',
 );
 
+$result = db_query("select data from field_config_instance where field_name ='field_parcel_weight' ")->fetchfield();
+$data = unserialize($result);
+
+$suf = $data['settings']['suffix'];
 
 
 
@@ -98,7 +102,7 @@ if ($node->type=="live_parcel"){
 	foreach($account->roles as $key=>$role){
 		$role_array .=  '"'.$key.'"'.':'. '"'. $role.'",';
 	}
-        $weight = $weight.' kg';
+	$weight = $weight.$suf;
         $price = variable_get('uc_currency_sign','$').$price;
 	$role_array = substr($role_array,0,strlen($role_array)-1);
         $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Service type":"'.$service_type.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country_name'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country_name'].'"}],"role":[{'.$role_array.'}]}';

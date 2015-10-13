@@ -893,7 +893,7 @@ global $user;
 	$price = empty($node->field_parcel_price['und'][0]['value'])?'':$node->field_parcel_price['und'][0]['value'];
 	$dimension = empty($node->field_parcel_size['und'][0]['value'])?'':$node->field_parcel_size['und'][0]['value'];
 	$package = empty($node->field_parcel_package_name['und'][0]['value'])?'':$node->field_parcel_package_name['und'][0]['value'];
-	$weight = empty($node->field_parcel_weight['und'][0]['value'])?'':$node->field_parcel_weight['und'][0]['value'];
+	$weight = empty($node->field_parcel_weight['und'][0]['value'])?'':$node->content['field_parcel_weight']['0']['#markup'];
 	$leave = empty($node->field_authority_to_leave['und'][0]['value'])?'':$node->field_authority_to_leave['und'][0]['value'];
 	$collect = empty($node->field_cash_to_collect['und'][0]['value'])?'':$node->field_cash_to_collect['und'][0]['value'];
 	$ref = empty($node->field_customer_reference['und'][0]['value'])?'':$node->field_customer_reference['und'][0]['value'];
@@ -908,7 +908,6 @@ global $user;
         $service_type = empty($node->field_service_type['und'][0]['value'])?'':$node->field_service_type['und'][0]['value'];
 
        $price = variable_get('uc_currency_sign','$').$price;
-       $weight 	= $weight.' kg';
 
         $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Service type":"'.$service_type.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country_name'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country_name'].'"}],"role":[{'.$role_array.'}]}';
 
