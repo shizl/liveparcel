@@ -895,6 +895,8 @@ if(isset($_SESSION['lp_order'])){
 
 	    $distance = $data->rows['0']['elements']['0']['distance']['value'];
 
+ print_r($distance);exit;
+
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
 		$pzon = 0;
@@ -902,9 +904,11 @@ if(isset($_SESSION['lp_order'])){
 
 			$set_distance = $rst->distance;
 
-			if(intval($distance/1000)>$set_distance){
+			if($distance>$set_distance*1000){
 				$pzon = $rst->multiplier;
 			}
+
+
 		 }
 
                 if($pzon>0){
