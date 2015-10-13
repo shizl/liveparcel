@@ -86,6 +86,9 @@ $output['print_right']['pickup_info'] = array(
 </div></div></div>',
 );
 
+
+
+
 if ($node->type=="live_parcel"){
 
         global $base_url;
