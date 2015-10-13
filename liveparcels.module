@@ -245,7 +245,15 @@ if(module_exists('distance_price')){
     'type'=>MENU_CALLBACK,
   );
 
-
+  $items['liveparcels/parcels_addtocart'] = array(
+    'title' => 'Parcels add to cart',
+    'description' => 'Parcels add to cart',
+    'page callback' => 'liveparcels_addToCart',
+    'access callback' => true,
+    'file' => 'liveparcels_checkout2.inc',
+    'menu_name'=>'liveparcels',
+    'weight'=>2,
+  );
 
 }else{
   $items['liveparcels/parcel_quote'] = array(
@@ -285,7 +293,15 @@ if(module_exists('distance_price')){
     'type'=>MENU_CALLBACK,
   );
 
-
+  $items['liveparcels/parcels_addtocart'] = array(
+    'title' => 'Parcels add to cart',
+    'description' => 'Parcels add to cart',
+    'page callback' => 'liveparcels_addToCart',
+    'access callback' => true,
+    'file' => 'liveparcels_checkout.inc',
+    'menu_name'=>'liveparcels',
+    'weight'=>2,
+  );
 
 }
 
@@ -297,15 +313,6 @@ if(module_exists('distance_price')){
     'access callback'=>true,
     'menu_name'=>'navigation',
     'weight'=>1,
-  );
-  $items['liveparcels/parcels_addtocart'] = array(
-    'title' => 'Parcels add to cart',
-    'description' => 'Parcels add to cart',
-    'page callback' => 'liveparcels_addToCart',
-    'access callback' => true,
-    'file' => 'liveparcels_checkout.inc',
-    'menu_name'=>'liveparcels',
-    'weight'=>2,
   );
 
   $items['user/%user/live_parcel_price'] = array(

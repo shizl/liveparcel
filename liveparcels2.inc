@@ -608,11 +608,19 @@ if(document.readyState == "complete") {
               var ptype=2;
               if($(".deliver").attr("checked")){
                    var addressfrom =$("#autocomplete").val();
-                    var addressto = $(".post-all:eq("+(f-1)+")").find("#destination").val();
+                   var addressto = $(".post-all:eq("+(f-1)+")").find("#destination").val();
+		  //   locality  = $("#locality").val();
+		   //  state = $("#administrative_area_level_1").val();
+		   //  postcode = $("#postal_code").val();
+
+		     var postfrom = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		     var postto = "0_"+$("#administrative_area_level_11").val()+"_"+$("#postal_code1").val();
                      ptype=2;
                 }else{
                     var addressto =$("#autocomplete").val() ;
                     var addressfrom =$(".post-all:eq("+(f-1)+")").find("#destination").val();
+		     var postto = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		     var postfrom = "0_"+$("#administrative_area_level_11").val()+"_"+$("#postal_code1").val();
                    ptype=1;
                 }
 			  if(dimfirst > max){
@@ -626,7 +634,7 @@ if(document.readyState == "complete") {
 			  }
               weighttext=parseFloat(weighttext);
               
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\' ; 
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -787,7 +795,7 @@ if(document.readyState == "complete") {
 		  return str;
 	
     }
-    function ajaxsearch(words,id){      
+    function ajaxsearch(words,id){     
         if(words == "" || words == " " ){
 	     	 $("#pcode"+id).hide();
              return false;
@@ -891,11 +899,11 @@ if(isset($_SESSION['lp_order'])){
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
-          $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
+         // $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
 
-	    $distance = $data->rows['0']['elements']['0']['distance']['value'];
+	//    $distance = $data->rows['0']['elements']['0']['distance']['value'];
 
- print_r($distance);exit;
+	$distance = 218000;
 
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
