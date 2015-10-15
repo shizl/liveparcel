@@ -169,7 +169,7 @@ $p++;
 		<input id ="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
 <input type="hidden"  id="route1">
 <input type="hidden"  id="locality1">
-<input  type="hidden" id="administrative_area_level_11">
+<input type="hidden" id="administrative_area_level_11">
 <input type="hidden"  id="postal_code1">
 <input type="hidden"  id="country1">
 
@@ -226,7 +226,7 @@ $p++;
 // This example displays an address form, using the autocomplete feature
 // of the Google Places API to help users fill in the information.
 
-var placeSearch, autocomplete,destination;
+var placeSearch, autocomplete,destination1,destination2,destination3,destination4,destination5,destination6,destination7,destination8,destination9;
 var componentForm = {
 
   route: "long_name",
@@ -244,6 +244,71 @@ var componentForm1 = {
   country1: "long_name",
   postal_code1: "short_name"
 };
+var componentForm2 = {
+
+  route2: "long_name",
+  locality2: "long_name",
+  administrative_area_level_12: "short_name",
+  country2: "long_name",
+  postal_code2: "short_name"
+};
+var componentForm3 = {
+
+  route3: "long_name",
+  locality3: "long_name",
+  administrative_area_level_13: "short_name",
+  country3: "long_name",
+  postal_code3: "short_name"
+};
+var componentForm4 = {
+
+  route4: "long_name",
+  locality4: "long_name",
+  administrative_area_level_14: "short_name",
+  country4: "long_name",
+  postal_code4: "short_name"
+};
+var componentForm5 = {
+
+  route5: "long_name",
+  locality5: "long_name",
+  administrative_area_level_15: "short_name",
+  country4: "long_name",
+  postal_code5: "short_name"
+};
+var componentForm6 = {
+
+  route6: "long_name",
+  locality6: "long_name",
+  administrative_area_level_16: "short_name",
+  country6: "long_name",
+  postal_code6: "short_name"
+};
+var componentForm7 = {
+
+  route7: "long_name",
+  locality7: "long_name",
+  administrative_area_level_17: "short_name",
+  country7: "long_name",
+  postal_code7: "short_name"
+};
+var componentForm8 = {
+
+  route8: "long_name",
+  locality8: "long_name",
+  administrative_area_level_18: "short_name",
+  country8: "long_name",
+  postal_code8: "short_name"
+};
+var componentForm9 = {
+
+  route9: "long_name",
+  locality9: "long_name",
+  administrative_area_level_19: "short_name",
+  country9: "long_name",
+  postal_code9: "short_name"
+};
+
 
 
 
@@ -254,14 +319,60 @@ function initAutocomplete() {
      (document.getElementById("autocomplete")),
       {types: ["geocode"]});
 
-  destination  = new google.maps.places.Autocomplete(
+  destination1  = new google.maps.places.Autocomplete(
      (document.getElementById("destination")),
       {types: ["geocode"]});
+  destination2  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination2")),
+      {types: ["geocode"]});
+  destination3  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination3")),
+      {types: ["geocode"]});
+  destination4  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination4")),
+      {types: ["geocode"]});
+  destination5  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination5")),
+      {types: ["geocode"]});
+  destination6  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination6")),
+      {types: ["geocode"]});
+  destination7  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination7")),
+      {types: ["geocode"]});
+  destination8  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination8")),
+      {types: ["geocode"]});
+  destination9  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination9")),
+      {types: ["geocode"]});
+
 
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
+  autocomplete.setComponentRestrictions({"country": "au"});
   autocomplete.addListener("place_changed", fillInAddress);
-  destination.addListener("place_changed", fillInAddress1);
+
+  destination1.setComponentRestrictions({"country": "au"});
+  destination2.setComponentRestrictions({"country": "au"});
+  destination3.setComponentRestrictions({"country": "au"});
+  destination4.setComponentRestrictions({"country": "au"});
+  destination5.setComponentRestrictions({"country": "au"});
+  destination6.setComponentRestrictions({"country": "au"});
+  destination7.setComponentRestrictions({"country": "au"});
+  destination8.setComponentRestrictions({"country": "au"});
+  destination9.setComponentRestrictions({"country": "au"});
+
+  destination1.addListener("place_changed", fillInAddress1);
+  destination2.addListener("place_changed", fillInAddress1);
+  destination3.addListener("place_changed", fillInAddress1);
+  destination4.addListener("place_changed", fillInAddress1);
+  destination5.addListener("place_changed", fillInAddress1);
+  destination6.addListener("place_changed", fillInAddress1);
+  destination7.addListener("place_changed", fillInAddress1);
+  destination8.addListener("place_changed", fillInAddress1);
+  destination9.addListener("place_changed", fillInAddress1);
+
 }
 
 // [START region_fillform]
@@ -287,9 +398,12 @@ function fillInAddress() {
 
 function fillInAddress1() {
 
-  var place = destination.getPlace();
+ for(var j=1;j<10;j++){
 
-  for (var component in componentForm1) {
+
+  var place = destination[j].getPlace();
+
+  for (var component in componentForm[j]) {
     document.getElementById(component).value = "";
     document.getElementById(component).disabled = false;
   }
@@ -297,13 +411,14 @@ function fillInAddress1() {
   for (var i = 0; i < place.address_components.length; i++) {
     var addressType = place.address_components[i].types[0];
 
-    if (componentForm1[addressType+"1"]) {
-      var val = place.address_components[i][componentForm1[addressType+"1"]];
-      document.getElementById(addressType+"1").value = val;
+    if (componentForm[j][addressType[j]]) {
+      var val = place.address_components[i][componentForm[j][addressType[j]]];
+      document.getElementById(addressType[j]).value = val;
     }
 
   }
 
+ }
 }
 
 
@@ -323,7 +438,6 @@ function geolocate() {
         radius: position.coords.accuracy
       });
       autocomplete.setBounds(circle.getBounds());
-      destination.setBounds(circle.getBounds());
     });
   }
 
@@ -542,6 +656,7 @@ if(document.readyState == "complete") {
 		var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
 		divText.after(newDiv);
+		
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
          $(".post-all:last .pcode").attr("id","pcode"+num);
           $(".post-all:last .addressto").attr("id","destination"+ num);
