@@ -908,6 +908,7 @@ global $user;
         $service_type = empty($node->field_service_type['und'][0]['value'])?'':$node->field_service_type['und'][0]['value'];
 
        $price = variable_get('uc_currency_sign','$').$price;
+       $collect = variable_get('uc_currency_sign','$').$collect;
 
 	date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
 	$p_date = format_date(strtotime($p_date),'custom','Y-m-d', drupal_get_user_timezone());
