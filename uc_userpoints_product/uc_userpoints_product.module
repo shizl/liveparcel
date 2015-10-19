@@ -55,10 +55,20 @@ function uc_userpoints_product_uc_product_feature() {
     'title' => t(variable_get(USERPOINTS_TRANS_UCPOINTS, 'Userpoints')),
     'callback' => 'uc_userpoints_product_feature_form',
     'delete' => 'uc_userpoints_product_feature_delete',
-    'settings' => array('uc_userpoints_product_feature_settings'),
+    //'settings' => array('uc_userpoints_product_feature_settings'),
+    'settings' => 'uc_userpoints_product_feature_settings',
   );
   return $features;
 }
+
+
+ function uc_userpoints_product_feature_settings() {
+ 	// Nothing yet.
+	return array('info' => array( 
+	  '#type' => 'markup',
+	  '#value' => t('No information to show up.')
+	));
+ }
 
 /**
 * Build the userpoints feature form
