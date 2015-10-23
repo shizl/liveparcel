@@ -33,10 +33,15 @@ margin-left:165px;
 .date-padding .form-item{
 width:250px !important;
 }
+.date-padding .form-item .form-text{
+width:195px !important;
+}
+
+
 .date-padding .form-item label{display:none}
 .pick_up_time_ampm{
-margin-left: 476px !important;
-margin-top: -59px;
+margin-left: 385px !important;
+margin-top: -55px;
 width:auto !important;
 }
 .authority_to_leave{margin-left:165px !important;  margin-top:10px;margin-right: -40px; width: auto !important;}
