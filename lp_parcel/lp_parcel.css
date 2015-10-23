@@ -37,7 +37,7 @@ width:250px !important;
 .pick_up_time_ampm{
 margin-left: 476px !important;
 margin-top: -59px;
-width:50px !important;
+width:auto !important;
 }
 .authority_to_leave{margin-left:165px !important;  margin-top:10px;margin-right: -40px; width: auto !important;}
 #parcel_pickup-pane .form-textarea-wrapper ,#parcel_delivery-pane .form-textarea-wrapper{
