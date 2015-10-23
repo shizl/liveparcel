@@ -271,7 +271,8 @@ function uc_userpoints_product_form_alter(&$form, &$form_state, $form_id) {
     }
     elseif ($count == 1) {
       // If only one payment method remains, make it the default.
-      $form['panes']['payment']['payment_method']['#default_value'] = array_pop(array_keys($form['panes']['payment']['payment_method']['#options']));
+ 	$var = array_keys($form['panes']['payment']['payment_method']['#options']);
+      $form['panes']['payment']['payment_method']['#default_value'] = array_pop($var);
     }
   }
 }
