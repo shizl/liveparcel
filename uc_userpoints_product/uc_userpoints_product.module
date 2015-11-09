@@ -55,10 +55,21 @@ function uc_userpoints_product_uc_product_feature() {
     'title' => t(variable_get(USERPOINTS_TRANS_UCPOINTS, 'Userpoints')),
     'callback' => 'uc_userpoints_product_feature_form',
     'delete' => 'uc_userpoints_product_feature_delete',
-    'settings' => array('uc_userpoints_product_feature_settings'),
+    //'settings' => array('uc_userpoints_product_feature_settings'),
+    'settings' => 'uc_userpoints_product_feature_settings',
   );
   return $features;
 }
+
+
+ function uc_userpoints_product_feature_settings() {
+ 	// Nothing yet.
+	return array('info' => array( 
+	  '#type' => 'markup',
+	  '#value' => t('No information to show up.')
+	));
+ }
+
 
 /**
 * Build the userpoints feature form
@@ -260,7 +271,8 @@ function uc_userpoints_product_form_alter(&$form, &$form_state, $form_id) {
     }
     elseif ($count == 1) {
       // If only one payment method remains, make it the default.
-      $form['panes']['payment']['payment_method']['#default_value'] = array_pop(array_keys($form['panes']['payment']['payment_method']['#options']));
+ 	$var = array_keys($form['panes']['payment']['payment_method']['#options']);
+      $form['panes']['payment']['payment_method']['#default_value'] = array_pop($var);
     }
   }
 }
