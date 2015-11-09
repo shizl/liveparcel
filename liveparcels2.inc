@@ -1182,7 +1182,7 @@ if(isset($_SESSION['lp_order'])){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
           $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-	  $distance = $data->rows['0']['elements']['0']['distance']['value'];
+	  $distance = $data->rows[0]->elements[0]->distance->value;
 	  // $distance = 218000;
 
             if($pprice['pprice']>0){
@@ -1241,9 +1241,9 @@ if(isset($_SESSION['lp_order'])){
 
 function  get_google_distance($from,$to){
 
-  $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en';
+$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.base64_encode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en';
 
-  $output = file_get_contents($url);
+$output = file_get_contents($url);
 
   return json_decode($output);
 
