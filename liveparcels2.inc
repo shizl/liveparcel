@@ -72,11 +72,11 @@ $p++;
                </td>
                <td class="des-text">
 		<input id="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="route1">
-<input type="hidden"  id="locality1">
-<input  type="hidden" id="administrative_area_level_11">
-<input type="hidden"  id="postal_code1">
-<input type="hidden"  id="country1">
+<input type="hidden"  id="route1" class="route">
+<input type="hidden"  id="locality1" class="locality">
+<input  type="hidden" id="administrative_area_level_11" class="administrative_area_level">
+<input type="hidden"  id="postal_code1" class="postal_code">
+<input type="hidden"  id="country1" class="country">
 
                 </td>
 
@@ -167,11 +167,11 @@ $p++;
                </td>
                <td class="des-text">
 		<input id ="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="route1">
-<input type="hidden"  id="locality1">
-<input  type="hidden" id="administrative_area_level_11">
-<input type="hidden"  id="postal_code1">
-<input type="hidden"  id="country1">
+<input type="hidden"  id="route1" class="route">
+<input type="hidden"  id="locality1" class="locality">
+<input  type="hidden" id="administrative_area_level_11" class="administrative_area_level">
+<input type="hidden"  id="postal_code1" class="postal_code">
+<input type="hidden"  id="country1" class="country">
 
 
 
@@ -226,7 +226,10 @@ $p++;
 // This example displays an address form, using the autocomplete feature
 // of the Google Places API to help users fill in the information.
 
-var placeSearch, autocomplete,destination;
+var placeSearch,autocomplete,destination1,destination2,destination3,destination4,destination5,destination6,destination7,destination8,destination9;
+
+
+
 var componentForm = {
 
   route: "long_name",
@@ -236,14 +239,74 @@ var componentForm = {
   postal_code: "short_name"
 };
 
-var componentForm1 = {
 
+var destination_componentForm = {
+componentForm1:{
   route1: "long_name",
   locality1: "long_name",
   administrative_area_level_11: "short_name",
   country1: "long_name",
   postal_code1: "short_name"
+},
+componentForm2 :{
+  route2: "long_name",
+  locality2: "long_name",
+  administrative_area_level_12: "short_name",
+  country2: "long_name",
+  postal_code2: "short_name"
+},
+componentForm3 :{
+  route3: "long_name",
+  locality3: "long_name",
+  administrative_area_level_13: "short_name",
+  country3: "long_name",
+  postal_code3: "short_name"
+},
+componentForm4 :{
+  route4: "long_name",
+  locality4: "long_name",
+  administrative_area_level_14: "short_name",
+  country4: "long_name",
+  postal_code4: "short_name"
+},
+componentForm5 :{
+  route5: "long_name",
+  locality5: "long_name",
+  administrative_area_level_15: "short_name",
+  country5: "long_name",
+  postal_code5: "short_name"
+},
+componentForm6 :{
+  route6: "long_name",
+  locality6: "long_name",
+  administrative_area_level_16: "short_name",
+  country6: "long_name",
+  postal_code6: "short_name"
+},
+componentForm7 :{
+  route7: "long_name",
+  locality7: "long_name",
+  administrative_area_level_17: "short_name",
+  country7: "long_name",
+  postal_code7: "short_name"
+},
+componentForm8 :{
+  route8: "long_name",
+  locality8: "long_name",
+  administrative_area_level_18: "short_name",
+  country8: "long_name",
+  postal_code8: "short_name"
+},
+componentForm9 :{
+  route9: "long_name",
+  locality9: "long_name",
+  administrative_area_level_19: "short_name",
+  country9: "long_name",
+  postal_code9: "short_name"
+}
+
 };
+
 
 
 
@@ -254,14 +317,64 @@ function initAutocomplete() {
      (document.getElementById("autocomplete")),
       {types: ["geocode"]});
 
-  destination  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination")),
-      {types: ["geocode"]});
-
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
+  autocomplete.setComponentRestrictions({"country": "au"});
   autocomplete.addListener("place_changed", fillInAddress);
-  destination.addListener("place_changed", fillInAddress1);
+
+  destination1  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination")),
+      {types: ["geocode"]});
+  destination1.setComponentRestrictions({"country": "au"});
+  destination1.addListener("place_changed", fillInAddress1);
+
+  destination2  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination2")),
+      {types: ["geocode"]});
+  destination2.setComponentRestrictions({"country": "au"});
+  destination2.addListener("place_changed", fillInAddress2);
+
+  destination3  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination3")),
+      {types: ["geocode"]});
+  destination3.setComponentRestrictions({"country": "au"});
+  destination3.addListener("place_changed", fillInAddress3);
+
+  destination4  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination4")),
+      {types: ["geocode"]});
+  destination4.setComponentRestrictions({"country": "au"});
+  destination4.addListener("place_changed", fillInAddress4);
+
+  destination5  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination5")),
+      {types: ["geocode"]});
+  destination5.setComponentRestrictions({"country": "au"});
+  destination5.addListener("place_changed", fillInAddress5);
+
+  destination6  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination6")),
+      {types: ["geocode"]});
+  destination6.setComponentRestrictions({"country": "au"});
+  destination6.addListener("place_changed", fillInAddress6);
+
+  destination7  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination7")),
+      {types: ["geocode"]});
+  destination7.setComponentRestrictions({"country": "au"});
+  destination7.addListener("place_changed", fillInAddress7);
+
+  destination8  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination8")),
+      {types: ["geocode"]});
+  destination8.setComponentRestrictions({"country": "au"});
+  destination8.addListener("place_changed", fillInAddress8);
+
+  destination9  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination9")),
+      {types: ["geocode"]});
+  destination9.setComponentRestrictions({"country": "au"});
+  destination9.addListener("place_changed", fillInAddress9);
 }
 
 // [START region_fillform]
@@ -285,33 +398,188 @@ function fillInAddress() {
 
 }
 
+
 function fillInAddress1() {
 
-  var place = destination.getPlace();
+  var place = destination1.getPlace();
 
-  for (var component in componentForm1) {
+  for (var component in destination_componentForm["componentForm1"]){
     document.getElementById(component).value = "";
     document.getElementById(component).disabled = false;
   }
 
   for (var i = 0; i < place.address_components.length; i++) {
     var addressType = place.address_components[i].types[0];
-
-    if (componentForm1[addressType+"1"]) {
-      var val = place.address_components[i][componentForm1[addressType+"1"]];
+    if (destination_componentForm["componentForm1"][addressType+"1"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm1"][addressType+"1"]];
       document.getElementById(addressType+"1").value = val;
     }
+ }
+}
+function fillInAddress2() {
 
+  var place = destination2.getPlace();
+
+  for (var component in destination_componentForm["componentForm2"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
   }
 
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm2"][addressType+"2"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm2"][addressType+"2"]];
+      document.getElementById(addressType+"2").value = val;
+    }
+ }
 }
 
+function fillInAddress3() {
+
+  var place = destination3.getPlace();
+
+  for (var component in destination_componentForm["componentForm3"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm3"][addressType+"3"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm3"][addressType+"3"]];
+      document.getElementById(addressType+"3").value = val;
+    }
+ }
+}
+function fillInAddress4() {
+
+  var place = destination4.getPlace();
+
+  for (var component in destination_componentForm["componentForm4"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm4"][addressType+"4"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm4"][addressType+"4"]];
+      document.getElementById(addressType+"4").value = val;
+    }
+ }
+}
+
+function fillInAddress5() {
+
+  var place = destination5.getPlace();
+
+  for (var component in destination_componentForm["componentForm5"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm5"][addressType+"5"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm5"][addressType+"5"]];
+      document.getElementById(addressType+"5").value = val;
+    }
+ }
+}
+
+function fillInAddress6() {
+
+  var place = destination6.getPlace();
+
+  for (var component in destination_componentForm["componentForm6"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm6"][addressType+"6"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm6"][addressType+"6"]];
+      document.getElementById(addressType+"6").value = val;
+    }
+ }
+}
+
+function fillInAddress7() {
+
+  var place = destination4.getPlace();
+
+  for (var component in destination_componentForm["componentForm7"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm7"][addressType+"7"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm7"][addressType+"7"]];
+      document.getElementById(addressType+"7").value = val;
+    }
+ }
+}
+function fillInAddress8() {
+
+  var place = destination8.getPlace();
+
+  for (var component in destination_componentForm["componentForm8"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm8"][addressType+"8"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm8"][addressType+"8"]];
+      document.getElementById(addressType+"8").value = val;
+    }
+ }
+}
+
+function fillInAddress9() {
+
+  var place = destination9.getPlace();
+
+  for (var component in destination_componentForm["componentForm9"]){
+    document.getElementById(component).value = "";
+    document.getElementById(component).disabled = false;
+  }
+
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (destination_componentForm["componentForm9"][addressType+"9"]) {
+      var val = place.address_components[i][destination_componentForm["componentForm9"][addressType+"9"]];
+      document.getElementById(addressType+"9").value = val;
+    }
+ }
+}
+
+function count(o){
+    var t = typeof o;
+    if(t == "string"){
+            return o.length;
+    }else if(t == "object"){
+            var n = 0;
+            for(var i in o){
+                    n++;
+            }
+            return n;
+    }
+    return false;
+}; 
 
 // [END region_fillform]
 
 // [START region_geolocation]
 
 function geolocate() {
+
+initAutocomplete();
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var geolocation = {
@@ -323,7 +591,6 @@ function geolocate() {
         radius: position.coords.accuracy
       });
       autocomplete.setBounds(circle.getBounds());
-      destination.setBounds(circle.getBounds());
     });
   }
 
@@ -338,14 +605,14 @@ document.onreadystatechange = subSomething;
 
 function subSomething() { 
 if(document.readyState == "complete") {
-  $(".post-suburb").removeAttr("disabled");
+  $("#autocomplete").removeAttr("disabled");
   $(".deliver").removeAttr("disabled");
   $(".pick-up").removeAttr("disabled");
 
 }else{
-  $(".post-suburb").attr("disabled","disabled");
-  $(".deliver").addr("disabled","disabled");
-  $(".pick-up").addr("disabled","disabled");
+  $("#autocomplete").attr("disabled","disabled");
+  $(".deliver").attr("disabled","disabled");
+  $(".pick-up").attr("disabled","disabled");
 }
 
 }
@@ -542,9 +809,17 @@ if(document.readyState == "complete") {
 		var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
 		divText.after(newDiv);
+		
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
          $(".post-all:last .pcode").attr("id","pcode"+num);
           $(".post-all:last .addressto").attr("id","destination"+ num);
+
+          $(".post-all:last .route").attr("id","route"+ num);
+          $(".post-all:last .locality").attr("id","locality"+ num);
+          $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
+          $(".post-all:last .postal_code").attr("id","postal_code"+ num);
+          $(".post-all:last .country").attr("id","country"+ num);
+
 		$(".post-all:last .parcel input").show();
 		$(".post-all:last .post-mess table input").val("");
 		
@@ -569,6 +844,13 @@ if(document.readyState == "complete") {
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
         $(".post-all:last .pcode").attr("id","pcode"+num);
          $(".post-all:last .addressto").attr("id","duplicate"+num);
+
+          $(".post-all:last .route").attr("id","route"+ num);
+          $(".post-all:last .locality").attr("id","locality"+ num);
+          $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
+          $(".post-all:last .postal_code").attr("id","postal_code"+ num);
+          $(".post-all:last .country").attr("id","country"+ num);
+
 		$(".post-all:last .parcel input").show();
    		
      });
@@ -608,19 +890,19 @@ if(document.readyState == "complete") {
               var ptype=2;
               if($(".deliver").attr("checked")){
                    var addressfrom =$("#autocomplete").val();
+		   var from_locality  = $("#locality").val();
                    var addressto = $(".post-all:eq("+(f-1)+")").find("#destination").val();
-		  //   locality  = $("#locality").val();
-		   //  state = $("#administrative_area_level_1").val();
-		   //  postcode = $("#postal_code").val();
-
-		     var postfrom = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		     var postto = "0_"+$("#administrative_area_level_11").val()+"_"+$("#postal_code1").val();
+		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+		   var postfrom = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postto = "0_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                      ptype=2;
                 }else{
-                    var addressto =$("#autocomplete").val() ;
-                    var addressfrom =$(".post-all:eq("+(f-1)+")").find("#destination").val();
-		     var postto = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		     var postfrom = "0_"+$("#administrative_area_level_11").val()+"_"+$("#postal_code1").val();
+                   var addressto =$("#autocomplete").val() ;
+                   var addressfrom =$(".post-all:eq("+(f-1)+")").find("#destination").val();
+		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+	           var to_locality = $("#locality").val();
+		   var postto = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postfrom =  "0_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    ptype=1;
                 }
 			  if(dimfirst > max){
@@ -634,7 +916,7 @@ if(document.readyState == "complete") {
 			  }
               weighttext=parseFloat(weighttext);
               
-              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
+              ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","from_locality":"\'+from_locality+\'","to_locality":"\'+to_locality+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
               
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
@@ -899,11 +1181,9 @@ if(isset($_SESSION['lp_order'])){
         foreach($pricedata as $key=>$pdata){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
-         // $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-
-	//    $distance = $data->rows['0']['elements']['0']['distance']['value'];
-
-	$distance = 218000;
+          $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
+	  $distance = $data->rows['0']['elements']['0']['distance']['value'];
+	  // $distance = 218000;
 
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');

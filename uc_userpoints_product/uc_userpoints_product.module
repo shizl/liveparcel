@@ -70,7 +70,6 @@ function uc_userpoints_product_uc_product_feature() {
 	));
  }
 
-
 /**
 * Build the userpoints feature form
 */
