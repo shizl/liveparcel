@@ -1025,7 +1025,7 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 if(!empty($node->content['comments'])){
       $node->content['comments']['#theme'] = 'custom_comment_wrapper__node_live_parcel';
 
-      $cids = db_query('SELECT cid FROM {comment} WHERE nid=:nid ORDER BY created DESC',array(':nid'=>$node->nid));
+      $cids = db_query('SELECT cid FROM {comment} WHERE nid=:nid and status = 1 ORDER BY created DESC',array(':nid'=>$node->nid));
         if($cids!=null){
 	  foreach($cids as $cid){
              $node->content['comments']['comments'][$cid->cid]['#theme'] = 'custom_comment__node_live_parcel';
