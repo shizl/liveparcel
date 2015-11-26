@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Store front page menu items.
@@ -1184,9 +1183,9 @@ if(isset($_SESSION['lp_order'])){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
           $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-	  $distance = $data->rows[0]->elements[0]->distance->value;
-	  // $distance = 218000;
-
+	 $distance = intval($data->rows[0]->elements[0]->distance->value);	
+//print_r($distance);exit;
+ //$distance = 218000;
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
 		$pzon = 0;

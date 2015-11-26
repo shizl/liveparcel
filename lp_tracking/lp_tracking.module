@@ -81,7 +81,9 @@ function template_preprocess_custom_comment(&$variables) {
   $variables['node'] = $node;
   $variables['author'] = theme('username', array('account' => $comment));
 
-  $variables['created'] = format_date($comment->created);
+  //$variables['created'] = format_date($comment->created);
+  date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
+  $variables['created'] = format_date($comment->created,'custom','l, F j, Y - H:i', drupal_get_user_timezone());
 
   // Avoid calling format_date() twice on the same timestamp.
   if ($comment->changed == $comment->created) {
