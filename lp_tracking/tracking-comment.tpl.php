@@ -1,12 +1,3 @@
-<div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
-<style>
-
- .subject a{
- color:red !important;
-}
-
-</style>
 <?php
 
 global $user;
@@ -21,6 +12,9 @@ global $user;
   }
 
 ?>
+
+<?php if(!empty($comment)):  ?>
+
 <tr>
 <td><?php print $created; ?></td>
 <td><?php print $author; ?></td>
@@ -95,6 +89,9 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 <?php print render($content['links']); ?>
 </td>
 </tr>
+
+<?php endif ;?>
+
 <!--
 <div class="attribution">
 
@@ -126,4 +123,4 @@ print render($content);
 <?php print render($content['links']); ?>
 </div> 
 -->
-</div>
+
