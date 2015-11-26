@@ -24,8 +24,8 @@ function  distance_pages(){
 
 function distance_setting(){
 
-  drupal_add_js(drupal_get_path('module', 'distance_price') . '/js/distance.js');
-  drupal_add_css(drupal_get_path('module', 'distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+  drupal_add_js(drupal_get_path('module', 'lp_distance_price') . '/js/distance.js');
+  drupal_add_css(drupal_get_path('module', 'lp_distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
  
  $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata">
         <li id="phead"><div class="field-small">Position</div><div class="field">max distance (km)</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
@@ -62,12 +62,12 @@ $form['description'] = array(
 $form['distance_type'] = array(
   '#type'=>'radios',
   '#options' => array('Straight Distance','Google Route'),
-  '#default_value'=>variable_get('distance_type'),
+  '#default_value'=>variable_get('distance_type',0),
 );
 
 $form['google_regison'] = array(
 
-  '#prefix' => '<div id="google-wrapper" style="'.(variable_get('distance_type')=="0"?"display:none":"display:block").'">',
+  '#prefix' => '<div id="google-wrapper" style="'.(variable_get('distance_type')=="0"||empty(variable_get('distance_type')) ?"display:none":"display:block").'">',
   '#suffix' => '</div>', 
 
 );
@@ -77,8 +77,8 @@ $form['google_regison']['restriction_title'] = array(
 );
 $form['google_regison']['distance_restriction'] = array(
   '#type'=>'checkboxes',
-  '#options' => array('1'=>'tolls','2'=>'highways','3'=>'ferries','4'=>'indoor'),
-  '#default_value'=>variable_get('distance_restriction'),
+  '#options' => drupal_map_assoc(array('tolls','highways','ferries','indoor')),
+  '#default_value'=> variable_get('distance_restriction',array()),
 );
 
 $form['google_regison']['unit_title'] = array(
@@ -88,7 +88,7 @@ $form['google_regison']['unit_title'] = array(
 $form['google_regison']['distance_unit'] = array(
   '#type'=>'radios',
   '#options' => array('Metric (default) returns distances in kilometers and meters.','Imperial returns distances in miles and feet.'),
-  '#default_value'=>variable_get('distance_unit'), 
+  '#default_value'=>variable_get('distance_unit',0), 
 );
 
 

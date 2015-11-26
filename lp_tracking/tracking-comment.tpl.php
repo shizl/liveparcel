@@ -1,12 +1,4 @@
-<div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-<style>
-
- .subject a{
- color:red !important;
-}
-
-</style>
 <?php
 
 global $user;
@@ -21,6 +13,9 @@ global $user;
   }
 
 ?>
+
+<?php if(!empty($comment)):  ?>
+
 <tr>
 <td><?php print $created; ?></td>
 <td><?php print $author; ?></td>
@@ -95,35 +90,5 @@ if($user->uid == $node->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
 <?php print render($content['links']); ?>
 </td>
 </tr>
-<!--
-<div class="attribution">
+<?php endif; ?>
 
-<div class="submitted">
-<p class="commenter-name">
-<?php print $author; ?>
-</p>
-<p class="comment-time">
-<?php print $created; ?>
-</p>
-
-</div>
-</div>
-<div class="comment-text">
-
-
-<?php print render($title_prefix); ?>
-<h3<?php print $title_attributes; ?>><?php print $title; ?></h3>
-<?php print render($title_suffix); ?>
-<div class="content"<?php print $content_attributes; ?>>
-<?php
-// We hide the comments and links now so that we can render them later.
-hide($content['links']);
-
-print render($content);
-?>
-
-</div> 
-<?php print render($content['links']); ?>
-</div> 
--->
-</div>

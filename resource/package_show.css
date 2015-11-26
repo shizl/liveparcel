@@ -64,10 +64,11 @@ margin-top:15px;
 width:590px;
 }
 .page-content-address input {
-width:250px;
+width:357px;
 }
 .page-content-address strong {
 margin-right:10px;
+width:75px;
 }
 .post-all {
 border: 1px solid #ccc;
@@ -114,7 +115,7 @@ width:238px;
 width:150px;
 }
 .post-btn {
-   bottom: 34px;
+   bottom: 56px;
     position: absolute;
     right: 10px;
     width: 100px;
@@ -237,6 +238,6 @@ width:170px;
 width:46px;
 }
 .post-mess table tr .des-text input {
-width:150px;
+width:293px;
 }
 

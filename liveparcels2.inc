@@ -12,6 +12,8 @@ function liveparcels_packageshow() {
 
 $parcels=liveparcels_getparcelsdata();
 
+$countryinfo = lp_address_get_country_info();
+
 if(module_exists('lp_feature_service') && get_service_type_count()>1){
  $service_type = get_service_type();
 //update 2015-08-13
@@ -319,61 +321,61 @@ function initAutocomplete() {
 
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
-  autocomplete.setComponentRestrictions({"country": "au"});
+  autocomplete.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   autocomplete.addListener("place_changed", fillInAddress);
 
   destination1  = new google.maps.places.Autocomplete(
      (document.getElementById("destination")),
       {types: ["geocode"]});
-  destination1.setComponentRestrictions({"country": "au"});
+  destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination1.addListener("place_changed", fillInAddress1);
 
   destination2  = new google.maps.places.Autocomplete(
      (document.getElementById("destination2")),
       {types: ["geocode"]});
-  destination2.setComponentRestrictions({"country": "au"});
+  destination2.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination2.addListener("place_changed", fillInAddress2);
 
   destination3  = new google.maps.places.Autocomplete(
      (document.getElementById("destination3")),
       {types: ["geocode"]});
-  destination3.setComponentRestrictions({"country": "au"});
+  destination3.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination3.addListener("place_changed", fillInAddress3);
 
   destination4  = new google.maps.places.Autocomplete(
      (document.getElementById("destination4")),
       {types: ["geocode"]});
-  destination4.setComponentRestrictions({"country": "au"});
+  destination4.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination4.addListener("place_changed", fillInAddress4);
 
   destination5  = new google.maps.places.Autocomplete(
      (document.getElementById("destination5")),
       {types: ["geocode"]});
-  destination5.setComponentRestrictions({"country": "au"});
+  destination5.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination5.addListener("place_changed", fillInAddress5);
 
   destination6  = new google.maps.places.Autocomplete(
      (document.getElementById("destination6")),
       {types: ["geocode"]});
-  destination6.setComponentRestrictions({"country": "au"});
+  destination6.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination6.addListener("place_changed", fillInAddress6);
 
   destination7  = new google.maps.places.Autocomplete(
      (document.getElementById("destination7")),
       {types: ["geocode"]});
-  destination7.setComponentRestrictions({"country": "au"});
+  destination7.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination7.addListener("place_changed", fillInAddress7);
 
   destination8  = new google.maps.places.Autocomplete(
      (document.getElementById("destination8")),
       {types: ["geocode"]});
-  destination8.setComponentRestrictions({"country": "au"});
+  destination8.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination8.addListener("place_changed", fillInAddress8);
 
   destination9  = new google.maps.places.Autocomplete(
      (document.getElementById("destination9")),
       {types: ["geocode"]});
-  destination9.setComponentRestrictions({"country": "au"});
+  destination9.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination9.addListener("place_changed", fillInAddress9);
 }
 

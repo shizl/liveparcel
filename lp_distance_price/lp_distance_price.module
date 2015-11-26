@@ -3,7 +3,7 @@
 /**
 * Implements hook_menu().
 */
-function distance_price_menu(){
+function lp_distance_price_menu(){
 
 /*
   $items['admin/liveparcels/distance_config_page'] = array(

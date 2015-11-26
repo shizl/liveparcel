@@ -7,6 +7,9 @@
 /**
  * Menu callback which provides the store administration overview page.
  */
+
+  include_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'lp_distance_price') . '/distance_price.admin.inc');
+
 function liveparcels_custom_message_form($form, &$form_state) {
 
   $form['liveparcels_info_message'] = array(
@@ -550,6 +553,7 @@ function liveparcels_live_parcel_price() {
     if ($user->uid==0) {
          header("location:/user");exit;
         }
+
     $rows['package'] = array(array('data' => '<div class="parcels-list"><div class="parcels-title">Package size and weight limits</div><div class="parcels-body"><div class="parcels-note"><p>To calculate the parcel price, we use either the Dimensional Weight or the Dead Weight, whichever is the greater of the two values.</p>
         <p>For more information, visit <a href="http://en.wikipedia.org/wiki/Dimensional_weight" target="_blank">http://en.wikipedia.org/wiki/Dimensional_weight</a></p>
         <p>Dimensional weight = (L cm x W cm x H cm) x Dimensional Factor</p></div> <div class="parcels-factor">Dimensional Factor = '.variable_get('liveparcels_factor',0.0002).'</div>
@@ -557,9 +561,30 @@ function liveparcels_live_parcel_price() {
         <ul class="packagedata">
         <li id="phead"><div class="field-small">Position</div><div class="field">Package Name</div><div class="field">Max weight (kg)</div><div class="field-small">Max length (cm)</div><div class="field-small">Price ('.variable_get('uc_currency_sign','$').')</div></li>
         </ul></div></div>'));
+
+
+ if(module_exists('lp_distance_price')){
+
+   
+   drupal_add_js(drupal_get_path('module', 'lp_distance_price') . '/js/distance.js');
+ // drupal_add_css(drupal_get_path('module', 'lp_distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+ 
+ $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata distance_data">
+        <li id="phead"><div class="field-small">Position</div><div class="field">max distance (km)</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
+        <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="distance small-text"></div><div class="field"><input type="text" class="multiplier small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div>'));
+
+
+
+  $rows['table']  = array(array('data'=>distance_price_table()));
+
+  }else{
+
 $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Price table including your discount</div><div class="parcels-body"><div class="parcels-note"><p>The price table below shows you the cost to deliver a parcel from the pickup zone to different delivery zone. Please select a pickup zone to see the corresponding price.</p>
         <p><input type="checkbox" value="1" class="useregion"> Enable grouping of zones into region.</p>
         </div> <div class="pickup-search">Pickup from:   &nbsp;&nbsp;&nbsp; <span class="show-region">Region: <select name="state-pickup" class="form-select state-pickup">'.liveparcels_zonedata('stateoption').'</select>  </span>&nbsp;&nbsp;&nbsp;Zone name: <select name="zone-pickup" class="form-select zone-pickup">'.liveparcels_zonedata('zoneoption').'</select> </div><div class="pickup-result"><input type="hidden" class="path_page" value="ouser"><table><tr class="table-head"><th><a href="####" class="znumber">Zone number <input type="hidden" class="oid" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zname">Zone Name<input type="hidden" class="oname" value="asc"><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zstate">Region <input type="hidden" class="ostate" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th>'.liveparcels_packagename('name').'</tr></table></div> '.(!empty($_SESSION['liveparcels_status']) && count($_SESSION['liveparcels_status'])>1 ? '<script> jQuery(\'.region-content\').before(\'<div id="console" class="clearfix"><div class="messages '.( $_SESSION['liveparcels_status']['status'] ? 'status':'error').'"><h2 class="element-invisible">'.( $_SESSION['liveparcels_status']['status'] ? 'Success':'Falise').' message</h2>'. $_SESSION['liveparcels_status']['message'].'</div></div>\');</script>':'')));
+
+ }
+
   unset($_SESSION['firrow']);
   unset($_SESSION['liveparcels_status']);
   $build['liveparcels'] = array(
@@ -573,6 +598,7 @@ $rows['zone_price_show'] = array(array('data' => '<div class="parcels-title">Pri
   drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/liveparcels.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 
   return $build;
+
 }
 
 function liveparcels_admin_message_form($form, &$form_state) {

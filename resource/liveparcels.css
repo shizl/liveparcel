@@ -3,7 +3,7 @@
 .small-text{width:70px;padding:3px 5px;border: 1px solid #ccc;}
 .field{float:left;width:140px;text-align:center;}
 
-.parcels-list ul{
+.packagedata{
 margin:10px 0px !important;
 padding:0 !important;
 }
@@ -20,6 +20,12 @@ display:none;
 #phead div, .package-line div{border-right:1px solid #ccc;border-bottom: 1px solid #ccc;
 display: inline-block;
 margin-right: -1px;
+}
+.distance_data li:last-child{
+display:none !important;
+}
+.distance_data li div:last-child{
+display:none !important;
 }
 .package-line{
  height:30px;line-height:30px;

@@ -1,19 +1,21 @@
 <?php 
 
 /**
- * Implements hook_install().
+ * Implements hook_uninstall().
  */
 
-function distance_price_install(){
+function lp_distance_price_uninstall(){
 
-
+variable_del('distance_restriction');
+variable_del('distance_type');
+variable_del('distance_unit');
 }
 
 
 /**
  * Implements hook_schema().
  */
-function distance_price_schema() {
+function lp_distance_price_schema() {
   $schema = array();
   $schema['liveparcels_distance'] = array(
     'description' => 'liveparcels distance package information.',
@@ -26,16 +28,20 @@ function distance_price_schema() {
       ),
       'distance' => array(
         'description' => 'max distance (km)',
-        'type' => 'int',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 1,
         'not null' => TRUE,
-        'default' => 0,
+        'default' => 0.0,
       ),
 
       'multiplier' => array(
         'description' => ' setitng multiplier',
-        'type' => 'int',
+        'type' => 'numeric',
+        'precision' => 16,
+        'scale' => 1,
         'not null' => TRUE,
-        'default' => 1,
+        'default' => 0.0,
       ),
     ),
     'primary key' => array('position'),

@@ -206,7 +206,7 @@ function liveparcels_menu() {
     'file' => 'liveparcels.admin.inc',
   );
 
-if(module_exists('distance_price')){
+if(module_exists('lp_distance_price')){
 
   $items['liveparcels/parcel_quote'] = array(
     'title' => 'Quote and book',
