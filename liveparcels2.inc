@@ -1183,7 +1183,7 @@ if(isset($_SESSION['lp_order'])){
             $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
           $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-	 $distance = intval($data->rows[0]->elements[0]->distance->value);	
+	 $distance = intval($data->rows[0]->elements[0]->distance->value);
 //print_r($distance);exit;
  //$distance = 218000;
             if($pprice['pprice']>0){
@@ -1223,7 +1223,7 @@ if(isset($_SESSION['lp_order'])){
             }
 
 	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
-            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div></li>";
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div>".$distance."</li>";
             }else{
  $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
 	    }
