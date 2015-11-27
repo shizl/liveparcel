@@ -67,7 +67,7 @@ $form['distance_type'] = array(
 
 $form['google_regison'] = array(
 
-  '#prefix' => '<div id="google-wrapper" style="'.(variable_get('distance_type')=="0"||empty(variable_get('distance_type')) ?"display:none":"display:block").'">',
+  '#prefix' => '<div id="google-wrapper" style="'.(empty(variable_get('distance_type')) ?"display:none":"display:block").'">',
   '#suffix' => '</div>', 
 
 );
