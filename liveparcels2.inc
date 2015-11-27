@@ -1208,7 +1208,7 @@ if(isset($_SESSION['lp_order'])){
             }else{
           	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
 	        $distance = intval($data->rows[0]->elements[0]->distance->value);	
-	  	$distancetest = intval($data->rows[0]->elements[0]->distance->text);	
+	  	$distancetest = $data->rows[0]->elements[0]->distance->text;
             }
  //$distance = 218000;
             if($pprice['pprice']>0){
