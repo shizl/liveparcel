@@ -1156,6 +1156,23 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 		return  array("pprice"=>$items['pprice'],"package_name"=>$items['package_name']);
 }  
 
+
+
+
+	$location_from = explode(',','1780 Dandenong Road, Clayton, Victoria, Australia');
+	$locationfrom = array();
+	$locationfrom['street'] = $location_from[0];
+	$locationfrom['city'] = $location_from[1];
+	$locationfrom['province'] = $location_from[2];
+	$locationfrom['country'] = $location_from[3];
+	$latlon_a = google_geocode_location($locationfrom);
+
+	print_r($latlon_a);
+
+
+
+
+
 function liveparcels_getZoneprice() {
 
 if(isset($_SESSION['lp_node'])){ 
@@ -1199,6 +1216,7 @@ if(isset($_SESSION['lp_order'])){
 	$latlon_a = google_geocode_location($locationfrom);
 	$latlon_b = google_geocode_location($locationto);
 
+print_r($latlon_a);exit;
 
           $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
           $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
@@ -1207,7 +1225,7 @@ if(isset($_SESSION['lp_order'])){
 	  $between = location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
 
 	  $distancetest = intval($data->rows[0]->elements[0]->distance->text);
-print_r($between);exit;
+
  //$distance = 218000;
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
