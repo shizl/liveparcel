@@ -1201,8 +1201,6 @@ if(isset($_SESSION['lp_order'])){
 			}
 		 }
 
-print_r($set_distance*1000).',';exit;
-
                 if($pzon>0){
                     $pzone=$pzon*$pprice['pprice']; 
                 }else{
