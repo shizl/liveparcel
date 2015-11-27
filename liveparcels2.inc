@@ -7,6 +7,9 @@
 /**
  * Menu callback which provides the store administration overview page.
  */
+
+include_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'location') . '/geocoding/google.inc');
+
 function liveparcels_packageshow() {
 
 $parcels=liveparcels_getparcelsdata();
@@ -1174,17 +1177,38 @@ if(isset($_SESSION['lp_order'])){
 
    // location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
 
-
-
-
-
 	if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
-            $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
 
+
+	$location_from = explode(',',$pdata['addressfrom']);
+	$locationfrom = array();
+	$locationfrom['street'] = $location_from[0];
+	$locationfrom['city'] = $location_from[1];
+	$locationfrom['province'] = $location_from[2];
+	$locationfrom['country'] = $location_from[3];
+
+	$location_to = explode(',',$pdata['addressto']);
+	$locationto = array();
+	$locationto['street'] = $location_to[0];
+	$locationto['city'] = $location_to[1];
+	$locationto['province'] = $location_to[2];
+	$locationto['country'] = $location_to[3];
+
+
+	$latlon_a = google_geocode_location($locationfrom);
+	$latlon_a = google_geocode_location($locationto);
+
+
+          $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
           $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-	 $distance = intval($data->rows[0]->elements[0]->distance->value);
-//print_r($distance);exit;
+	  $distance = intval($data->rows[0]->elements[0]->distance->value);
+
+	  $between = location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
+
+
+	  $distancetest = intval($data->rows[0]->elements[0]->distance->text);
+print_r($between);exit;
  //$distance = 218000;
             if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
@@ -1224,7 +1248,7 @@ if(isset($_SESSION['lp_order'])){
             }
 
 	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
-            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span>".$distance."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div>".$distance."</li>";
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div>".$distancetest."</li>";
             }else{
  $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').$pzone."</span></li>";
 	    }
