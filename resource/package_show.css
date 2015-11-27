@@ -61,14 +61,14 @@ margin:0px;
 }
 .page-content-address {
 margin-top:15px;
-width:590px;
+width:auto;
 }
 .page-content-address input {
-width:357px;
+width:296px;
 }
 .page-content-address strong {
 margin-right:10px;
-width:75px;
+width:112px;
 }
 .post-all {
 border: 1px solid #ccc;
