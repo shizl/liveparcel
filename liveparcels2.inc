@@ -1197,7 +1197,7 @@ if(isset($_SESSION['lp_order'])){
 
 
 	$latlon_a = google_geocode_location($locationfrom);
-	$latlon_a = google_geocode_location($locationto);
+	$latlon_b = google_geocode_location($locationto);
 
 
           $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
@@ -1205,7 +1205,6 @@ if(isset($_SESSION['lp_order'])){
 	  $distance = intval($data->rows[0]->elements[0]->distance->value);
 
 	  $between = location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
-
 
 	  $distancetest = intval($data->rows[0]->elements[0]->distance->text);
 print_r($between);exit;
