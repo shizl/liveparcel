@@ -70,12 +70,9 @@ function template_preprocess_custom_comment_wrapper(&$variables) {
 function template_preprocess_custom_comment(&$variables) {
 
   $comment = $variables['elements']['#comment'];
- 
-   if(empty($comment)){
-     return false;
-   }
-
-
+ if(empty($comment)){
+   return fasle;
+  }
   $node = $variables['elements']['#node'];
   $variables['comment'] = $comment;
   $variables['node'] = $node;
