@@ -1167,7 +1167,7 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 	$locationfrom['country'] = $location_from[3];
 	$latlon_a = google_geocode_location($locationfrom);
 
-	$location_to = explode(',',$pdata['addressto']);
+	$location_to = explode(',','1680 Dandenong Road, Clayton, Victoria, Australia']);
 	$locationto = array();
 	$locationto['street'] = $location_to[0];
 	$locationto['city'] = $location_to[1];
