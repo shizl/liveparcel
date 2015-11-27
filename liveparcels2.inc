@@ -1166,8 +1166,8 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 	$locationfrom['province'] = $location_from[2];
 	$locationfrom['country'] = $location_from[3];
 	$latlon_a = google_geocode_location($locationfrom);
-
-	print_r($latlon_a);
+	$between = location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
+	print_r($between);
 
 
 
