@@ -1186,15 +1186,18 @@ if(isset($_SESSION['lp_order'])){
 	 $distance = intval($data->rows[0]->elements[0]->distance->value);
 //print_r($distance);exit;
  //$distance = 218000;
-          //  if($pprice['pprice']>0){
+            if($pprice['pprice']>0){
 		$result = db_query('select * from {liveparcels_distance} order by distance asc');
 		$pzon = 0;
 		 foreach($result as $rst){
 
 			$set_distance = $rst->distance;
 
-			if($distance>$set_distance*1000){
+			if($set_distance*1000>$distance){
 				$pzon = $rst->multiplier;
+  				break;
+			}else{
+				$pzon = $rst->multiplier;				
 			}
 		 }
 
@@ -1204,9 +1207,9 @@ if(isset($_SESSION['lp_order'])){
                     $pzone=0;
                 }
                
-          //  }else{
-          //        $pzone=0;  
-         //   }
+            }else{
+                  $pzone=0;  
+            }
             $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone,2)),"package_name"=>$pprice['package_name']);
 	    // service price
 	    $totals+=$pzone;
