@@ -65,9 +65,10 @@ $form['distance_type'] = array(
   '#default_value'=>variable_get('distance_type',0),
 );
 
+$custom_var = variable_get('distance_type');
 $form['google_regison'] = array(
 
-  '#prefix' => '<div id="google-wrapper" style="'.(empty(variable_get('distance_type')) ?"display:none":"display:block").'">',
+  '#prefix' => '<div id="google-wrapper" style="'.(empty($custom_var) ?"display:none":"display:block").'">',
   '#suffix' => '</div>', 
 
 );
