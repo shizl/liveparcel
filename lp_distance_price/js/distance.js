@@ -9,8 +9,8 @@ function savenote(nid,atype){
 		});
 	}else{
 	
-		var position=parseFloat(jQuery("#n"+nid+" .position").val());
-		var oldposition=parseFloat(jQuery("#n"+nid+" .oldposition").val());
+		var position=parseInt(jQuery("#n"+nid+" .position").val());
+		var oldposition=parseInt(jQuery("#n"+nid+" .oldposition").val());
 		atype= oldposition==position && oldposition>0 ? 'update':'updateposition';
 		
 
@@ -19,11 +19,12 @@ function savenote(nid,atype){
 
 
 		if(position >0 && distance >0 && multiplier >0){
-		var aid=parseFloat(jQuery('.packagedata .package-line:last').index())-1;
-
+		var aid=parseInt(jQuery('.packagedata .package-line:last').index())-1;
 		if( aid > 2){
-			if(position>parseFloat(jQuery(".package-line:eq(0) .position").val())){
-                if(position>parseFloat(jQuery(".package-line:eq("+(aid-1)+") .position").val())){
+		if(position>parseInt(jQuery(".package-line:eq(0) .position").val())){
+
+                if(position>parseInt(jQuery(".package-line:eq("+(aid-1)+") .position").val())){
+
                     if(distance == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .distance").val()) || multiplier == parseFloat(jQuery(".package-line:eq("+(aid-1)+") .multiplier").val()) || distance < parseFloat(jQuery(".package-line:eq("+(aid-1)+") .distance").val()) || multiplier < parseFloat(jQuery(".package-line:eq("+(aid-1)+") .multiplier").val()) ) {
 
                         alert('Please input values larger than the last row or in between the row you are trying to add to.');
@@ -45,6 +46,7 @@ function savenote(nid,atype){
                 }
 				var newid=position;
 			}else{
+
 				if((distance >parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier > parseFloat(jQuery(".package-line:eq(0)  .multiplier").val()) || (distance==parseFloat(jQuery(".package-line:eq(0)  .distance").val())  || multiplier==parseFloat(jQuery(".package-line:eq(0)  .multiplier").val()))) && position != oldposition ){
 					alert('Please input values larger than the last row or in between the row you are trying to add to.');
 					return false;
@@ -54,18 +56,19 @@ function savenote(nid,atype){
 					
 		}else if(aid>1){
 
-			if(position >= parseFloat(jQuery(".package-line:eq(1) .position").val()) ){
-                 if(distance <=parseFloat(jQuery(".package-line:eq(0) .distance").val()) ||  multiplier <= parseFloat(jQuery(".package-line:eq(0)  .multiplier").val())  && position != oldposition  ){
+			if(position >= parseInt(jQuery(".package-line:eq(1) .position").val()) ){
+
+                 if((distance <= parseFloat(jQuery(".package-line").eq(-2).find(".distance").val()) ||  multiplier <= parseFloat(jQuery(".package-line").eq(-2).find(".multiplier").val())) && position != oldposition  ){
 					alert('Please input values larger than the last row or in between the row you are trying to add to.');
 					return false;
 				}
-                var newid= parseFloat(jQuery(".package-line:eq(1) .position").val())+1;
-               }else if(position >= parseFloat(jQuery(".package-line:eq(0) .position").val()) ){
+                var newid= parseInt(jQuery(".package-line:eq(1) .position").val())+1;
+               }else if(position >= parseInt(jQuery(".package-line:eq(0) .position").val()) ){
                    
                     if(((distance>=parseFloat(jQuery(".package-line:eq(1) .distance").val())  || multiplier >=parseFloat(jQuery(".package-line:eq(1) .multiplier").val())) || (distance<=parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier <=parseFloat(jQuery(".package-line:eq(0) .multiplier").val()))) && position != oldposition  ){
                              alert('Please input values larger than the last row or in between the row you are trying to add to.');						return false;
                     }
-                        var newid= parseFloat(jQuery(".package-line:eq(0) .position").val())+1;
+                        var newid= parseInt(jQuery(".package-line:eq(0) .position").val())+1;
                 }else{ 
                     if((distance == parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier >=parseFloat(jQuery(".package-line:eq(0) .multiplier").val())) || (distance>=parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier ==parseFloat(jQuery(".package-line:eq(0) .multiplier").val()))  ){
                                         alert('Please input values larger than the last row or in between the row you are trying to add to.');
@@ -74,13 +77,18 @@ function savenote(nid,atype){
                                 var newid=1;
                 }
 		}else if(aid>0){
-                if(position != parseFloat(jQuery(".package-line:eq(0) .position").val()) ){
-                     if((distance>=parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier >parseFloat(jQuery(".package-line:eq(0) .multiplier").val())) || (distance > parseFloat(jQuery(".package-line:eq(0) .distance").val())  || multiplier >= parseFloat(jQuery(".package-line:eq(0) .multiplier").val())) ){ 
-                        var newid=parseFloat(jQuery(".package-line:eq(0) .position").val())+1;              
-                    }else{
-                            var newid=parseFloat(jQuery(".package-line:eq(0) .position").val())-1;   
+                if(position != parseInt(jQuery(".package-line:eq(0) .position").val()) ){
+
+                    if(distance>=parseFloat(jQuery(".package-line:eq(0) .distance").val()) && multiplier >=parseFloat(jQuery(".package-line:eq(0) .multiplier").val())){
+                        var newid=parseInt(jQuery(".package-line:eq(0) .position").val())+1;              
+                    }else if(distance<parseFloat(jQuery(".package-line:eq(0) .distance").val()) && multiplier <parseFloat(jQuery(".package-line:eq(0) .multiplier").val())){
+                            var newid=parseInt(jQuery(".package-line:eq(0) .position").val())-1;   
                             newid=newid>1? newid:1;    
-                    }
+                    }else{
+
+		        alert('Please input values larger than the last row or in between the row you are trying to add to.');
+                        return false;
+		    }
                     
                 }else{
                 var newid=position;   
