@@ -52,6 +52,13 @@ $rows['table']  = array(array('data'=>distance_price_table()));
 
 function  distances_option_form($form,&$form_state){
 
+
+$form['google_autocomplete_address_key'] = array(
+ '#title'=>t('API KEY'),
+ '#type'=>'textfield',
+ '#default_value'=>variable_get('google_autocomplete_address_key',''),
+);
+
 $form['title'] = array(
  '#markup'=>'<div class="parcels-title">Distance option</div>',
 );

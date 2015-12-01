@@ -222,7 +222,7 @@ $p++;
 	  '.variable_get('liveparcels_note_message').'
 	  </div>
   </div>
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAemm83CciPsUdSgw6W5jtV-j5RHiNDnU4&signed_in=true&libraries=places&callback=initAutocomplete"
+ <script src="https://maps.googleapis.com/maps/api/js?key='.variable_get('google_autocomplete_address_key','').'&signed_in=true&libraries=places&callback=initAutocomplete"
         async defer></script>
 
  <script type="text/javascript">
@@ -898,16 +898,16 @@ if(document.readyState == "complete") {
                    var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
 		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
-		   var postfrom = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postto = "0_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+		   var postfrom = $("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postto = $(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                      ptype=2;
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
 		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 	           var to_locality = $("#locality").val();
-		   var postto = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postfrom =  "0_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+		   var postto = $("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    ptype=1;
                 }
 			  if(dimfirst > max){

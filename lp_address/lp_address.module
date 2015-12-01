@@ -72,6 +72,12 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
     foreach($addresses as $adr){
       $options[$parcel_type.'_'.$key.'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
     }
+
+  if(module_exists('lp_distance_price')){
+   $street = $pdata[0];
+  }else{
+   $street = ''; 
+  }
     $contents['select_address'] = array(
       '#type' => 'select', 
       '#title' => t('Address book'), 
@@ -129,7 +135,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
   ),'street1'=>array(
     '#type' => 'textfield',
     '#title' => t('Street address').' <span class="form-required" title="This field is required.">*</span>',
-    '#default_value'=>!empty($default_info['address']['street1']) ? $default_info['address']['street1']:'',
+    '#default_value'=>!empty($default_info['address']['street1']) ? $default_info['address']['street1']:$street,
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array($parcel_type.'_street1')),
