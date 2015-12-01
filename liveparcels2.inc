@@ -922,7 +922,7 @@ if(document.readyState == "complete") {
               weighttext=parseFloat(weighttext);
               
               ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","from_locality":"\'+from_locality+\'","to_locality":"\'+to_locality+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
-alert(ajaxrequest);
+
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
                 
