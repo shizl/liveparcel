@@ -847,7 +847,7 @@ if(document.readyState == "complete") {
 		$(".post-all:last").after(newDiv);
 		$(".post-all:last .parcel strong").html("Parcel#" + num);
         $(".post-all:last .pcode").attr("id","pcode"+num);
-         $(".post-all:last .addressto").attr("id","duplicate"+num);
+         $(".post-all:last .addressto").attr("id","destination"+num);
 
           $(".post-all:last .route").attr("id","route"+ num);
           $(".post-all:last .locality").attr("id","locality"+ num);
@@ -895,14 +895,15 @@ if(document.readyState == "complete") {
               if($(".deliver").attr("checked")){
                    var addressfrom =$("#autocomplete").val();
 		   var from_locality  = $("#locality").val();
-                   var addressto = $(".post-all:eq("+(f-1)+")").find("#destination").val();
+                   var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
+
 		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 		   var postfrom = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
 		   var postto = "0_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                      ptype=2;
                 }else{
-                   var addressto =$("#autocomplete").val() ;
-                   var addressfrom =$(".post-all:eq("+(f-1)+")").find("#destination").val();
+                   var addressto = $("#autocomplete").val();
+                   var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
 		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 	           var to_locality = $("#locality").val();
 		   var postto = "0_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
@@ -921,7 +922,7 @@ if(document.readyState == "complete") {
               weighttext=parseFloat(weighttext);
               
               ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","from_locality":"\'+from_locality+\'","to_locality":"\'+to_locality+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
-              
+alert(ajaxrequest);
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
                 
