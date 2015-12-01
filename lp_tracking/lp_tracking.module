@@ -71,7 +71,7 @@ function template_preprocess_custom_comment(&$variables) {
 
   $comment = $variables['elements']['#comment'];
  if(empty($comment)){
-   return fasle;
+   return false;
   }
   $node = $variables['elements']['#node'];
   $variables['comment'] = $comment;
