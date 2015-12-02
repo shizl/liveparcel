@@ -64,17 +64,17 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
   array_push($options,'Select one...');
   $pdata=$parcel_type=="pickup" ? $parcel_info['parcels'][$key]['postfrom']:$parcel_info['parcels'][$key]['postto'];
   $pdata= explode('_',$pdata);
-  $post_code=$pdata[2];//postal code
+  $post_code=$pdata[3];//postal code
   $countryinfo=lp_address_get_country_info();//country id and name
   $parcel_array=lp_address_get_parcel_address_filter($post_code);
-  $zone_id=lp_address_get_zone_id($pdata[1]);//zone_id
+  $zone_id=lp_address_get_zone_id($pdata[2]);//zone_id
   if ($user->uid && $addresses = lp_address_get_uc_address_book($user->uid,$parcel_array,$zone_id,$post_code)) {
     foreach($addresses as $adr){
       $options[$parcel_type.'_'.$key.'_'.$adr->aid] =($adr->address_name<>'' ?  '('.$adr->address_name.') ':' ').($adr->company<>'' ?  $adr->company.', ':' ').$adr->first_name.' '.$adr->last_name.', '.$adr->city.', '.$adr->street1;
     }
 
   if(module_exists('lp_distance_price')){
-   $street = $pdata[0];
+   $street = $pdata[0].' '.$pdata[1];
   }else{
    $street = ''; 
   }

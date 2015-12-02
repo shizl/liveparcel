@@ -16,16 +16,7 @@ $parcels=liveparcels_getparcelsdata();
 
 $countryinfo = lp_address_get_country_info();
 
-if(module_exists('lp_feature_service') && get_service_type_count()>1){
- $service_type = get_service_type();
-//update 2015-08-13
 $options = '';
- foreach($service_type as $service){
-   $options .= '<option value="'.$service['id'].'">'.$service['type'].' (+'.($service['value']*100).'%)</option>'; 
- }
-
-}
-
 $parcel_info='';
  $postfrom='';
  $post='postto';
@@ -42,7 +33,23 @@ if($parcels>0){
      $post=$parcels['ptype']==2 ? 'postto':'postfrom';
 
   foreach($parcels['parcels'] as $pid=>$parcel){
+
 $p++;
+
+ $_postfrom = explode('_',$parcel['postfrom']);
+ $_postto = explode('_',$parcel['postto']);
+
+if(module_exists('lp_feature_service') && get_service_type_count()>1){
+ $service_type = get_service_type();
+//update 2015-08-13
+
+ foreach($service_type as $service){
+   $options .= '<option '.($parcel['service_type']==$service['id']?"selected":"").' value="'.$service['id'].'">'.$service['type'].' (+'.($service['value']*100).'%)</option>'; 
+ }
+
+}
+
+
        $parcel_info.=' <div class="post-all">
           <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
@@ -75,11 +82,12 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="route1" class="route">
+		<input id="destination" class="addressto"  value="'.$parcel['addressto'].'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="street_number1" class="street" value="'. $_postto[0].'">
+<input type="hidden"  id="route1" class="route" value="'.$_postto[1].'">
 <input type="hidden"  id="locality1" class="locality">
-<input  type="hidden" id="administrative_area_level_11" class="administrative_area_level">
-<input type="hidden"  id="postal_code1" class="postal_code">
+<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.$_postto[2].'">
+<input type="hidden"  id="postal_code1" class="postal_code" value="'.$_postto[3].'">
 <input type="hidden"  id="country1" class="country">
 
                 </td>
@@ -126,13 +134,13 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" placeholder="Enter your address"
+            <input id="autocomplete" placeholder="Enter your address" value="'.$parcel['addressfrom'].'"
              onFocus="geolocate()" type="text"></input>
-
-<input type="hidden"  id="route">
+<input type="hidden"  id="street_number" value="'.$_postfrom[0].'">
+<input type="hidden"  id="route" value="'.$_postfrom[1].'">
 <input type="hidden"  id="locality">
-<input  type="hidden" id="administrative_area_level_1">
-<input type="hidden"  id="postal_code">
+<input type="hidden"  id="administrative_area_level_1" value="'.$_postfrom[2].'">
+<input type="hidden"  id="postal_code" value="'.$_postfrom[3].'">
 <input type="hidden"  id="country">
 
 
@@ -170,11 +178,12 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="route1" class="route">
+		<input id ="destination" class="addressto"  value="'.$parcel['addressto'].'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="street_number1" class="street" value="'.$_postto[0].'">
+<input type="hidden"  id="route1" class="route" value="'.$_postto[1].'">
 <input type="hidden"  id="locality1" class="locality">
-<input  type="hidden" id="administrative_area_level_11" class="administrative_area_level">
-<input type="hidden"  id="postal_code1" class="postal_code">
+<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.$_postto[2].'">
+<input type="hidden"  id="postal_code1" class="postal_code" value="'.$_postto[3].'">
 <input type="hidden"  id="country1" class="country">
 
 
@@ -235,7 +244,7 @@ var placeSearch,autocomplete,destination1,destination2,destination3,destination4
 
 
 var componentForm = {
-
+  street_number: "short_name",
   route: "long_name",
   locality: "long_name",
   administrative_area_level_1: "short_name",
@@ -246,6 +255,7 @@ var componentForm = {
 
 var destination_componentForm = {
 componentForm1:{
+  street_number1: "short_name",
   route1: "long_name",
   locality1: "long_name",
   administrative_area_level_11: "short_name",
@@ -253,6 +263,7 @@ componentForm1:{
   postal_code1: "short_name"
 },
 componentForm2 :{
+  street_number2: "short_name",
   route2: "long_name",
   locality2: "long_name",
   administrative_area_level_12: "short_name",
@@ -260,6 +271,7 @@ componentForm2 :{
   postal_code2: "short_name"
 },
 componentForm3 :{
+  street_number3: "short_name",
   route3: "long_name",
   locality3: "long_name",
   administrative_area_level_13: "short_name",
@@ -267,6 +279,7 @@ componentForm3 :{
   postal_code3: "short_name"
 },
 componentForm4 :{
+  street_number4: "short_name",
   route4: "long_name",
   locality4: "long_name",
   administrative_area_level_14: "short_name",
@@ -274,6 +287,7 @@ componentForm4 :{
   postal_code4: "short_name"
 },
 componentForm5 :{
+  street_number5: "short_name",
   route5: "long_name",
   locality5: "long_name",
   administrative_area_level_15: "short_name",
@@ -281,6 +295,7 @@ componentForm5 :{
   postal_code5: "short_name"
 },
 componentForm6 :{
+  street_number6: "short_name",
   route6: "long_name",
   locality6: "long_name",
   administrative_area_level_16: "short_name",
@@ -288,6 +303,7 @@ componentForm6 :{
   postal_code6: "short_name"
 },
 componentForm7 :{
+  street_number7: "short_name",
   route7: "long_name",
   locality7: "long_name",
   administrative_area_level_17: "short_name",
@@ -295,6 +311,7 @@ componentForm7 :{
   postal_code7: "short_name"
 },
 componentForm8 :{
+  street_number8: "short_name",
   route8: "long_name",
   locality8: "long_name",
   administrative_area_level_18: "short_name",
@@ -302,6 +319,7 @@ componentForm8 :{
   postal_code8: "short_name"
 },
 componentForm9 :{
+  street_number9: "short_name",
   route9: "long_name",
   locality9: "long_name",
   administrative_area_level_19: "short_name",
@@ -648,15 +666,27 @@ if(document.readyState == "complete") {
 		 var three  = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
 		 var weight = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
 		 var dimens = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
-		 var postto = $(".post-all:eq("+(f-1)+")").find(".pnum-to").val();
-		 var posttos = $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").val();
+		 var postto = $("#autocomplete").val();
+		 var posttos = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
+
 		 if(postto == ""){
-             error=1;
-	           $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").css("border","1px dashed red");
+
+	           $("#autocomplete").css("border","1px dashed red");
 	           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
 		 }else{
-		       $(".post-all:eq("+(f-1)+")").find(".postcode-suburb").css("border","1px solid #ccc");
+		       $("#autocomplete").css("border","1px solid #ccc");
 		 }
+
+		if(posttos==""){
+
+	           $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px dashed red");
+	           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();		
+
+ 		}else{
+	           $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px solid #ccc");
+		}
+
+		
 		if(first !== "" && second !== "" && three !== "" 
 		   && weight !== "" && dimens !== "" && postto !== ""){
 		        $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();       
@@ -707,9 +737,6 @@ if(document.readyState == "complete") {
 				   }else{
                       $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px solid #ccc"); 
 				   }
-			     if(posttos ==""){
-			       $(".post-all:eq("+(f-1)+")").find(".pnum-to").val("");
-			     }
 		    if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
 		         $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
 		}
@@ -818,6 +845,7 @@ if(document.readyState == "complete") {
          $(".post-all:last .pcode").attr("id","pcode"+num);
           $(".post-all:last .addressto").attr("id","destination"+ num);
 
+          $(".post-all:last .street").attr("id","street_number"+ num);
           $(".post-all:last .route").attr("id","route"+ num);
           $(".post-all:last .locality").attr("id","locality"+ num);
           $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
@@ -849,6 +877,7 @@ if(document.readyState == "complete") {
         $(".post-all:last .pcode").attr("id","pcode"+num);
          $(".post-all:last .addressto").attr("id","destination"+num);
 
+          $(".post-all:last .street").attr("id","street_number"+ num);
           $(".post-all:last .route").attr("id","route"+ num);
           $(".post-all:last .locality").attr("id","locality"+ num);
           $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
@@ -898,16 +927,16 @@ if(document.readyState == "complete") {
                    var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
 		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
-		   var postfrom = $("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postto = $(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+		   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                      ptype=2;
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
 		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 	           var to_locality = $("#locality").val();
-		   var postto = $("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+		   var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    ptype=1;
                 }
 			  if(dimfirst > max){
@@ -1219,11 +1248,11 @@ if(isset($_SESSION['lp_order'])){
 
 			$set_distance = $rst->distance;
 
-			if($set_distance*1000>$distance){
+			if($distance!='0'&&$set_distance*1000>$distance){
 				$pzon = $rst->multiplier;
   				break;
 			}else{
-				$pzon = $rst->multiplier;				
+				$pzon = 0;
 			}
 		 }
 
@@ -1269,7 +1298,17 @@ if(isset($_SESSION['lp_order'])){
 
 function  get_google_distance($from,$to){
 
-$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en';
+$unit = variable_get('distance_unit',0);
+$restriction = variable_get('distance_restriction',0);
+print_r($restriction);exit;
+
+if($unit=='0'){
+ $distance_unit = 'metric';
+}else{
+ $distance_unit = 'imperial';
+}
+
+$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en&avoid=&units='.$distance_unit;
 
 $output = file_get_contents($url);
 

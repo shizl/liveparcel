@@ -81,12 +81,12 @@ $form['google_regison'] = array(
 );
 
 $form['google_regison']['restriction_title'] = array(
-  '#markup'=>'<p>Restriction otpion</p>',
+  '#markup'=>'<p>Restriction option</p>',
 );
 $form['google_regison']['distance_restriction'] = array(
-  '#type'=>'checkboxes',
-  '#options' => drupal_map_assoc(array('tolls','highways','ferries','indoor')),
-  '#default_value'=> variable_get('distance_restriction',array()),
+  '#type'=>'radios',
+  '#options' => array('tolls','highways','ferries','indoor'),
+  '#default_value'=> variable_get('distance_restriction',0),
 );
 
 $form['google_regison']['unit_title'] = array(
