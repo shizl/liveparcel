@@ -96,9 +96,8 @@ if ($node->type=="live_parcel"){
 		$role_array .=  '"'.$key.'"'.':'. '"'. $role.'",';
 	}
 
-<<<<<<< HEAD
-       $price = variable_get('uc_currency_sign','$').$price;
-=======
+
+
 	date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
 	$p_date = format_date(strtotime($p_date),'custom','Y-m-d', drupal_get_user_timezone());
 
@@ -108,7 +107,7 @@ if ($node->type=="live_parcel"){
 	$weight = $weight.$suf;
         $price = variable_get('uc_currency_sign','$').$price;
         $collect = variable_get('uc_currency_sign','$').$collect;
->>>>>>> 55b9ca4f2ee2068a313215c4208625d43d948bf9
+
 	$role_array = substr($role_array,0,strlen($role_array)-1);
         $data = '{"username":"'.$account->name.'","uid":'.$node->uid.',"nid":'.$node->nid.',"date":"'.date('Y-m-d',$node->created).'","title":"'.$node->title.'","url":"'.$base_url.'/node/'.$node->nid.'","Order ID":"'.$orderid.'","Shipping fee":"'.$price.'","Parcel dimension":"'.$dimension.'","Package type":"'.$package.'","Parcel weight":"'.$weight.'","Service type":"'.$service_type.'","Authority to leave":"'.$leave.'","Cash to collect":"'.$collect.'","Customer reference":"'.$ref.'","Delivery note":"'.$d_note.'","Pickup note":"'.$p_note.'","Pickup date":"'.$p_date.'","Pickup shift":"'.$shift.'","Pickup address":[{"name":"'.$p_address['name'].'","street":"'.$p_address['street'].'","city":"'.$p_address['city'].'","province":"'.$p_address['province'].'","postal_code":"'.$p_address['postal_code'].'","country":"'.$p_address['country_name'].'"}],"Delivery address":[{"name":"'.$d_address['name'].'","street":"'.$d_address['street'].'","city":"'.$d_address['city'].'","province":"'.$d_address['province'].'","postal_code":"'.$d_address['postal_code'].'","country":"'.$d_address['country_name'].'"}],"role":[{'.$role_array.'}]}';
 
