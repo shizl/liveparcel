@@ -1300,7 +1300,16 @@ function  get_google_distance($from,$to){
 
 $unit = variable_get('distance_unit',0);
 $restriction = variable_get('distance_restriction',0);
-print_r($restriction);exit;
+
+if($restriction=='0'){
+  $distance_restriction = 'tolls';
+}elseif($restriction=='1'){
+  $distance_restriction = 'highways';
+}elseif($restriction=='2'){
+  $distance_restriction = 'ferries';
+}else{
+  $distance_restriction = 'indoor';
+}
 
 if($unit=='0'){
  $distance_unit = 'metric';
@@ -1308,7 +1317,7 @@ if($unit=='0'){
  $distance_unit = 'imperial';
 }
 
-$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en&avoid=&units='.$distance_unit;
+$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en&avoid='.$distance_restriction.'&units='.$distance_unit;
 
 $output = file_get_contents($url);
 
