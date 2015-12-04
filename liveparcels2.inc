@@ -22,33 +22,39 @@ $parcel_info='';
  $post='postto';
 $p=0;
  $jsondata=liveparcels_getZonelistData();
-if($parcels>0){
-
-        if(strpos($parcels['parcels'][0]['parcelnum'],'Parcel')>0){
-          $parcels['parcels'][0]['parcelnum'] = 'Parcel#1';
-        } 
-
-
-        $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
-     $post=$parcels['ptype']==2 ? 'postto':'postfrom';
-
-  foreach($parcels['parcels'] as $pid=>$parcel){
-
-$p++;
-
- $_postfrom = explode('_',$parcel['postfrom']);
- $_postto = explode('_',$parcel['postto']);
 
 if(module_exists('lp_feature_service') && get_service_type_count()>1){
  $service_type = get_service_type();
 //update 2015-08-13
 
  foreach($service_type as $service){
-   $options .= '<option '.($parcel['service_type']==$service['id']?"selected":"").' value="'.$service['id'].'">'.$service['type'].' (+'.($service['value']*100).'%)</option>'; 
+
+   $options .= '<option  value="'.$service['id'].'">'.$service['type'].' (+'.($service['value']*100).'%)</option>'; 
+
  }
 
 }
 
+
+if($parcels>0){
+
+        if(strpos($parcels['parcels'][0]['parcelnum'],'Parcel')>0){
+          $parcels['parcels'][0]['parcelnum'] = 'Parcel#1';
+        }
+
+
+     $postfrom=$parcels['ptype']==2 ? $parcels['parcels'][0]['postfrom']:$parcels['parcels'][0]['postto'];
+     $post=$parcels['ptype']==2 ? 'postto':'postfrom';
+
+ foreach($parcels['parcels'] as $pid=>$parcel){
+
+$p++;
+
+ $_postfrom = explode('_',$parcel['postfrom']);
+ $_postto = explode('_',$parcel['postto']);
+
+  
+   $options =  str_replace('value="'.$parcel['service_type'].'"', 'value="'.$parcel['service_type'].'" selected ' ,$options);
 
        $parcel_info.=' <div class="post-all">
           <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
@@ -82,12 +88,12 @@ if(module_exists('lp_feature_service') && get_service_type_count()>1){
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto"  value="'.$parcel['addressto'].'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="street_number1" class="street" value="'. $_postto[0].'">
-<input type="hidden"  id="route1" class="route" value="'.$_postto[1].'">
+		<input id="destination" class="addressto"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
+<input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
-<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.$_postto[2].'">
-<input type="hidden"  id="postal_code1" class="postal_code" value="'.$_postto[3].'">
+<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
+<input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
 <input type="hidden"  id="country1" class="country">
 
                 </td>
@@ -134,13 +140,13 @@ if(module_exists('lp_feature_service') && get_service_type_count()>1){
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" placeholder="Enter your address" value="'.$parcel['addressfrom'].'"
+            <input id="autocomplete" placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'"
              onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="street_number" value="'.$_postfrom[0].'">
-<input type="hidden"  id="route" value="'.$_postfrom[1].'">
+<input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
+<input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
 <input type="hidden"  id="locality">
-<input type="hidden"  id="administrative_area_level_1" value="'.$_postfrom[2].'">
-<input type="hidden"  id="postal_code" value="'.$_postfrom[3].'">
+<input type="hidden"  id="administrative_area_level_1" value="'.(empty($_postfrom[2])?'':$_postfrom[2]).'">
+<input type="hidden"  id="postal_code" value="'.(empty($_postfrom[3])?'':$_postfrom[3]).'">
 <input type="hidden"  id="country">
 
 
@@ -178,12 +184,12 @@ if(module_exists('lp_feature_service') && get_service_type_count()>1){
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto"  value="'.$parcel['addressto'].'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-<input type="hidden"  id="street_number1" class="street" value="'.$_postto[0].'">
-<input type="hidden"  id="route1" class="route" value="'.$_postto[1].'">
+		<input id ="destination" class="addressto"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
+<input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
-<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.$_postto[2].'">
-<input type="hidden"  id="postal_code1" class="postal_code" value="'.$_postto[3].'">
+<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
+<input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
 <input type="hidden"  id="country1" class="country">
 
 
