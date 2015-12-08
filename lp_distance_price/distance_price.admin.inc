@@ -79,7 +79,7 @@ $form['description'] = array(
 );
 $form['distance_type'] = array(
   '#type'=>'radios',
-  '#options' => array('Straight distance','Google route'),
+  '#options' => array('Straight line distance','Google maps driving distance'),
   '#default_value'=>variable_get('distance_type',0),
 );
 
