@@ -92,7 +92,7 @@ $form['google_regison']['restriction_title'] = array(
 );
 $form['google_regison']['distance_restriction'] = array(
   '#type'=>'radios',
-  '#options' => array('default','tolls','highways','ferries'),
+  '#options' => array('none','tolls','highways','ferries','indoor'),
   '#default_value'=> variable_get('distance_restriction',0),
 );
 
