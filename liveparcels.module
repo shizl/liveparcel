@@ -146,8 +146,8 @@ function liveparcels_menu() {
 
 
   $items['admin/liveparcels/adminsetting/postcode'] = array(
-    'title' => 'Postcode',
-    'description' => 'Configure postcode. View price table.',
+    'title' => 'Postcode and pricing',
+    'description' => 'Configure postcode and price multiplier. View price table.',
     'page callback' => 'liveparcels_admin_postcode',
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
