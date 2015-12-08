@@ -1,5 +1,5 @@
-name = Distance Price
-description = "In this new feature, cost will be calculated based on package size and distance range."
+name = Distance pricing
+description = "Optional. Enabling this will enable distance based pricing using Google Autocomplete for addresses API and disable postcode based pricing system."
 package = Live Parcels - core
 
 version = "7.x-1.0"
