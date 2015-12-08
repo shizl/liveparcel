@@ -34,8 +34,11 @@ if($getunit=='1'){
   drupal_add_js(drupal_get_path('module', 'lp_distance_price') . '/js/distance.js');
   drupal_add_css(drupal_get_path('module', 'lp_distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
  
- $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata">
-        <li id="phead"><div class="field-small">Position</div><div class="field">max distance ('.$unit.')</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
+ $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="parcels-title">Define distance maximum value and associated price multiplier</div>
+ <div><p>To use distance pricing, you must configure the pricing table below, the zone multipler here multiples with the base price of the package to arrive at the price the customer is charged.</p>
+ <p>The first row (position 1) defines the price multiplier from 0 to the max distance, e.g. 10 km you have entered.</p></div>
+ <ul class="packagedata">
+        <li id="phead"><div class="field-small">Position</div><div class="field">Max distance ('.$unit.')</div><div class="field">Multiplier</div><div class="field">Edit/Delete</div></li>
         <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="distance small-text"></div><div class="field"><input type="text" class="multiplier small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div>'));
  
 $rows['option'] = array(array('data'=>drupal_get_form('distances_option_form')));
@@ -61,21 +64,22 @@ function  distances_option_form($form,&$form_state){
 
 
 $form['google_autocomplete_address_key'] = array(
- '#title'=>t('API KEY'),
+ '#title'=>t('Google API key'),
+ '#description' => 'Entering your own Google API key allows you to track and pay for excess usage.',
  '#type'=>'textfield',
  '#default_value'=>variable_get('google_autocomplete_address_key',''),
 );
 
 $form['title'] = array(
- '#markup'=>'<div class="parcels-title">Distance option</div>',
+ '#markup'=>'<div class="parcels-title">Distance calculation method</div>',
 );
 
 $form['description'] = array(
-  '#markup'=>'<p>Distance option descriotion</p>',
+  '#markup'=>'<p>Straight distance is the recommended default.</p>',
 );
 $form['distance_type'] = array(
   '#type'=>'radios',
-  '#options' => array('Straight Distance','Google Route'),
+  '#options' => array('Straight distance','Google route'),
   '#default_value'=>variable_get('distance_type',0),
 );
 
@@ -88,21 +92,21 @@ $form['google_regison'] = array(
 );
 
 $form['google_regison']['restriction_title'] = array(
-  '#markup'=>'<p>Restriction option</p>',
+  '#markup'=>'<p>Avoid</p>',
 );
 $form['google_regison']['distance_restriction'] = array(
   '#type'=>'radios',
-  '#options' => array('none','tolls','highways','ferries','indoor'),
+  '#options' => array('None','Tolls','Highways','Ferries','Indoor'),
   '#default_value'=> variable_get('distance_restriction',0),
 );
 
 $form['unit_title'] = array(
-  '#markup'=>'<p>Unit option</p>',
+  '#markup'=>'<p>Units</p>',
 );
 
 $form['distance_unit'] = array(
   '#type'=>'radios',
-  '#options' => array('Metric (default) returns distances in kilometers and meters.','Imperial returns distances in miles and feet.'),
+  '#options' => array('Metric (default) returns distance in kilometers and meters.','Imperial returns distance in miles and feet.'),
   '#default_value'=>variable_get('distance_unit',0), 
 );
  return system_settings_form($form);
@@ -141,7 +145,7 @@ $tr .= '<tr><td>'.$rst->position.'</td><td>'.$rst->distance.' '.$unit.'</td>'.$t
 
 }
 
-  $output ='<div class="parcels-title">Price table (calculated)</div><p>some description</p><table><thead><tr class="table-head"><th><a href="####" class="znumber">distance number <input type="hidden" class="oid" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zname">max distance<input type="hidden" class="oname" value="asc"><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th>'.distances_packagename('name').'</tr></thead><tr>'.$tr.'</table>';
+  $output ='<div class="parcels-title">Price table (calculated)</div><p>The price table below is calculated based on your settings above. It shows you the price charged to deliver a parcel at the distance defined.</p><table><thead><tr class="table-head"><th><a href="####" class="znumber">distance number <input type="hidden" class="oid" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zname">max distance<input type="hidden" class="oname" value="asc"><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th>'.distances_packagename('name').'</tr></thead><tr>'.$tr.'</table>';
 
  return $output;
 }
@@ -213,4 +217,3 @@ function distance_price_managepackage(){
   }
 
 }
-
