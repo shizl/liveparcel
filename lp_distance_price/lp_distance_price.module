@@ -16,8 +16,8 @@ function lp_distance_price_menu(){
   );
 */
   $items['admin/liveparcels/adminsetting/distance_price'] = array(
-    'title' => 'Distance price ',
-    'description' => 'Administer distance pages.',
+    'title' => 'Distance pricing',
+    'description' => 'Configure distance pricing. View price table.',
     'page callback' => 'distance_setting',
     'access arguments' => array('administer actions'),
     'weight' => -13,
