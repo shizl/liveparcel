@@ -1241,7 +1241,7 @@ if(isset($_SESSION['lp_order'])){
 
 		$getunit = variable_get('distance_unit',0);
 		if($getunit=='1'){
-		  $unit = 'mi';
+		  $unit = 'mile';
 		}else{
 		  $unit = 'km';
 		}
