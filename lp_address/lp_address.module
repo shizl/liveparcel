@@ -63,6 +63,9 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
   $options = array();
   array_push($options,'Select one...');
   $pdata=$parcel_type=="pickup" ? $parcel_info['parcels'][$key]['postfrom']:$parcel_info['parcels'][$key]['postto'];
+echo '<pre>';
+print_r($pdata);exit;
+
   $pdata= explode('_',$pdata);
   if(module_exists('lp_distance_price')){
   $post_code=$pdata[3];//postal code

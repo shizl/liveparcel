@@ -933,6 +933,7 @@ if(document.readyState == "complete") {
                    var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
 		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+
 		   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
 		   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                      ptype=2;
@@ -1238,7 +1239,13 @@ if(isset($_SESSION['lp_order'])){
 		$locationto['country'] = $location_to[3];
 		$latlon_b = google_geocode_location($locationto);
 
-		$between = location_distance_between($latlon_a,$latlon_b,'km');
+		$getunit = variable_get('distance_unit',0);
+		if($getunit=='1'){
+		  $unit = 'mi';
+		}else{
+		  $unit = 'km';
+		}
+		$between = location_distance_between($latlon_a,$latlon_b,$unit);
 		$distance = $between['scalar']*1000;
 	  	$distancetest = $between['scalar'].$between['distance_unit'];
             }else{
@@ -1307,14 +1314,14 @@ function  get_google_distance($from,$to){
 $unit = variable_get('distance_unit',0);
 $restriction = variable_get('distance_restriction',0);
 
-if($restriction=='0'){
+if($restriction=='1'){
   $distance_restriction = 'tolls';
-}elseif($restriction=='1'){
-  $distance_restriction = 'highways';
 }elseif($restriction=='2'){
+  $distance_restriction = 'highways';
+}elseif($restriction=='3'){
   $distance_restriction = 'ferries';
 }else{
-  $distance_restriction = 'indoor';
+  $distance_restriction = '';
 }
 
 if($unit=='0'){
@@ -1323,7 +1330,7 @@ if($unit=='0'){
  $distance_unit = 'imperial';
 }
 
-$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=bicycling&language=en&avoid='.$distance_restriction.'&units='.$distance_unit;
+$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=driving&language=en&avoid='.$distance_restriction.'&units='.$distance_unit;
 
 $output = file_get_contents($url);
 

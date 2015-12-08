@@ -24,11 +24,18 @@ function  distance_pages(){
 
 function distance_setting(){
 
+$getunit = variable_get('distance_unit',0);
+if($getunit=='1'){
+  $unit = 'mi';
+}else{
+  $unit = 'km';
+}
+
   drupal_add_js(drupal_get_path('module', 'lp_distance_price') . '/js/distance.js');
   drupal_add_css(drupal_get_path('module', 'lp_distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
  
  $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata">
-        <li id="phead"><div class="field-small">Position</div><div class="field">max distance (km)</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
+        <li id="phead"><div class="field-small">Position</div><div class="field">max distance ('.$unit.')</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
         <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="distance small-text"></div><div class="field"><input type="text" class="multiplier small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div>'));
  
 $rows['option'] = array(array('data'=>drupal_get_form('distances_option_form')));
@@ -85,21 +92,19 @@ $form['google_regison']['restriction_title'] = array(
 );
 $form['google_regison']['distance_restriction'] = array(
   '#type'=>'radios',
-  '#options' => array('tolls','highways','ferries','indoor'),
+  '#options' => array('default','tolls','highways','ferries'),
   '#default_value'=> variable_get('distance_restriction',0),
 );
 
-$form['google_regison']['unit_title'] = array(
+$form['unit_title'] = array(
   '#markup'=>'<p>Unit option</p>',
 );
 
-$form['google_regison']['distance_unit'] = array(
+$form['distance_unit'] = array(
   '#type'=>'radios',
   '#options' => array('Metric (default) returns distances in kilometers and meters.','Imperial returns distances in miles and feet.'),
   '#default_value'=>variable_get('distance_unit',0), 
 );
-
-
  return system_settings_form($form);
 
 }
@@ -118,6 +123,12 @@ $tr = '';
 
 $package = distances_packagename('price');
 
+$getunit = variable_get('distance_unit',0);
+if($getunit=='1'){
+  $unit = 'mi';
+}else{
+  $unit = 'km';
+}
 
 foreach($result as $key=>$rst){
 $td = '';
@@ -126,7 +137,7 @@ $td = '';
   $td .= '<td>'.variable_get('uc_currency_sign','$').sprintf('%0.2f',$size*$rst->multiplier).'</td>';
  }
 
-$tr .= '<tr><td>'.$rst->position.'</td><td>'.$rst->distance.' km</td>'.$td.'</tr>';
+$tr .= '<tr><td>'.$rst->position.'</td><td>'.$rst->distance.' '.$unit.'</td>'.$td.'</tr>';
 
 }
 
