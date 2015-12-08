@@ -63,9 +63,11 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
   $options = array();
   array_push($options,'Select one...');
   $pdata=$parcel_type=="pickup" ? $parcel_info['parcels'][$key]['postfrom']:$parcel_info['parcels'][$key]['postto'];
-echo '<pre>';
-print_r($parcel_info);exit;
 
+  if(module_exists('lp_distance_price')){
+   $locality = $parcel_type=="pickup" ? $parcel_info['parcels'][$key]['from_locality']:$parcel_info['parcels'][$key]['to_locality'];
+   }
+  
   $pdata= explode('_',$pdata);
   if(module_exists('lp_distance_price')){
   $post_code=$pdata[3];//postal code
@@ -157,7 +159,7 @@ print_r($parcel_info);exit;
     '#maxlength' => 100,
     '#size'=>32,
     '#attributes' => array('class'=>array($parcel_type.'_street2')),
-  ),'parcel_data'=>array('#markup'=>'<div class="parcel_data"><strong>City:</strong> '. $parcel_array['locality'].'&nbsp;&nbsp;&nbsp;<strong>State/Province:</strong> '. $pdata[1].' &nbsp;&nbsp;&nbsp;<strong>Country:</strong> '.$countryinfo['country_name'].' &nbsp;&nbsp;&nbsp;<strong>Postal code:</strong> '.$post_code.'</div>'),'city'=>array(
+  ),'parcel_data'=>array('#markup'=>'<div class="parcel_data"><strong>City:</strong> '.(empty($locality)?$parcel_array['locality']:$locality).'&nbsp;&nbsp;&nbsp;<strong>State/Province:</strong> '.(module_exists('lp_distance_price')?$pdata[2]:$pdata[1]).' &nbsp;&nbsp;&nbsp;<strong>Country:</strong> '.$countryinfo['country_name'].' &nbsp;&nbsp;&nbsp;<strong>Postal code:</strong> '.$post_code.'</div>'),'city'=>array(
     '#type' => 'hidden',
     '#title' => t('City'),
     '#default_value' =>$parcel_array['locality'],

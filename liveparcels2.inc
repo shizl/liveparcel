@@ -1320,6 +1320,8 @@ if($restriction=='1'){
   $distance_restriction = 'highways';
 }elseif($restriction=='3'){
   $distance_restriction = 'ferries';
+}elseif($restriction=='4'){
+  $distance_restriction = 'indoor';
 }else{
   $distance_restriction = '';
 }
