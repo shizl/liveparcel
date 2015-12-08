@@ -20,7 +20,7 @@ function lp_distance_price_menu(){
     'description' => 'Configure distance pricing. View price table.',
     'page callback' => 'distance_setting',
     'access arguments' => array('administer actions'),
-    'weight' => -13,
+    'weight' => 0,
     'file' => 'distance_price.admin.inc',
   );
 
