@@ -138,7 +138,7 @@ function liveparcels_menu() {
 
   $items['admin/liveparcels/adminsetting/package_size'] = array(
     'title' => 'Package size',
-    'description' => 'Configure package price. View price table.',
+    'description' => 'Configure package price.',
     'page callback' => 'liveparcels_admin_packagesize',
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
@@ -147,7 +147,7 @@ function liveparcels_menu() {
 
   $items['admin/liveparcels/adminsetting/postcode'] = array(
     'title' => 'Postcode',
-    'description' => 'Configure postcode . View price table.',
+    'description' => 'Configure postcode. View price table.',
     'page callback' => 'liveparcels_admin_postcode',
     'access arguments' => array('administer liveparcel'),
     'file' => 'liveparcels.admin.inc',
