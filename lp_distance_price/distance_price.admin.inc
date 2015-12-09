@@ -58,7 +58,7 @@ $form['title'] = array(
 );
 
 $form['description'] = array(
-  '#markup'=>'<p>Straight distance is the recommended default.</p>',
+  '#markup'=>"<p>Straight line distance is the recommended default to avoid exceeding Google's free usage limit.</p>",
 );
 $form['distance_type'] = array(
   '#type'=>'radios',
