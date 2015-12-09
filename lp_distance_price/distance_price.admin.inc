@@ -2,23 +2,6 @@
 
 
 /**
-* distance  menu items .
-**/
-
-function  distance_pages(){
-
-  $menu = menu_get_item('admin/liveparcels/distance_config_page');
-  $content = system_admin_menu_block($menu);
-  $build['menu'] = array(
-    '#theme' => 'admin_block_content',
-    '#content' => $content,
-  );
-
-  return $build;
-
-}
-
-/**
 * distance setting page
 */
 

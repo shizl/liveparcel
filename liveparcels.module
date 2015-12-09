@@ -145,15 +145,6 @@ function liveparcels_menu() {
   );
 
 
-  $items['admin/liveparcels/adminsetting/postcode'] = array(
-    'title' => 'Postcode and pricing',
-    'description' => 'Configure postcode and price multiplier. View price table.',
-    'page callback' => 'liveparcels_admin_postcode',
-    'access arguments' => array('administer liveparcel'),
-    'file' => 'liveparcels.admin.inc',
-  );
-
-
   $items['admin/liveparcels/adminsetting/message'] = array(
     'title' => 'Quote and book messages',
     'description' => 'Customize the messages to show at the quote and book page.',
@@ -256,6 +247,17 @@ if(module_exists('lp_distance_price')){
   );
 
 }else{
+
+
+  $items['admin/liveparcels/adminsetting/postcode'] = array(
+    'title' => 'Postcode and pricing',
+    'description' => 'Configure postcode and price multiplier. View price table.',
+    'page callback' => 'liveparcels_admin_postcode',
+    'access arguments' => array('administer liveparcel'),
+    'file' => 'liveparcels.admin.inc',
+  );
+
+
   $items['liveparcels/parcel_quote'] = array(
     'title' => 'Quote and book',
     'description' => 'Obtain quotation and book delivery/pickup',
