@@ -1332,7 +1332,7 @@ if($unit=='0'){
  $distance_unit = 'imperial';
 }
 
-$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=driving&language=en&avoid='.$distance_restriction.'&units='.$distance_unit;
+$url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='.urlencode($from).'&destinations='.urlencode($to).'&mode=driving&language=en&avoid='.$distance_restriction.'&units='.$distance_unit.'&key='.variable_get('google_autocomplete_address_key','');
 
 $output = file_get_contents($url);
 
