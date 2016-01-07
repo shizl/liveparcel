@@ -113,7 +113,7 @@ function lp_tracking_install() {
 
 
 
-// add field_transaction
+// add field_transaction_date
 
   $field_name = 'field_transaction_date';
   if (!field_info_field($field_name)) {
@@ -138,6 +138,7 @@ function lp_tracking_install() {
       'display' => array(
         'default' => array(
           'label' => 'hidden',
+	  'format_type'=>'medium',
         ),
       ),
     );
