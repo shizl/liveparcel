@@ -99,7 +99,7 @@ if ($node->type=="live_parcel"){
 
 
 	date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
-	$p_date = format_date(strtotime($p_date),'custom','Y-m-d', drupal_get_user_timezone());
+	$p_date = format_date(strtotime($p_date),'custom','m/d/Y', drupal_get_user_timezone());
 
 	$result = db_query("select data from {field_config_instance} where field_name = 'field_parcel_weight' ")->fetchfield();
 	$data = unserialize($result);
