@@ -45,7 +45,14 @@ function lp_tracking_uninstall() {
       field_delete_instance($instance);
     }
   }
-
+  //delete field_transaction_date
+  $field_name = 'field_transaction_date';
+  if (field_info_field($field_name)) {
+    field_delete_field($field_name);
+    if ($instance = field_info_instance('comment', $field_name, 'comment_node_live_parcel')) {
+      field_delete_instance($instance);
+    }
+  }
   //delete driver role
  // $roleName = 'driver';
  // user_role_delete($roleName);
@@ -103,6 +110,40 @@ function lp_tracking_install() {
   		$role->weight = 11;
       user_role_save($role);
     }
+
+
+
+// add field_transaction
+
+  $field_name = 'field_transaction_date';
+  if (!field_info_field($field_name)) {
+    $field = array(
+      'field_name' => $field_name, 
+      'type' => 'datetime',
+      'settings' => array(
+	'tz_handling'=>'user',
+      ),
+    );
+    field_create_field($field);
+    $instance = array(
+      'field_name' => $field_name, 
+      'entity_type' => 'comment', 
+      'label' => 'Transaction date/time', 
+      'bundle' => 'comment_node_live_parcel', 
+      'required' => FALSE,
+      'description' => 'The date/time when the transaction occurs.',
+      'widget' => array(
+        'type' => 'date_popup',
+      ), 
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+        ),
+      ),
+    );
+    field_create_instance($instance);
+  }
+
 
   //add field_status
   $field_name = 'field_status';
