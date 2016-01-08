@@ -16,7 +16,14 @@ global $user;
 <?php if(!empty($comment)):  ?>
 
 <tr>
-<td><?php print $created; ?></td>
+
+<?php 
+   $driver = empty($content['field_created'])?'':render($content['field_created']);
+ if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+   print '<td>'.$created.'</td>';	
+ }
+?>
+
 <td><?php print $customDate; ?></td>
 <td><?php print $author; ?></td>
 
