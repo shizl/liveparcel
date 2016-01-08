@@ -20,7 +20,13 @@ global $user;
 
 <thead>
 <tr>
-<th>Date</th>
+
+<?php
+if($node->uid == $user->uid ||in_array(3,$arr)||in_array('driver',$arrname)){
+echo '<th>Upload date/time</th>';
+}
+?>
+
 <th>Transaction date/time</th>
 <th>Author</th>
 
