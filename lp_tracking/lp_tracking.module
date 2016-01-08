@@ -78,7 +78,7 @@ function template_preprocess_custom_comment(&$variables) {
   $variables['comment'] = $comment;
  date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
   $variables['node'] = $node;
-  $variables['customDate'] =format_date(strtotime($comment->field_transaction_date['und'][0]['value']),'custom','D, m/d/Y - H:i',$comment->field_transaction_date['und'][0]['timezone']);
+  $variables['customDate'] =!empty($comment->field_transaction_date['und'][0]['timezone']) ? format_date(strtotime($comment->field_transaction_date['und'][0]['value']),'custom','D, m/d/Y - H:i',$comment->field_transaction_date['und'][0]['timezone']):"";
   
   $variables['author'] = theme('username', array('account' => $comment));
 
