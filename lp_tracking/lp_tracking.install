@@ -130,7 +130,7 @@ function lp_tracking_install() {
       'entity_type' => 'comment', 
       'label' => 'Transaction date/time', 
       'bundle' => 'comment_node_live_parcel', 
-      'required' => FALSE,
+      'required' => TRUE,
       'description' => 'The date/time when the transaction occurs.',
       'widget' => array(
         'type' => 'date_popup',
