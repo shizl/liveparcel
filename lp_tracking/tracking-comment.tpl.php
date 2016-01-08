@@ -17,6 +17,7 @@ global $user;
 
 <tr>
 <td><?php print $created; ?></td>
+<td><?php print $customDate; ?></td>
 <td><?php print $author; ?></td>
 
 <?php 

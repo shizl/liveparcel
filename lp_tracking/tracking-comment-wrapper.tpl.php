@@ -21,6 +21,7 @@ global $user;
 <thead>
 <tr>
 <th>Date</th>
+<th>Transaction date/time</th>
 <th>Author</th>
 
 <?php

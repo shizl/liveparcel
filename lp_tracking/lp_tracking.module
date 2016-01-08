@@ -76,13 +76,15 @@ function template_preprocess_custom_comment(&$variables) {
   $comment = $variables['elements']['#comment'];
   $node = $variables['elements']['#node'];
   $variables['comment'] = $comment;
+ date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
   $variables['node'] = $node;
+  $variables['customDate'] =format_date(strtotime($comment->field_transaction_date['und'][0]['value']),'custom','D, m/d/Y - H:i',$comment->field_transaction_date['und'][0]['timezone']);
+  
   $variables['author'] = theme('username', array('account' => $comment));
 
   //$variables['created'] = format_date($comment->created);
-  date_default_timezone_set($node->field_pick_up_time[$node->language][0]['timezone_db']);
+ 
   $variables['created'] = format_date($comment->created,'custom','l, F j, Y - H:i', drupal_get_user_timezone());
-
   // Avoid calling format_date() twice on the same timestamp.
   if ($comment->changed == $comment->created) {
     $variables['changed'] = $variables['created'];
