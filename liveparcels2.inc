@@ -631,11 +631,11 @@ initAutocomplete();
 
 document.onreadystatechange = subSomething;
 
-function subSomething() { 
+
+function subSomething() {
 if(document.readyState == "complete") {
-  $("#autocomplete").removeAttr("disabled");
-  $(".deliver").removeAttr("disabled");
-  $(".pick-up").removeAttr("disabled");
+
+include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('google_autocomplete_address_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
 
 }else{
   $("#autocomplete").attr("disabled","disabled");
@@ -644,6 +644,32 @@ if(document.readyState == "complete") {
 }
 
 }
+
+function include_js(file) {
+
+    var _doc = document.getElementsByTagName("head")[0];
+    var js = document.createElement("script");
+    js.setAttribute("type", "text/javascript");
+    js.setAttribute("src", file);
+    _doc.appendChild(js);
+    if (!/*@cc_on!@*/0) { 
+        js.onload = function () {
+	  $("#autocomplete").removeAttr("disabled");
+	  $(".deliver").removeAttr("disabled");
+	  $(".pick-up").removeAttr("disabled");
+        }
+    } else {
+        js.onreadystatechange = function () {
+            if (js.readyState == "loaded" || js.readyState == "complete") {
+		  $("#autocomplete").removeAttr("disabled");
+		  $(".deliver").removeAttr("disabled");
+		  $(".pick-up").removeAttr("disabled");
+            }
+        }
+    }
+    return false;
+}
+
    function isFloat(oNum){
 
 	  if(!oNum) return false;
