@@ -638,7 +638,9 @@ if(document.readyState == "complete") {
 include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('google_autocomplete_address_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
 
 }else{
+
   $("#autocomplete").attr("disabled","disabled");
+  $("addressto").attr("disabled","disabled");
   $(".deliver").attr("disabled","disabled");
   $(".pick-up").attr("disabled","disabled");
 }
