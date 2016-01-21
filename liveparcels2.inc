@@ -88,7 +88,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -184,7 +184,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -655,13 +655,16 @@ function include_js(file) {
     if (!/*@cc_on!@*/0) { 
         js.onload = function () {
 	  $("#autocomplete").removeAttr("disabled");
+	  $(".addressto").removeAttr("disabled");
 	  $(".deliver").removeAttr("disabled");
 	  $(".pick-up").removeAttr("disabled");
+	  
         }
     } else {
         js.onreadystatechange = function () {
             if (js.readyState == "loaded" || js.readyState == "complete") {
 		  $("#autocomplete").removeAttr("disabled");
+	  	  $(".addressto").removeAttr("disabled");
 		  $(".deliver").removeAttr("disabled");
 		  $(".pick-up").removeAttr("disabled");
             }
