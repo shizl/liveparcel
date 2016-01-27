@@ -122,6 +122,7 @@ function lp_tracking_install() {
       'type' => 'datetime',
       'settings' => array(
 	'tz_handling'=>'user',
+	
       ),
     );
     field_create_field($field);
@@ -134,6 +135,7 @@ function lp_tracking_install() {
       'description' => 'The date/time when the transaction occurs.',
       'widget' => array(
         'type' => 'date_popup',
+	'settings'=>array('increment'=>1),
       ), 
       'display' => array(
         'default' => array(
