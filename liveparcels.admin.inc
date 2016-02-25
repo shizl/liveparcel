@@ -599,7 +599,7 @@ if($distance_type == '0'){
 
 
 
- $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="distance_option">'.$type.', Avoid:'. $distance_restriction.', Units:'.$distance_unit.'</div><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata distance_data">
+ $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="distance_option"> <div class="parcels-title">Distance calculation method</div> <p>Straight line distance is the recommended default to avoid exceeding Google \'s free usage limit.<br>&nbsp;&nbsp;'.$type.'</p>'.($distance_type=='0'?'':'<p>Avoid<br>&nbsp;&nbsp;'.$distance_restriction.'</p>').'<p>Units<br>&nbsp;&nbsp;'.$distance_unit.'</p></div><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata distance_data">
         <li id="phead"><div class="field-small">Position</div><div class="field">max distance (km)</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
         <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="distance small-text"></div><div class="field"><input type="text" class="multiplier small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div>'));
 
