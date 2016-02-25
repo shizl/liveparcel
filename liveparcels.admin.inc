@@ -569,7 +569,7 @@ function liveparcels_live_parcel_price() {
    drupal_add_js(drupal_get_path('module', 'lp_distance_price') . '/js/distance.js');
  // drupal_add_css(drupal_get_path('module', 'lp_distance_price') . '/css/distance.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
  
-$unit = variable_get('distance_unit',0);
+$getunit = variable_get('distance_unit',0);
 $restriction = variable_get('distance_restriction',0);
 $distance_type =  variable_get('distance_type');
 
@@ -585,10 +585,12 @@ if($restriction=='1'){
   $distance_restriction = 'none';
 }
 
-if($unit=='0'){
+if($getunit=='0'){
  $distance_unit = 'Metric (default) returns distance in kilometers and meters.';
+ $unit = 'km';
 }else{
  $distance_unit = 'Imperial returns distance in miles and feet.';
+ $unit = 'mi';
 }
 
 if($distance_type == '0'){
@@ -600,7 +602,7 @@ if($distance_type == '0'){
 
 
  $rows['distance'] = array(array('data'=>'<div class="package-table"><div class="distance_option"> <div class="parcels-title">Distance calculation method</div> <p>Straight line distance is the recommended default to avoid exceeding Google \'s free usage limit.</p><span style="color:#000;font-size: 14px;">'.$type.'</span>'.($distance_type=='0'?'':'<p style="margin-top:10px;margin-bottom:0px;">Avoid: '.$distance_restriction.'</p>').'<p>Units: '.$distance_unit.'</p></div><div class="parcels-title">Define package maximum values and price</div><ul class="packagedata distance_data">
-        <li id="phead"><div class="field-small">Position</div><div class="field">max distance (km)</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
+        <li id="phead"><div class="field-small">Position</div><div class="field">max distance ('.$unit.')</div><div class="field">multiplier</div><div class="field">Edit/Delete</div></li>
         <li class="package-line" id="n0"><div class="field-small"><input type="hidden" class="oldposition small-text" value="0"><input type="text" class="position small-text" size="4"></div><div class="field"><input type="text" class="distance small-text"></div><div class="field"><input type="text" class="multiplier small-text"></div><div class="field"><a href="####" onclick="savenote(0,\'updateposition\')">Save</a></div></li></ul></div>'));
 
 
