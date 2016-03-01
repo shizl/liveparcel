@@ -173,7 +173,7 @@ function lp_address_address_view($parcel_info,$parcel_type,$key,$default_info,$e
   ), 'zone_name'=>array(
     '#type' => 'hidden',
     '#title' => t('State/Province'),
-    '#default_value' =>$pdata[1],
+    '#default_value' =>module_exists('lp_distance_price')?$pdata[2]:$pdata[1],
     '#maxlength' => 100,
 
   ),'country'=>array(

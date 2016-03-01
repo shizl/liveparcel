@@ -640,7 +640,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
     
 
     $order_id=$order->order_id;
-    $parceldata=lp_parcel_get_parcel_data($order_id);
+    $parceldata= lp_parcel_get_parcel_data($order_id);
     $parcel_info=$parceldata['parcel_info'];
     $extra_info=$parceldata['extra_info'];
 
