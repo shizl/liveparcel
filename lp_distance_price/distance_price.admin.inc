@@ -121,8 +121,13 @@ foreach($result as $key=>$rst){
 $td = '';
  foreach($package as $size){
 
+if(module_exists('lp_discount')){
+ $td .= '<td>'.variable_get('uc_currency_sign','$').(sprintf('%0.2f',$size*$rst->multiplier)-lp_discount_get_pricing($size*$rst->multiplier)).'</td>';
+}else{
   $td .= '<td>'.variable_get('uc_currency_sign','$').sprintf('%0.2f',$size*$rst->multiplier).'</td>';
  }
+
+}
 
 $tr .= '<tr><td>'.$rst->position.'</td><td>'.$rst->distance.' '.$unit.'</td>'.$td.'</tr>';
 
