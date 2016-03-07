@@ -607,7 +607,7 @@ if($distance_type == '0'){
 
 
 
-  $rows['table']  = array(array('data'=>distance_price_table()));
+  $rows['table']  = array(array('data'=>distance_price_table(1)));
 
   }else{
 

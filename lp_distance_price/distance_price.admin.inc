@@ -102,7 +102,7 @@ $form['distance_unit'] = array(
 /**
 * distance price table
 */
-function distance_price_table(){
+function distance_price_table($user_price_list = 0){
 
 $result = db_query('select * from {liveparcels_distance} ');
 
@@ -121,7 +121,7 @@ foreach($result as $key=>$rst){
 $td = '';
  foreach($package as $size){
 
-if(module_exists('lp_discount')){
+if(module_exists('lp_discount') && $user_price_list == 1){
  $td .= '<td>'.variable_get('uc_currency_sign','$').(sprintf('%0.2f',$size*$rst->multiplier)-lp_discount_get_pricing($size*$rst->multiplier)).'</td>';
 }else{
   $td .= '<td>'.variable_get('uc_currency_sign','$').sprintf('%0.2f',$size*$rst->multiplier).'</td>';
@@ -133,7 +133,7 @@ $tr .= '<tr><td>'.$rst->position.'</td><td>'.$rst->distance.' '.$unit.'</td>'.$t
 
 }
 
-  $output ='<div class="parcels-title">Price table including your discount</div><p>The price table below is calculated based on your settings above. It shows you the price charged to deliver a parcel at the distance defined.</p><table><thead><tr class="table-head"><th><a href="####" class="znumber">Position<input type="hidden" class="oid" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zname">max distance<input type="hidden" class="oname" value="asc"><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th>'.distances_packagename('name').'</tr></thead><tr>'.$tr.'</table>';
+  $output ='<div class="parcels-title">Price table</div><p>The price table below is calculated based on your settings above. It shows you the price charged to deliver a parcel at the distance defined.</p><table><thead><tr class="table-head"><th><a href="####" class="znumber">Position<input type="hidden" class="oid" value=""><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th><th><a href="####" class="zname">max distance<input type="hidden" class="oname" value="asc"><img typeof="foaf:Image" src="/sites/all/modules/live_parcel/resource/arrow-desc.png" class="hide" width="13" height="13" ></a></th>'.distances_packagename('name').'</tr></thead><tr>'.$tr.'</table>';
 
  return $output;
 }
