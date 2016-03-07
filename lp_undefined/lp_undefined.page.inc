@@ -117,8 +117,8 @@ $lid = $node->field_pickup_location['und'][0]['lid'];
 
 $lid1 = $node->field_delivery_location['und'][0]['lid'];
 
-$address = db_query('select city,province,postal_code from location where lid ='.$lid)->fetchAssoc();
-$address1 = db_query('select city,province,postal_code from location where lid ='.$lid1)->fetchAssoc();
+$address = db_query('select city,street,province,postal_code from location where lid ='.$lid)->fetchAssoc();
+$address1 = db_query('select city,street,province,postal_code from location where lid ='.$lid1)->fetchAssoc();
     $zone_number =  db_query('SELECT zone_number FROM  {liveparcels_zone_post} WHERE locality =:locality LIMIT 0 , 1',array(':locality'=>$address['city']))->fetchfield();
 
     $zone_number1 =  db_query('SELECT zone_number FROM  {liveparcels_zone_post} WHERE locality =:locality LIMIT 0 , 1',array(':locality'=>$address1['city']))->fetchfield();
@@ -127,6 +127,15 @@ $address1 = db_query('select city,province,postal_code from location where lid =
       if(!empty($node->field_parcel_package_name['und'][0]['value'])){
 	 	 $str = explode('_',$node->field_parcel_package_name['und'][0]['value']);
 	}
+
+  if(module_exists('lp_distance_price')){
+
+    $post_from =  'undefined_'.$address['street'].'_'.$address['province'].'_'.$address['postal_code'];
+    $post_to =  'undefined_'.$address1['street'].'_'.$address1['province'].'_'.$address1['postal_code'];
+  }else{
+	$post_from = $zone_number.'_'.$address['province'].'_'.$address['postal_code'];
+	$post_to = $zone_number1.'_'.$address1['province'].'_'.$address1['postal_code'];
+  }
 
 
 
@@ -140,14 +149,18 @@ $address1 = db_query('select city,province,postal_code from location where lid =
 		'max'=>$max,
 		'dimenstext'=>0,
 		'weighttext'=>$node->field_parcel_weight['und'][0]['value'],
-		'postfrom'=>$zone_number.'_'.$address['province'].'_'.$address['postal_code'],
-		'postto'=>$zone_number1.'_'.$address1['province'].'_'.$address1['postal_code'],
+		'postfrom'=> $post_from,
+		'postto'=>  $post_to,
+		'from_locality'=>$address['city'],
+		'to_locality'=>$address1['city'],
+
 		'price'=> '$'.intval($node->field_parcel_price['und'][0]['value']),
 		'package_name'=>isset($str[0])?$str[0]:'',
               )),	
 		'ptype'=>isset($str[1])?$str[1]:2,
 		'totals'=>intval($node->field_parcel_price['und'][0]['value']),
 		'discount'=>0,	
+
 		);
 
 

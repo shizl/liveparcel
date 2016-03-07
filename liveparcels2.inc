@@ -53,9 +53,10 @@ $p++;
  $_postfrom = explode('_',$parcel['postfrom']);
  $_postto = explode('_',$parcel['postto']);
 
-  
-   $options =  str_replace('value="'.$parcel['service_type'].'"', 'value="'.$parcel['service_type'].'" selected ' ,$options);
 
+  if(!empty($parcel['service_type'])){
+   $options =  str_replace('value="'.$parcel['service_type'].'"', 'value="'.$parcel['service_type'].'" selected ' ,$options);
+   }
        $parcel_info.=' <div class="post-all">
           <div class="parcel"><strong>'.$parcel['parcelnum'].'</strong>
             <div class="error-mess">Please fill in the correct information!</div>           
@@ -1323,9 +1324,9 @@ if(isset($_SESSION['lp_order'])){
             }
 
 	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
-            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div><p>".$distancetest."</p></li>";
+            $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span><br>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div><p>".$distancetest."</p></li>";
             }else{
- $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span></li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span><p>".$distancetest."</p></li>";
+ $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span><br>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span><p>".$distancetest."</p></li>";
 	    }
         }
 	}

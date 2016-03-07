@@ -29,6 +29,56 @@ jQuery(".parcel_select_address").change(function(){
         jQuery("."+parcel_id[0]+"_address_name:eq("+parcel_id[1]+")").val(jQuery("."+parcel_id[0]+"_address_name:eq("+parcel_id[2]+")").val());
     });  
 
+  jQuery("#uc-cart-checkout-form").submit(function(){
+
+	jQuery('.address_error_message').remove();
+
+	if(jQuery('#parcel_pickup-pane h2:last').text()!=''){
+	 str1 = jQuery('#parcel_pickup-pane h2:last').text();
+	 num1 = parseInt(str1.replace('Parcel#',''));
+	}else{
+	num1 = 1;
+	}
+	 for(i=0;i<num1;i++){
+	pickup_city = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][city]"]').val();
+	pickup_zone = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][zone]"]').val();
+	
+	pickup_zone_name = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][zone_name]"]').val();
+	pickup_postal_code = jQuery('parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][postal_code]"]').val();
+
+	if(pickup_city==''||pickup_zone==''||pickup_zone_name ==''|| pickup_postal_code==''){
+	jQuery('#parcel_pickup-pane').find('.form-item-panes-parcel-pickup-'+i+'-field-pickup-note').append('<div class="address_error_message" style="color:red;">Your address is not correct, please check it.</div>');
+		return false;
+	}
+
+      }
+
+
+	if(jQuery('#parcel_delivery-pane h2:last').text()!=''){
+	 str = jQuery('#parcel_delivery-pane h2:last').text();
+	 num = parseInt(str.replace('Parcel#',''));
+	}else{
+	num = 1;
+	}
+	 for(i=0;i<num;i++){
+	delivery_city = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][city]"]').val();
+	delivery_zone = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][zone]"]').val();
+	
+	delivery_zone_name = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][zone_name]"]').val();
+	delivery_postal_code = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][postal_code]"]').val();
+
+	if(delivery_city==''||delivery_zone==''||delivery_zone_name ==''|| delivery_postal_code==''){
+	jQuery('#parcel_delivery-pane').find('.form-item-panes-parcel-delivery-'+i+'-field-delivery-note').append('<div class="address_error_message" style="color:red;">Your address is not correct, please check it.</div>');
+	
+	 return false;
+	}
+
+      }	
+
+	return true;
+  });
+
+
 });
 
 
