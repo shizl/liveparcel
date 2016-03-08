@@ -469,8 +469,95 @@ function liveparcels_uc_checkout_pane_parcels($op, $order, $form = NULL, &$form_
   }
 }
 
+function liveparcels_block_view_uc_cart_cart_alter(&$data, $block) {
+
+  global $user;
+
+    $product_count = count(uc_cart_get_contents());
+
+    // Display nothing if the block is set to hide on empty and there are no
+    // items in the cart.
+    if (!variable_get('uc_cart_block_empty_hide', FALSE) || $product_count) {
+      // Add the cart block CSS.
+      drupal_add_css(drupal_get_path('module', 'uc_cart') . '/uc_cart_block.css');
+
+      // If the block is collapsible, add the appropriate JS.
+      if (variable_get('uc_cart_block_collapsible', TRUE)) {
+        drupal_add_js(drupal_get_path('module', 'uc_cart') . '/uc_cart_block.js');
+      }
+
+      // First build the help text.
+      $help_text = FALSE;
+
+      // uc_cart_help_text variable is only here for backward compatibility.
+      if (variable_get('uc_cart_show_help_text', FALSE) && ($text = variable_get('uc_cart_help_text', t('Click title to display cart contents.')))) {
+        $help_text = check_plain($text);
+      }
+
+      $items = FALSE;
+      $item_count = 0;
+      $total = 0;
+
+      if ($product_count) {
+        $display_items = entity_view('uc_cart_item', uc_cart_get_contents(), 'cart');
+        foreach (element_children($display_items['uc_cart_item']) as $key) {
+          $display_item = $display_items['uc_cart_item'][$key];
+
+          if (count(element_children($display_item))) {
+            $items[] = array(
+              'nid' => $display_item['nid']['#value'],
+              'qty' => theme('uc_qty', array('qty' => 1)),
+              'title' => $display_item['title']['#markup'],
+              'price' => $display_item['#total'],
+              'desc' => isset($display_item['description']['#markup']) ? $display_item['description']['#markup'] : FALSE,
+            );
+            $total = $display_item['#total'];
+            $item_count += $display_item['qty']['#default_value'];
+          }
+
+        }
+      }
+
+      // Build the item count text and cart links.
+      $item_text = format_plural(1, '<span class="num-items">1</span> Item', '<span class="num-items">@count</span> Items');
+
+      $summary_links = array(
+        'cart-block-view-cart' => array(
+          'title' => t('View cart'),
+          'href' => 'cart',
+          'attributes' => array('rel' => 'nofollow'),
+        ),
+      );
+
+      // Only add the checkout link if checkout is enabled.
+      if (variable_get('uc_checkout_enabled', TRUE)) {
+        $summary_links['cart-block-checkout'] = array(
+          'title' => t('Checkout'),
+          'href' => 'cart/checkout',
+          'attributes' => array('rel' => 'nofollow'),
+        );
+      }
+
+      $data['content'] = theme('uc_cart_block_content', array(
+        'help_text' => $help_text,
+        'items' => $items,
+        'item_count' => $item_count,
+        'item_text' => $item_text,
+        'total' => $total,
+        'summary_links' => $summary_links,
+        'collapsed' => variable_get('uc_cart_block_collapsed', TRUE)
+      ));
+
+      return $data;
+    }
+  
+
+}
+
+
 
 function liveparcels_user_load($users) {
+
   if (request_uri() == '/user?destination=cart/checkout') {
     foreach ($users as $account) {
       if ($account->uid != 0) {
@@ -480,7 +567,8 @@ function liveparcels_user_load($users) {
 	if (!isset($_SESSION['uc_cart_id'])) {
 	    return;
 	  }
-       db_delete('liveparcels_cart')->condition('cart_id',$account->uid , '=')->execute();
+     //  db_delete('liveparcels_cart')->condition('cart_id',$account->uid , '=')->execute();
+       db_delete('uc_cart_products')->condition('cart_id',$user->uid , '=')->execute();
                  db_update('liveparcels_cart') // Table name no longer needs {}
 		   ->fields(array(
 		    'cart_id' =>$account->uid,
