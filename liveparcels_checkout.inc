@@ -13,7 +13,7 @@ function liveparcels_addToCart(){
     if($action != "addtocart" || $parcels==""){
             header("location:/liveparcels/parcel_quote");exit;
     }
-
+	$cart_id=uc_cart_get_id();
     $data=array( 'shippable' =>'1','type'=>'live_parcel_product','module' => 'uc_product');
     db_delete('uc_cart_products')->condition('cart_id',$cart_id , '=')->execute();
     db_delete('liveparcels_cart')->condition('cart_id',$cart_id , '=')->execute();
