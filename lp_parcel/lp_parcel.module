@@ -72,9 +72,10 @@ global $user;
 
 
  function lp_parcel_uc_order_product_alter(&$product, $order) {
-   $parcels=liveparcels_getparcelsdata();
-//db_update('uc_order_products')->fields(array('price' => $parcels['totals']))->condition('order_id',$order->order_id , '=')->execute();
-   $product->price = $parcels['totals'];
+
+ //$parcels=liveparcels_getparcelsdata();
+ //print_r($order);exit;
+   $product->price = $order->order_total;
 }
 
 function lp_access($node){
