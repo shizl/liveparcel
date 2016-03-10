@@ -40,3 +40,6 @@ body.page-user table.live-parcels-status tr.even,
 body.page-user table.live-parcels-status tr.odd{
 background: rgba(255, 255, 255, 0);
 }
+body.page-cart-checkout-complete #block-lp-search-lp-parcel-search{
+display:none;
+}

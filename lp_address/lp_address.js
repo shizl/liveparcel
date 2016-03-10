@@ -31,6 +31,7 @@ jQuery(".parcel_select_address").change(function(){
 
   jQuery("#uc-cart-checkout-form").submit(function(){
 
+
 	jQuery('.address_error_message').remove();
 
 	if(jQuery('#parcel_pickup-pane h2:last').text()!=''){
@@ -41,14 +42,27 @@ jQuery(".parcel_select_address").change(function(){
 	}
 	 for(i=0;i<num1;i++){
 	pickup_city = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][city]"]').val();
-	pickup_zone = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][zone]"]').val();
+	pickup_country = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][country]"]').val();
 	
 	pickup_zone_name = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][zone_name]"]').val();
-	pickup_postal_code = jQuery('parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][postal_code]"]').val();
+	pickup_postal_code = jQuery('#parcel_pickup-pane').find('input[name="panes[parcel_pickup]['+i+'][field_parcel_pickup_address_data][address][postal_code]"]').val();
 
-	if(pickup_city==''||pickup_zone==''||pickup_zone_name ==''|| pickup_postal_code==''){
+	if(pickup_city==''||pickup_country==''||pickup_zone_name ==''|| pickup_postal_code==''){
 	jQuery('#parcel_pickup-pane').find('.form-item-panes-parcel-pickup-'+i+'-field-pickup-note').append('<div class="address_error_message" style="color:red;">Your address is not correct, please check it.</div>');
-		return false;
+	
+	if(pickup_city==''){
+		jQuery('#parcel_pickup-pane').find('.parcel_data .city_'+i).css({'color':'red'});
+	}
+	if(pickup_country==''){
+		jQuery('#parcel_pickup-pane').find('.parcel_data .country_'+i).css({'color':'red'});
+	}
+	if(pickup_zone_name==''){
+		jQuery('#parcel_pickup-pane').find('.parcel_data .state_'+i).css({'color':'red'});
+	}
+	if(pickup_postal_code==''){
+		jQuery('#parcel_pickup-pane').find('.parcel_data .postcode_'+i).css({'color':'red'});
+	}
+
 	}
 
       }
@@ -62,20 +76,37 @@ jQuery(".parcel_select_address").change(function(){
 	}
 	 for(i=0;i<num;i++){
 	delivery_city = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][city]"]').val();
-	delivery_zone = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][zone]"]').val();
+	delivery_country = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][country]"]').val();
 	
 	delivery_zone_name = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][zone_name]"]').val();
 	delivery_postal_code = jQuery('#parcel_delivery-pane').find('input[name="panes[parcel_delivery]['+i+'][field_parcel_delivery_address_data][address][postal_code]"]').val();
 
-	if(delivery_city==''||delivery_zone==''||delivery_zone_name ==''|| delivery_postal_code==''){
+	if(delivery_city==''||delivery_country==''||delivery_zone_name ==''|| delivery_postal_code==''){
 	jQuery('#parcel_delivery-pane').find('.form-item-panes-parcel-delivery-'+i+'-field-delivery-note').append('<div class="address_error_message" style="color:red;">Your address is not correct, please check it.</div>');
-	
-	 return false;
+	if(delivery_city==''){
+		jQuery('#parcel_delivery-pane').find('.parcel_data .city_'+i).css({'color':'red'});
+	}
+	if(delivery_country==''){
+		jQuery('#parcel_delivery-pane').find('.parcel_data .country_'+i).css({'color':'red'});
+	}
+	if(delivery_zone_name==''){
+		jQuery('#parcel_delivery-pane').find('.parcel_data .state_'+i).css({'color':'red'});
+	}
+	if(delivery_postal_code==''){
+		jQuery('#parcel_delivery-pane').find('.parcel_data .postcode_'+i).css({'color':'red'});
+	}
+
 	}
 
       }	
 
-	return true;
+	if(jQuery('#uc-cart-checkout-form .address_error_message').html()== null){
+		return true;
+
+	}else{
+		return false;
+	}
+
   });
 
 
