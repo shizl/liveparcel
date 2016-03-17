@@ -1278,11 +1278,19 @@ if(isset($_SESSION['lp_order'])){
 		  $unit = 'km';
 		}
 		$between = location_distance_between($latlon_a,$latlon_b,$unit);
+		if($latlon_a != $latlon_b){
 		$distance = $between['scalar']*1000;
+		}else{
+		$distance = 1 ;
+		 }
 	  	$distancetest = $between['scalar'].$between['distance_unit'];
             }else{
           	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-	        $distance = intval($data->rows[0]->elements[0]->distance->value);	
+		if($pdata['addressfrom'] != $pdata['addressto']){
+	           $distance = intval($data->rows[0]->elements[0]->distance->value);
+		}else{
+		   $distance = 1;
+		}
 	  	$distancetest = $data->rows[0]->elements[0]->distance->text;
             }
  //$distance = 218000;

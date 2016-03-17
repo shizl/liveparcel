@@ -240,7 +240,7 @@ function lp_address_address_update($address,$uid){
 
     $addressbook = UcAddressesAddressBook::loadAddress($address_id);
 
-  $addressbook->setField('first_name', $address['address']['first_name']);
+    $addressbook->setField('first_name', $address['address']['first_name']);
     $addressbook->setField('last_name', $address['address']['last_name']);
     $addressbook->setField('company', $address['address']['company']);
     $addressbook->setField('street1', $address['address']['street1']);

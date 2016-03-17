@@ -70,13 +70,18 @@ global $user;
 
 }
 
+/*
 
  function lp_parcel_uc_order_product_alter(&$product, $order) {
 
+$total = db_query("SELECT amount FROM {uc_order_line_items} WHERE order_id = :id AND type = :type", array(':id' => $order->order_id, ':type' => 'subtotal'))->fetchField();
  //$parcels=liveparcels_getparcelsdata();
- //print_r($order);exit;
-   $product->price = $order->order_total;
+
+  $product->price =  isset($total)?$total:0.00;
+
 }
+
+*/
 
 function lp_access($node){
 
@@ -574,10 +579,10 @@ function lp_parcel_update_parcel_address($address,$uid){
  * */
 function theme_lp_parcel_table($variables) {
     $parcels = $variables['items'];
- 
+ 	
   // Set up table rows.
     foreach ($parcels['parcels'] as $parcel ) {
-        
+ 
       $rows[] = array(
         array('data' => $parcel['parcelnum'], 'class' => array('products')),
         array('data' => $parcel['dimfirst'].'x'.$parcel['dimsecond'].'x'.$parcel['dimthree'].' cm','class' => array('price')),
@@ -637,6 +642,7 @@ function lp_parcel_uc_checkout_complete($order, $account){
         }else{
             $order_total=$parcels['totals'];
         }
+
      db_update('uc_orders')->fields(array('order_total' => $order_total))->condition('order_id',$order->order_id , '=')->execute();
     
 
