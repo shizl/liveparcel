@@ -518,7 +518,7 @@ function liveparcels_block_view_uc_cart_cart_alter(&$data, $block) {
       }
 
       // Build the item count text and cart links.
-      $item_text = format_plural(1, '<span class="num-items">1</span> Item', '<span class="num-items">@count</span> Items');
+      $item_text = format_plural(1, '<span class="num-items">'.($product_count>0?'1':$item_count).'</span> Item', '<span class="num-items">@count</span> Items');
 
       $summary_links = array(
         'cart-block-view-cart' => array(
@@ -544,7 +544,7 @@ function liveparcels_block_view_uc_cart_cart_alter(&$data, $block) {
         'items' => $items,
         'item_count' => $item_count,
         'item_text' => $item_text,
-        'total' =>  $parcels['totals'],
+        'total' =>  $product_count>0?$parcels['totals']:$total,
         'summary_links' => $summary_links,
         'collapsed' => variable_get('uc_cart_block_collapsed', TRUE)
       ));
