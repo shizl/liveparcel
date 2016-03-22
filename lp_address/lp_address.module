@@ -251,6 +251,7 @@ function lp_address_address_update($address,$uid){
     $addressbook->setField('country', $address['address']['country']);
     $addressbook->setField('phone', $address['address']['phone']);
     $addressbook->save();
+	  	return $address_id;
   }else{
 
      $count = db_query('select count(aid) from {uc_addresses} where first_name = :first_name and last_name = :last_name and phone= :phone and company= :company and street1= :street1 and street2 = :street2 and city= :city and zone= :zone and postal_code= :postal_code and country= :country and uid = :uid',array(
@@ -284,10 +285,10 @@ if($count<1){
     $addressbook->setField('default_billing', '0');
     $addressbook->save();
     $address_id = $addressbook->getField('aid');
+  	return $address_id;
 }
-
   }
-  return $address_id;
+
 }
 
 /*location_update($address)
