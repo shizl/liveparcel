@@ -1286,12 +1286,13 @@ if(isset($_SESSION['lp_order'])){
 	  	$distancetest = $between['scalar'].$between['distance_unit'];
             }else{
           	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-		if($pdata['addressfrom'] != $pdata['addressto']){
+		$distancetest = $data->rows[0]->elements[0]->distance->text;
+		if($pdata['addressfrom'] != $pdata['addressto'] && intval($data->rows[0]->elements[0]->distance->value)>1){
 	           $distance = intval($data->rows[0]->elements[0]->distance->value);
 		}else{
 		   $distance = 1;
 		}
-	  	$distancetest = $data->rows[0]->elements[0]->distance->text;
+
             }
  //$distance = 218000;
             if($pprice['pprice']>0){
