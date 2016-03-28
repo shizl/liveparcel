@@ -89,7 +89,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onFocus="geolocate()" type="text"></input>
+		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate(jQuery(this))" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -141,7 +141,7 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onFocus="geolocate()"  onBlur="updateAddress(jQuery(this))" type="text"></input>
+            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onFocus="geolocate(jQuery(this))"  type="text"></input>
 <input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
 <input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
 <input type="hidden"  id="locality">
@@ -184,7 +184,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()"  onBlur="updateAddress(jQuery(this))" type="text"></input>
+		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate(jQuery(this))"  type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -603,7 +603,7 @@ function count(o){
 // [END region_fillform]
 
 // [START region_geolocation]
-function updateAddress(cid){
+/*function updateAddress(cid){
   cid.val("");
  var lid=cid.attr("id");
   if(lid.indexOf("destination")>-1){
@@ -622,9 +622,26 @@ function updateAddress(cid){
     cid.parent(".page-content-address").find("#postal_code").val("");
     cid.parent(".page-content-address").find("#country").val("");
   }
-}
-function geolocate() {
- 
+}*/
+function geolocate(cid) {
+ cid.val("");
+ var lid=cid.attr("id");
+  if(lid.indexOf("destination")>-1){
+   cid.parent(".des-text").find(".street").val("");
+    cid.parent(".des-text").find(".route").val("");
+    cid.parent(".des-text").find(".locality").val("");
+    cid.parent(".des-text").find(".administrative_area_level").val("");
+    cid.parent(".des-text").find(".postal_code").val("");
+    cid.parent(".des-text").find(".country").val("");
+
+  }else{
+   cid.parent(".page-content-address").find("#street").val("");
+    cid.parent(".page-content-address").find("#route").val("");
+    cid.parent(".page-content-address").find("#locality").val("");
+    cid.parent(".page-content-address").find("#administrative_area_level").val("");
+    cid.parent(".page-content-address").find("#postal_code").val("");
+    cid.parent(".page-content-address").find("#country").val("");
+  }
   initAutocomplete();
 
   if (navigator.geolocation) {
@@ -883,15 +900,15 @@ function include_js(file) {
 	 
      var num = '.($p>1 ? $p:1).';
      $(".add_new input").click(function(){
-		num++;
+		    num++;
           $(".post-all .parcel strong").each(function(){
-		ptitle = $(this).html();
-                pnum = ptitle.substring(7);
-                 if(pnum==num){
-			num++;
-                 }
+        		ptitle = $(this).html();
+                        pnum = ptitle.substring(7);
+                         if(pnum==num){
+        			             num++;
+                         }
 
-	  });
+	       });
 
 		var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
@@ -922,7 +939,7 @@ function include_js(file) {
 		ptitle = $(this).html();
                 pnum = ptitle.substring(7);
                  if(pnum==num){
-			num++;
+			             num++;
                  }
 
 	  });
