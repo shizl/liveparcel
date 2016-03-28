@@ -89,7 +89,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate(jQuery(this))" type="text"></input>
+		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate(jQuery(this))" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -624,7 +624,6 @@ function count(o){
   }
 }*/
 function geolocate(cid) {
- cid.val("");
  var lid=cid.attr("id");
   if(lid.indexOf("destination")>-1){
    cid.parent(".des-text").find(".street").val("");
@@ -643,7 +642,6 @@ function geolocate(cid) {
     cid.parent(".page-content-address").find("#country").val("");
   }
   initAutocomplete();
-
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var geolocation = {
@@ -1289,63 +1287,66 @@ if(isset($_SESSION['lp_order'])){
 
           $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
            $distance_type =  variable_get('distance_type');
+      if($pdata['postfrom']!="___" && $pdata['postto']!="___"){
+  	   if($distance_type == '0'){
 
-	   if($distance_type == '0'){
+      		$location_from = explode(',',$pdata['addressfrom']);
+      		$locationfrom = array();
+      		$locationfrom['street'] = $location_from[0];
+      		$locationfrom['city'] = $location_from[1];
+      		$locationfrom['province'] = $location_from[2];
+      		$locationfrom['country'] = $location_from[3];
+      		$latlon_a = google_geocode_location($locationfrom);
 
-		$location_from = explode(',',$pdata['addressfrom']);
-		$locationfrom = array();
-		$locationfrom['street'] = $location_from[0];
-		$locationfrom['city'] = $location_from[1];
-		$locationfrom['province'] = $location_from[2];
-		$locationfrom['country'] = $location_from[3];
-		$latlon_a = google_geocode_location($locationfrom);
+      		$location_to = explode(',',$pdata['addressto']);
+      		$locationto = array();
+      		$locationto['street'] = $location_to[0];
+      		$locationto['city'] = $location_to[1];
+      		$locationto['province'] = $location_to[2];
+      		$locationto['country'] = $location_to[3];
+      		$latlon_b = google_geocode_location($locationto);
 
-		$location_to = explode(',',$pdata['addressto']);
-		$locationto = array();
-		$locationto['street'] = $location_to[0];
-		$locationto['city'] = $location_to[1];
-		$locationto['province'] = $location_to[2];
-		$locationto['country'] = $location_to[3];
-		$latlon_b = google_geocode_location($locationto);
+      		$getunit = variable_get('distance_unit',0);
+      		if($getunit=='1'){
+      		  $unit = 'mile';
+      		}else{
+      		  $unit = 'km';
+      		}
+      		$between = location_distance_between($latlon_a,$latlon_b,$unit);
+      		if($latlon_a != $latlon_b){
+      		$distance = $between['scalar']*1000;
+      		}else{
+      		$distance = 1 ;
+      		 }
+  	  	  $distancetest = $between['scalar'].$between['distance_unit'];
+        }else{
+            	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
+  		      $distancetest = $data->rows[0]->elements[0]->distance->text;
+        		if($pdata['addressfrom'] != $pdata['addressto'] && intval($data->rows[0]->elements[0]->distance->value)>1){
+        	           $distance = intval($data->rows[0]->elements[0]->distance->value);
+        		}else{
+        		   $distance = 1;
+        		}
 
-		$getunit = variable_get('distance_unit',0);
-		if($getunit=='1'){
-		  $unit = 'mile';
-		}else{
-		  $unit = 'km';
-		}
-		$between = location_distance_between($latlon_a,$latlon_b,$unit);
-		if($latlon_a != $latlon_b){
-		$distance = $between['scalar']*1000;
-		}else{
-		$distance = 1 ;
-		 }
-	  	$distancetest = $between['scalar'].$between['distance_unit'];
-            }else{
-          	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-		$distancetest = $data->rows[0]->elements[0]->distance->text;
-		if($pdata['addressfrom'] != $pdata['addressto'] && intval($data->rows[0]->elements[0]->distance->value)>1){
-	           $distance = intval($data->rows[0]->elements[0]->distance->value);
-		}else{
-		   $distance = 1;
-		}
-
-            }
+        }
+      }else{
+        $distance = 0;
+      }
  //$distance = 218000;
             if($pprice['pprice']>0){
-		$result = db_query('select * from {liveparcels_distance} order by distance asc');
-		$pzon = 0;
-		 foreach($result as $rst){
+            		$result = db_query('select * from {liveparcels_distance} order by distance asc');
+            		$pzon = 0;
+            		 foreach($result as $rst){
 
-			$set_distance = $rst->distance;
+              			$set_distance = $rst->distance;
 
-			if($distance!='0'&&$set_distance*1000>$distance){
-				$pzon = $rst->multiplier;
-  				break;
-			}else{
-				$pzon = 0;
-			}
-		 }
+              			if($distance!='0'&&$set_distance*1000>$distance){
+              				$pzon = $rst->multiplier;
+                				break;
+              			}else{
+              				$pzon = 0;
+              			}
+            		 }
 
                 if($pzon>0){
                     $pzone=$pzon*$pprice['pprice']; 
