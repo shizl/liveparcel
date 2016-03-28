@@ -603,26 +603,6 @@ function count(o){
 // [END region_fillform]
 
 // [START region_geolocation]
-/*function updateAddress(cid){
-  cid.val("");
- var lid=cid.attr("id");
-  if(lid.indexOf("destination")>-1){
-   cid.parent(".des-text").find(".street").val("");
-    cid.parent(".des-text").find(".route").val("");
-    cid.parent(".des-text").find(".locality").val("");
-    cid.parent(".des-text").find(".administrative_area_level").val("");
-    cid.parent(".des-text").find(".postal_code").val("");
-    cid.parent(".des-text").find(".country").val("");
-
-  }else{
-   cid.parent(".page-content-address").find("#street").val("");
-    cid.parent(".page-content-address").find("#route").val("");
-    cid.parent(".page-content-address").find("#locality").val("");
-    cid.parent(".page-content-address").find("#administrative_area_level").val("");
-    cid.parent(".page-content-address").find("#postal_code").val("");
-    cid.parent(".page-content-address").find("#country").val("");
-  }
-}*/
 function geolocate(cid) {
  var lid=cid.attr("id");
   if(lid.indexOf("destination")>-1){
@@ -634,10 +614,10 @@ function geolocate(cid) {
     cid.parent(".des-text").find(".country").val("");
 
   }else{
-   cid.parent(".page-content-address").find("#street").val("");
+   cid.parent(".page-content-address").find("#street_number").val("");
     cid.parent(".page-content-address").find("#route").val("");
     cid.parent(".page-content-address").find("#locality").val("");
-    cid.parent(".page-content-address").find("#administrative_area_level").val("");
+    cid.parent(".page-content-address").find("#administrative_area_level_1").val("");
     cid.parent(".page-content-address").find("#postal_code").val("");
     cid.parent(".page-content-address").find("#country").val("");
   }
