@@ -89,7 +89,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'"  placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onFocus="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -141,8 +141,7 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'"
-             onFocus="geolocate()" type="text"></input>
+            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onFocus="geolocate()"  onBlur="updateAddress(jQuery(this))" type="text"></input>
 <input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
 <input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
 <input type="hidden"  id="locality">
@@ -185,7 +184,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate()"  onBlur="updateAddress(jQuery(this))" type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -604,10 +603,29 @@ function count(o){
 // [END region_fillform]
 
 // [START region_geolocation]
+function updateAddress(cid){
+  cid.val("");
+ var lid=cid.attr("id");
+  if(lid.indexOf("destination")>-1){
+   cid.parent(".des-text").find(".street").val("");
+    cid.parent(".des-text").find(".route").val("");
+    cid.parent(".des-text").find(".locality").val("");
+    cid.parent(".des-text").find(".administrative_area_level").val("");
+    cid.parent(".des-text").find(".postal_code").val("");
+    cid.parent(".des-text").find(".country").val("");
 
+  }else{
+   cid.parent(".page-content-address").find("#street").val("");
+    cid.parent(".page-content-address").find("#route").val("");
+    cid.parent(".page-content-address").find("#locality").val("");
+    cid.parent(".page-content-address").find("#administrative_area_level").val("");
+    cid.parent(".page-content-address").find("#postal_code").val("");
+    cid.parent(".page-content-address").find("#country").val("");
+  }
+}
 function geolocate() {
-
-initAutocomplete();
+ 
+  initAutocomplete();
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -961,22 +979,24 @@ function include_js(file) {
               var ptype=2;
               if($(".deliver").attr("checked")){
                    var addressfrom =$("#autocomplete").val();
-		   var from_locality  = $("#locality").val();
-                   var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
+            		   var from_locality  = $("#locality").val();
+                               var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
-		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+            		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 
-		   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+            		   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+            		   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+                   
                      ptype=2;
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
-		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
-	           var to_locality = $("#locality").val();
-		   var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
-                   ptype=1;
+            		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+            	           var to_locality = $("#locality").val();
+            		   var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+
+            		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+                               ptype=1;
                 }
 			  if(dimfirst > max){
 				  max = dimfirst; 
@@ -1047,16 +1067,16 @@ function include_js(file) {
 	       if(postfroms == ""){
 	         $(".pnum-from").val("");
 	       }
-		   if(postfrom ==""){
-		      $(".post-suburb").css("border","1px dashed red");
-		      return false;
-		   }else{
-		      $(".post-suburb").css("border","1px solid #ccc");
-		   }
-		   var f=1;   
-		   var subtotal = 0;   
-		   var tlen=$(".post-all:last").index()-2;
-		   $(".order ul li").remove();
+  		   if(postfrom ==""){
+  		      $(".post-suburb").css("border","1px dashed red");
+  		      return false;
+  		   }else{
+  		      $(".post-suburb").css("border","1px solid #ccc");
+  		   }
+  		   var f=1;   
+  		   var subtotal = 0;   
+  		   var tlen=$(".post-all:last").index()-2;
+  		   $(".order ul li").remove();
            $(".header-warning").hide();
            var er=0;
            for(var i=1;i<=tlen;i++){
