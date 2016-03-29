@@ -89,14 +89,14 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate(jQuery(this))" type="text"></input>
-<input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
-<input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
-<input type="hidden"  id="locality1" class="locality">
-<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
-<input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
-<input type="hidden"  id="country1" class="country">
-
+		<input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onFocus="geolocate()" type="text"></input>
+<input type="hidden"  id="street_number'.$p.'" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
+<input type="hidden"  id="route'.$p.'" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
+<input type="hidden"  id="locality'.$p.'" class="locality">
+<input type="hidden"  id="administrative_area_level_1'.$p.'" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
+<input type="hidden"  id="postal_code'.$p.'" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
+<input type="hidden"  id="country'.$p.'" class="country">
+<input type="hidden"  id="olddestination'.$p.'" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" class="olddestination">
                 </td>
 
 
@@ -141,14 +141,14 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onFocus="geolocate(jQuery(this))"  type="text"></input>
+            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onBlur="updateAddress(jQuery(this))" onFocus="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
 <input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
 <input type="hidden"  id="locality">
 <input type="hidden"  id="administrative_area_level_1" value="'.(empty($_postfrom[2])?'':$_postfrom[2]).'">
 <input type="hidden"  id="postal_code" value="'.(empty($_postfrom[3])?'':$_postfrom[3]).'">
 <input type="hidden"  id="country">
-
+<input type="hidden"  id="oldautocomplete" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" class="oldautocomplete">
 
 
       </div>
@@ -184,14 +184,14 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onFocus="geolocate(jQuery(this))"  type="text"></input>
+		<input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onFocus="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
 <input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
 <input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
 <input type="hidden"  id="country1" class="country">
-
+<input type="hidden"  id="olddestination1" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" class="olddestination">
 
 
                 </td>
@@ -351,7 +351,7 @@ function initAutocomplete() {
   autocomplete.addListener("place_changed", fillInAddress);
 
   destination1  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination")),
+     (document.getElementById("destination1")),
       {types: ["geocode"]});
   destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination1.addListener("place_changed", fillInAddress1);
@@ -407,183 +407,232 @@ function initAutocomplete() {
 
 // [START region_fillform]
 function fillInAddress() {
+  if(jQuery("#autocomplete").val()!=jQuery("#oldautocomplete").val()){
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+    if(place!=undefined){
+      for (var component in componentForm) {
+        document.getElementById(component).value = "";
+        document.getElementById(component).disabled = false;
+      }
 
-  // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
-
-  for (var component in componentForm) {
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
-  }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (componentForm[addressType]) {
-      var val = place.address_components[i][componentForm[addressType]];
-      document.getElementById(addressType).value = val;
+      for (var i = 0; i < place.address_components.length; i++) {
+        var addressType = place.address_components[i].types[0];
+        if (componentForm[addressType]) {
+          var val = place.address_components[i][componentForm[addressType]];
+          document.getElementById(addressType).value = val;
+        }
+      }
+    }else{
+      updateAddress(jQuery("#autocomplete"));
     }
+      jQuery("#oldautocomplete").val(jQuery("#autocomplete").val());
+    
   }
-
 }
 
 
 function fillInAddress1() {
-
-  var place = destination1.getPlace();
-
-  for (var component in destination_componentForm["componentForm1"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+  if(jQuery("#destination1").val()!=jQuery("#olddestination1").val()){
+      var place = destination1.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm1"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm1"][addressType+"1"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm1"][addressType+"1"]];
+            document.getElementById(addressType+"1").value = val;
+          }
+        }
+      }else{
+      updateAddress(jQuery("#destination1"));
+      }
+      jQuery("#olddestination1").val(jQuery("#destination1").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm1"][addressType+"1"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm1"][addressType+"1"]];
-      document.getElementById(addressType+"1").value = val;
-    }
- }
 }
 function fillInAddress2() {
+  if(jQuery("#destination2").val()!=jQuery("#olddestination2").val()){
+      var place = destination2.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm2"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination2.getPlace();
-
-  for (var component in destination_componentForm["componentForm2"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm2"][addressType+"2"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm2"][addressType+"2"]];
+            document.getElementById(addressType+"2").value = val;
+          }
+       }
+      }else{
+      updateAddress(jQuery("#destination2"));
+      }
+     jQuery("#olddestination2").val(jQuery("#destination2").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm2"][addressType+"2"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm2"][addressType+"2"]];
-      document.getElementById(addressType+"2").value = val;
-    }
- }
 }
 
 function fillInAddress3() {
+  if(jQuery("#destination3").val()!=jQuery("#olddestination3").val()){
+      var place = destination3.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm3"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination3.getPlace();
-
-  for (var component in destination_componentForm["componentForm3"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm3"][addressType+"3"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm3"][addressType+"3"]];
+            document.getElementById(addressType+"3").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination3"));
+      }
+     jQuery("#olddestination3").val(jQuery("#destination3").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm3"][addressType+"3"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm3"][addressType+"3"]];
-      document.getElementById(addressType+"3").value = val;
-    }
- }
 }
 function fillInAddress4() {
+  if(jQuery("#destination4").val()!=jQuery("#olddestination4").val()){
+      var place = destination4.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm4"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination4.getPlace();
-
-  for (var component in destination_componentForm["componentForm4"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm4"][addressType+"4"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm4"][addressType+"4"]];
+            document.getElementById(addressType+"4").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination4"));
+      }
+     jQuery("#olddestination4").val(jQuery("#destination4").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm4"][addressType+"4"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm4"][addressType+"4"]];
-      document.getElementById(addressType+"4").value = val;
-    }
- }
 }
 
 function fillInAddress5() {
+  if(jQuery("#destination5").val()!=jQuery("#olddestination5").val()){
+      var place = destination5.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm5"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination5.getPlace();
-
-  for (var component in destination_componentForm["componentForm5"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm5"][addressType+"5"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm5"][addressType+"5"]];
+            document.getElementById(addressType+"5").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination5"));
+      }
+     jQuery("#olddestination5").val(jQuery("#destination5").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm5"][addressType+"5"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm5"][addressType+"5"]];
-      document.getElementById(addressType+"5").value = val;
-    }
- }
 }
 
 function fillInAddress6() {
+  if(jQuery("#destination6").val()!=jQuery("#olddestination6").val()){
+      var place = destination6.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm6"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination6.getPlace();
-
-  for (var component in destination_componentForm["componentForm6"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm6"][addressType+"6"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm6"][addressType+"6"]];
+            document.getElementById(addressType+"6").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination6"));
+      }
+     jQuery("#olddestination6").val(jQuery("#destination6").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm6"][addressType+"6"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm6"][addressType+"6"]];
-      document.getElementById(addressType+"6").value = val;
-    }
- }
 }
 
 function fillInAddress7() {
+  if(jQuery("#destination7").val()!=jQuery("#olddestination7").val()){
+      var place = destination4.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm7"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination4.getPlace();
-
-  for (var component in destination_componentForm["componentForm7"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm7"][addressType+"7"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm7"][addressType+"7"]];
+            document.getElementById(addressType+"7").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination7"));
+      }
+     jQuery("#olddestination7").val(jQuery("#destination7").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm7"][addressType+"7"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm7"][addressType+"7"]];
-      document.getElementById(addressType+"7").value = val;
-    }
- }
 }
 function fillInAddress8() {
+  if(jQuery("#destination8").val()!=jQuery("#olddestination8").val()){
+      var place = destination8.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm8"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination8.getPlace();
-
-  for (var component in destination_componentForm["componentForm8"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm8"][addressType+"8"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm8"][addressType+"8"]];
+            document.getElementById(addressType+"8").value = val;
+          }
+        }
+      }else{
+      updateAddress(jQuery("#destination8"));
+      }
+      jQuery("#olddestination8").val(jQuery("#destination8").val());
   }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm8"][addressType+"8"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm8"][addressType+"8"]];
-      document.getElementById(addressType+"8").value = val;
-    }
- }
 }
 
 function fillInAddress9() {
+  if(jQuery("#destination9").val()!=$("#olddestination9").val()){
+      var place = destination9.getPlace();
+      if(place!=undefined){
+        for (var component in destination_componentForm["componentForm9"]){
+          document.getElementById(component).value = "";
+          document.getElementById(component).disabled = false;
+        }
 
-  var place = destination9.getPlace();
-
-  for (var component in destination_componentForm["componentForm9"]){
-    document.getElementById(component).value = "";
-    document.getElementById(component).disabled = false;
-  }
-
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (destination_componentForm["componentForm9"][addressType+"9"]) {
-      var val = place.address_components[i][destination_componentForm["componentForm9"][addressType+"9"]];
-      document.getElementById(addressType+"9").value = val;
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (destination_componentForm["componentForm9"][addressType+"9"]) {
+            var val = place.address_components[i][destination_componentForm["componentForm9"][addressType+"9"]];
+            document.getElementById(addressType+"9").value = val;
+          }
+       }
+     }else{
+      updateAddress(jQuery("#destination9"));
     }
- }
+     jQuery("#olddestination9").val(jQuery("#destination9").val());
+  }
 }
 
 function count(o){
@@ -603,24 +652,30 @@ function count(o){
 // [END region_fillform]
 
 // [START region_geolocation]
-function geolocate(cid) {
+function updateAddress(cid){
  var lid=cid.attr("id");
-  if(lid.indexOf("destination")>-1){
-   cid.parent(".des-text").find(".street").val("");
-    cid.parent(".des-text").find(".route").val("");
-    cid.parent(".des-text").find(".locality").val("");
-    cid.parent(".des-text").find(".administrative_area_level").val("");
-    cid.parent(".des-text").find(".postal_code").val("");
-    cid.parent(".des-text").find(".country").val("");
+  if(cid.val()!=jQuery("#old"+lid).val()){
+    if(lid.indexOf("destination")>-1){
+     cid.parent(".des-text").find(".street").val("");
+      cid.parent(".des-text").find(".route").val("");
+      cid.parent(".des-text").find(".locality").val("");
+      cid.parent(".des-text").find(".administrative_area_level").val("");
+      cid.parent(".des-text").find(".postal_code").val("");
+      cid.parent(".des-text").find(".country").val("");
 
-  }else{
-   cid.parent(".page-content-address").find("#street_number").val("");
-    cid.parent(".page-content-address").find("#route").val("");
-    cid.parent(".page-content-address").find("#locality").val("");
-    cid.parent(".page-content-address").find("#administrative_area_level_1").val("");
-    cid.parent(".page-content-address").find("#postal_code").val("");
-    cid.parent(".page-content-address").find("#country").val("");
+    }else{
+     cid.parent(".page-content-address").find("#street_number").val("");
+      cid.parent(".page-content-address").find("#route").val("");
+      cid.parent(".page-content-address").find("#locality").val("");
+      cid.parent(".page-content-address").find("#administrative_area_level_1").val("");
+      cid.parent(".page-content-address").find("#postal_code").val("");
+      cid.parent(".page-content-address").find("#country").val("");
+    }
+    jQuery("#old"+lid).val(cid.val());
   }
+}
+function geolocate() {
+ 
   initAutocomplete();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -902,6 +957,7 @@ function include_js(file) {
           $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
           $(".post-all:last .postal_code").attr("id","postal_code"+ num);
           $(".post-all:last .country").attr("id","country"+ num);
+          $(".post-all:last .olddestination").attr("id","olddestination"+ num);
 
 		$(".post-all:last .parcel input").show();
 		$(".post-all:last .post-mess table input").val("");
@@ -934,6 +990,7 @@ function include_js(file) {
           $(".post-all:last .administrative_area_level").attr("id","administrative_area_level_1"+ num);
           $(".post-all:last .postal_code").attr("id","postal_code"+ num);
           $(".post-all:last .country").attr("id","country"+ num);
+          $(".post-all:last .olddestination").attr("id","olddestination"+ num);
 
 		$(".post-all:last .parcel input").show();
    		
