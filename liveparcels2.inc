@@ -407,7 +407,7 @@ function initAutocomplete() {
 
 // [START region_fillform]
 function fillInAddress() {
-  if(jQuery("#autocomplete").val()!=jQuery("#oldautocomplete").val()){
+  if(checkdif("autocomplete")){
       // Get the place details from the autocomplete object.
       var place = autocomplete.getPlace();
     if(place!=undefined){
@@ -423,17 +423,18 @@ function fillInAddress() {
           document.getElementById(addressType).value = val;
         }
       }
-    }else{
-      updateAddress(jQuery("#autocomplete"));
-    }
       jQuery("#oldautocomplete").val(jQuery("#autocomplete").val());
     
+    }else{
+        updateAddress(jQuery("#autocomplete"));
+    }
+
   }
 }
 
 
 function fillInAddress1() {
-  if(jQuery("#destination1").val()!=jQuery("#olddestination1").val()){
+  if(checkdif("destination1")){
       var place = destination1.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm1"]){
@@ -447,14 +448,16 @@ function fillInAddress1() {
             document.getElementById(addressType+"1").value = val;
           }
         }
+        jQuery("#olddestination1").val(jQuery("#destination1").val());
       }else{
-      updateAddress(jQuery("#destination1"));
+        updateAddress(jQuery("#destination1"));
       }
-      jQuery("#olddestination1").val(jQuery("#destination1").val());
+
+      
   }
 }
 function fillInAddress2() {
-  if(jQuery("#destination2").val()!=jQuery("#olddestination2").val()){
+  if(checkdif("destination2")){
       var place = destination2.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm2"]){
@@ -469,15 +472,16 @@ function fillInAddress2() {
             document.getElementById(addressType+"2").value = val;
           }
        }
+       jQuery("#olddestination2").val(jQuery("#destination2").val());
       }else{
       updateAddress(jQuery("#destination2"));
       }
-     jQuery("#olddestination2").val(jQuery("#destination2").val());
+     
   }
 }
 
 function fillInAddress3() {
-  if(jQuery("#destination3").val()!=jQuery("#olddestination3").val()){
+  if(checkdif("destination3")){
       var place = destination3.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm3"]){
@@ -492,14 +496,15 @@ function fillInAddress3() {
             document.getElementById(addressType+"3").value = val;
           }
        }
+       jQuery("#olddestination3").val(jQuery("#destination3").val());
      }else{
       updateAddress(jQuery("#destination3"));
       }
-     jQuery("#olddestination3").val(jQuery("#destination3").val());
+     
   }
 }
 function fillInAddress4() {
-  if(jQuery("#destination4").val()!=jQuery("#olddestination4").val()){
+  if(checkdif("destination4")){
       var place = destination4.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm4"]){
@@ -514,15 +519,16 @@ function fillInAddress4() {
             document.getElementById(addressType+"4").value = val;
           }
        }
+       jQuery("#olddestination4").val(jQuery("#destination4").val());
      }else{
       updateAddress(jQuery("#destination4"));
       }
-     jQuery("#olddestination4").val(jQuery("#destination4").val());
+     
   }
 }
 
 function fillInAddress5() {
-  if(jQuery("#destination5").val()!=jQuery("#olddestination5").val()){
+  if(checkdif("destination5")){
       var place = destination5.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm5"]){
@@ -537,15 +543,16 @@ function fillInAddress5() {
             document.getElementById(addressType+"5").value = val;
           }
        }
+       jQuery("#olddestination5").val(jQuery("#destination5").val());
      }else{
       updateAddress(jQuery("#destination5"));
       }
-     jQuery("#olddestination5").val(jQuery("#destination5").val());
+     
   }
 }
 
 function fillInAddress6() {
-  if(jQuery("#destination6").val()!=jQuery("#olddestination6").val()){
+  if(checkdif("destination6")){
       var place = destination6.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm6"]){
@@ -560,15 +567,16 @@ function fillInAddress6() {
             document.getElementById(addressType+"6").value = val;
           }
        }
+       jQuery("#olddestination6").val(jQuery("#destination6").val());
      }else{
       updateAddress(jQuery("#destination6"));
       }
-     jQuery("#olddestination6").val(jQuery("#destination6").val());
+     
   }
 }
 
 function fillInAddress7() {
-  if(jQuery("#destination7").val()!=jQuery("#olddestination7").val()){
+  if(checkdif("destination7")){
       var place = destination4.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm7"]){
@@ -583,14 +591,15 @@ function fillInAddress7() {
             document.getElementById(addressType+"7").value = val;
           }
        }
+       jQuery("#olddestination7").val(jQuery("#destination7").val());
      }else{
       updateAddress(jQuery("#destination7"));
       }
-     jQuery("#olddestination7").val(jQuery("#destination7").val());
+     
   }
 }
 function fillInAddress8() {
-  if(jQuery("#destination8").val()!=jQuery("#olddestination8").val()){
+  if(checkdif("destination8")){
       var place = destination8.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm8"]){
@@ -605,15 +614,16 @@ function fillInAddress8() {
             document.getElementById(addressType+"8").value = val;
           }
         }
+        jQuery("#olddestination8").val(jQuery("#destination8").val());
       }else{
       updateAddress(jQuery("#destination8"));
       }
-      jQuery("#olddestination8").val(jQuery("#destination8").val());
+      
   }
 }
 
 function fillInAddress9() {
-  if(jQuery("#destination9").val()!=$("#olddestination9").val()){
+  if(checkdif("destination9")){
       var place = destination9.getPlace();
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm9"]){
@@ -628,10 +638,11 @@ function fillInAddress9() {
             document.getElementById(addressType+"9").value = val;
           }
        }
+       jQuery("#olddestination9").val(jQuery("#destination9").val());
      }else{
       updateAddress(jQuery("#destination9"));
     }
-     jQuery("#olddestination9").val(jQuery("#destination9").val());
+     
   }
 }
 
@@ -651,10 +662,17 @@ function count(o){
 
 // [END region_fillform]
 
-// [START region_geolocation]
+
+// start update address
+function checkdif(aid){//check address edit
+  var a=0;
+  var aval=jQuery("#"+aid).val();
+  var oldval=jQuery("#old"+aid).val();
+  return aval!=oldval && aval+"号"!=oldval && oldval+"号"!=aval;
+}
 function updateAddress(cid){
  var lid=cid.attr("id");
-  if(cid.val()!=jQuery("#old"+lid).val()){
+  if(checkdif(lid)){
     if(lid.indexOf("destination")>-1){
      cid.parent(".des-text").find(".street").val("");
       cid.parent(".des-text").find(".route").val("");
@@ -674,6 +692,8 @@ function updateAddress(cid){
     jQuery("#old"+lid).val(cid.val());
   }
 }
+// end update address
+// [START region_geolocation]
 function geolocate() {
  
   initAutocomplete();
