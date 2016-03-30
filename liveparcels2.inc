@@ -436,6 +436,7 @@ function fillInAddress() {
 function fillInAddress1() {
   if(checkdif("destination1")){
       var place = destination1.getPlace();
+      
       if(place!=undefined){
         for (var component in destination_componentForm["componentForm1"]){
           document.getElementById(component).value = "";
@@ -689,7 +690,8 @@ function updateAddress(cid){
       cid.parent(".page-content-address").find("#postal_code").val("");
       cid.parent(".page-content-address").find("#country").val("");
     }
-    jQuery("#old"+lid).val(cid.val());
+    var cval=cid.val();
+    jQuery("#old"+lid).val(cval.substring(0,cval.length-2));
   }
 }
 // end update address
