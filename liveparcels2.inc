@@ -63,7 +63,7 @@ $p++;
             <input type="button" value="X" '.($pid>0 ? 'style="display:block"':'').'>
           </div>
           <div class="post-mess"> 
-		    <table>
+        <table>
             <tr>
              <td class="dimensions">Dimensions (cm):</td>
               <td>
@@ -89,7 +89,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()" type="text"></input>
+    <input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number'.$p.'" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route'.$p.'" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality'.$p.'" class="locality">
@@ -101,10 +101,10 @@ $p++;
 
 
               </tr>'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
-	      <tr>
-		<td class="service-type">Service (+fee):</td>
-		<td><select class="optional-fees">'.$options.'</select></td>
-	      </tr>':'').'
+        <tr>
+    <td class="service-type">Service (+fee):</td>
+    <td><select class="optional-fees">'.$options.'</select></td>
+        </tr>':'').'
             </table>
           </div>
         <div class="post-btn">
@@ -122,26 +122,26 @@ $p++;
     }  
 }
 
-	$rows['package'] = array(array('data' => '<div class="page-main">
-	<div class="header-warning">
-	  '.variable_get('liveparcels_error_message').'
-	</div>
-	<div class="header-mess">
+  $rows['package'] = array(array('data' => '<div class="page-main">
+  <div class="header-warning">
+    '.variable_get('liveparcels_error_message').'
+  </div>
+  <div class="header-mess">
 
-<!--	  <div><h1>Postage calculator</h1></div> -->
+<!--    <div><h1>Postage calculator</h1></div> -->
 
-	  <div class="header-content">
-	    '.variable_get('liveparcels_info_message').'
-	  </div>
-	</div>
-	<div class="page-content">
-	  <div class="page-content-title"><h2>Parcel Details</h2></div>
-	  <div class="page-float">
+    <div class="header-content">
+      '.variable_get('liveparcels_info_message').'
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="page-content-title"><h2>Parcel Details</h2></div>
+    <div class="page-float">
       <div class="page-content-select"><h4>Please select the service 
       you requires:</h4></div>
       <div class="page-content-choose">
-		 <input class="deliver" type="radio" disabled="disabled" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
-		 Deliver one or more items
+     <input class="deliver" type="radio" disabled="disabled" name="items" '.( $parcels['ptype']==1 ? '':'checked').' value="2" >
+     Deliver one or more items
          <input class="pick-up" type="radio" disabled="disabled" name="items" '.($parcels['ptype']==1 ? 'checked':'').' value="1" >
          Pickup one or more items
       </div>
@@ -164,7 +164,7 @@ $p++;
             <input type="button" value="X">
           </div>
           <div class="post-mess"> 
-		    <table>
+        <table>
             <tr>
              <td class="dimensions">Dimensions (cm):</td>
               <td>
@@ -190,7 +190,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
+    <input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -202,11 +202,11 @@ $p++;
 
                 </td>
              </tr> 
-		'.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
-	      	<tr>
-		<td class="service-type">Service (+fee):</td>
-		<td><select class="optional-fees">'.$options.'</select></td>
-	      	</tr>':'').'
+    '.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
+          <tr>
+    <td class="service-type">Service (+fee):</td>
+    <td><select class="optional-fees">'.$options.'</select></td>
+          </tr>':'').'
        
             </table>
           </div>
@@ -222,7 +222,7 @@ $p++;
       </div>
       </div>
       <div class="order sidebar">
-	 <div class="block">	
+   <div class="block">  
           <h2>Order summary</h2>
           <ul class="parcel-line">
           <li class="order-first">Pending...</li>
@@ -236,16 +236,13 @@ $p++;
            <input  type="hidden" name="action" value="addtocart">
           <input class="parcelsPost" type="hidden" name="parcelsPost" value="">
           </form>
-		    <input class="form-submit check_parcels" type="button" name="modify" value="Update">
-	        <input class="form-submit add_to_cart" type="button" name="checkout" value="Checkout">
+        <input class="form-submit check_parcels" type="button" name="modify" value="Update">
+          <input class="form-submit add_to_cart" type="button" name="checkout" value="Checkout">
           </div>  
-	  <div class="footer-note">
-	  '.variable_get('liveparcels_note_message').'
-	  </div>
+    <div class="footer-note">
+    '.variable_get('liveparcels_note_message').'
+    </div>
   </div>
- <script src="https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete"
-        async defer></script>
-
  <script type="text/javascript">
 
 // This example displays an address form, using the autocomplete feature
@@ -678,24 +675,24 @@ function geolocate() {
   (function($){
   var zonedata='.( $jsondata<>'' ? $jsondata:'').';
 
-//document.onreadystatechange = subSomething;
+document.onreadystatechange = subSomething;
 
-//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'//&signed_in=true&libraries=places&callback=initAutocomplete");
+include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
 
-//function subSomething() {
-//if(document.readyState == "complete") {
+function subSomething() {
+if(document.readyState == "complete") {
 
-//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'//&signed_in=true&libraries=places&callback=initAutocomplete");
+include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
 
-//}else{
+}else{
 
-//  $("#autocomplete").attr("disabled","disabled");
-//  $(".addressto").attr("disabled","disabled");
-//  $(".deliver").attr("disabled","disabled");
-//  $(".pick-up").attr("disabled","disabled");
-//}
+  $("#autocomplete").attr("disabled","disabled");
+  $(".addressto").attr("disabled","disabled");
+  $(".deliver").attr("disabled","disabled");
+  $(".pick-up").attr("disabled","disabled");
+}
 
-//}
+}
 
 function include_js(file) {
 
@@ -706,19 +703,19 @@ function include_js(file) {
     _doc.appendChild(js);
     if (!/*@cc_on!@*/0) { 
         js.onload = function () {
-	  $("#autocomplete").removeAttr("disabled");
-	  $(".addressto").removeAttr("disabled");
-	  $(".deliver").removeAttr("disabled");
-	  $(".pick-up").removeAttr("disabled");
-	  
+    $("#autocomplete").removeAttr("disabled");
+    $(".addressto").removeAttr("disabled");
+    $(".deliver").removeAttr("disabled");
+    $(".pick-up").removeAttr("disabled");
+    
         }
     } else {
         js.onreadystatechange = function () {
             if (js.readyState == "loaded" || js.readyState == "complete") {
-		  $("#autocomplete").removeAttr("disabled");
-	  	  $(".addressto").removeAttr("disabled");
-		  $(".deliver").removeAttr("disabled");
-		  $(".pick-up").removeAttr("disabled");
+      $("#autocomplete").removeAttr("disabled");
+        $(".addressto").removeAttr("disabled");
+      $(".deliver").removeAttr("disabled");
+      $(".pick-up").removeAttr("disabled");
             }
         }
     }
@@ -727,208 +724,208 @@ function include_js(file) {
 
    function isFloat(oNum){
 
-	  if(!oNum) return false;
+    if(!oNum) return false;
 
-	  var strP=/^\d+(\.\d+)?$/;
+    var strP=/^\d+(\.\d+)?$/;
 
-	  if(!strP.test(oNum)) return false;
+    if(!strP.test(oNum)) return false;
 
-	  try{
+    try{
 
-	  	if(parseFloat(oNum)!=oNum) return false;
+      if(parseFloat(oNum)!=oNum) return false;
 
-	  }catch(ex){
+    }catch(ex){
 
-	    return false;
+      return false;
 
-	  }
+    }
 
-	  return true;
+    return true;
 
-	}
+  }
       function checknull(f){
           var error=0;
-		 var first  = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
-		 var second = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
-		 var three  = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
-		 var weight = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-		 var dimens = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
-		 var postto = $("#autocomplete").val();
-		 var posttos = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
+     var first  = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
+     var second = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
+     var three  = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
+     var weight = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
+     var dimens = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
+     var postto = $("#autocomplete").val();
+     var posttos = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
-		 if(postto == ""){
+     if(postto == ""){
 
-	           $("#autocomplete").css("border","1px dashed red");
-	           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-		 }else{
-		       $("#autocomplete").css("border","1px solid #ccc");
-		 }
+             $("#autocomplete").css("border","1px dashed red");
+             $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+     }else{
+           $("#autocomplete").css("border","1px solid #ccc");
+     }
 
-		if(posttos==""){
+    if(posttos==""){
 
-	           $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px dashed red");
-	           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();		
+             $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px dashed red");
+             $(".post-all:eq("+(f-1)+")").find(".error-mess").show();   
 
- 		}else{
-	           $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px solid #ccc");
-		}
+    }else{
+             $(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px solid #ccc");
+    }
 
-		
-		if(first !== "" && second !== "" && three !== "" 
-		   && weight !== "" && dimens !== "" && postto !== ""){
-		        $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();       
-		}  
-		 
-			if(isFloat(first) && isFloat(second) && isFloat(three)){
-		         var volume = parseFloat(first) * parseFloat(second) * parseFloat(three)*
-		         '.variable_get('liveparcels_factor',1).';
-		         var Pvolume = volume.toFixed(4);
-		         $(".post-all:eq("+(f-1)+")").find(".dimens-text").val(Pvolume);  
-		     }   
-				 if(!isFloat(first)){
-                     error=1;		 
-					$(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px dashed red");
-					$(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-				 }else{
-					$(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px solid #ccc");
-				 }
-	         
-				 if(!isFloat(second)){
+    
+    if(first !== "" && second !== "" && three !== "" 
+       && weight !== "" && dimens !== "" && postto !== ""){
+            $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();       
+    }  
+     
+      if(isFloat(first) && isFloat(second) && isFloat(three)){
+             var volume = parseFloat(first) * parseFloat(second) * parseFloat(three)*
+             '.variable_get('liveparcels_factor',1).';
+             var Pvolume = volume.toFixed(4);
+             $(".post-all:eq("+(f-1)+")").find(".dimens-text").val(Pvolume);  
+         }   
+         if(!isFloat(first)){
+                     error=1;    
+          $(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px dashed red");
+          $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+         }else{
+          $(".post-all:eq("+(f-1)+")").find(".dim-first").css("border","1px solid #ccc");
+         }
+           
+         if(!isFloat(second)){
                      error=1;
-					$(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px dashed red");
-					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-				 }else{
-					$(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px solid #ccc"); 
-				}
-	         
-				 if(!isFloat(three)){
+          $(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px dashed red");
+           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+         }else{
+          $(".post-all:eq("+(f-1)+")").find(".dim-second").css("border","1px solid #ccc"); 
+        }
+           
+         if(!isFloat(three)){
                      error=1;
-					$(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px dashed red");
-					$(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-				 }else{
-					$(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px solid #ccc"); 
-				 }
-	      
-				 if(!isFloat(weight)){
+          $(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px dashed red");
+          $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+         }else{
+          $(".post-all:eq("+(f-1)+")").find(".dim-three").css("border","1px solid #ccc"); 
+         }
+        
+         if(!isFloat(weight)){
                       error=1;
-					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-					 $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px dashed red");
-				   }else{
+           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+           $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px dashed red");
+           }else{
                       $(".post-all:eq("+(f-1)+")").find(".weight-text").css("border","1px solid #ccc"); 
-				   }
-			  
-				 if(!isFloat(dimens)){
+           }
+        
+         if(!isFloat(dimens)){
                       error=1;
-					 $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
-					 $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px dashed red");
-				   }else{
+           $(".post-all:eq("+(f-1)+")").find(".error-mess").show();
+           $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px dashed red");
+           }else{
                       $(".post-all:eq("+(f-1)+")").find(".dimens-text").css("border","1px solid #ccc"); 
-				   }
-		    if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
-		         $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
-		}
+           }
+        if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
+             $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
+    }
         return error;     
-	  }
-	  $(".post-all input").blur(function(){
-		 var first = $(this).parent("td").find(".dim-first").val();
-		 var second = $(this).parent("td").find(".dim-second").val();
-		 var three = $(this).parent("td").find(".dim-three").val();
-		 var weight = $(this).parent("td").find(".weight-text").val();
-		 var dimens  = $(this).parent("td").find(".dimens-text").val();
-		 var postto = $(this).parent("td").find(".pnum-to").val();
-		 var posttos = $(this).parent("td").find(".postcode-suburb").val();
-		 var cla = $(this).attr("class");
-	     if(cla == "dim-first" || cla == "dim-second" || cla == "dim-three"){ 
-			if(isFloat(first) && isFloat(second) && isFloat(three)){
-		         var volume = parseFloat(first) * parseFloat(second) * parseFloat(three)*
-		         '.variable_get('liveparcels_factor',1).';
-		         var Pvolume = volume.toFixed(4);
-	             $(this).parent("td").parent("tr").next("tr")
-	             .children("td").find(".dimens-text").val(Pvolume);  
-		     }
-		     if( cla == "dim-first"){ 	    
-				 if(!isFloat(first)){		 
-					$(this).parent("td").find(".dim-first").css("border","1px dashed red");
-					 $(this).parent("td").parent("tr").parent("table").parent("div")
-					 .next("div").find(".error-mess").show();
-					 return false;
-					 
-				 }else{
-					$(this).parent("td").find(".dim-first").css("border","1px solid #ccc");
-				 }
-	         }
-	         if(cla == "dim-second" ){
-				 if(!isFloat(second)){
-					$(this).parent("td").find(".dim-second").css("border","1px dashed red");
-					 $(this).parent("td").parent("tr").parent("table").parent("div")
-					 .next("div").find(".error-mess").show();
-					 return false;
-					 
-				 }else{
-					$(this).parent("td").find(".dim-second").css("border","1px solid #ccc"); 
-				}
-	         }
-	         if(cla == "dim-three"){
-				 if(!isFloat(three)){
-					$(this).parent("td").find(".dim-three").css("border","1px dashed red");
-					 $(this).parent("td").parent("tr").parent("table").parent("div")
-					 .next("div").find(".error-mess").show();
-					 return false;
-					 
-				 }else{
-					$(this).parent("td").find(".dim-three").css("border","1px solid #ccc"); 
-				 }
-	         }
-	     } 
-			 if(cla =="weight-text"){
-				 if(isFloat(weight)){
-					 $(this).parent("td").find(".weight-text").css("border","1px solid #ccc"); 
-				   }else{
-					 $(this).parent("td").parent("tr").parent("table").parent("div")
-					 .next("div").find(".error-mess").show();
-					 $(this).parent("td").find(".weight-text").css("border","1px dashed red");
-					 return false;
-				   }
-			  } 
-			   if(cla =="dimens-text"){
-				 if(isFloat(dimens)){
-					 $(this).parent("td").find(".dimens-text").css("border","1px solid #ccc"); 
-				   }else{
-					 $(this).parent("td").parent("tr").parent("table").parent("div")
-					 .next("div").find(".error-mess").show();
-					 $(this).parent("td").find(".dimens-text").css("border","1px dashed red");
-					 return false;
-				   }
-			  } 
-			  if(cla == "postcode-suburb"){
-			     if(posttos ==""){
-			       $(this).parent("td").find(".pnum-to").val("");
-			     }
-			  }
-		if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
-		         $(this).parent("td").parent("tr").parent("table").parent("div")
-		         .next("div").find(".error-mess").hide();
-		} 
-	  
+    }
+    $(".post-all input").blur(function(){
+     var first = $(this).parent("td").find(".dim-first").val();
+     var second = $(this).parent("td").find(".dim-second").val();
+     var three = $(this).parent("td").find(".dim-three").val();
+     var weight = $(this).parent("td").find(".weight-text").val();
+     var dimens  = $(this).parent("td").find(".dimens-text").val();
+     var postto = $(this).parent("td").find(".pnum-to").val();
+     var posttos = $(this).parent("td").find(".postcode-suburb").val();
+     var cla = $(this).attr("class");
+       if(cla == "dim-first" || cla == "dim-second" || cla == "dim-three"){ 
+      if(isFloat(first) && isFloat(second) && isFloat(three)){
+             var volume = parseFloat(first) * parseFloat(second) * parseFloat(three)*
+             '.variable_get('liveparcels_factor',1).';
+             var Pvolume = volume.toFixed(4);
+               $(this).parent("td").parent("tr").next("tr")
+               .children("td").find(".dimens-text").val(Pvolume);  
+         }
+         if( cla == "dim-first"){       
+         if(!isFloat(first)){    
+          $(this).parent("td").find(".dim-first").css("border","1px dashed red");
+           $(this).parent("td").parent("tr").parent("table").parent("div")
+           .next("div").find(".error-mess").show();
+           return false;
+           
+         }else{
+          $(this).parent("td").find(".dim-first").css("border","1px solid #ccc");
+         }
+           }
+           if(cla == "dim-second" ){
+         if(!isFloat(second)){
+          $(this).parent("td").find(".dim-second").css("border","1px dashed red");
+           $(this).parent("td").parent("tr").parent("table").parent("div")
+           .next("div").find(".error-mess").show();
+           return false;
+           
+         }else{
+          $(this).parent("td").find(".dim-second").css("border","1px solid #ccc"); 
+        }
+           }
+           if(cla == "dim-three"){
+         if(!isFloat(three)){
+          $(this).parent("td").find(".dim-three").css("border","1px dashed red");
+           $(this).parent("td").parent("tr").parent("table").parent("div")
+           .next("div").find(".error-mess").show();
+           return false;
+           
+         }else{
+          $(this).parent("td").find(".dim-three").css("border","1px solid #ccc"); 
+         }
+           }
+       } 
+       if(cla =="weight-text"){
+         if(isFloat(weight)){
+           $(this).parent("td").find(".weight-text").css("border","1px solid #ccc"); 
+           }else{
+           $(this).parent("td").parent("tr").parent("table").parent("div")
+           .next("div").find(".error-mess").show();
+           $(this).parent("td").find(".weight-text").css("border","1px dashed red");
+           return false;
+           }
+        } 
+         if(cla =="dimens-text"){
+         if(isFloat(dimens)){
+           $(this).parent("td").find(".dimens-text").css("border","1px solid #ccc"); 
+           }else{
+           $(this).parent("td").parent("tr").parent("table").parent("div")
+           .next("div").find(".error-mess").show();
+           $(this).parent("td").find(".dimens-text").css("border","1px dashed red");
+           return false;
+           }
+        } 
+        if(cla == "postcode-suburb"){
+           if(posttos ==""){
+             $(this).parent("td").find(".pnum-to").val("");
+           }
+        }
+    if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
+             $(this).parent("td").parent("tr").parent("table").parent("div")
+             .next("div").find(".error-mess").hide();
+    } 
+    
   });    
-	 
+   
      var num = '.($p>1 ? $p:1).';
      $(".add_new input").click(function(){
-		    num++;
+        num++;
           $(".post-all .parcel strong").each(function(){
-        		ptitle = $(this).html();
+            ptitle = $(this).html();
                         pnum = ptitle.substring(7);
                          if(pnum==num){
-        			             num++;
+                           num++;
                          }
 
-	       });
+         });
 
-		var divText = $(".post-all:last");
+    var divText = $(".post-all:last");
         var newDiv = divText.clone(true);
-		divText.after(newDiv);
-		
-		$(".post-all:last .parcel strong").html("Parcel#" + num);
+    divText.after(newDiv);
+    
+    $(".post-all:last .parcel strong").html("Parcel#" + num);
          $(".post-all:last .pcode").attr("id","pcode"+num);
           $(".post-all:last .addressto").attr("id","destination"+ num);
 
@@ -940,8 +937,8 @@ function include_js(file) {
           $(".post-all:last .country").attr("id","country"+ num);
           $(".post-all:last .olddestination").attr("id","olddestination"+ num);
 
-		$(".post-all:last .parcel input").show();
-		$(".post-all:last .post-mess table input").val("");
+    $(".post-all:last .parcel input").show();
+    $(".post-all:last .post-mess table input").val("");
     if(num==2){
         destination2  = new google.maps.places.Autocomplete(
        (document.getElementById("destination2")),
@@ -993,21 +990,21 @@ function include_js(file) {
       }
 
      });
-	 $(".duplicate input").click(function(){
-		num++;
+   $(".duplicate input").click(function(){
+    num++;
 
           $(".post-all .parcel strong").each(function(){
-		ptitle = $(this).html();
+    ptitle = $(this).html();
                 pnum = ptitle.substring(7);
                  if(pnum==num){
-			             num++;
+                   num++;
                  }
 
-	  });
-		var divText = $(this).parent().parent().parent();
+    });
+    var divText = $(this).parent().parent().parent();
         var newDiv = divText.clone(true);
-		$(".post-all:last").after(newDiv);
-		$(".post-all:last .parcel strong").html("Parcel#" + num);
+    $(".post-all:last").after(newDiv);
+    $(".post-all:last .parcel strong").html("Parcel#" + num);
         $(".post-all:last .pcode").attr("id","pcode"+num);
          $(".post-all:last .addressto").attr("id","destination"+num);
 
@@ -1019,8 +1016,8 @@ function include_js(file) {
           $(".post-all:last .country").attr("id","country"+ num);
           $(".post-all:last .olddestination").attr("id","olddestination"+ num);
 
-		$(".post-all:last .parcel input").show();
-   		if(num==2){
+    $(".post-all:last .parcel input").show();
+      if(num==2){
         destination2  = new google.maps.places.Autocomplete(
        (document.getElementById("destination2")),
         {types: ["geocode"]});
@@ -1080,61 +1077,61 @@ function include_js(file) {
          $(".package-from").text("Destination:");
         });
         
-	 $(".parcel input").click(function() {
-		$(this).parent().parent().remove();
-		num--;
-	 });
-	 $(".post-all").mouseenter(function(){
-	    if($(".order-btn .check_parcels").val()=="Update"){
-	       $(this).find(".duplicate").show();
-	    }
-	 }).mouseleave(function(){
-	    $(this).find(".duplicate").hide();
-	 });
-	 function getprice(f,tlen,postfrom,ajaxrequest){
-			  var max = 0;
-			  var parcelnum = $(".post-all:eq("+(f-1)+")").find(".parcel strong").text();
-			  var dimfirst = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
-			  var dimsecond = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
-			  var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
-			  var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
-			  var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
-	             	
-			  var service_type = $(".post-all:eq("+(f-1)+")").find(".optional-fees").val();
+   $(".parcel input").click(function() {
+    $(this).parent().parent().remove();
+    num--;
+   });
+   $(".post-all").mouseenter(function(){
+      if($(".order-btn .check_parcels").val()=="Update"){
+         $(this).find(".duplicate").show();
+      }
+   }).mouseleave(function(){
+      $(this).find(".duplicate").hide();
+   });
+   function getprice(f,tlen,postfrom,ajaxrequest){
+        var max = 0;
+        var parcelnum = $(".post-all:eq("+(f-1)+")").find(".parcel strong").text();
+        var dimfirst = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
+        var dimsecond = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
+        var dimthree = $(".post-all:eq("+(f-1)+")").find(".dim-three").val();
+        var dimenstext  = $(".post-all:eq("+(f-1)+")").find(".dimens-text").val();
+        var weighttext = $(".post-all:eq("+(f-1)+")").find(".weight-text").val();
+                
+        var service_type = $(".post-all:eq("+(f-1)+")").find(".optional-fees").val();
 
 
 
               var ptype=2;
               if($(".deliver").attr("checked")){
                    var addressfrom =$("#autocomplete").val();
-            		   var from_locality  = $("#locality").val();
+                   var from_locality  = $("#locality").val();
                                var addressto = $(".post-all:eq("+(f-1)+")").find(".addressto").val();
 
-            		   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+                   var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 
-            		   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
-            		   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+                   var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+                   var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    
                      ptype=2;
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
-            		   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
-            	           var to_locality = $("#locality").val();
-            		   var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+                   var from_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
+                         var to_locality = $("#locality").val();
+                   var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
 
-            		   var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+                   var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                                ptype=1;
                 }
-			  if(dimfirst > max){
-				  max = dimfirst; 
-			  }
-			  if(dimsecond > max){
-			      max = dimsecond;
-			  }
-			  if(dimthree > max){
-				  max = dimthree;  
-			  }
+        if(dimfirst > max){
+          max = dimfirst; 
+        }
+        if(dimsecond > max){
+            max = dimsecond;
+        }
+        if(dimthree > max){
+          max = dimthree;  
+        }
               weighttext=parseFloat(weighttext);
               
               ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","from_locality":"\'+from_locality+\'","to_locality":"\'+to_locality+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
@@ -1168,11 +1165,11 @@ function include_js(file) {
                             var totals=zone.totals-zone.discount; 
 
                             $(".order-total").html("Total: '.variable_get('uc_currency_sign','$').'" + '.(module_exists('lp_discount') ?  'totals.toFixed(2)':'zone.totals').');
-					    }else{
+              }else{
                             $(".header-warning").show();
                              '.(module_exists('lp_discount') ? ' $(".order-discount").html("Discount:  Pending...");':'').'
-							  $(".order-total").html("Total : Pending..."); 
-					    }
+                $(".order-total").html("Total : Pending..."); 
+              }
                      },"json");
             }
             
@@ -1186,25 +1183,25 @@ function include_js(file) {
             for (var i in o) arr.push("\\"" + i + "\\":" + fmt(o[i])); 
             return "{" + arr.join(",") + "}"; 
         } 
-	 $(".check_parcels").click(function(){
-		if($(this).attr("value")=="Update"){
-		   
-	       var postfrom =$(".pnum-from").val();
-	       var postfroms =$(".post-suburb").val();
-	      
-	       if(postfroms == ""){
-	         $(".pnum-from").val("");
-	       }
-  		   if(postfrom ==""){
-  		      $(".post-suburb").css("border","1px dashed red");
-  		      return false;
-  		   }else{
-  		      $(".post-suburb").css("border","1px solid #ccc");
-  		   }
-  		   var f=1;   
-  		   var subtotal = 0;   
-  		   var tlen=$(".post-all:last").index()-2;
-  		   $(".order ul li").remove();
+   $(".check_parcels").click(function(){
+    if($(this).attr("value")=="Update"){
+       
+         var postfrom =$(".pnum-from").val();
+         var postfroms =$(".post-suburb").val();
+        
+         if(postfroms == ""){
+           $(".pnum-from").val("");
+         }
+         if(postfrom ==""){
+            $(".post-suburb").css("border","1px dashed red");
+            return false;
+         }else{
+            $(".post-suburb").css("border","1px solid #ccc");
+         }
+         var f=1;   
+         var subtotal = 0;   
+         var tlen=$(".post-all:last").index()-2;
+         $(".order ul li").remove();
            $(".header-warning").hide();
            var er=0;
            for(var i=1;i<=tlen;i++){
@@ -1215,40 +1212,40 @@ function include_js(file) {
             }
             if(!er){
                 var ajaxrequest="";
-                getprice(f,tlen,postfrom,ajaxrequest);	
+                getprice(f,tlen,postfrom,ajaxrequest);  
            }       
-	       $(".page-float input").attr("disabled",true);     
-	       $(".post-mess table input").css("background","#d2d2d2");
-	       $(".page-float select").attr("disabled",true);     
+         $(".page-float input").attr("disabled",true);     
+         $(".post-mess table input").css("background","#d2d2d2");
+         $(".page-float select").attr("disabled",true);     
 
 
-	       $(".add_new").hide();
-	       $(this).attr("value","Modify");
-	    }else{
+         $(".add_new").hide();
+         $(this).attr("value","Modify");
+      }else{
            $(".parcelsPost").val("");
-	       if(postfroms == ""){
-	          $(".pnum-from").val("");
-	       }
-		   if(postfrom ==""){
-		      $(".post-suburb").css("border","1px dashed red");
-		      return false;
-		   }else{
-		      $(".post-suburb").css("border","1px solid #ccc");
-		   }
-		   $(".page-float input").attr("disabled",false);
-		   $(".page-float select").attr("disabled",false);
+         if(postfroms == ""){
+            $(".pnum-from").val("");
+         }
+       if(postfrom ==""){
+          $(".post-suburb").css("border","1px dashed red");
+          return false;
+       }else{
+          $(".post-suburb").css("border","1px solid #ccc");
+       }
+       $(".page-float input").attr("disabled",false);
+       $(".page-float select").attr("disabled",false);
 
-		   $(".dimens-text").attr("disabled",true);
-		   $(".post-mess table input").css("background","white");
+       $(".dimens-text").attr("disabled",true);
+       $(".post-mess table input").css("background","white");
 
-		   $(".dimens-input input").css("background","#d2d2d2");
-		   $(".order ul li").remove();
-		   $(".order ul").append("<li>Pending...</li>");
-		   $(".order-total").html("Total: Pending..."); 
-		   $(".add_new").show();
-	       $(this).attr("value","Update");
-		}    
-	 });
+       $(".dimens-input input").css("background","#d2d2d2");
+       $(".order ul li").remove();
+       $(".order ul").append("<li>Pending...</li>");
+       $(".order-total").html("Total: Pending..."); 
+       $(".add_new").show();
+         $(this).attr("value","Update");
+    }    
+   });
     $(".add_to_cart").click(function(){
         if($(".parcelsPost").val()==""){
                 alert("Please update parcels information.");
@@ -1257,7 +1254,7 @@ function include_js(file) {
             $("#liveparcelsform").submit();
         }
     });
-	 $(".post-suburb").keyup(function(){
+   $(".post-suburb").keyup(function(){
           var words=gettrim($(this).val());
           var id=$(this).attr("id");
           if( words.length >= 3){
@@ -1265,7 +1262,7 @@ function include_js(file) {
           }else{
               $("#pcode"+id).hide();
             }
-	  });
+    });
        $(".postcode-suburb").keyup(function(){
           var words=gettrim($(this).val());
           var id=$(this).attr("id");
@@ -1275,44 +1272,44 @@ function include_js(file) {
           }else{
               $("#pcode"+id).hide();
             }
-	  });
+    });
       function gettrim(str){ //trim left and right varchar
  
-		  var i;
-		  for(i=0;i<str.length;i++){
-		    if(str.charAt(i)!=" "&&str.charAt(i)!=" ") {
-			break;
-		    } 
-		  } 
-		  str = str.substring(i,str.length);
-		  i=0;
-		  
-		  for(i=str.length-1;i>=0;i--){
-		  
-		  if(str.charAt(i)!=" "&&str.charAt(i)!=" ") break;
-		  
-		  }
-		  
-		  str = str.substring(0,i+1);
-		  
-		  return str;
-	
+      var i;
+      for(i=0;i<str.length;i++){
+        if(str.charAt(i)!=" "&&str.charAt(i)!=" ") {
+      break;
+        } 
+      } 
+      str = str.substring(i,str.length);
+      i=0;
+      
+      for(i=str.length-1;i>=0;i--){
+      
+      if(str.charAt(i)!=" "&&str.charAt(i)!=" ") break;
+      
+      }
+      
+      str = str.substring(0,i+1);
+      
+      return str;
+  
     }
     function ajaxsearch(words,id){     
         if(words == "" || words == " " ){
-	     	 $("#pcode"+id).hide();
+         $("#pcode"+id).hide();
              return false;
         } 
         var str="";
-	 	var res="";
-		var post="";
-		for (k in zonedata){
-			str=zonedata[k].locality.toUpperCase();
+    var res="";
+    var post="";
+    for (k in zonedata){
+      str=zonedata[k].locality.toUpperCase();
             post=zonedata[k].pcode;
-			if(str.indexOf(words.toUpperCase()) >= 0 || post.indexOf(words) >= 0){
-			  res+="<li id=\'"+zonedata[k].pnum+"_"+zonedata[k].state+"_"+post+"\'>"+str+" "+post+"</li>";
-		    }	
-		}
+      if(str.indexOf(words.toUpperCase()) >= 0 || post.indexOf(words) >= 0){
+        res+="<li id=\'"+zonedata[k].pnum+"_"+zonedata[k].state+"_"+post+"\'>"+str+" "+post+"</li>";
+        } 
+    }
         if(res != ""){
          $("#pcode"+id).html(res);
            $(".pcode li").click(function(){
@@ -1327,31 +1324,31 @@ function include_js(file) {
              });
          $("#pcode"+id).show();
         }
-	 }
+   }
   })(jQuery) </script>'));
   
-	$build['liveparcels'] = array(
-	"#theme" => "table",
-	  "#rows" => $rows,
-	  "#attributes" => array("class" => array("live-parcels-status")),
-	);
+  $build['liveparcels'] = array(
+  "#theme" => "table",
+    "#rows" => $rows,
+    "#attributes" => array("class" => array("live-parcels-status")),
+  );
 
-	 drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/package_show.css', 
-	 array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+   drupal_add_css(drupal_get_path('module', 'liveparcels') . '/resource/package_show.css', 
+   array('group' => CSS_DEFAULT, 'every_page' => TRUE));
 
-	 
+   
      return $build;
 }
 
 function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
 
-	$weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
-	$items=array('pprice'=>0,'package_name'=>'');
-	if($max>0 && $dimenstext>0 && $weighttext>0){
-		$arr = db_query("SELECT `weight`,`plength` FROM 
-		`{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
-		if($arr['weight'] < $weight || $arr['plength'] < $max){
-		     $items=array('pprice'=>0,'package_name'=>'');
+  $weight = $dimenstext>$weighttext?$dimenstext:$weighttext;
+  $items=array('pprice'=>0,'package_name'=>'');
+  if($max>0 && $dimenstext>0 && $weighttext>0){
+    $arr = db_query("SELECT `weight`,`plength` FROM 
+    `{liveparcels_package}` ORDER BY `pprice` DESC LIMIT 1")->fetchAssoc();
+    if($arr['weight'] < $weight || $arr['plength'] < $max){
+         $items=array('pprice'=>0,'package_name'=>'');
         }else{
                 $pprice = db_query("SELECT `pprice`,`package_name` FROM `{liveparcels_package}` 
                    WHERE `plength`>=". $max ." ORDER BY `pprice` ASC  LIMIT 1")
@@ -1370,7 +1367,7 @@ function liveparcels_getPackageprice($max,$dimenstext,$weighttext) {
               }
       }
   
-		return  array("pprice"=>$items['pprice'],"package_name"=>$items['package_name']);
+    return  array("pprice"=>$items['pprice'],"package_name"=>$items['package_name']);
 }  
 
 function liveparcels_getZoneprice() {
@@ -1394,52 +1391,52 @@ if(isset($_SESSION['lp_order'])){
 
    // location_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km');
 
-	if($action =="updateprice" && count($pricedata)>0){
+  if($action =="updateprice" && count($pricedata)>0){
         foreach($pricedata as $key=>$pdata){
 
 
           $pprice=liveparcels_getPackageprice($pdata['max'],$pdata['dimenstext'],$pdata['weighttext']);
            $distance_type =  variable_get('distance_type');
       if($pdata['postfrom']!="___" && $pdata['postto']!="___"){
-  	   if($distance_type == '0'){
+       if($distance_type == '0'){
 
-      		$location_from = explode(',',$pdata['addressfrom']);
-      		$locationfrom = array();
-      		$locationfrom['street'] = $location_from[0];
-      		$locationfrom['city'] = $location_from[1];
-      		$locationfrom['province'] = $location_from[2];
-      		$locationfrom['country'] = $location_from[3];
-      		$latlon_a = google_geocode_location($locationfrom);
+          $location_from = explode(',',$pdata['addressfrom']);
+          $locationfrom = array();
+          $locationfrom['street'] = $location_from[0];
+          $locationfrom['city'] = $location_from[1];
+          $locationfrom['province'] = $location_from[2];
+          $locationfrom['country'] = $location_from[3];
+          $latlon_a = google_geocode_location($locationfrom);
 
-      		$location_to = explode(',',$pdata['addressto']);
-      		$locationto = array();
-      		$locationto['street'] = $location_to[0];
-      		$locationto['city'] = $location_to[1];
-      		$locationto['province'] = $location_to[2];
-      		$locationto['country'] = $location_to[3];
-      		$latlon_b = google_geocode_location($locationto);
+          $location_to = explode(',',$pdata['addressto']);
+          $locationto = array();
+          $locationto['street'] = $location_to[0];
+          $locationto['city'] = $location_to[1];
+          $locationto['province'] = $location_to[2];
+          $locationto['country'] = $location_to[3];
+          $latlon_b = google_geocode_location($locationto);
 
-      		$getunit = variable_get('distance_unit',0);
-      		if($getunit=='1'){
-      		  $unit = 'mile';
-      		}else{
-      		  $unit = 'km';
-      		}
-      		$between = location_distance_between($latlon_a,$latlon_b,$unit);
-      		if($latlon_a != $latlon_b){
-      		$distance = $between['scalar']*1000;
-      		}else{
-      		$distance = 1 ;
-      		 }
-  	  	  $distancetest = $between['scalar'].$between['distance_unit'];
+          $getunit = variable_get('distance_unit',0);
+          if($getunit=='1'){
+            $unit = 'mile';
+          }else{
+            $unit = 'km';
+          }
+          $between = location_distance_between($latlon_a,$latlon_b,$unit);
+          if($latlon_a != $latlon_b){
+          $distance = $between['scalar']*1000;
+          }else{
+          $distance = 1 ;
+           }
+          $distancetest = $between['scalar'].$between['distance_unit'];
         }else{
-            	$data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
-  		      $distancetest = $data->rows[0]->elements[0]->distance->text;
-        		if($pdata['addressfrom'] != $pdata['addressto'] && intval($data->rows[0]->elements[0]->distance->value)>1){
-        	           $distance = intval($data->rows[0]->elements[0]->distance->value);
-        		}else{
-        		   $distance = 1;
-        		}
+              $data = get_google_distance($pdata['addressfrom'],$pdata['addressto']);
+            $distancetest = $data->rows[0]->elements[0]->distance->text;
+            if($pdata['addressfrom'] != $pdata['addressto'] && intval($data->rows[0]->elements[0]->distance->value)>1){
+                     $distance = intval($data->rows[0]->elements[0]->distance->value);
+            }else{
+               $distance = 1;
+            }
 
         }
       }else{
@@ -1447,19 +1444,19 @@ if(isset($_SESSION['lp_order'])){
       }
  //$distance = 218000;
             if($pprice['pprice']>0){
-            		$result = db_query('select * from {liveparcels_distance} order by distance asc');
-            		$pzon = 0;
-            		 foreach($result as $rst){
+                $result = db_query('select * from {liveparcels_distance} order by distance asc');
+                $pzon = 0;
+                 foreach($result as $rst){
 
-              			$set_distance = $rst->distance;
+                    $set_distance = $rst->distance;
 
-              			if($distance!='0'&&$set_distance*1000>$distance){
-              				$pzon = $rst->multiplier;
-                				break;
-              			}else{
-              				$pzon = 0;
-              			}
-            		 }
+                    if($distance!='0'&&$set_distance*1000>$distance){
+                      $pzon = $rst->multiplier;
+                        break;
+                    }else{
+                      $pzon = 0;
+                    }
+                 }
 
                 if($pzon>0){
                     $pzone=$pzon*$pprice['pprice']; 
@@ -1471,25 +1468,25 @@ if(isset($_SESSION['lp_order'])){
                   $pzone=0;  
             }
             $parcels_price[]=array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone,2)),"package_name"=>$pprice['package_name']);
-	    // service price
-	    $totals+=$pzone;
-	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
-	    $type_value =  get_service_value($pdata['service_type']);
-    	    $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2)),"package_name"=>$pprice['package_name']);
-    	    $totals += $pzone*$type_value;
-	    }
+      // service price
+      $totals+=$pzone;
+      if(module_exists('lp_feature_service')&&get_service_type_count()>1){
+      $type_value =  get_service_value($pdata['service_type']);
+          $service_price[] = array("pprice"=>variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2)),"package_name"=>$pprice['package_name']);
+          $totals += $pzone*$type_value;
+      }
 
             if($pzone=='0'){
             $error=1;    
             }
 
-	    if(module_exists('lp_feature_service')&&get_service_type_count()>1){
+      if(module_exists('lp_feature_service')&&get_service_type_count()>1){
             $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span><br>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span> <div>Service fee: ".variable_get('uc_currency_sign','$').sprintf('%.2f',round($pzone*$type_value,2))."</div><p>".$distancetest."</p></li>";
             }else{
  $parcels.=$pzone=='0' ? "<li>". $pdata['parcelnum'].": <span style='color:red'>??</span><br>".$distancetest."</li>":"<li>". $pdata['parcelnum'].": <span>".variable_get('uc_currency_sign','$').sprintf('%.2f',$pzone)."</span><p>".$distancetest."</p></li>";
-	    }
+      }
         }
-	}
+  }
     if(module_exists('lp_discount')){
         $discount=lp_discount_get_pricing($totals);
     }else{
@@ -1498,7 +1495,7 @@ if(isset($_SESSION['lp_order'])){
 
     $returndata=array('error'=>$error,'discount'=>sprintf('%.2f',$discount),'totals'=>sprintf('%.2f',$totals),'service_price'=>$service_price,'parcels'=>$parcels,'pprice'=>$parcels_price);
     
-		echo json_encode($returndata);		
+    echo json_encode($returndata);    
 }
 
 function  get_google_distance($from,$to){
@@ -1531,7 +1528,3 @@ $output = file_get_contents($url);
   return json_decode($output);
 
 }
-
-
-
-
