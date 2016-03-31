@@ -89,7 +89,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onkey="geolocate()" type="text"></input>
+		<input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number'.$p.'" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route'.$p.'" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality'.$p.'" class="locality">
@@ -112,7 +112,13 @@ $p++;
                 <input class="form-submit" type="button" name="duplicate" value="Duplicate">
              </div>
         </div>
-      </div>';
+      </div><script type="text/javascript">
+ destination'.$p.'  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination'.$p.'")),
+      {types: ["geocode"]});
+  destination'.$p.'.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+  destination'.$p.'.addListener("place_changed", fillInAddress'.$p.');
+      </script>';
     }  
 }
 
@@ -141,7 +147,7 @@ $p++;
       </div>
       <div class="page-content-address" >
            <strong class="package-from">'.($post=='postfrom' ? 'Destination:':'Pickup:').'</strong>
-            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onBlur="updateAddress(jQuery(this))" onkeyup="geolocate()"  type="text"></input>
+            <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
 <input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
 <input type="hidden"  id="locality">
@@ -184,7 +190,7 @@ $p++;
                   <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
                </td>
                <td class="des-text">
-		<input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onkeyup="geolocate()"  type="text"></input>
+		<input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
 <input type="hidden"  id="locality1" class="locality">
@@ -237,7 +243,7 @@ $p++;
 	  '.variable_get('liveparcels_note_message').'
 	  </div>
   </div>
- <script src="https://maps.googleapis.com/maps/api/js?key='.variable_get('google_autocomplete_address_key','').'&signed_in=true&libraries=places&callback=initAutocomplete"
+ <script src="https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete"
         async defer></script>
 
  <script type="text/javascript">
@@ -355,54 +361,6 @@ function initAutocomplete() {
       {types: ["geocode"]});
   destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   destination1.addListener("place_changed", fillInAddress1);
-
-  destination2  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination2")),
-      {types: ["geocode"]});
-  destination2.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination2.addListener("place_changed", fillInAddress2);
-
-  destination3  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination3")),
-      {types: ["geocode"]});
-  destination3.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination3.addListener("place_changed", fillInAddress3);
-
-  destination4  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination4")),
-      {types: ["geocode"]});
-  destination4.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination4.addListener("place_changed", fillInAddress4);
-
-  destination5  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination5")),
-      {types: ["geocode"]});
-  destination5.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination5.addListener("place_changed", fillInAddress5);
-
-  destination6  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination6")),
-      {types: ["geocode"]});
-  destination6.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination6.addListener("place_changed", fillInAddress6);
-
-  destination7  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination7")),
-      {types: ["geocode"]});
-  destination7.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination7.addListener("place_changed", fillInAddress7);
-
-  destination8  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination8")),
-      {types: ["geocode"]});
-  destination8.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination8.addListener("place_changed", fillInAddress8);
-
-  destination9  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination9")),
-      {types: ["geocode"]});
-  destination9.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination9.addListener("place_changed", fillInAddress9);
 }
 
 // [START region_fillform]
@@ -720,23 +678,24 @@ function geolocate() {
   (function($){
   var zonedata='.( $jsondata<>'' ? $jsondata:'').';
 
-document.onreadystatechange = subSomething;
+//document.onreadystatechange = subSomething;
 
+//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'//&signed_in=true&libraries=places&callback=initAutocomplete");
 
-function subSomething() {
-if(document.readyState == "complete") {
+//function subSomething() {
+//if(document.readyState == "complete") {
 
-include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('google_autocomplete_address_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
+//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'//&signed_in=true&libraries=places&callback=initAutocomplete");
 
-}else{
+//}else{
 
-  $("#autocomplete").attr("disabled","disabled");
-  $(".addressto").attr("disabled","disabled");
-  $(".deliver").attr("disabled","disabled");
-  $(".pick-up").attr("disabled","disabled");
-}
+//  $("#autocomplete").attr("disabled","disabled");
+//  $(".addressto").attr("disabled","disabled");
+//  $(".deliver").attr("disabled","disabled");
+//  $(".pick-up").attr("disabled","disabled");
+//}
 
-}
+//}
 
 function include_js(file) {
 
@@ -983,9 +942,55 @@ function include_js(file) {
 
 		$(".post-all:last .parcel input").show();
 		$(".post-all:last .post-mess table input").val("");
-		
-
-
+    if(num==2){
+        destination2  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination2")),
+        {types: ["geocode"]});
+    destination2.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination2.addListener("place_changed", fillInAddress2);
+      }else if(num==3) {
+      destination3  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination3")),
+        {types: ["geocode"]});
+    destination3.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination3.addListener("place_changed", fillInAddress3);
+      }else if(num==4) {
+      destination4  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination4")),
+        {types: ["geocode"]});
+    destination4.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination4.addListener("place_changed", fillInAddress4);
+      }else if(num==5) {
+      destination5  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination5")),
+        {types: ["geocode"]});
+    destination5.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination5.addListener("place_changed", fillInAddress5);
+      }else if(num==6) {
+      destination6  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination6")),
+        {types: ["geocode"]});
+    destination6.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination6.addListener("place_changed", fillInAddress6);
+      }else if(num==7) {
+      destination7  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination7")),
+        {types: ["geocode"]});
+    destination7.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination7.addListener("place_changed", fillInAddress7);
+      }else if(num==8) {
+      destination8  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination8")),
+        {types: ["geocode"]});
+    destination8.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination8.addListener("place_changed", fillInAddress8);
+      }else if(num==9) {
+      destination9  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination9")),
+        {types: ["geocode"]});
+    destination9.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination9.addListener("place_changed", fillInAddress9);
+      }
 
      });
 	 $(".duplicate input").click(function(){
@@ -1015,7 +1020,56 @@ function include_js(file) {
           $(".post-all:last .olddestination").attr("id","olddestination"+ num);
 
 		$(".post-all:last .parcel input").show();
-   		
+   		if(num==2){
+        destination2  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination2")),
+        {types: ["geocode"]});
+    destination2.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination2.addListener("place_changed", fillInAddress2);
+      }else if(num==3) {
+      destination3  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination3")),
+        {types: ["geocode"]});
+    destination3.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination3.addListener("place_changed", fillInAddress3);
+      }else if(num==4) {
+      destination4  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination4")),
+        {types: ["geocode"]});
+    destination4.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination4.addListener("place_changed", fillInAddress4);
+      }else if(num==5) {
+      destination5  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination5")),
+        {types: ["geocode"]});
+    destination5.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination5.addListener("place_changed", fillInAddress5);
+      }else if(num==6) {
+      destination6  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination6")),
+        {types: ["geocode"]});
+    destination6.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination6.addListener("place_changed", fillInAddress6);
+      }else if(num==7) {
+      destination7  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination7")),
+        {types: ["geocode"]});
+    destination7.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination7.addListener("place_changed", fillInAddress7);
+      }else if(num==8) {
+      destination8  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination8")),
+        {types: ["geocode"]});
+    destination8.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination8.addListener("place_changed", fillInAddress8);
+      }else if(num==9) {
+      destination9  = new google.maps.places.Autocomplete(
+       (document.getElementById("destination9")),
+        {types: ["geocode"]});
+    destination9.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+    destination9.addListener("place_changed", fillInAddress9);
+      }
+     
      });
      $(".deliver").click(function(){
          $(".package-from").text("Pickup:");
