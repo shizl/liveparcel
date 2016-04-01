@@ -35,7 +35,7 @@ if(module_exists('lp_feature_service') && get_service_type_count()>1){
 
 }
 
- $morparcel="";
+ $moreparcel="";
 
 if($parcels>0){
 
@@ -114,7 +114,7 @@ $p++;
              </div>
         </div>
       </div>';
-      $morparcel+='  destination'.$p.'  = new google.maps.places.Autocomplete(
+      $moreparcel .='  destination'.$p.'  = new google.maps.places.Autocomplete(
      (document.getElementById("destination'.$p.'")),
       {types: ["geocode"]});
   destination'.$p.'.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
@@ -353,12 +353,7 @@ function initAutocomplete() {
   autocomplete.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   autocomplete.addListener("place_changed", fillInAddress);
 
-  destination1  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination1")),
-      {types: ["geocode"]});
-  destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination1.addListener("place_changed", fillInAddress1);
-  '.$morparcel.'
+  '.$moreparcel.'
 }
 
 // [START region_fillform]
