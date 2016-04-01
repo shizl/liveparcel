@@ -93,7 +93,7 @@ $p++;
     <input id="destination'.$p.'" class="addressto" disabled="disabled"  value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()" type="text"></input>
 <input type="hidden"  id="street_number'.$p.'" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route'.$p.'" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
-<input type="hidden"  id="locality'.$p.'" class="locality" value="'.(empty($parcel['to_locality'])?'':$parcel['to_locality']).'">
+<input type="hidden"  id="locality'.$p.'" class="locality" value="'.(empty($parcel['to_locality'])?'':$parcel['to_locality']).'" >
 <input type="hidden"  id="administrative_area_level_1'.$p.'" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
 <input type="hidden"  id="postal_code'.$p.'" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
 <input type="hidden"  id="country'.$p.'" class="country">
@@ -150,7 +150,7 @@ $p++;
             <input id="autocomplete" disabled="disabled"  placeholder="Enter your address" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number" value="'.(empty($_postfrom[0])?'':$_postfrom[0]).'">
 <input type="hidden"  id="route" value="'.(empty($_postfrom[1])?'':$_postfrom[1]).'">
-<input type="hidden"  id="locality" value="'.(empty($parcel['from_locality'])?'':$parcel['from_locality']).'>
+<input type="hidden"  id="locality" value="'.(empty($parcel['from_locality'])?'':$parcel['from_locality']).'" >
 <input type="hidden"  id="administrative_area_level_1" value="'.(empty($_postfrom[2])?'':$_postfrom[2]).'">
 <input type="hidden"  id="postal_code" value="'.(empty($_postfrom[3])?'':$_postfrom[3]).'">
 <input type="hidden"  id="country">
@@ -193,7 +193,7 @@ $p++;
     <input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
 <input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
 <input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
-<input type="hidden"  id="locality1" class="locality" value="'.(empty($parcel['to_locality'])?'':$parcel['to_locality']).'>
+<input type="hidden"  id="locality1" class="locality" value="'.(empty($parcel['to_locality'])?'':$parcel['to_locality']).'" >
 <input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
 <input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
 <input type="hidden"  id="country1" class="country">
