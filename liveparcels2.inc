@@ -35,6 +35,7 @@ if(module_exists('lp_feature_service') && get_service_type_count()>1){
 
 }
 
+ $morparcel="";
 
 if($parcels>0){
 
@@ -112,13 +113,12 @@ $p++;
                 <input class="form-submit" type="button" name="duplicate" value="Duplicate">
              </div>
         </div>
-      </div><script type="text/javascript">
- destination'.$p.'  = new google.maps.places.Autocomplete(
+      </div>';
+      $morparcel+='  destination'.$p.'  = new google.maps.places.Autocomplete(
      (document.getElementById("destination'.$p.'")),
       {types: ["geocode"]});
   destination'.$p.'.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination'.$p.'.addListener("place_changed", fillInAddress'.$p.');
-      </script>';
+  destination'.$p.'.addListener("place_changed", fillInAddress'.$p.'); ';
     }  
 }
 
@@ -126,7 +126,6 @@ $p++;
   <div class="header-warning">
     '.variable_get('liveparcels_error_message').'
   </div>
-
   <div class="header-mess">
 
 <!--    <div><h1>Postage calculator</h1></div> -->
@@ -156,8 +155,212 @@ $p++;
 <input type="hidden"  id="postal_code" value="'.(empty($_postfrom[3])?'':$_postfrom[3]).'">
 <input type="hidden"  id="country">
 <input type="hidden"  id="oldautocomplete" value="'.(empty($parcel['addressfrom'])?'':$parcel['addressfrom']).'" class="oldautocomplete">
-      <script type="text/javascript">
-function initAutocomplete(){}
+
+
+      </div>
+    '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
+          <div class="parcel"><strong>Parcel#1</strong>
+            <div class="error-mess">Please fill in the correct information!</div>           
+            <input type="button" value="X">
+          </div>
+          <div class="post-mess"> 
+        <table>
+            <tr>
+             <td class="dimensions">Dimensions (cm):</td>
+              <td>
+              <input class="dim-first" type="text">X
+              <input class="dim-second" type="text">X
+              <input class="dim-three" type="text">
+             </td>
+            </tr>
+            <tr>
+              <td class="dimensional">Dimensional weight (kg):</td>
+              <td class="dimens-input">
+                <input class="dimens-text" type="text" readonly>(this value is calculated automatically)
+              </td>
+            </tr>
+            <tr>
+               <td class="weight">Dead weight (kg):</td>
+               <td class="wei-text">
+                 <input class="weight-text" type="text" >
+               </td>
+            </tr>
+            <tr>
+               <td class="destination">
+                  <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
+               </td>
+               <td class="des-text">
+    <input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
+<input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
+<input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
+<input type="hidden"  id="locality1" class="locality">
+<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
+<input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
+<input type="hidden"  id="country1" class="country">
+<input type="hidden"  id="olddestination1" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" class="olddestination">
+
+
+                </td>
+             </tr> 
+    '.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
+          <tr>
+    <td class="service-type">Service (+fee):</td>
+    <td><select class="optional-fees">'.$options.'</select></td>
+          </tr>':'').'
+       
+            </table>
+          </div>
+        <div class="post-btn">
+             <div class="duplicate">
+                <input class="form-submit" type="button" name="duplicate" value="Duplicate">
+             </div>
+        </div>
+      </div>').'
+          <div class="add_new">
+               <input class="form-submit" type="button" name="add_new" value="Add new">
+          </div>   
+      </div>
+      </div>
+      <div class="order sidebar">
+   <div class="block">  
+          <h2>Order summary</h2>
+          <ul class="parcel-line">
+          <li class="order-first">Pending...</li>
+          </ul>
+           '.(module_exists('lp_discount') ? '<div class="order-discount">Discount : Pending...</div>':'').'
+          <div class="order-total">Total : Pending...</div>
+           </div>
+          </div>
+          <div class="order-btn">
+          <form action="/liveparcels/parcels_addtocart" method="POST" id="liveparcelsform">
+           <input  type="hidden" name="action" value="addtocart">
+          <input class="parcelsPost" type="hidden" name="parcelsPost" value="">
+          </form>
+        <input class="form-submit check_parcels" type="button" name="modify" value="Update">
+          <input class="form-submit add_to_cart" type="button" name="checkout" value="Checkout">
+          </div>  
+    <div class="footer-note">
+    '.variable_get('liveparcels_note_message').'
+    </div>
+  </div>
+ <script type="text/javascript">
+
+// This example displays an address form, using the autocomplete feature
+// of the Google Places API to help users fill in the information.
+
+var placeSearch,autocomplete,destination1,destination2,destination3,destination4,destination5,destination6,destination7,destination8,destination9;
+
+
+
+var componentForm = {
+  street_number: "short_name",
+  route: "long_name",
+  locality: "long_name",
+  administrative_area_level_1: "short_name",
+  country: "long_name",
+  postal_code: "short_name"
+};
+
+
+var destination_componentForm = {
+componentForm1:{
+  street_number1: "short_name",
+  route1: "long_name",
+  locality1: "long_name",
+  administrative_area_level_11: "short_name",
+  country1: "long_name",
+  postal_code1: "short_name"
+},
+componentForm2 :{
+  street_number2: "short_name",
+  route2: "long_name",
+  locality2: "long_name",
+  administrative_area_level_12: "short_name",
+  country2: "long_name",
+  postal_code2: "short_name"
+},
+componentForm3 :{
+  street_number3: "short_name",
+  route3: "long_name",
+  locality3: "long_name",
+  administrative_area_level_13: "short_name",
+  country3: "long_name",
+  postal_code3: "short_name"
+},
+componentForm4 :{
+  street_number4: "short_name",
+  route4: "long_name",
+  locality4: "long_name",
+  administrative_area_level_14: "short_name",
+  country4: "long_name",
+  postal_code4: "short_name"
+},
+componentForm5 :{
+  street_number5: "short_name",
+  route5: "long_name",
+  locality5: "long_name",
+  administrative_area_level_15: "short_name",
+  country5: "long_name",
+  postal_code5: "short_name"
+},
+componentForm6 :{
+  street_number6: "short_name",
+  route6: "long_name",
+  locality6: "long_name",
+  administrative_area_level_16: "short_name",
+  country6: "long_name",
+  postal_code6: "short_name"
+},
+componentForm7 :{
+  street_number7: "short_name",
+  route7: "long_name",
+  locality7: "long_name",
+  administrative_area_level_17: "short_name",
+  country7: "long_name",
+  postal_code7: "short_name"
+},
+componentForm8 :{
+  street_number8: "short_name",
+  route8: "long_name",
+  locality8: "long_name",
+  administrative_area_level_18: "short_name",
+  country8: "long_name",
+  postal_code8: "short_name"
+},
+componentForm9 :{
+  street_number9: "short_name",
+  route9: "long_name",
+  locality9: "long_name",
+  administrative_area_level_19: "short_name",
+  country9: "long_name",
+  postal_code9: "short_name"
+}
+
+};
+
+
+
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+     (document.getElementById("autocomplete")),
+      {types: ["geocode"]});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+  autocomplete.addListener("place_changed", fillInAddress);
+
+  destination1  = new google.maps.places.Autocomplete(
+     (document.getElementById("destination1")),
+      {types: ["geocode"]});
+  destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+  destination1.addListener("place_changed", fillInAddress1);
+  '.$morparcel.'
+}
+
 // [START region_fillform]
 function fillInAddress() {
   if(checkdif("autocomplete")){
@@ -184,6 +387,8 @@ function fillInAddress() {
 
   }
 }
+
+
 function fillInAddress1() {
   if(checkdif("destination1")){
       var place = destination1.getPlace();
@@ -398,209 +603,6 @@ function fillInAddress9() {
   }
 }
 
-       </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete" >
-
-  </script>
-  </div>
-    '.($parcel_info<>'' ? $parcel_info:' <div class="post-all">
-          <div class="parcel"><strong>Parcel#1</strong>
-            <div class="error-mess">Please fill in the correct information!</div>           
-            <input type="button" value="X">
-          </div>
-          <div class="post-mess"> 
-        <table>
-            <tr>
-             <td class="dimensions">Dimensions (cm):</td>
-              <td>
-              <input class="dim-first" type="text">X
-              <input class="dim-second" type="text">X
-              <input class="dim-three" type="text">
-             </td>
-            </tr>
-            <tr>
-              <td class="dimensional">Dimensional weight (kg):</td>
-              <td class="dimens-input">
-                <input class="dimens-text" type="text" readonly>(this value is calculated automatically)
-              </td>
-            </tr>
-            <tr>
-               <td class="weight">Dead weight (kg):</td>
-               <td class="wei-text">
-                 <input class="weight-text" type="text" >
-               </td>
-            </tr>
-            <tr>
-               <td class="destination">
-                  <span class="package-to">'.($post=='postfrom' ? 'Pickup:':'Destination:').'</span>
-               </td>
-               <td class="des-text">
-    <input id ="destination1" class="addressto" disabled="disabled" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" placeholder="Enter your address" onBlur="updateAddress(jQuery(this))" onfouce="geolocate()"  type="text"></input>
-<input type="hidden"  id="street_number1" class="street" value="'.(empty($_postto[0])?'':$_postto[0]).'">
-<input type="hidden"  id="route1" class="route" value="'.(empty($_postto[1])?'':$_postto[1]).'">
-<input type="hidden"  id="locality1" class="locality">
-<input type="hidden"  id="administrative_area_level_11" class="administrative_area_level" value="'.(empty($_postto[2])?'':$_postto[2]).'">
-<input type="hidden"  id="postal_code1" class="postal_code" value="'.(empty($_postto[3])?'':$_postto[3]).'">
-<input type="hidden"  id="country1" class="country">
-<input type="hidden"  id="olddestination1" value="'.(empty($parcel['addressto'])?'':$parcel['addressto']).'" class="olddestination">
-
-
-                </td>
-             </tr> 
-    '.(module_exists('lp_feature_service')&&get_service_type_count()>1?'
-          <tr>
-    <td class="service-type">Service (+fee):</td>
-    <td><select class="optional-fees">'.$options.'</select></td>
-          </tr>':'').'
-       
-            </table>
-          </div>
-        <div class="post-btn">
-             <div class="duplicate">
-                <input class="form-submit" type="button" name="duplicate" value="Duplicate">
-             </div>
-        </div>
-      </div>').'
-          <div class="add_new">
-               <input class="form-submit" type="button" name="add_new" value="Add new">
-          </div>   
-      </div>
-      </div>
-      <div class="order sidebar">
-   <div class="block">  
-          <h2>Order summary</h2>
-          <ul class="parcel-line">
-          <li class="order-first">Pending...</li>
-          </ul>
-           '.(module_exists('lp_discount') ? '<div class="order-discount">Discount : Pending...</div>':'').'
-          <div class="order-total">Total : Pending...</div>
-           </div>
-          </div>
-          <div class="order-btn">
-          <form action="/liveparcels/parcels_addtocart" method="POST" id="liveparcelsform">
-           <input  type="hidden" name="action" value="addtocart">
-          <input class="parcelsPost" type="hidden" name="parcelsPost" value="">
-          </form>
-        <input class="form-submit check_parcels" type="button" name="modify" value="Update">
-          <input class="form-submit add_to_cart" type="button" name="checkout" value="Checkout">
-          </div>  
-    <div class="footer-note">
-    '.variable_get('liveparcels_note_message').'
-    </div>
-  </div>
- <script type="text/javascript">
-
-// This example displays an address form, using the autocomplete feature
-// of the Google Places API to help users fill in the information.
-
-var placeSearch,autocomplete,destination1,destination2,destination3,destination4,destination5,destination6,destination7,destination8,destination9;
-
-
-
-var componentForm = {
-  street_number: "short_name",
-  route: "long_name",
-  locality: "long_name",
-  administrative_area_level_1: "short_name",
-  country: "long_name",
-  postal_code: "short_name"
-};
-
-
-var destination_componentForm = {
-componentForm1:{
-  street_number1: "short_name",
-  route1: "long_name",
-  locality1: "long_name",
-  administrative_area_level_11: "short_name",
-  country1: "long_name",
-  postal_code1: "short_name"
-},
-componentForm2 :{
-  street_number2: "short_name",
-  route2: "long_name",
-  locality2: "long_name",
-  administrative_area_level_12: "short_name",
-  country2: "long_name",
-  postal_code2: "short_name"
-},
-componentForm3 :{
-  street_number3: "short_name",
-  route3: "long_name",
-  locality3: "long_name",
-  administrative_area_level_13: "short_name",
-  country3: "long_name",
-  postal_code3: "short_name"
-},
-componentForm4 :{
-  street_number4: "short_name",
-  route4: "long_name",
-  locality4: "long_name",
-  administrative_area_level_14: "short_name",
-  country4: "long_name",
-  postal_code4: "short_name"
-},
-componentForm5 :{
-  street_number5: "short_name",
-  route5: "long_name",
-  locality5: "long_name",
-  administrative_area_level_15: "short_name",
-  country5: "long_name",
-  postal_code5: "short_name"
-},
-componentForm6 :{
-  street_number6: "short_name",
-  route6: "long_name",
-  locality6: "long_name",
-  administrative_area_level_16: "short_name",
-  country6: "long_name",
-  postal_code6: "short_name"
-},
-componentForm7 :{
-  street_number7: "short_name",
-  route7: "long_name",
-  locality7: "long_name",
-  administrative_area_level_17: "short_name",
-  country7: "long_name",
-  postal_code7: "short_name"
-},
-componentForm8 :{
-  street_number8: "short_name",
-  route8: "long_name",
-  locality8: "long_name",
-  administrative_area_level_18: "short_name",
-  country8: "long_name",
-  postal_code8: "short_name"
-},
-componentForm9 :{
-  street_number9: "short_name",
-  route9: "long_name",
-  locality9: "long_name",
-  administrative_area_level_19: "short_name",
-  country9: "long_name",
-  postal_code9: "short_name"
-}
-
-};
-
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-     (document.getElementById("autocomplete")),
-      {types: ["geocode"]});
-
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  autocomplete.addListener("place_changed", fillInAddress);
-
-  destination1  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination1")),
-      {types: ["geocode"]});
-  destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination1.addListener("place_changed", fillInAddress1);
-
-
 function count(o){
     var t = typeof o;
     if(t == "string"){
@@ -672,29 +674,19 @@ function geolocate() {
 
 
   (function($){
-
   var zonedata='.( $jsondata<>'' ? $jsondata:'').';
 
-//document.onreadystatechange = subSomething;
+document.onreadystatechange = subSomething;
 
-//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
-	 $("#autocomplete").attr("disabled","disabled");
-  $(".addressto").attr("disabled","disabled");
-  $(".deliver").attr("disabled","disabled");
-  $(".pick-up").attr("disabled","disabled");
-  	$(document).ready(function(){
-  		  $("#autocomplete").removeAttr("disabled");
-	    $(".addressto").removeAttr("disabled");
-	    $(".deliver").removeAttr("disabled");
-	    $(".pick-up").removeAttr("disabled");
-  	})
+//include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'//&signed_in=true&libraries=places&callback=initAutocomplete");
+
 function subSomething() {
 if(document.readyState == "complete") {
 
 include_js("https://maps.googleapis.com/maps/api/js?key='.variable_get('gmap_api_key','').'&signed_in=true&libraries=places&callback=initAutocomplete");
 
 }else{
-
+$(".check_parcels").attr("disabled","disabled");
   $("#autocomplete").attr("disabled","disabled");
   $(".addressto").attr("disabled","disabled");
   $(".deliver").attr("disabled","disabled");
@@ -713,6 +705,7 @@ function include_js(file) {
     if (!/*@cc_on!@*/0) { 
         js.onload = function () {
     $("#autocomplete").removeAttr("disabled");
+    $(".check_parcels").removeAttr("disabled");
     $(".addressto").removeAttr("disabled");
     $(".deliver").removeAttr("disabled");
     $(".pick-up").removeAttr("disabled");
@@ -721,10 +714,13 @@ function include_js(file) {
     } else {
         js.onreadystatechange = function () {
             if (js.readyState == "loaded" || js.readyState == "complete") {
+          $(".check_parcels").removeAttr("disabled");
       $("#autocomplete").removeAttr("disabled");
         $(".addressto").removeAttr("disabled");
       $(".deliver").removeAttr("disabled");
       $(".pick-up").removeAttr("disabled");
+
+
             }
         }
     }
@@ -1144,6 +1140,7 @@ function include_js(file) {
               weighttext=parseFloat(weighttext);
               
               ajaxrequest+=(ajaxrequest !="" ? ",":"")+ \'{"parcelnum":"\'+parcelnum+\'","service_type":"\'+service_type+\'","dimfirst":"\'+dimfirst+\'","dimsecond":"\'+dimsecond+\'","dimthree":"\'+dimthree+\'","max":"\'+max+\'","dimenstext":"\'+dimenstext+\'","weighttext":"\'+weighttext.toFixed(1)+\'","from_locality":"\'+from_locality+\'","to_locality":"\'+to_locality+\'","postfrom":"\'+postfrom+\'","postto":"\'+postto+\'","addressfrom":"\'+addressfrom+\'","addressto":"\'+addressto+\'"}\'; 
+
              if(f<tlen){ 
                 getprice(f+1,tlen,postfrom,ajaxrequest);
                 
@@ -1208,8 +1205,7 @@ function include_js(file) {
          }
          var f=1;   
          var subtotal = 0;   
-         var tlen=$(" .post-all:last").index()-2;
-        
+         var tlen=$(".post-all:last").index()-2;
          $(".order ul li").remove();
            $(".header-warning").hide();
            var er=0;
