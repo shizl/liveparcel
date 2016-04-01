@@ -1441,6 +1441,7 @@ if(isset($_SESSION['lp_order'])){
         }
       }else{
         $distance = 0;
+        $distancetest="";
       }
  //$distance = 218000;
             if($pprice['pprice']>0){
