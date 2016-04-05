@@ -830,7 +830,23 @@ function include_js(file) {
            }
         if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
              $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
-    }
+    	}
+    	if(f==1){
+    		var postfrom=$("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();  
+    		if(postfrom=="___"){
+                $("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+            }else{
+            	$("#autocomplete").parent("div").find(".errorAddress").remove();
+            }
+       }
+     	var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
+
+       if(postto=="___"){
+       		$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+       }else{
+       		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
+       }
+
         return error;     
     }
     $(".post-all input").blur(function(){
@@ -1121,18 +1137,7 @@ function include_js(file) {
                    var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    
                      ptype=2;
-                   if(postfrom=="___" && f==1){
-                   	$("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-                   }
-                   if(postfrom!="___" && f==1){
-                   	$("#autocomplete").parent("div").find(".errorAddress").remove();
-                   }
-                   if(postto=="___"){
-                   	$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-                   }else{
-                   		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
-
-                   }
+                   
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
@@ -1142,18 +1147,7 @@ function include_js(file) {
 
                    var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    ptype=1;
-                   if(postto=="___" && f==1){
-                   	$("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-                   }
-                   if(postto!="___" && f==1){
-                   	$("#autocomplete").parent("div").find(".errorAddress").remove();
-                   }
-                   if(postfrom=="___"){
-                   	$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-                   }else{
-                   		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
-
-                   }
+                  
                 }
         if(dimfirst > max){
           max = dimfirst; 
@@ -1236,6 +1230,7 @@ function include_js(file) {
          $(".order ul li").remove();
            $(".header-warning").hide();
            var er=0;
+           $(".errorAddress").remove();
            for(var i=1;i<=tlen;i++){
                 er=checknull(i);
                 if(er){
@@ -1244,7 +1239,7 @@ function include_js(file) {
             }
             if(!er){
                 var ajaxrequest="";
-                $(".errorAddress").remove();
+                
 
                 getprice(f,tlen,postfrom,ajaxrequest);  
            }       
