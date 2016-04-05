@@ -836,17 +836,23 @@ function include_js(file) {
     		if(postfrom=="___"){
     			error=1
                 $("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+                $("#autocomplete").css("border","1px solid #ccc"); 
             }else{
             	$("#autocomplete").parent("div").find(".errorAddress").remove();
+            	$("#autocomplete").css("border","1px solid #ccc"); 
             }
        }
      	var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
 
        if(postto=="___"){
        		$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-       		error=1
+       		$(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px dashed red");
+ 
+      
+       		error=1;
        }else{
        		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
+       		$(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px solid #ccc"); 
        }
 
         return error;     
