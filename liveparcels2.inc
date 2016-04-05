@@ -750,7 +750,7 @@ function include_js(file) {
     return true;
 
   }
-      function checknull(f){
+      function checknull(f,check_addr){
           var error=0;
      var first  = $(".post-all:eq("+(f-1)+")").find(".dim-first").val();
      var second = $(".post-all:eq("+(f-1)+")").find(".dim-second").val();
@@ -831,12 +831,16 @@ function include_js(file) {
         if(isFloat(first) && isFloat(second) && isFloat(three) && isFloat(weight) && isFloat(dimens)){
              $(".post-all:eq("+(f-1)+")").find(".error-mess").hide();
     	}
+
     	if(f==1){
     		var postfrom=$("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();  
     		if(postfrom=="___"){
-    			error=1
+    		
                 $("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
-                $("#autocomplete").css("border","1px solid #ccc"); 
+                $("#autocomplete").css("border","1px dashed red"); 
+                if(check_addr=="1"){
+    				error=1;
+    			}
             }else{
             	$("#autocomplete").parent("div").find(".errorAddress").remove();
             	$("#autocomplete").css("border","1px solid #ccc"); 
@@ -847,9 +851,10 @@ function include_js(file) {
        if(postto=="___"){
        		$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
        		$(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px dashed red");
- 
+ 			if(check_addr=="1"){
+    			error=1;
+    		}
       
-       		error=1;
        }else{
        		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
        		$(".post-all:eq("+(f-1)+")").find(".addressto").css("border","1px solid #ccc"); 
@@ -1240,7 +1245,7 @@ function include_js(file) {
            var er=0;
            $(".errorAddress").remove();
            for(var i=1;i<=tlen;i++){
-                er+=checknull(i);
+                er+=checknull(i,0);
            }
             if(er==0){
                 var ajaxrequest="";
@@ -1280,7 +1285,13 @@ function include_js(file) {
     }    
    });
     $(".add_to_cart").click(function(){
-        if($(".parcelsPost").val()==""){
+    	 var ef=0;
+    	 var tlen=$(".post-all:last").index()-2;
+           $(".errorAddress").remove();
+           for(var i=1;i<=tlen;i++){
+                ef+=checknull(i,1);
+           }     
+        if($(".parcelsPost").val()=="" || ef>0){
                 alert("Please update parcels information.");
                 return false;
         }else{
