@@ -834,6 +834,7 @@ function include_js(file) {
     	if(f==1){
     		var postfrom=$("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();  
     		if(postfrom=="___"){
+    			error=1
                 $("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
             }else{
             	$("#autocomplete").parent("div").find(".errorAddress").remove();
@@ -843,6 +844,7 @@ function include_js(file) {
 
        if(postto=="___"){
        		$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+       		error=1
        }else{
        		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
        }
