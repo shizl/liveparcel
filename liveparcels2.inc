@@ -1240,14 +1240,10 @@ function include_js(file) {
            var er=0;
            $(".errorAddress").remove();
            for(var i=1;i<=tlen;i++){
-                er=checknull(i);
-                if(er){
-                break;    
-                }
-            }
-            if(!er){
+                er+=checknull(i);
+           }
+            if(er==0){
                 var ajaxrequest="";
-                
 
                 getprice(f,tlen,postfrom,ajaxrequest);  
            }       
