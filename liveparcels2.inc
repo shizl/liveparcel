@@ -114,11 +114,13 @@ $p++;
              </div>
         </div>
       </div>';
-      $moreparcel .='  destination'.$p.'  = new google.maps.places.Autocomplete(
-     (document.getElementById("destination'.$p.'")),
-      {types: ["geocode"]});
-  destination'.$p.'.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
-  destination'.$p.'.addListener("place_changed", fillInAddress'.$p.'); ';
+      if($p>1){
+		      $moreparcel .='  destination'.$p.'  = new google.maps.places.Autocomplete(
+		     (document.getElementById("destination'.$p.'")),
+		      {types: ["geocode"]});
+		  destination'.$p.'.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+		  destination'.$p.'.addListener("place_changed", fillInAddress'.$p.'); ';
+		}
     }  
 }
 
@@ -352,7 +354,12 @@ function initAutocomplete() {
   // fields in the form.
   autocomplete.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
   autocomplete.addListener("place_changed", fillInAddress);
-
+	
+	destination1  = new google.maps.places.Autocomplete(
+		     (document.getElementById("destination1")),
+		      {types: ["geocode"]});
+		  destination1.setComponentRestrictions({"country": "'.$countryinfo['country_iso_code_2'].'"});
+		  destination1.addListener("place_changed", fillInAddress1);
   '.$moreparcel.'
 }
 
@@ -1110,9 +1117,22 @@ function include_js(file) {
                    var to_locality  = $(".post-all:eq("+(f-1)+")").find(".locality").val();
 
                    var postfrom = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
+
                    var postto = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
                    
                      ptype=2;
+                   if(postfrom=="___" && f==1){
+                   	$("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+                   }
+                   if(postfrom!="___" && f==1){
+                   	$("#autocomplete").parent("div").find(".errorAddress").remove();
+                   }
+                   if(postto=="___"){
+                   	$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+                   }else{
+                   		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
+
+                   }
                 }else{
                    var addressto = $("#autocomplete").val();
                    var addressfrom =$(".post-all:eq("+(f-1)+")").find(".addressto").val();
@@ -1121,7 +1141,19 @@ function include_js(file) {
                    var postto = $("#street_number").val()+"_"+$("#route").val()+"_"+$("#administrative_area_level_1").val()+"_"+$("#postal_code").val();
 
                    var postfrom = $(".post-all:eq("+(f-1)+")").find(".street").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".route").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".administrative_area_level").val()+"_"+$(".post-all:eq("+(f-1)+")").find(".postal_code").val();
-                               ptype=1;
+                   ptype=1;
+                   if(postto=="___" && f==1){
+                   	$("#autocomplete").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+                   }
+                   if(postto!="___" && f==1){
+                   	$("#autocomplete").parent("div").find(".errorAddress").remove();
+                   }
+                   if(postfrom=="___"){
+                   	$(".post-all:eq("+(f-1)+")").find(".addressto").after("<span class=\"errorAddress\">Please select an address from the list. </span>");
+                   }else{
+                   		$(".post-all:eq("+(f-1)+")").find(".errorAddress").remove();
+
+                   }
                 }
         if(dimfirst > max){
           max = dimfirst; 
@@ -1212,6 +1244,8 @@ function include_js(file) {
             }
             if(!er){
                 var ajaxrequest="";
+                $(".errorAddress").remove();
+
                 getprice(f,tlen,postfrom,ajaxrequest);  
            }       
          $(".page-float input").attr("disabled",true);     

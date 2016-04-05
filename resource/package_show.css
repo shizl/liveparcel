@@ -65,6 +65,7 @@ width:auto;
 }
 .page-content-address input {
 width:296px;
+position: inherit !important;
 }
 .page-content-address strong {
 margin-right:10px;
@@ -229,6 +230,14 @@ font-weight: bold;
 float: left;
 margin-left: 56px;
 display:none;
+}
+.errorAddress {
+color: red;
+font-size: 12px;
+font-weight: bold;
+float: right;
+margin-right: 56px;
+display:block;
 }
 .post-mess table tr td:first-child{
 width:170px;
